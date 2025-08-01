@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHADOW STORE</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Share Tech Mono', monospace;
+      overflow: hidden;
+      background: url('https://i.ibb.co/ymk69RTF/IMG-20250801-121537-524.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+    #intro {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #intro h1 {
+      font-size: 3em;
+      background: linear-gradient(90deg, #ff00cc, #00ffff, #ff00cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+    main {
+      display: none;
+      padding: 2em;
+      color: white;
+      min-height: 100vh;
+      overflow-y: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    .profile {
+      text-align: center;
+      margin-top: 1em;
+    }
+    .profile img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    .section {
+      margin: 2em 0;
+    }
+    h2 {
+      color: #0ff;
+      margin-bottom: 0.5em;
+    }
+    ul {
+      list-style-type: square;
+      padding-left: 1.5em;
+    }
+    a {
+      color: #0ff;
+      text-decoration: none;
+    }
+    footer {
+      text-align: center;
+      padding: 1em;
+      color: #ccc;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="intro">
+    <h1>SHADOW STORE</h1>
+  </div>
+
+  <main>
+    <div class="profile">
+      <img src="https://i.ibb.co/LDJ1dBxk/IMG-20250801-121533-790.jpg" alt="Foto Profil" />
+    </div>
+
+    <div class="section">
+      <h2>Murband 25k (khusus Jumat 15k)</h2>
+      <ul>
+        <li>bisa jadi kang band/jasa band</li>
+        <li>balmod kalo lu usaha</li>
+        <li>bisa band mantan</li>
+        <li>note: jangan disalahgunakan</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>PT Band 55k (khusus Jumat 20k)</h2>
+      <ul>
+        <li>bisa jadi kang band</li>
+        <li>bisa open murband</li>
+        <li>dapat teks tinjau langsung permanen</li>
+        <li>dapat panel bot</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Kebutuhan Hosting</h2>
+      <ul>
+        <li>1GB - 1k</li>
+        <li>2GB - 2k</li>
+        <li>3GB - 3k</li>
+        <li>4GB - 4k</li>
+        <li>5GB - 5k</li>
+        <li>6GB - 6k</li>
+        <li>7GB - 7k</li>
+        <li>8GB - 8k</li>
+        <li>9GB - 9k</li>
+        <li>Unli - 9k (Jumat 2k)</li>
+        <li>ADP - 10k (Jumat 5k)</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <p><strong>Join saluran WhatsApp:</strong><br>
+      <a href="https://www.whatsapp.com/channel/0029VbB0c9O5kg75fc1CGI19" target="_blank">Klik di sini</a></p>
+
+      <p><strong>Minat? PV Telegram:</strong><br>
+      <a href="https://t.me/fanzu14" target="_blank">t.me/fanzu14</a></p>
+
+      <p><strong>Follow TikTok juga ya!</strong><br>
+      <a href="https://www.tiktok.com" target="_blank">TikTok Link</a></p>
+    </div>
+
+    <footer>by Arcelz</footer>
+  </main>
+
+  <audio id="bgmusic" autoplay loop>
+    <source src="https://files.catbox.moe/lsfoom.mp3" type="audio/mp3">
+    Browsermu tidak mendukung audio.
+  </audio>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const audio = document.getElementById("bgmusic");
+      audio.play().catch(() => {
+        // Jika autoplay gagal karena policy browser, bisa disiapkan play manual
+        console.warn("Autoplay diblokir. Sentuh layar untuk mulai musik.");
+        const resumeAudio = () => {
+          audio.play();
+          document.removeEventListener("click", resumeAudio);
+        };
+        document.addEventListener("click", resumeAudio);
+      });
+    });
+
+    setTimeout(() => {
+      document.getElementById('intro').style.display = 'none';
+      document.querySelector('main').style.display = 'block';
+      document.body.style.overflow = 'auto';
+    }, 2000);
+  </script>
+</body>
+</html>
