@@ -3,164 +3,320 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SHADOW STORE</title>
+  <title>261 AREA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
+    /* Reset & Base */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
     }
-    html, body {
-      width: 100%;
-      height: 100%;
-      font-family: 'Share Tech Mono', monospace;
-      overflow: hidden;
-      background: url('https://img1.pixhost.to/images/7635/627566979_ochobot.jpg') no-repeat center center fixed;
+
+    body {
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background Setup */
+    .bg-fixed {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: url('https://i.ibb.co.com/G4MYnQXq/IMG-20250802-171007-951.jpg') no-repeat center center fixed;
       background-size: cover;
+      z-index: -2;
     }
+
+    .bg-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75); 
+      backdrop-filter: blur(8px); 
+      z-index: -1;
+    }
+
+    /* Smooth Intro */
     #intro {
       position: fixed;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      inset: 0;
+      background: #000;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 9999;
+      z-index: 10000;
+      transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     #intro h1 {
-      font-size: 3em;
-      background: linear-gradient(90deg, #ff00cc, #00ffff, #ff00cc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.8rem;
+      letter-spacing: 12px;
+      animation: tracking-in 1.5s ease-out forwards;
     }
-    main {
+
+    @keyframes tracking-in {
+      from { letter-spacing: -10px; opacity: 0; }
+      to { letter-spacing: 12px; opacity: 1; }
+    }
+
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0; width: 100%;
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
       display: none;
-      padding: 2em;
-      color: white;
-      min-height: 100vh;
-      overflow-y: auto;
-      background-color: rgba(0, 0, 0, 0.6);
     }
-    .profile {
-      text-align: center;
-      margin-top: 1em;
+
+    .nav-inner {
+      display: flex;
+      gap: 40px;
     }
-    .profile img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 2px solid white;
-    }
-    .section {
-      margin: 2em 0;
-    }
-    h2 {
-      color: #0ff;
-      margin-bottom: 0.5em;
-    }
-    ul {
-      list-style-type: square;
-      padding-left: 1.5em;
-    }
-    a {
-      color: #0ff;
+
+    nav a {
+      color: #888;
       text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 3px;
+      font-weight: 500;
+      transition: 0.5s;
+      cursor: pointer;
     }
+
+    nav a:hover, nav a.active {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    /* Main Layout */
+    main {
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 130px 25px 60px;
+      display: none;
+      opacity: 0;
+      transition: all 1.5s ease;
+    }
+
+    .visible {
+      display: block !important;
+      opacity: 1 !important;
+    }
+
+    /* Leaders Section */
+    .top-leaders {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-bottom: 25px;
+    }
+
+    .leader-item img {
+      width: 160px; 
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      filter: grayscale(100%);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .leader-item:hover img {
+      filter: grayscale(0%);
+      transform: scale(1.05);
+      border-color: #ff0000;
+    }
+
+    /* Teks Tengah (Sub-heading Petinggi) */
+    .petinggi-label {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeIn 2s ease;
+    }
+
+    .petinggi-label h3 {
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .petinggi-label p {
+      font-size: 0.7rem;
+      color: #ff0000;
+      letter-spacing: 4px;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+
+    /* ID List All Member */
+    .id-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      max-width: 700px;
+      margin: 0 auto 70px;
+      text-align: center;
+    }
+
+    .id-item {
+      font-size: 1.1rem; 
+      color: #ccc;
+      letter-spacing: 2px;
+      font-weight: 700;
+      transition: 0.3s;
+      text-transform: lowercase;
+    }
+
+    .id-item:hover {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
+
+    /* Content Block */
+    .content-block {
+      animation: slideUp 1s ease forwards;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      color: #fff;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      border-left: 4px solid #ff0000;
+      padding-left: 15px;
+    }
+
+    .page { display: none; }
+    .active-page { display: block; }
+
     footer {
       text-align: center;
-      padding: 1em;
-      color: #ccc;
+      margin-top: 60px;
+      font-size: 0.75rem;
+      color: #666;
+      letter-spacing: 3px;
+    }
+
+    @media (max-width: 600px) {
+      .top-leaders { gap: 20px; }
+      .leader-item img { width: 130px; height: 130px; }
+      .petinggi-label h3 { font-size: 1rem; }
+      .id-item { font-size: 0.9rem; }
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
+
+  <div class="bg-fixed"></div>
+  <div class="bg-overlay"></div>
+
   <div id="intro">
-    <h1>SHADOW STORE</h1>
+    <h1>261 AREA</h1>
   </div>
 
-  <main>
-    <div class="profile">
-      <img src="https://files.catbox.moe/ks5ch0.jpg" alt="Foto Profil" />
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a onclick="switchPage('home')" id="n-home" class="active">HOME</a>
+      <a onclick="switchPage('about')" id="n-about">ABOUT</a>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    
+    <div id="home" class="page active-page">
+      <div class="top-leaders">
+        <div class="leader-item">
+          <img src="https://files.catbox.moe/k8zipc.jpg" alt="Shadow">
+        </div>
+        <div class="leader-item">
+          <img src="https://files.catbox.moe/7negcr.jpg" alt="Fanzu">
+        </div>
+      </div>
+
+      <div class="petinggi-label">
+        <h3>THE HIGH TABLE OF 261</h3>
+        <p>DIRECTOR OF CHAOS</p>
+      </div>
+
+      <div class="id-list">
+        <div class="id-item">@Ar3clxyz</div>
+        <div class="id-item">@Lifzz_</div>
+        <div class="id-item">@Joyzz_</div>
+        <div class="id-item">@tuanzeroo</div>
+        <div class="id-item">@ndi_milktea</div>
+      </div>
     </div>
 
-    <div class="section">
-      <h2>Murband 25k (khusus Jumat 15k)</h2>
-      <ul>
-        <li>bisa jadi kang band/jasa band</li>
-        <li>balmod kalo lu usaha</li>
-        <li>bisa band mantan</li>
-        <li>note: jangan disalahgunakan</li>
-      </ul>
+    <div id="about" class="page">
+      <div class="content-block">
+        <h2>261 AREA</h2>
+        <p style="color: #eee; line-height: 1.8; font-weight: 700; margin-bottom: 15px;"> KAMI DATANG UNTUK MENGHANCURKAN DINASTI PARA PETINGGI PALSU!</p>
+        <p>Selamat datang di AREA 261 yang nggak kenal takut sama dunia drama virtu. Fokus kami cuma satu: <strong>Menyadarkan kalian dari perbudakan IT dan drama kosong.</strong></p>
+        <p style="margin-top: 15px;">Jangan bangga sama gelar virtu lu di sini. Jangankan fisik lu, silsilah keluarga lu dari emak bapak sampe buyut juga bakal dibawa ke meja hijau kalau masih betah jadi budak drama. Sadar atau hancur.</p>
+      </div>
     </div>
 
-    <div class="section">
-      <h2>PT Band 55k (khusus Jumat 20k)</h2>
-      <ul>
-        <li>bisa jadi kang band</li>
-        <li>bisa open murband</li>
-        <li>dapat teks tinjau langsung permanen</li>
-        <li>dapat panel bot</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <h2>Kebutuhan Hosting</h2>
-      <ul>
-        <li>1GB - 1k</li>
-        <li>2GB - 2k</li>
-        <li>3GB - 3k</li>
-        <li>4GB - 4k</li>
-        <li>5GB - 5k</li>
-        <li>6GB - 6k</li>
-        <li>7GB - 7k</li>
-        <li>8GB - 8k</li>
-        <li>9GB - 9k</li>
-        <li>Unli - 9k (Jumat 2k)</li>
-        <li>ADP - 10k (Jumat 5k)</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <p><strong>Join saluran WhatsApp:</strong><br>
-      <a href="https://www.whatsapp.com/channel/0029VbB0c9O5kg75fc1CGI19" target="_blank">Klik di sini</a></p>
-
-      <p><strong>Minat? PV Telegram:</strong><br>
-      <a href="https://t.me/fanzu14" target="_blank">t.me/fanzu14</a></p>
-
-      <p><strong>Follow TikTok juga ya!</strong><br>
-      <a href="https://www.tiktok.com" target="_blank">TikTok Link</a></p>
-    </div>
-
-    <footer>by Shadow×Fanz</footer>
+    <footer>EST 2026 BY @AR3CLXYZ</footer>
   </main>
 
-  <audio id="bgmusic" autoplay loop>
+  <audio id="bgmusic" loop>
     <source src="https://files.catbox.moe/lsfoom.mp3" type="audio/mp3">
-    Browsermu tidak mendukung audio.
   </audio>
 
   <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      const audio = document.getElementById("bgmusic");
-      audio.play().catch(() => {
-        // Jika autoplay gagal karena policy browser, bisa disiapkan play manual
-        console.warn("Autoplay diblokir. Sentuh layar untuk mulai musik.");
-        const resumeAudio = () => {
-          audio.play();
-          document.removeEventListener("click", resumeAudio);
-        };
-        document.addEventListener("click", resumeAudio);
-      });
+    window.addEventListener('click', () => {
+      document.getElementById('bgmusic').play().catch(() => {});
+    }, { once: true });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const intro = document.getElementById('intro');
+        const main = document.getElementById('main-content');
+        const navbar = document.getElementById('navbar');
+
+        intro.style.opacity = '0';
+        setTimeout(() => {
+          intro.style.display = 'none';
+          navbar.style.display = 'flex';
+          main.classList.add('visible');
+        }, 1500);
+      }, 2500);
     });
 
-    setTimeout(() => {
-      document.getElementById('intro').style.display = 'none';
-      document.querySelector('main').style.display = 'block';
-      document.body.style.overflow = 'auto';
-    }, 2000);
+    function switchPage(pageId) {
+      const home = document.getElementById('home');
+      const about = document.getElementById('about');
+      const nHome = document.getElementById('n-home');
+      const nAbout = document.getElementById('n-about');
+
+      if(pageId === 'home') {
+        about.style.display = 'none';
+        home.style.display = 'block';
+        nHome.classList.add('active');
+        nAbout.classList.remove('active');
+      } else {
+        home.style.display = 'none';
+        about.style.display = 'block';
+        nAbout.classList.add('active');
+        nHome.classList.remove('active');
+      }
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
   </script>
 </body>
-  </html>
+</html>
