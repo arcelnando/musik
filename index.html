@@ -317,7 +317,7 @@
     }
 
     .photo-item::after {
-      content: "🔍";
+      content: "";
       position: absolute;
       top: 5px;
       right: 5px;
@@ -534,16 +534,16 @@
         <!-- baris 1: satu foto besar (shadow) -->
         <div class="leader-row top-row">
           <div class="leader-item">
-            <img src="https://files.catbox.moe/k8zipc.jpg" alt="Shadow" onclick="openSingleModal(this.src, 'SHADOW - HIGH TABLE')">
+            <img src="https://files.catbox.moe/k8zipc.jpg" alt="Shadow" onclick="openSingleModal(this.src, '261 Leaders')">
           </div>
         </div>
         <!-- baris 2: dua foto (fanzu & fanzu dupe) -->
         <div class="leader-row bottom-row">
           <div class="leader-item">
-            <img src="https://files.catbox.moe/7negcr.jpg" alt="Fanzu" onclick="openSingleModal(this.src, 'FANZU - HIGH TABLE')">
+            <img src="https://files.catbox.moe/7negcr.jpg" alt="Fanzu" onclick="openSingleModal(this.src, '261 founders')">
           </div>
           <div class="leader-item">
-            <img src="https://files.catbox.moe/yvehh5.jpg" alt="Fanzu kedua" onclick="openSingleModal(this.src, 'FANZU II - HIGH TABLE')">
+            <img src="https://files.catbox.moe/yvehh5.jpg" alt="Fanzu kedua" onclick="openSingleModal(this.src, '261 founders')">
           </div>
         </div>
       </div>
@@ -596,7 +596,7 @@
   </audio>
 
   <script>
-    // Database chaos
+    // Database chaos (SUDAH DITAMBAH 1 FOTO BARU)
     const databaseMarga = [
       {
         foto: [
@@ -608,6 +608,17 @@
         gelar: "petinggi ktnyah😹",
         grup: "alberich",
         tgl: "26 FEB 2026",
+        keluarga: "-"
+      },
+      {
+        foto: [
+          "https://files.catbox.moe/0ekipa.jpg" // <--- FOTO BARU DITAMBAHKAN DI SINI
+        ],
+        nama: "BOCAH KACUNG MASALAH BELOM KELAR DH MISSING",
+        wangsaff: "6287845279749",
+        gelar: "KACUNG",
+        grup: "261 AREA",
+        tgl: "27 FEB 2026",
         keluarga: "-"
       }
     ];
@@ -732,7 +743,7 @@
         
         fotoList.forEach((foto, i) => {
           // escape untuk JSON stringify (aman)
-          const fotoArrayJson = JSON.stringify(fotoList);
+          const fotoArrayJson = JSON.stringify(fotoList).replace(/'/g, "&apos;");
           fotoHtml += `
             <div class="photo-item" onclick='openMultipleModal(${fotoArrayJson}, "${item.nama}", ${i})'>
               <img src="${foto}" alt="${item.nama} - foto ${i+1}">
@@ -805,4 +816,4 @@
     }
   </script>
 </body>
-      </html>
+    </html>
