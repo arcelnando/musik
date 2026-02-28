@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>261 AREA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Eater&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -20,82 +20,133 @@
       overflow-x: hidden;
     }
 
-    /* background fixed */
+    /* Flash impact untuk animasi masuk */
+    .flash-impact {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      z-index: 10002;
+      opacity: 0;
+      pointer-events: none;
+      animation: flash 0.3s ease-out forwards;
+    }
+
+    @keyframes flash {
+      0% { opacity: 0.8; }
+      100% { opacity: 0; }
+    }
+
+    /* Background fixed dengan opacity 50% */
     .bg-fixed {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('https://i.ibb.co.com/G4MYnQXq/IMG-20250802-171007-951.jpg') no-repeat center center fixed;
+      background: url('https://i.postimg.cc/kGpZmWxr/18f6726e_1f2b_4518_9b9e_c222e494280e.jpg') no-repeat center center fixed;
       background-size: cover;
       z-index: -2;
+      opacity: 0.9; /* Diubah ke 50% sesuai permintaan */
+      filter: grayscale(0.8) contrast(1.1); 
     }
 
     .bg-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.72); 
-      backdrop-filter: blur(6px); 
+      background: rgba(0, 0, 0, 0.7); 
+      backdrop-filter: blur(0px); 
       z-index: -1;
     }
 
-    /* INTRO — lebih premium */
+    /* Vignette effect biar fokus ke tengah */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, transparent 30%, #000 100%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Efek noise halus */
+    .vignette::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('https://www.transparenttextures.com/patterns/dark-matter.png');
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    /* INTRO — Dibuat Transparan agar langsung tembus ke background utama */
     #intro {
       position: fixed;
       inset: 0;
-      background: #000;
+      background: transparent; /* Diubah menjadi transparan */
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 10000;
-      transition: opacity 1.8s cubic-bezier(0.23, 1, 0.32, 1);
+      transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1);
       pointer-events: none;
     }
 
     #intro h1 {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 2.2rem;
-      letter-spacing: 14px;
-      animation: introGlitch 2.2s ease-out forwards;
+      font-family: 'Eater', cursive;
+      font-size: clamp(3rem, 15vw, 8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 8px;
+      text-align: center;
+      
+      background: linear-gradient(180deg, 
+          #111 0%, 
+          #aaa 45%, 
+          #fff 50%, 
+          #666 55%, 
+          #000 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      
+      filter: drop-shadow(6px 6px 2px rgba(0,0,0,1))
+              drop-shadow(-2px -2px 2px #888);
+      
       opacity: 0;
-      position: relative;
+      animation: hantam 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    #intro h1::before,
-    #intro h1::after {
-      content: "261 AREA";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
+    @keyframes hantam {
+      0% { 
+        opacity: 0; 
+        transform: scale(3.5); 
+        filter: brightness(8) blur(15px) drop-shadow(6px 6px 2px rgba(0,0,0,1));
+        letter-spacing: 25px;
+      }
+      60% {
+        opacity: 1;
+        transform: scale(0.95);
+        filter: brightness(1.5) blur(0) drop-shadow(6px 6px 2px rgba(0,0,0,1));
+      }
+      100% { 
+        opacity: 1; 
+        transform: scale(1); 
+        filter: brightness(1) blur(0) drop-shadow(6px 6px 2px rgba(0,0,0,1))
+                drop-shadow(-2px -2px 2px #888);
+        letter-spacing: 8px;
+      }
     }
 
-    #intro h1::before {
-      color: #ff5e5e;
-      z-index: -1;
-      animation: glitchShift 2.2s ease-out forwards;
+    /* Tengkorak floating */
+    .skull {
+      position: fixed;
+      font-size: 2rem;
+      opacity: 0.03;
+      color: #fff;
+      z-index: 0;
+      pointer-events: none;
+      filter: blur(1px);
+      animation: moveUp 20s linear infinite;
     }
 
-    #intro h1::after {
-      color: #5effff;
-      z-index: -2;
-      animation: glitchShift 2.2s ease-out 0.1s forwards;
-    }
-
-    @keyframes introGlitch {
-      0% { opacity: 0; letter-spacing: -8px; filter: blur(10px); transform: scale(0.95); }
-      30% { opacity: 1; filter: blur(0); transform: scale(1); }
-      70% { opacity: 1; letter-spacing: 14px; }
-      100% { opacity: 1; letter-spacing: 14px; }
-    }
-
-    @keyframes glitchShift {
-      0% { opacity: 0; transform: translate(0); }
-      20% { opacity: 0.3; transform: translate(-2px, 1px); }
-      40% { opacity: 0.2; transform: translate(2px, -1px); }
-      60% { opacity: 0.1; transform: translate(-1px, 2px); }
-      80% { opacity: 0; transform: translate(1px, -2px); }
-      100% { opacity: 0; transform: translate(0); }
+    @keyframes moveUp {
+      from { transform: translateY(110vh) rotate(0deg); }
+      to { transform: translateY(-20vh) rotate(360deg); }
     }
 
     /* NAVBAR */
@@ -120,11 +171,11 @@
     .nav-inner {
       display: flex;
       gap: 40px;
-      background: rgba(10, 10, 10, 0.25);
+      background: rgba(10, 10, 10, 0.4);
       padding: 8px 30px;
       border-radius: 40px;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 94, 94, 0.2);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 94, 94, 0.25);
     }
 
     nav a {
@@ -133,7 +184,7 @@
       font-size: 0.9rem;
       letter-spacing: 3px;
       font-weight: 500;
-      transition: all 0.3s ease;
+      transition: color 0.3s ease;
       cursor: pointer;
       padding: 5px 0;
       position: relative;
@@ -157,7 +208,6 @@
 
     nav a:hover, nav a.active {
       color: #fff;
-      text-shadow: 0 0 10px rgba(255, 94, 94, 0.5);
     }
 
     /* MAIN */
@@ -175,7 +225,6 @@
       opacity: 1 !important;
     }
 
-    /* page container */
     .page-container {
       position: relative;
       width: 100%;
@@ -191,7 +240,7 @@
     }
 
     @keyframes pageReveal {
-      0% { opacity: 0; transform: translateY(25px) scale(0.98); filter: blur(3px); }
+      0% { opacity: 0; transform: translateY(25px) scale(0.98); filter: blur(2px); }
       60% { opacity: 1; filter: blur(0); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
@@ -224,14 +273,14 @@
       filter: grayscale(90%) brightness(0.9);
       transition: all 0.5s ease;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
       border: 1px solid rgba(255, 94, 94, 0.3);
     }
 
     .leader-item:hover img {
       filter: grayscale(30%) brightness(1.05);
       transform: scale(1.02);
-      box-shadow: 0 15px 30px rgba(255, 94, 94, 0.2);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9);
       border-color: rgba(255, 94, 94, 0.8);
     }
 
@@ -251,14 +300,14 @@
       filter: grayscale(90%) brightness(0.9);
       transition: all 0.5s ease;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
       border: 1px solid rgba(255, 94, 94, 0.3);
     }
 
     .extra-row .leader-item:hover img {
       filter: grayscale(30%) brightness(1.05);
       transform: scale(1.02);
-      box-shadow: 0 15px 30px rgba(255, 94, 94, 0.2);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9);
       border-color: rgba(255, 94, 94, 0.8);
     }
 
@@ -274,7 +323,6 @@
       letter-spacing: 6px;
       color: #fff;
       text-transform: uppercase;
-      text-shadow: 0 0 15px rgba(255, 94, 94, 0.3);
     }
 
     .petinggi-label p {
@@ -303,7 +351,7 @@
       font-weight: 600;
       transition: all 0.3s ease;
       text-transform: lowercase;
-      background: rgba(20, 20, 20, 0.3);
+      background: rgba(20, 20, 20, 0.4);
       padding: 6px 16px;
       border-radius: 30px;
       backdrop-filter: blur(4px);
@@ -320,7 +368,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 94, 94, 0.1), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 94, 94, 0.15), transparent);
       transition: left 0.5s ease;
     }
 
@@ -330,7 +378,7 @@
 
     .id-item:hover {
       color: #fff;
-      background: rgba(255, 80, 80, 0.15);
+      background: rgba(255, 80, 80, 0.2);
       transform: translateY(-2px);
       border-color: rgba(255, 94, 94, 0.5);
     }
@@ -347,8 +395,8 @@
       bottom: 30px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(12px);
+      background: rgba(10, 10, 10, 0.9);
+      backdrop-filter: blur(8px);
       color: #fff;
       padding: 12px 28px;
       border-radius: 50px;
@@ -358,7 +406,7 @@
       opacity: 0;
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
       border: 1px solid rgba(255, 94, 94, 0.3);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
     }
 
     .toast-premium.show {
@@ -373,12 +421,12 @@
 
     /* content block */
     .content-block {
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.35);
       backdrop-filter: blur(4px);
       padding: 28px;
       border-radius: 18px;
       animation: fadeUp 0.8s both;
-      border: 1px solid rgba(255, 94, 94, 0.15);
+      border: 1px solid rgba(255, 94, 94, 0.2);
     }
 
     @keyframes fadeUp {
@@ -394,7 +442,6 @@
       text-transform: uppercase;
       border-left: 3px solid #ff5e5e;
       padding-left: 15px;
-      text-shadow: 0 0 10px rgba(255, 94, 94, 0.3);
     }
 
     /* ABOUT page */
@@ -430,21 +477,21 @@
     }
 
     .search-input {
-      background: rgba(20, 20, 20, 0.45);
-      border: 1px solid rgba(255, 94, 94, 0.2);
+      background: rgba(20, 20, 20, 0.5);
+      border: 1px solid rgba(255, 94, 94, 0.25);
       color: #fff;
       padding: 12px 25px;
       width: 100%;
       font-size: 0.9rem;
       border-radius: 40px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
       transition: all 0.3s ease;
     }
 
     .search-input:focus {
       background: rgba(30, 30, 30, 0.7);
-      box-shadow: 0 8px 20px rgba(255, 94, 94, 0.15);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
       outline: none;
       transform: scale(1.02);
       border-color: rgba(255, 94, 94, 0.5);
@@ -481,14 +528,14 @@
     }
 
     .db-card {
-      background: rgba(10, 10, 10, 0.35);
-      backdrop-filter: blur(6px);
+      background: rgba(10, 10, 10, 0.45);
+      backdrop-filter: blur(4px);
       transition: all 0.4s ease;
       border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
       animation: cardAppear 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-      border: 1px solid rgba(255, 94, 94, 0.1);
+      border: 1px solid rgba(255, 94, 94, 0.15);
     }
 
     @keyframes cardAppear {
@@ -498,8 +545,8 @@
 
     .db-card:hover {
       transform: translateY(-6px);
-      background: rgba(20, 20, 20, 0.55);
-      box-shadow: 0 18px 30px rgba(255, 94, 94, 0.15);
+      background: rgba(20, 20, 20, 0.6);
+      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.9);
       border-color: rgba(255, 94, 94, 0.3);
     }
 
@@ -546,7 +593,7 @@
       position: absolute;
       bottom: 5px;
       right: 5px;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       color: #ff8888;
       padding: 3px 8px;
       font-size: 0.7rem;
@@ -572,7 +619,7 @@
       font-size: 0.8rem;
       margin-bottom: 15px;
       letter-spacing: 1px;
-      background: rgba(255, 80, 80, 0.1);
+      background: rgba(255, 80, 80, 0.15);
       display: inline-block;
       padding: 3px 12px;
       border-radius: 30px;
@@ -598,9 +645,9 @@
       padding: 50px 0;
       font-size: 0.9rem;
       grid-column: 1 / -1;
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.35);
       border-radius: 30px;
-      border: 1px solid rgba(255, 94, 94, 0.1);
+      border: 1px solid rgba(255, 94, 94, 0.15);
     }
 
     /* MODAL */
@@ -613,14 +660,14 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.94);
-      backdrop-filter: blur(14px);
+      background-color: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
       animation: modalFade 0.4s ease;
     }
 
     @keyframes modalFade {
       from { opacity: 0; backdrop-filter: blur(0); }
-      to { opacity: 1; backdrop-filter: blur(14px); }
+      to { opacity: 1; backdrop-filter: blur(10px); }
     }
 
     .modal-content {
@@ -629,7 +676,7 @@
       max-width: 90%;
       max-height: 80vh;
       border: 1px solid rgba(255, 94, 94, 0.3);
-      box-shadow: 0 15px 35px rgba(255, 94, 94, 0.15);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
       animation: modalZoom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -675,12 +722,11 @@
       cursor: pointer;
       padding: 20px;
       user-select: none;
-      transition: all 0.2s;
+      transition: color 0.2s;
     }
 
     .modal-nav:hover {
       color: #ff5e5e;
-      text-shadow: 0 0 15px rgba(255, 94, 94, 0.5);
     }
 
     .modal-prev { left: 20px; }
@@ -692,7 +738,7 @@
       left: 50%;
       transform: translateX(-50%);
       color: #fff;
-      background: rgba(255, 80, 80, 0.2);
+      background: rgba(255, 80, 80, 0.25);
       padding: 5px 15px;
       border-radius: 30px;
       font-size: 0.85rem;
@@ -708,7 +754,7 @@
       letter-spacing: 3px;
       padding: 15px 0;
       animation: fadeUp 1s 0.5s both;
-      border-top: 1px solid rgba(255, 94, 94, 0.1);
+      border-top: 1px solid rgba(255, 94, 94, 0.15);
     }
 
     @media (max-width: 600px) {
@@ -719,14 +765,16 @@
       .nav-inner { gap: 20px; padding: 6px 20px; }
       .id-item { font-size: 0.9rem; padding: 5px 12px; }
       .db-grid { grid-template-columns: 1fr; }
-      #intro h1 { font-size: 1.8rem; letter-spacing: 8px; }
+      #intro h1 { font-size: 2.5rem; letter-spacing: 4px; }
     }
   </style>
 </head>
 <body>
-
+  <div class="flash-impact"></div>
+  
   <div class="bg-fixed"></div>
   <div class="bg-overlay"></div>
+  <div class="vignette"></div>
 
   <div id="toast" class="toast-premium">✧ <span>ID TERSALIN</span> ✧</div>
 
@@ -817,7 +865,7 @@
         <div class="search-container">
           <div class="search-wrapper">
             <input type="text" id="searchInput" class="search-input" placeholder="CARI MARGA / USERNAME..." onkeyup="searchDatabase()">
-            <span class="search-icon"></span>
+            <span class="search-icon">🔍</span>
           </div>
         </div>
         <div class="result-count" id="resultCount">MENAMPILKAN 2 MARGA</div>
@@ -834,12 +882,22 @@
   </audio>
 
   <script>
+    function spawnSkull() {
+      const skull = document.createElement('div');
+      skull.innerHTML = '💀';
+      skull.className = 'skull';
+      skull.style.left = Math.random() * 100 + 'vw';
+      skull.style.fontSize = (1 + Math.random() * 3) + 'rem';
+      const dur = 15 + Math.random() * 15;
+      skull.style.animationDuration = dur + 's';
+      document.body.appendChild(skull);
+      setTimeout(() => skull.remove(), dur * 1000);
+    }
+    setInterval(spawnSkull, 3000);
+
     const databaseMarga = [
       {
-        foto: [
-          "https://files.catbox.moe/xm2xjl.jpg", 
-          "https://files.catbox.moe/o096a2.jpg"
-         ], 
+        foto: ["https://files.catbox.moe/xm2xjl.jpg", "https://files.catbox.moe/o096a2.jpg"], 
         nama: "vian alber",
         wangsaff: "6285882457223",
         gelar: "petinggi ktnyah😹",
@@ -848,10 +906,7 @@
         keluarga: "-"
       },
       {
-        foto: [
-          "https://files.catbox.moe/0ekipa.jpg", 
-          "https://files.catbox.moe/pshlkb.jpg"
-        ],
+        foto: ["https://files.catbox.moe/0ekipa.jpg", "https://files.catbox.moe/pshlkb.jpg"],
         nama: "BOCAH KACUNG NGATAIN ORNG LOMTE ABISTU MISSING😹",
         wangsaff: "6287845279749",
         gelar: "KACUNG",
@@ -882,58 +937,32 @@
           main.classList.add('visible');
           tampilkanDatabase(databaseMarga);
           switchPage('home');
-        }, 1800);
-      }, 2400);
+        }, 1200);
+      }, 2500);
     });
 
-    // ✦ FUNGSI COPY ID DENGAN TOAST PREMIUM ✦
     function copyID(element, idText) {
       navigator.clipboard.writeText(idText).then(() => {
         element.classList.add('copied');
-        setTimeout(() => {
-          element.classList.remove('copied');
-        }, 300);
-
+        setTimeout(() => element.classList.remove('copied'), 300);
         const toast = document.getElementById('toast');
         toast.classList.add('show');
         toast.innerHTML = `✧ <span>${idText}</span> TERSALIN ✧`;
-        
         clearTimeout(copyTimeout);
-        copyTimeout = setTimeout(() => {
-          toast.classList.remove('show');
-        }, 2000);
-      }).catch(err => {
-        console.error('gagal copy:', err);
+        copyTimeout = setTimeout(() => toast.classList.remove('show'), 2000);
       });
     }
 
     function openSingleModal(imgSrc, caption) {
       currentPhotoList = [imgSrc];
       currentPhotoIndex = 0;
-      const modal = document.getElementById('imageModal');
-      const modalImg = document.getElementById('modalImage');
-      const modalCaption = document.getElementById('modalCaption');
-      const modalCounter = document.getElementById('modalCounter');
-      modalImg.src = currentPhotoList[0];
-      modalCaption.innerHTML = caption || '';
-      modalCounter.innerHTML = '';
-      modal.style.display = "block";
+      updateModal();
     }
 
     function openMultipleModal(photoList, nama, index) {
       currentPhotoList = photoList;
       currentPhotoIndex = index;
-      
-      const modal = document.getElementById('imageModal');
-      const modalImg = document.getElementById('modalImage');
-      const modalCaption = document.getElementById('modalCaption');
-      const modalCounter = document.getElementById('modalCounter');
-      
-      modalImg.src = currentPhotoList[currentPhotoIndex];
-      modalCaption.innerHTML = `${nama} — Foto ${currentPhotoIndex + 1} dari ${currentPhotoList.length}`;
-      modalCounter.innerHTML = `${currentPhotoIndex + 1} / ${currentPhotoList.length}`;
-      
-      modal.style.display = "block";
+      updateModal();
     }
 
     function updateModal() {
@@ -941,9 +970,7 @@
       const modalImg = document.getElementById('modalImage');
       const modalCaption = document.getElementById('modalCaption');
       const modalCounter = document.getElementById('modalCounter');
-      
       modalImg.src = currentPhotoList[currentPhotoIndex];
-      
       if(currentPhotoList.length > 1) {
         modalCaption.innerHTML = `Foto ${currentPhotoIndex + 1} dari ${currentPhotoList.length}`;
         modalCounter.innerHTML = `${currentPhotoIndex + 1} / ${currentPhotoList.length}`;
@@ -951,7 +978,6 @@
         modalCaption.innerHTML = '';
         modalCounter.innerHTML = '';
       }
-      
       modal.style.display = "block";
     }
 
@@ -969,46 +995,29 @@
       }
     }
 
-    function closeModal() {
-      document.getElementById('imageModal').style.display = "none";
-    }
-
-    window.onclick = function(event) {
-      const modal = document.getElementById('imageModal');
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
+    function closeModal() { document.getElementById('imageModal').style.display = "none"; }
 
     function tampilkanDatabase(data) {
       const grid = document.getElementById('dbGrid');
       const count = document.getElementById('resultCount');
-      
       if(data.length === 0) {
         grid.innerHTML = '<div class="no-result">TIDAK ADA MARGA DITEMUKAN</div>';
         count.innerText = 'MENAMPILKAN 0 MARGA';
         return;
       }
-
       let html = '';
       data.forEach((item, idx) => {
-        const fotoList = item.foto;
-        const fotoCount = fotoList.length;
-        
-        let fotoHtml = '<div class="db-photos" data-count="' + fotoCount + '">';
-        
-        fotoList.forEach((foto, i) => {
-          const fotoArrayJson = JSON.stringify(fotoList).replace(/'/g, "&apos;");
+        const fotoCount = item.foto.length;
+        let fotoHtml = `<div class="db-photos" data-count="${fotoCount}">`;
+        item.foto.forEach((foto, i) => {
+          const fotoArrayJson = JSON.stringify(item.foto).replace(/"/g, '&quot;');
           fotoHtml += `
             <div class="photo-item" onclick='openMultipleModal(${fotoArrayJson}, "${item.nama}", ${i})'>
-              <img src="${foto}" alt="${item.nama} - foto ${i+1}">
+              <img src="${foto}" alt="${item.nama}">
               ${fotoCount > 1 ? '<span class="photo-count-badge">' + (i+1) + '/' + fotoCount + '</span>' : ''}
-            </div>
-          `;
+            </div>`;
         });
-        
         fotoHtml += '</div>';
-
         html += `
           <div class="db-card" style="animation-delay: ${idx * 0.05}s">
             ${fotoHtml}
@@ -1022,62 +1031,29 @@
                 <div><span>KELUARGA</span> ${item.keluarga}</div>
               </div>
             </div>
-          </div>
-        `;
+          </div>`;
       });
-      
       grid.innerHTML = html;
       count.innerText = `MENAMPILKAN ${data.length} MARGA`;
     }
 
     function searchDatabase() {
       const input = document.getElementById('searchInput').value.toLowerCase().trim();
-      
-      if(input === '') {
-        tampilkanDatabase(databaseMarga);
-        return;
-      }
-
       const hasil = databaseMarga.filter(item => 
         item.nama.toLowerCase().includes(input) || 
-        (item.wangsaff && item.wangsaff.toLowerCase().includes(input)) ||
-        item.gelar.toLowerCase().includes(input) ||
+        item.wangsaff.toLowerCase().includes(input) ||
         item.grup.toLowerCase().includes(input)
       );
-      
       tampilkanDatabase(hasil);
     }
 
     function switchPage(pageId) {
-      // Sembunyikan semua page
-      document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active-page');
-      });
-      
-      // Tampilkan page yang dipilih
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
       document.getElementById(pageId).classList.add('active-page');
-      
-      // Update active state di navbar
-      document.querySelectorAll('nav a').forEach(link => {
-        link.classList.remove('active');
-      });
+      document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
       document.getElementById('n-' + pageId).classList.add('active');
-      
-      // Scroll ke atas
       window.scrollTo({top: 0, behavior: 'smooth'});
-      
-      // Refresh data jika di halaman chaos
-      if(pageId === 'chaos') {
-        const searchInput = document.getElementById('searchInput');
-        if(searchInput) {
-          searchInput.value = '';
-        }
-        tampilkanDatabase(databaseMarga);
-      }
     }
-
-    // Set home sebagai default
-    switchPage('home');
   </script>
 </body>
-  </html>
+</html>
