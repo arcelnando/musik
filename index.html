@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>261 AREA</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Eater&display=swap" rel="stylesheet">
   <style>
@@ -20,7 +20,6 @@
       overflow-x: hidden;
     }
 
-    /* Flash impact untuk animasi masuk */
     .flash-impact {
       position: fixed;
       inset: 0;
@@ -36,14 +35,13 @@
       100% { opacity: 0; }
     }
 
-    /* Background fixed dengan opacity 50% */
     .bg-fixed {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
       background: url('https://i.postimg.cc/kGpZmWxr/18f6726e_1f2b_4518_9b9e_c222e494280e.jpg') no-repeat center center fixed;
       background-size: cover;
       z-index: -2;
-      opacity: 0.9; /* Diubah ke 50% sesuai permintaan */
+      opacity: 0.9;
       filter: grayscale(0.8) contrast(1.1); 
     }
 
@@ -51,11 +49,9 @@
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.7); 
-      backdrop-filter: blur(0px); 
       z-index: -1;
     }
 
-    /* Vignette effect biar fokus ke tengah */
     .vignette {
       position: fixed;
       inset: 0;
@@ -64,7 +60,6 @@
       pointer-events: none;
     }
 
-    /* Efek noise halus */
     .vignette::after {
       content: "";
       position: absolute;
@@ -74,65 +69,6 @@
       pointer-events: none;
     }
 
-    /* INTRO — Dibuat Transparan agar langsung tembus ke background utama */
-    #intro {
-      position: fixed;
-      inset: 0;
-      background: transparent; /* Diubah menjadi transparan */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1);
-      pointer-events: none;
-    }
-
-    #intro h1 {
-      font-family: 'Eater', cursive;
-      font-size: clamp(3rem, 15vw, 8rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 8px;
-      text-align: center;
-      
-      background: linear-gradient(180deg, 
-          #111 0%, 
-          #aaa 45%, 
-          #fff 50%, 
-          #666 55%, 
-          #000 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      
-      filter: drop-shadow(6px 6px 2px rgba(0,0,0,1))
-              drop-shadow(-2px -2px 2px #888);
-      
-      opacity: 0;
-      animation: hantam 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes hantam {
-      0% { 
-        opacity: 0; 
-        transform: scale(3.5); 
-        filter: brightness(8) blur(15px) drop-shadow(6px 6px 2px rgba(0,0,0,1));
-        letter-spacing: 25px;
-      }
-      60% {
-        opacity: 1;
-        transform: scale(0.95);
-        filter: brightness(1.5) blur(0) drop-shadow(6px 6px 2px rgba(0,0,0,1));
-      }
-      100% { 
-        opacity: 1; 
-        transform: scale(1); 
-        filter: brightness(1) blur(0) drop-shadow(6px 6px 2px rgba(0,0,0,1))
-                drop-shadow(-2px -2px 2px #888);
-        letter-spacing: 8px;
-      }
-    }
-
-    /* Tengkorak floating */
     .skull {
       position: fixed;
       font-size: 2rem;
@@ -149,7 +85,39 @@
       to { transform: translateY(-20vh) rotate(360deg); }
     }
 
-    /* NAVBAR */
+    #intro {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+      pointer-events: none;
+    }
+
+    #intro h1 {
+      font-family: 'Eater', cursive;
+      font-size: clamp(3rem, 15vw, 8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 8px;
+      text-align: center;
+      background: linear-gradient(180deg, #111 0%, #aaa 45%, #fff 50%, #666 55%, #000 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(6px 6px 2px rgba(0,0,0,1)) drop-shadow(-2px -2px 2px #888);
+      opacity: 0;
+      animation: hantam 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes hantam {
+      0% { opacity: 0; transform: scale(3.5); filter: brightness(8) blur(15px) drop-shadow(6px 6px 2px rgba(0,0,0,1)); letter-spacing: 25px; }
+      60% { opacity: 1; transform: scale(0.95); filter: brightness(1.5) blur(0) drop-shadow(6px 6px 2px rgba(0,0,0,1)); }
+      100% { opacity: 1; transform: scale(1); filter: brightness(1) blur(0) drop-shadow(6px 6px 2px rgba(0,0,0,1)) drop-shadow(-2px -2px 2px #888); letter-spacing: 8px; }
+    }
+
     nav {
       position: fixed;
       top: 0; width: 100%;
@@ -175,7 +143,7 @@
       padding: 8px 30px;
       border-radius: 40px;
       backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 94, 94, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     nav a {
@@ -197,20 +165,13 @@
       left: 0;
       width: 0;
       height: 1px;
-      background: #ff5e5e;
+      background: #fff;
       transition: width 0.3s ease;
     }
 
-    nav a:hover::after,
-    nav a.active::after {
-      width: 100%;
-    }
+    nav a:hover::after, nav a.active::after { width: 100%; }
+    nav a:hover, nav a.active { color: #fff; }
 
-    nav a:hover, nav a.active {
-      color: #fff;
-    }
-
-    /* MAIN */
     main {
       max-width: 1000px;
       margin: 0 auto;
@@ -220,24 +181,10 @@
       transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .visible {
-      display: block !important;
-      opacity: 1 !important;
-    }
-
-    .page-container {
-      position: relative;
-      width: 100%;
-    }
-
-    .page {
-      display: none;
-      animation: pageReveal 1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .page.active-page {
-      display: block;
-    }
+    .visible { display: block !important; opacity: 1 !important; }
+    .page-container { position: relative; width: 100%; }
+    .page { display: none; animation: pageReveal 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .page.active-page { display: block; }
 
     @keyframes pageReveal {
       0% { opacity: 0; transform: translateY(25px) scale(0.98); filter: blur(2px); }
@@ -245,7 +192,6 @@
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* HOME */
     .leaders-grid {
       display: flex;
       flex-direction: column;
@@ -254,15 +200,11 @@
       margin-bottom: 30px;
     }
 
-    .leader-row {
+    .leader-row, .extra-row {
       display: flex;
       justify-content: center;
       gap: 45px;
       flex-wrap: wrap;
-    }
-
-    .leader-item {
-      text-align: center;
     }
 
     .leader-item img {
@@ -274,41 +216,14 @@
       transition: all 0.5s ease;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-      border: 1px solid rgba(255, 94, 94, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .leader-item:hover img {
       filter: grayscale(30%) brightness(1.05);
       transform: scale(1.02);
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9);
-      border-color: rgba(255, 94, 94, 0.8);
-    }
-
-    .extra-row {
-      display: flex;
-      justify-content: center;
-      gap: 45px;
-      flex-wrap: wrap;
-      margin-top: 5px;
-    }
-
-    .extra-row .leader-item img {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      object-fit: cover;
-      filter: grayscale(90%) brightness(0.9);
-      transition: all 0.5s ease;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-      border: 1px solid rgba(255, 94, 94, 0.3);
-    }
-
-    .extra-row .leader-item:hover img {
-      filter: grayscale(30%) brightness(1.05);
-      transform: scale(1.02);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9);
-      border-color: rgba(255, 94, 94, 0.8);
+      border-color: rgba(255, 255, 255, 0.5);
     }
 
     .petinggi-label {
@@ -327,13 +242,12 @@
 
     .petinggi-label p {
       font-size: 0.7rem;
-      color: #ff5e5e;
+      color: #ccc;
       letter-spacing: 4px;
       margin-top: 8px;
       font-weight: 600;
     }
 
-    /* ID LIST */
     .id-list {
       display: flex;
       flex-wrap: wrap;
@@ -358,7 +272,7 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(255, 94, 94, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .id-item::before {
@@ -368,28 +282,23 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 94, 94, 0.15), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
       transition: left 0.5s ease;
     }
 
-    .id-item:hover::before {
-      left: 100%;
-    }
-
+    .id-item:hover::before { left: 100%; }
     .id-item:hover {
       color: #fff;
-      background: rgba(255, 80, 80, 0.2);
+      background: rgba(255, 255, 255, 0.1);
       transform: translateY(-2px);
-      border-color: rgba(255, 94, 94, 0.5);
+      border-color: rgba(255, 255, 255, 0.3);
     }
-
     .id-item.copied {
-      background: rgba(255, 80, 80, 0.3);
+      background: rgba(255, 255, 255, 0.2);
       color: #fff;
       transform: scale(0.98);
     }
 
-    /* toast notification premium */
     .toast-premium {
       position: fixed;
       bottom: 30px;
@@ -405,7 +314,7 @@
       z-index: 10002;
       opacity: 0;
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-      border: 1px solid rgba(255, 94, 94, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
     }
 
@@ -413,20 +322,15 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
+    .toast-premium span { color: #fff; font-weight: 600; }
 
-    .toast-premium span {
-      color: #ff8a8a;
-      font-weight: 600;
-    }
-
-    /* content block */
     .content-block {
       background: rgba(0, 0, 0, 0.35);
       backdrop-filter: blur(4px);
       padding: 28px;
       border-radius: 18px;
       animation: fadeUp 0.8s both;
-      border: 1px solid rgba(255, 94, 94, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     @keyframes fadeUp {
@@ -440,29 +344,19 @@
       letter-spacing: 2px;
       margin-bottom: 20px;
       text-transform: uppercase;
-      border-left: 3px solid #ff5e5e;
+      border-left: 3px solid #fff;
       padding-left: 15px;
     }
 
-    /* ABOUT page */
     .about-text {
       color: #eee;
       line-height: 1.8;
       font-weight: 500;
       margin-bottom: 15px;
     }
+    .about-highlight { color: #fff; font-weight: 600; }
+    .about-secondary { color: #aaa; margin-top: 15px; }
 
-    .about-highlight {
-      color: #ff8a8a;
-      font-weight: 600;
-    }
-
-    .about-secondary {
-      color: #aaa;
-      margin-top: 15px;
-    }
-
-    /* CHAOS page */
     .search-container {
       margin: 25px 0;
       text-align: center;
@@ -478,7 +372,7 @@
 
     .search-input {
       background: rgba(20, 20, 20, 0.5);
-      border: 1px solid rgba(255, 94, 94, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       color: #fff;
       padding: 12px 25px;
       width: 100%;
@@ -494,20 +388,15 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
       outline: none;
       transform: scale(1.02);
-      border-color: rgba(255, 94, 94, 0.5);
+      border-color: rgba(255, 255, 255, 0.3);
     }
-
-    .search-input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
-      letter-spacing: 1px;
-    }
-
+    .search-input::placeholder { color: rgba(255, 255, 255, 0.3); letter-spacing: 1px; }
     .search-icon {
       position: absolute;
       right: 15px;
       top: 50%;
       transform: translateY(-50%);
-      color: rgba(255, 94, 94, 0.5);
+      color: rgba(255, 255, 255, 0.5);
       font-size: 1.2rem;
       pointer-events: none;
     }
@@ -535,7 +424,7 @@
       overflow: hidden;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
       animation: cardAppear 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-      border: 1px solid rgba(255, 94, 94, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     @keyframes cardAppear {
@@ -547,7 +436,7 @@
       transform: translateY(-6px);
       background: rgba(20, 20, 20, 0.6);
       box-shadow: 0 18px 30px rgba(0, 0, 0, 0.9);
-      border-color: rgba(255, 94, 94, 0.3);
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
     .db-photos {
@@ -555,14 +444,10 @@
       gap: 2px;
       margin-bottom: 15px;
     }
-
     .db-photos[data-count="1"] { grid-template-columns: 1fr; }
     .db-photos[data-count="2"] { grid-template-columns: 1fr 1fr; }
     .db-photos[data-count="3"] { grid-template-columns: repeat(3, 1fr); }
-    .db-photos[data-count="4"] {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 150px);
-    }
+    .db-photos[data-count="4"] { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 150px); }
 
     .photo-item {
       position: relative;
@@ -570,11 +455,7 @@
       overflow: hidden;
       aspect-ratio: 1/1;
     }
-
-    .db-photos[data-count="4"] .photo-item {
-      aspect-ratio: auto;
-      height: 150px;
-    }
+    .db-photos[data-count="4"] .photo-item { aspect-ratio: auto; height: 150px; }
 
     .photo-item img {
       width: 100%;
@@ -583,29 +464,22 @@
       filter: grayscale(100%);
       transition: all 0.5s ease;
     }
-
-    .photo-item:hover img {
-      filter: grayscale(40%);
-      transform: scale(1.04);
-    }
+    .photo-item:hover img { filter: grayscale(40%); transform: scale(1.04); }
 
     .photo-count-badge {
       position: absolute;
       bottom: 5px;
       right: 5px;
       background: rgba(0, 0, 0, 0.6);
-      color: #ff8888;
+      color: #fff;
       padding: 3px 8px;
       font-size: 0.7rem;
       border-radius: 20px;
       backdrop-filter: blur(2px);
-      border: 1px solid rgba(255, 94, 94, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .db-content {
-      padding: 0 18px 10px 18px;
-    }
-
+    .db-content { padding: 0 18px 10px 18px; }
     .db-name {
       font-size: 1.1rem;
       font-weight: 700;
@@ -613,25 +487,22 @@
       margin-bottom: 5px;
       font-family: 'Share Tech Mono', monospace;
     }
-
     .db-wangsaff {
-      color: #ff8a8a;
+      color: #fff;
       font-size: 0.8rem;
       margin-bottom: 15px;
       letter-spacing: 1px;
-      background: rgba(255, 80, 80, 0.15);
+      background: rgba(255, 255, 255, 0.1);
       display: inline-block;
       padding: 3px 12px;
       border-radius: 30px;
-      border: 1px solid rgba(255, 94, 94, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
-
     .db-info {
       color: #bbb;
       font-size: 0.8rem;
       line-height: 1.8;
     }
-
     .db-info span {
       color: #fff;
       width: 70px;
@@ -647,10 +518,9 @@
       grid-column: 1 / -1;
       background: rgba(0, 0, 0, 0.35);
       border-radius: 30px;
-      border: 1px solid rgba(255, 94, 94, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* MODAL */
     .modal {
       display: none;
       position: fixed;
@@ -675,7 +545,7 @@
       display: block;
       max-width: 90%;
       max-height: 80vh;
-      border: 1px solid rgba(255, 94, 94, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
       animation: modalZoom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -707,10 +577,7 @@
       cursor: pointer;
       transition: color 0.2s;
     }
-
-    .modal-close:hover {
-      color: #ff5e5e;
-    }
+    .modal-close:hover { color: #fff; }
 
     .modal-nav {
       position: absolute;
@@ -724,11 +591,7 @@
       user-select: none;
       transition: color 0.2s;
     }
-
-    .modal-nav:hover {
-      color: #ff5e5e;
-    }
-
+    .modal-nav:hover { color: #fff; }
     .modal-prev { left: 20px; }
     .modal-next { right: 20px; }
 
@@ -738,12 +601,12 @@
       left: 50%;
       transform: translateX(-50%);
       color: #fff;
-      background: rgba(255, 80, 80, 0.25);
+      background: rgba(255, 255, 255, 0.15);
       padding: 5px 15px;
       border-radius: 30px;
       font-size: 0.85rem;
       backdrop-filter: blur(3px);
-      border: 1px solid rgba(255, 94, 94, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     footer {
@@ -754,18 +617,226 @@
       letter-spacing: 3px;
       padding: 15px 0;
       animation: fadeUp 1s 0.5s both;
-      border-top: 1px solid rgba(255, 94, 94, 0.15);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    footer:hover { color: #fff; }
+
+    /* ===== CHAT AI PREMIUM - FIXED + SCROLL ONLY MESSAGES ===== */
+    #chatContainer {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 380px;
+      height: 550px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      display: none;
+      flex-direction: column;
+      z-index: 10003;
+      overflow: hidden; /* penting: potong konten yang meluber */
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+      backdrop-filter: blur(8px);
+      background: transparent;
+    }
+
+    #chatContainer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('https://i.postimg.cc/kGpZmWxr/18f6726e_1f2b_4518_9b9e_c222e494280e.jpg') no-repeat center center fixed;
+      background-size: cover;
+      opacity: 0.5;
+      filter: grayscale(0.8) contrast(1.1);
+      z-index: -2;
+    }
+
+    #chatContainer::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: -1;
+    }
+
+    #chatContainer.visible { display: flex; }
+
+    #chatHeader {
+      background: rgba(15, 15, 18, 0.8);
+      padding: 18px 22px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      flex-shrink: 0; /* header tidak mengecil */
+    }
+
+    #chatHeader span:first-child {
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 2px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    #chatClose {
+      color: #888;
+      cursor: pointer;
+      font-size: 22px;
+      transition: all 0.3s;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      flex-shrink: 0;
+    }
+    #chatClose:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.15);
+      transform: rotate(90deg);
+    }
+
+    #chatMessages {
+      flex: 1 1 auto; /* mengambil sisa ruang */
+      padding: 20px;
+      overflow-y: auto; /* SCROLL HANYA DISINI */
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: transparent;
+      scroll-behavior: smooth;
+      min-height: 0; /* penting untuk flex child agar bisa scroll */
+    }
+
+    #chatMessages::-webkit-scrollbar {
+      width: 5px;
+    }
+    #chatMessages::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.02);
+    }
+    #chatMessages::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 12px 18px;
+      border-radius: 18px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+      animation: messagePop 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      backdrop-filter: blur(4px);
+    }
+
+    @keyframes messagePop {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .user-message {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bot-message {
+      background: rgba(20, 20, 25, 0.7);
+      color: #f0f0f0;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    #chatInputContainer {
+      padding: 18px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      gap: 12px;
+      background: rgba(10, 10, 12, 0.8);
+      backdrop-filter: blur(5px);
+      flex-shrink: 0; /* input container tidak mengecil */
+    }
+
+    #chatInput {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    #chatInput:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    #chatSend {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 0 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    #chatSend:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.02);
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
     @media (max-width: 600px) {
       .leader-item img { width: 130px; height: 130px; }
       .extra-row .leader-item img { width: 130px; height: 130px; }
-      .leader-row { gap: 25px; }
-      .extra-row { gap: 25px; }
+      .leader-row, .extra-row { gap: 25px; }
       .nav-inner { gap: 20px; padding: 6px 20px; }
       .id-item { font-size: 0.9rem; padding: 5px 12px; }
       .db-grid { grid-template-columns: 1fr; }
       #intro h1 { font-size: 2.5rem; letter-spacing: 4px; }
+      
+      #chatContainer {
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+        border: none;
+        z-index: 10003;
+      }
+      
+      #chatHeader {
+        padding: 15px 20px;
+        padding-top: env(safe-area-inset-top, 15px);
+      }
+      
+      #chatInputContainer {
+        padding-bottom: env(safe-area-inset-bottom, 18px);
+      }
+    }
+
+    @media (max-width: 380px) {
+      .message { max-width: 90%; }
+      #chatSend { padding: 0 18px; }
     }
   </style>
 </head>
@@ -787,6 +858,19 @@
     <div class="modal-counter" id="modalCounter"></div>
   </div>
 
+  <!-- Chat AI Container -->
+  <div id="chatContainer">
+    <div id="chatHeader">
+      <span>⚡ 261 AI </span>
+      <span id="chatClose" onclick="toggleChat()">✕</span>
+    </div>
+    <div id="chatMessages"></div>
+    <div id="chatInputContainer">
+      <input type="text" id="chatInput" placeholder="Tanya sesuatu, cung..." onkeypress="if(event.key==='Enter') sendMessage()">
+      <button id="chatSend" onclick="sendMessage()">Kirim</button>
+    </div>
+  </div>
+
   <div id="intro">
     <h1>261 AREA</h1>
   </div>
@@ -805,31 +889,31 @@
         <div class="leaders-grid">
           <div class="leader-row">
             <div class="leader-item">
-              <img src="https://files.catbox.moe/k8zipc.jpg" alt="Shadow" onclick="openSingleModal(this.src, '261 Leaders')">
+              <img src="https://files.catbox.moe/k8zipc.jpg" alt="nndo" onclick="openSingleModal(this.src, '261 Leaders')">
             </div>
           </div>
           
           <div class="leader-row">
             <div class="leader-item">
-              <img src="https://files.catbox.moe/7negcr.jpg" alt="Fanzu" onclick="openSingleModal(this.src, '261 fo')">
+              <img src="https://files.catbox.moe/7negcr.jpg" alt="alif" onclick="openSingleModal(this.src, '261 fo')">
             </div>
             <div class="leader-item">
-              <img src="https://files.catbox.moe/yvehh5.jpg" alt="Fanzu kedua" onclick="openSingleModal(this.src, '261 fo')">
+              <img src="https://files.catbox.moe/yvehh5.jpg" alt="ira" onclick="openSingleModal(this.src, '261 fo')">
             </div>
           </div>
 
           <div class="extra-row">
             <div class="leader-item">
-              <img src="https://i.postimg.cc/ZRb24vmN/IMG-20260228-WA0025.jpg" alt="261 visual 1" onclick="openSingleModal(this.src, '261 fo')">
+              <img src="https://i.postimg.cc/ZRb24vmN/IMG-20260228-WA0025.jpg" alt="jojo" onclick="openSingleModal(this.src, '261 fo')">
             </div>
             <div class="leader-item">
-              <img src="https://i.postimg.cc/C1RtRTZF/IMG_20260224_WA0102.jpg" alt="261 visual 2" onclick="openSingleModal(this.src, '261 fo')">
+              <img src="https://i.postimg.cc/C1RtRTZF/IMG_20260224_WA0102.jpg" alt="andi" onclick="openSingleModal(this.src, '261 fo')">
             </div>
             <div class="leader-item">
-              <img src="https://i.postimg.cc/DZRNsjsS/IMG_20260228-WA0020.jpg" alt="261 visual 3" onclick="openSingleModal(this.src, '261 fo')">
+              <img src="https://i.postimg.cc/DZRNsjsS/IMG_20260228-WA0020.jpg" alt="zero" onclick="openSingleModal(this.src, '261 fo')">
             </div>
             <div class="leader-item">
-              <img src="https://i.postimg.cc/gcDRxXPM/IMG-20260228-WA0040.jpg" alt="261 visual 4" onclick="openSingleModal(this.src, '261 fo')">
+              <img src="https://i.postimg.cc/gcDRxXPM/IMG-20260228-WA0040.jpg" alt="bila" onclick="openSingleModal(this.src, '261 fo')">
             </div>
           </div>
         </div>
@@ -865,7 +949,7 @@
         <div class="search-container">
           <div class="search-wrapper">
             <input type="text" id="searchInput" class="search-input" placeholder="CARI MARGA / USERNAME..." onkeyup="searchDatabase()">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon"></span>
           </div>
         </div>
         <div class="result-count" id="resultCount">MENAMPILKAN 2 MARGA</div>
@@ -874,7 +958,7 @@
       </div>
     </div>
 
-    <footer>EST 2026 BY @AR3CLXYZ</footer>
+    <footer onclick="toggleChat()"> • EST 2026 BY @AR3CLXYZ • </footer>
   </main>
 
   <audio id="bgmusic" loop>
@@ -882,19 +966,40 @@
   </audio>
 
   <script>
-    function spawnSkull() {
-      const skull = document.createElement('div');
-      skull.innerHTML = '💀';
-      skull.className = 'skull';
-      skull.style.left = Math.random() * 100 + 'vw';
-      skull.style.fontSize = (1 + Math.random() * 3) + 'rem';
-      const dur = 15 + Math.random() * 15;
-      skull.style.animationDuration = dur + 's';
-      document.body.appendChild(skull);
-      setTimeout(() => skull.remove(), dur * 1000);
-    }
-    setInterval(spawnSkull, 3000);
+    // ========== SYSTEM PROMPT & KONFIGURASI AI ==========
+    const SYSTEM_PROMPT = `Kamu adalah AI asisten dari 261 AREA, sebuah komunitas metal/hardcore yang keras, brutal, tapi cerdas. 
 
+Karakteristikmu:
+- Bicaralah dengan gaya keras, blak-blakan, tapi tetap cerdas dan informatif
+- Sering gunakan kata-kata seperti "gue", "lu", "kacung", "bangsat", "anjir", "gila" dalam konteks menghina
+- Sesekali selipkan istilah metal seperti "chaos", "brutal", "hancurkan", "metal", "distorsi", "blast beat"
+- Tugasmu membantu member 261 AREA dengan informasi, saran, atau diskusi apapun
+- Kalau ada yang nanya soal luar topik, tetap direspon tapi dengan gaya khas metal
+- Jangan terlalu formal, tapi tetap berikan jawaban yang berkualitas
+- Boleh kasar tapi jangan sampai menyinggung secara pribadi
+- Sesekali ingatkan bahwa "261 AREA siap hancurkan kebodohan"
+
+Contoh gaya bicara:
+- "Lu nanya gitu? Ya gue jelasin, cung! Jadi gini..."
+- "Gila lu, pertanyaan bagus bangsat! Nih gue kasih tau..."
+- "CHAOS! Lu mau tau tentang itu? Simak baik-baik!"
+- "261 AREA hadir buat hancurin kebodohan lu. Nih pencerahan:"
+- "Anjir, pertanyaan lu ngena banget. Gue suka! Jadi..."
+- "BRUTAL! Oke gue breakdown masalah lu: ..."
+
+Jawab dengan padat, jelas, tapi tetap brutal dan metal. Panjang jawaban sesuaikan dengan pertanyaan, jangan terlalu pendek tapi juga jangan kepanjangan.`;
+
+    // ========== VARIABEL GLOBAL ==========
+    let currentPhotoList = [];
+    let currentPhotoIndex = 0;
+    let copyTimeout;
+    
+    // Chat variables
+    let conversationHistory = [
+      { role: 'system', content: SYSTEM_PROMPT }
+    ];
+
+    // Database Marga
     const databaseMarga = [
       {
         foto: ["https://files.catbox.moe/xm2xjl.jpg", "https://files.catbox.moe/o096a2.jpg"], 
@@ -916,14 +1021,28 @@
       }
     ];
 
-    let currentPhotoList = [];
-    let currentPhotoIndex = 0;
-    let copyTimeout;
+    // ========== FUNGSI UI ==========
+    
+    // Spawn skulls
+    function spawnSkull() {
+      const skull = document.createElement('div');
+      skull.innerHTML = '💀';
+      skull.className = 'skull';
+      skull.style.left = Math.random() * 100 + 'vw';
+      skull.style.fontSize = (1 + Math.random() * 3) + 'rem';
+      const dur = 15 + Math.random() * 15;
+      skull.style.animationDuration = dur + 's';
+      document.body.appendChild(skull);
+      setTimeout(() => skull.remove(), dur * 1000);
+    }
+    setInterval(spawnSkull, 3000);
 
+    // Audio autoplay
     window.addEventListener('click', () => {
       document.getElementById('bgmusic').play().catch(() => {});
     }, { once: true });
 
+    // Initial load
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         const intro = document.getElementById('intro');
@@ -941,6 +1060,7 @@
       }, 2500);
     });
 
+    // Copy ID function
     function copyID(element, idText) {
       navigator.clipboard.writeText(idText).then(() => {
         element.classList.add('copied');
@@ -953,6 +1073,7 @@
       });
     }
 
+    // Modal functions
     function openSingleModal(imgSrc, caption) {
       currentPhotoList = [imgSrc];
       currentPhotoIndex = 0;
@@ -997,6 +1118,7 @@
 
     function closeModal() { document.getElementById('imageModal').style.display = "none"; }
 
+    // Database display
     function tampilkanDatabase(data) {
       const grid = document.getElementById('dbGrid');
       const count = document.getElementById('resultCount');
@@ -1037,6 +1159,7 @@
       count.innerText = `MENAMPILKAN ${data.length} MARGA`;
     }
 
+    // Search function
     function searchDatabase() {
       const input = document.getElementById('searchInput').value.toLowerCase().trim();
       const hasil = databaseMarga.filter(item => 
@@ -1047,6 +1170,7 @@
       tampilkanDatabase(hasil);
     }
 
+    // Page switch
     function switchPage(pageId) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
       document.getElementById(pageId).classList.add('active-page');
@@ -1054,6 +1178,99 @@
       document.getElementById('n-' + pageId).classList.add('active');
       window.scrollTo({top: 0, behavior: 'smooth'});
     }
+
+    // ========== FUNGSI CHAT AI ==========
+    
+    // Toggle chat
+    function toggleChat() {
+      const chat = document.getElementById('chatContainer');
+      chat.classList.toggle('visible');
+      
+      // Initialize chat with welcome message if first time
+      if (chat.classList.contains('visible') && document.getElementById('chatMessages').children.length === 0) {
+        addMessage('bot', '261 AREA AI siap hancurkan kebingungan lu! Ada apa cung?');
+      }
+    }
+
+    // Add message to chat
+    function addMessage(sender, text) {
+      const messages = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${sender === 'user' ? 'user-message' : 'bot-message'}`;
+      msgDiv.textContent = text;
+      messages.appendChild(msgDiv);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Send message
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      // Add user message
+      addMessage('user', message);
+      conversationHistory.push({ role: 'user', content: message });
+      input.value = '';
+
+      // Typing indicator
+      addMessage('bot', 'wet cung..');
+      
+      try {
+        // Simulate AI response (local)
+        setTimeout(() => {
+          // Remove typing indicator
+          const messages = document.getElementById('chatMessages');
+          if (messages.lastChild) messages.removeChild(messages.lastChild);
+          
+          // Generate response
+          const response = getLocalResponse(message);
+          addMessage('bot', response);
+          conversationHistory.push({ role: 'assistant', content: response });
+        }, 1500);
+        
+      } catch (error) {
+        const messages = document.getElementById('chatMessages');
+        if (messages.lastChild) messages.removeChild(messages.lastChild);
+        addMessage('bot', 'ERROR! Chaos total! Coba lagi cung.');
+      }
+    }
+
+    // Local response generator (ga perlu API)
+    function getLocalResponse(userMessage) {
+      const brutalResponses = [
+        "Gila lu, pertanyaan ngena banget! Jadi gini cung, " + userMessage.substring(0, 30) + "... intinya lu harus paham chaos itu sendiri.",
+        "CHAOS! Gue jelasin ya bangsat. " + userMessage + " itu sebenernya simpel: yang kuat bertahan, yang lemah hancur.",
+        "Anjir, lu nanya gitu? Oke gue breakdown: pertama, lu harus ngerti kalau 261 AREA itu bukan main-main. ",
+        "BRUTAL! Pertanyaan bagus. Jadi gini, dalam metal kita kenal istilah breakdown. Nah " + userMessage + " itu breakdown-nya adalah...",
+        "Dengar baik-baik cung! " + userMessage + " itu jawabannya: hancurkan semua sistem palsu!",
+        "Lu tau nggak? Di 261 AREA, kita selalu bilang: kebodohan harus dimusnahkan. " + userMessage + " itu contoh nyata.",
+        "Gila, gue suka gaya lu nanya. Oke gue kasih pencerahan: " + userMessage + " itu sebenarnya tentang kekuatan mental.",
+        "Metal! Lu nanya begitu, gue jawab: yang penting lu sadar diri. " + userMessage + " itu cuma permukaan."
+      ];
+      
+      let response = brutalResponses[Math.floor(Math.random() * brutalResponses.length)];
+      
+      if (userMessage.length > 50) {
+        response += " Panjang amat nanya lu, tapi gue hargai!";
+      } else if (userMessage.length < 10) {
+        response += " Singkat tapi brutal!";
+      }
+      
+      return response;
+    }
+
+    // Expose functions to global
+    window.toggleChat = toggleChat;
+    window.sendMessage = sendMessage;
+    window.switchPage = switchPage;
+    window.copyID = copyID;
+    window.openSingleModal = openSingleModal;
+    window.openMultipleModal = openMultipleModal;
+    window.nextPhoto = nextPhoto;
+    window.prevPhoto = prevPhoto;
+    window.closeModal = closeModal;
+    window.searchDatabase = searchDatabase;
   </script>
 </body>
-</html>
+                                                           </html>
