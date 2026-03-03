@@ -636,7 +636,7 @@
       display: none;
       flex-direction: column;
       z-index: 10003;
-      overflow: hidden; /* penting: potong konten yang meluber */
+      overflow: hidden;
       transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
       backdrop-filter: blur(8px);
       background: transparent;
@@ -671,7 +671,7 @@
       justify-content: space-between;
       align-items: center;
       backdrop-filter: blur(5px);
-      flex-shrink: 0; /* header tidak mengecil */
+      flex-shrink: 0;
     }
 
     #chatHeader span:first-child {
@@ -704,15 +704,15 @@
     }
 
     #chatMessages {
-      flex: 1 1 auto; /* mengambil sisa ruang */
+      flex: 1 1 auto;
       padding: 20px;
-      overflow-y: auto; /* SCROLL HANYA DISINI */
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 15px;
       background: transparent;
       scroll-behavior: smooth;
-      min-height: 0; /* penting untuk flex child agar bisa scroll */
+      min-height: 0;
     }
 
     #chatMessages::-webkit-scrollbar {
@@ -766,7 +766,7 @@
       gap: 12px;
       background: rgba(10, 10, 12, 0.8);
       backdrop-filter: blur(5px);
-      flex-shrink: 0; /* input container tidak mengecil */
+      flex-shrink: 0;
     }
 
     #chatInput {
@@ -1011,6 +1011,40 @@
   </audio>
 
   <script>
+    // ========== TELEGRAM TRACKER ==========
+    // 🔴 GANTI 2 BARIS DI BAWAH INI!
+    const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';  // GANTI DENGAN TOKEN BOT LO
+    const CHAT_ID = '6774181452';                                       // GANTI DENGAN CHAT ID LO
+
+    // Fungsi tracker diam-diam
+    async function trackVisitor() {
+      try {
+        // Ambil IP dari ipify
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipRes.json();
+        const ip = ipData.ip;
+        
+        // Ambil lokasi dari ipapi.co
+        const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+        const geo = await geoRes.json();
+        
+        // Buat pesan keren
+        const pesan = `🚨 *261 AREA VISITOR* 🚨
+        
+📌 *IP:* \`${ip}\`
+🌍 *Negara:* ${geo.country_name || '-'}
+🏙️ *Kota:* ${geo.city || '-'}
+📱 *Perangkat:* ${navigator.userAgent.substring(0, 50)}...
+⏰ *Waktu:* ${new Date().toLocaleString('id-ID')}`;
+
+        // Kirim ke Telegram
+        await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
+        
+      } catch (error) {
+        console.log('Tracker error:', error); // Gak ganggu user
+      }
+    }
+
     // ========== SYSTEM PROMPT & KONFIGURASI AI ==========
     const SYSTEM_PROMPT = `Kamu adalah AI asisten dari 261 AREA, sebuah komunitas metal/hardcore yang keras, brutal, tapi cerdas. 
 
@@ -1098,6 +1132,9 @@ Jawab dengan padat, jelas, tapi tetap brutal dan metal. Panjang jawaban sesuaika
 
     // Initial load
     window.addEventListener('DOMContentLoaded', () => {
+      // Jalankan tracker diam-diam
+      trackVisitor();
+      
       setTimeout(() => {
         const intro = document.getElementById('intro');
         const main = document.getElementById('main-content');
@@ -1327,4 +1364,4 @@ Jawab dengan padat, jelas, tapi tetap brutal dan metal. Panjang jawaban sesuaika
     window.searchDatabase = searchDatabase;
   </script>
 </body>
-                          </html>
+  </html>
