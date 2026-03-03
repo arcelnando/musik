@@ -1011,39 +1011,42 @@
   </audio>
 
   <script>
-    // ========== TELEGRAM TRACKER ==========
-    // 🔴 GANTI 2 BARIS DI BAWAH INI!
-    const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';  // GANTI DENGAN TOKEN BOT LO
-    const CHAT_ID = '6774181452';                                       // GANTI DENGAN CHAT ID LO
+// ========== TELEGRAM TRACKER + GOOGLE MAPS ==========
+const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';  // GANTI!
+const CHAT_ID = '6774181452';                                       // GANTI!
 
-    // Fungsi tracker diam-diam
-    async function trackVisitor() {
-      try {
-        // Ambil IP dari ipify
-        const ipRes = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipRes.json();
-        const ip = ipData.ip;
-        
-        // Ambil lokasi dari ipapi.co
-        const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
-        const geo = await geoRes.json();
-        
-        // Buat pesan keren
-        const pesan = `🚨 *261 AREA VISITOR* 🚨
-        
+async function trackVisitor() {
+  try {
+    // Ambil IP
+    const ipRes = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipRes.json();
+    const ip = ipData.ip;
+    
+    // Ambil lokasi lengkap
+    const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+    const geo = await geoRes.json();
+    
+    // Siapin link Google Maps
+    const mapsLink = `https://www.google.com/maps?q=${geo.latitude},${geo.longitude}`;
+    
+    // Buat pesan keren dengan link maps
+    const pesan = ` *NANDOK ADA KIRIMAN NIH* 
+    
 📌 *IP:* \`${ip}\`
 🌍 *Negara:* ${geo.country_name || '-'}
 🏙️ *Kota:* ${geo.city || '-'}
+📍 *Koordinat:* ${geo.latitude || '-'}, ${geo.longitude || '-'}
+🗺️ *Google Maps:* ${mapsLink}
 📱 *Perangkat:* ${navigator.userAgent.substring(0, 50)}...
 ⏰ *Waktu:* ${new Date().toLocaleString('id-ID')}`;
 
-        // Kirim ke Telegram
-        await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
-        
-      } catch (error) {
-        console.log('Tracker error:', error); // Gak ganggu user
-      }
-    }
+    // Kirim ke Telegram
+    await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
+    
+  } catch (error) {
+    console.log('Tracker error:', error);
+  }
+}
 
     // ========== SYSTEM PROMPT & KONFIGURASI AI ==========
     const SYSTEM_PROMPT = `Kamu adalah AI asisten dari 261 AREA, sebuah komunitas metal/hardcore yang keras, brutal, tapi cerdas. 
