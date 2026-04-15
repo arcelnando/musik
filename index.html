@@ -558,6 +558,9 @@
             <div class="leader-item">
               <img src="cabang1.jpg" alt="cabang1" onclick="openSingleModal(this.src)">
             </div>
+          </div>
+
+          <div class="leader-row">
             <div class="leader-item">
               <img src="cabang2.jpg" alt="cabang2" onclick="openSingleModal(this.src)">
             </div>
@@ -573,19 +576,25 @@
           <h2 style="text-align: center; margin-bottom: 20px; width: 100%;">MEMBER 261</h2>
           
           <div class="leader-row">
-            <div class="leader-item"><img src="member.jpg" onclick="openSingleModal(this.src)"></div>
+            <div class="leader-item">
+              <img src="member.jpg" alt="member" onclick="openSingleModal(this.src)">
+            </div>
+          </div>
         </div>
       </div>
 
     </div>
   </main>
 
+  <footer id="footer">
+    </footer>
+
   <audio id="bgmusic" loop>
     <source src="bgmusic.mp3" type="audio/mp3">
   </audio>
 
   <script>
-    // Database Marga - Gambar diubah ke path lokal folder marga
+    // Database Marga
     const databaseMarga = [
       { foto: ["marga/vian1.jpg", "marga/vian2.jpg"], nama: "vian alber", wangsaff: "6285882457223", gelar: "petinggi ktnyah%D%9", grup: "alberich", tgl: "26 FEB 2026", keluarga: "-" },
       { foto: ["marga/amel1.jpg", "marga/amel2.jpg"], nama: "amel kacung 628", wangsaff: "682357660965", gelar: "kacung 261", grup: "628 AREA", tgl: "9 MAR 2026", keluarga: "-" },
@@ -610,9 +619,17 @@
     }
     setInterval(spawnSkull, 3000);
 
-    window.addEventListener('click', () => {
-      document.getElementById('bgmusic').play().catch(() => {});
-    }, { once: true });
+    // Audio Play Fix
+    const bgMusic = document.getElementById('bgmusic');
+    
+    function playAudio() {
+      if (bgMusic.paused) {
+        bgMusic.play().catch(err => console.log("Menunggu interaksi layar untuk putar musik..."));
+      }
+    }
+
+    window.addEventListener('click', playAudio);
+    window.addEventListener('touchstart', playAudio);
 
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
@@ -626,7 +643,7 @@
           intro.style.display = 'none';
           navbar.style.display = 'flex';
           main.classList.add('visible');
-          footer.style.display = 'block'; // Memunculkan footer
+          if(footer) footer.style.display = 'block';
           tampilkanDatabase(databaseMarga);
           switchPage('home');
         }, 1200);
@@ -699,7 +716,8 @@
 
     function switchPage(pageId) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-      document.getElementById(pageId).classList.add('active-page');
+      const targetPage = document.getElementById(pageId);
+      if(targetPage) targetPage.classList.add('active-page');
       
       document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
       const navLink = document.getElementById('n-' + pageId);
@@ -726,7 +744,10 @@
       const swipeDistance = touchEndX - touchStartX;
       const minSwipeDistance = 70; // Sensitivitas geseran
       
-      const activePage = document.querySelector('.page.active-page').id;
+      const activePageElement = document.querySelector('.page.active-page');
+      if(!activePageElement) return;
+      
+      const activePage = activePageElement.id;
       
       if (swipeDistance < -minSwipeDistance) {
         // Swipe Kiri (Geser jari kanan ke kiri)
