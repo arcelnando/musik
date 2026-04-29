@@ -18,6 +18,20 @@
       color: #fff;
       min-height: 100vh;
       overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent; 
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+
+    /* ANTI DOWNLOAD IMAGE GLOBALLY */
+    img {
+      -webkit-touch-callout: none; 
+      -webkit-user-select: none; 
+      -khtml-user-select: none; 
+      -moz-user-select: none; 
+      -ms-user-select: none; 
+      user-select: none; 
+      -webkit-user-drag: none;
     }
 
     .flash-impact {
@@ -35,11 +49,12 @@
       100% { opacity: 0; }
     }
 
-    .bg-fixed {
+    /* BACKGROUND VIDEO */
+    .bg-video {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: url('latar.jpg') no-repeat center center fixed;
-      background-size: cover;
+      top: 0; left: 0; 
+      width: 100vw; height: 100vh;
+      object-fit: cover;
       z-index: -2;
       opacity: 0.9;
       filter: grayscale(0.8) contrast(1.1); 
@@ -161,10 +176,8 @@
     nav a::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 1px;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
       background: #fff;
       transition: width 0.3s ease;
     }
@@ -192,24 +205,11 @@
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    .leaders-grid {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 25px;
-      margin-bottom: 30px;
-    }
-
-    .leader-row {
-      display: flex;
-      justify-content: center;
-      gap: 45px;
-      flex-wrap: wrap;
-    }
+    .leaders-grid { display: flex; flex-direction: column; align-items: center; gap: 25px; margin-bottom: 30px; }
+    .leader-row { display: flex; justify-content: center; gap: 45px; flex-wrap: wrap; }
 
     .leader-item img {
-      width: 150px;
-      height: 150px;
+      width: 150px; height: 150px;
       border-radius: 50%;
       object-fit: cover;
       filter: grayscale(90%) brightness(0.9);
@@ -226,27 +226,9 @@
       border-color: rgba(255, 255, 255, 0.5);
     }
 
-    .petinggi-label {
-      text-align: center;
-      margin: 40px 0 25px;
-      animation: fadeUp 0.8s 0.2s both;
-    }
-
-    .petinggi-label h3 {
-      font-size: 1.2rem;
-      font-weight: 900;
-      letter-spacing: 6px;
-      color: #fff;
-      text-transform: uppercase;
-    }
-
-    .petinggi-label p {
-      font-size: 0.7rem;
-      color: #ccc;
-      letter-spacing: 4px;
-      margin-top: 8px;
-      font-weight: 600;
-    }
+    .petinggi-label { text-align: center; margin: 40px 0 25px; animation: fadeUp 0.8s 0.2s both; }
+    .petinggi-label h3 { font-size: 1.2rem; font-weight: 900; letter-spacing: 6px; color: #fff; text-transform: uppercase; }
+    .petinggi-label p { font-size: 0.7rem; color: #ccc; letter-spacing: 4px; margin-top: 8px; font-weight: 600; }
 
     .content-block {
       background: rgba(0, 0, 0, 0.35);
@@ -262,195 +244,114 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    h2 {
-      font-size: 1.2rem;
-      color: #fff;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      border-left: 3px solid #fff;
-      padding-left: 15px;
-    }
-
-    .about-text {
-      color: #eee;
-      line-height: 1.8;
-      font-weight: 500;
-      margin-bottom: 15px;
-    }
+    h2 { font-size: 1.2rem; color: #fff; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; border-left: 3px solid #fff; padding-left: 15px; }
+    .about-text { color: #eee; line-height: 1.8; font-weight: 500; margin-bottom: 15px; }
     .about-highlight { color: #fff; font-weight: 600; }
     .about-secondary { color: #aaa; margin-top: 15px; }
 
-    .search-container {
-      margin: 25px 0;
-      text-align: center;
-      animation: fadeUp 0.8s 0.1s both;
-    }
-
-    .search-input {
-      background: rgba(20, 20, 20, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #fff;
-      padding: 12px 25px;
-      width: 100%;
-      max-width: 400px;
-      font-size: 0.9rem;
-      border-radius: 40px;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
-      transition: all 0.3s ease;
-    }
-
-    .search-input:focus {
-      background: rgba(30, 30, 30, 0.7);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
-      outline: none;
-      transform: scale(1.02);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .result-count {
-      color: #888;
-      font-size: 0.8rem;
-      text-align: center;
-      margin: 5px 0 25px;
-      letter-spacing: 1px;
-    }
-
-    .db-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 25px;
-      margin-top: 15px;
-    }
-
-    .db-card {
-      background: rgba(10, 10, 10, 0.45);
-      backdrop-filter: blur(4px);
-      transition: all 0.4s ease;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-      animation: cardAppear 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    @keyframes cardAppear {
-      from { opacity: 0; transform: translateY(20px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .db-card:hover {
-      transform: translateY(-6px);
-      background: rgba(20, 20, 20, 0.6);
-      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.9);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .db-photos { display: grid; gap: 2px; margin-bottom: 15px; }
-    .db-photos[data-count="1"] { grid-template-columns: 1fr; }
-    .db-photos[data-count="2"] { grid-template-columns: 1fr 1fr; }
-    
-    .photo-item {
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      aspect-ratio: 1/1;
-    }
-
-    .photo-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(100%);
-      transition: all 0.5s ease;
-    }
-    .photo-item:hover img { filter: grayscale(40%); transform: scale(1.04); }
-
-    .db-content { padding: 0 18px 10px 18px; }
-    .db-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 5px;
-      font-family: 'Share Tech Mono', monospace;
-    }
-    .db-wangsaff {
-      color: #fff;
-      font-size: 0.8rem;
-      margin-bottom: 15px;
-      letter-spacing: 1px;
-      background: rgba(255, 255, 255, 0.1);
-      display: inline-block;
-      padding: 3px 12px;
-      border-radius: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    .db-info { color: #bbb; font-size: 0.8rem; line-height: 1.8; }
-    .db-info span { color: #fff; width: 70px; display: inline-block; opacity: 0.9; }
-
     .modal {
-      display: none;
-      position: fixed;
-      z-index: 10001;
-      padding-top: 50px;
+      display: none; position: fixed; z-index: 10001; padding-top: 50px;
       left: 0; top: 0; width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(10px);
+      background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px);
       animation: modalFade 0.4s ease;
     }
 
-    @keyframes modalFade {
-      from { opacity: 0; backdrop-filter: blur(0); }
-      to { opacity: 1; backdrop-filter: blur(10px); }
-    }
+    @keyframes modalFade { from { opacity: 0; backdrop-filter: blur(0); } to { opacity: 1; backdrop-filter: blur(10px); } }
 
     .modal-content {
-      margin: auto;
-      display: block;
-      max-width: 90%;
-      max-height: 80vh;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+      margin: auto; display: block; max-width: 90%; max-height: 80vh;
+      border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
       animation: modalZoom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes modalZoom {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
+    @keyframes modalZoom { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-    .modal-close, .modal-nav {
-      position: absolute;
-      color: #ccc;
-      font-weight: 300;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
+    .modal-close, .modal-nav { position: absolute; color: #ccc; font-weight: 300; cursor: pointer; transition: color 0.2s; }
     .modal-close { top: 15px; right: 35px; font-size: 40px; }
     .modal-nav { top: 50%; transform: translateY(-50%); font-size: 45px; padding: 20px; user-select: none; }
     .modal-prev { left: 20px; }
     .modal-next { right: 20px; }
     .modal-close:hover, .modal-nav:hover { color: #fff; }
 
-    /* FOOTER DIBUAT DISPLAY NONE AGAR HILANG DI AWAL */
-    footer {
+    /* MODAL CLASSIFIED INTEL */
+    #intelModal {
       display: none;
+      position: fixed;
+      z-index: 10005;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(15, 15, 15, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 30px 25px;
+      width: 85%;
+      max-width: 320px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.05);
+      color: #fff;
+      animation: intelAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes intelAppear {
+      from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .intel-header {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.1rem;
       text-align: center;
-      margin-top: 60px;
-      font-size: 0.75rem;
-      color: #888;
-      letter-spacing: 3px;
-      padding: 15px 0;
-      animation: fadeUp 1s 0.5s both;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      letter-spacing: 5px;
+      margin-bottom: 25px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 15px;
+      color: #dcdcdc;
+    }
+
+    .intel-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+
+    .intel-label { color: #888; font-weight: 500; letter-spacing: 1px; }
+    .intel-val { color: #fff; font-weight: 600; text-align: right; letter-spacing: 0.5px; }
+
+    .intel-btn {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .intel-btn:active {
+      background: rgba(255, 255, 255, 0.8);
+      color: #000;
+      transform: scale(0.98);
+    }
+
+    footer {
+      display: none; text-align: center; margin-top: 60px; font-size: 0.75rem;
+      color: #888; letter-spacing: 3px; padding: 15px 0;
+      animation: fadeUp 1s 0.5s both; border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     @media (max-width: 600px) {
       .leader-item img { width: 130px; height: 130px; }
       .leader-row { gap: 25px; }
       .nav-inner { gap: 20px; padding: 6px 20px; }
-      .db-grid { grid-template-columns: 1fr; }
       #intro h1 { font-size: 2.5rem; letter-spacing: 4px; }
     }
   </style>
@@ -458,7 +359,10 @@
 <body>
   <div class="flash-impact"></div>
   
-  <div class="bg-fixed"></div>
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="latar_261.mp4" type="video/mp4">
+  </video>
+  
   <div class="bg-overlay"></div>
   <div class="vignette"></div>
 
@@ -469,6 +373,27 @@
     <img class="modal-content" id="modalImage">
   </div>
 
+  <div id="intelModal">
+    <div class="intel-header">DATA CLASSIFIED</div>
+    <div class="intel-row">
+      <span class="intel-label">SEKTOR</span>
+      <span class="intel-val" id="hk-cabang">-</span>
+    </div>
+    <div class="intel-row">
+      <span class="intel-label">ADMIN</span>
+      <span class="intel-val" id="hk-admin">-</span>
+    </div>
+    <div class="intel-row">
+      <span class="intel-label">STATUS</span>
+      <span class="intel-val" id="hk-status">-</span>
+    </div>
+    <div class="intel-row">
+      <span class="intel-label">LEVEL</span>
+      <span class="intel-val" id="hk-level">-</span>
+    </div>
+    <button class="intel-btn" onclick="closeIntelModal()">TUTUP</button>
+  </div>
+
   <div id="intro">
     <h1>261 AREA</h1>
   </div>
@@ -477,7 +402,7 @@
     <div class="nav-inner">
       <a onclick="switchPage('home')" id="n-home" class="active">HOME</a>
       <a onclick="switchPage('about')" id="n-about">ABOUT</a>
-      <a onclick="switchPage('chaos')" id="n-chaos">CHAOS</a>
+      <a onclick="switchPage('allcabang')" id="n-allcabang">CABANG</a>
     </div>
   </nav>
 
@@ -487,42 +412,21 @@
       <div id="home" class="page active-page">
         <div class="leaders-grid">
           <div class="leader-row">
-            <div class="leader-item">
-              <img src="home1.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div>
-            <div class="leader-item">
-              <img src="home2.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div>
-            <div class="leader-item">
-              <img src="home3.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div>
-            <div class="leader-item">
-              <img src="home4.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div>
+            <div class="leader-item"><img src="home1.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
+            <div class="leader-item"><img src="home2.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
+            <div class="leader-item"><img src="home3.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
+            <div class="leader-item"><img src="home4.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
           </div>
           
           <div class="leader-row">
-            <div class="leader-item">
-              <img src="home5.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div>
-            <div class="leader-item">
-              <img src="home6.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div>
-            <div class="leader-item">
-              <img src="home7.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div> 
-            <div class="leader-item">
-              <img src="home8.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div>
-            <div class="leader-item">
-              <img src="home9.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div>
-            <div class="leader-item">
-              <img src="home10.jpg" alt="261" onclick="openSingleModal(this.src)">
-            </div>   
+            <div class="leader-item"><img src="home5.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
+            <div class="leader-item"><img src="home6.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
+            <div class="leader-item"><img src="home7.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div> 
+            <div class="leader-item"><img src="home8.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
+            <div class="leader-item"><img src="home9.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
+            <div class="leader-item"><img src="home10.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>   
           </div>
         </div>
-
         <div class="petinggi-label">
           <h3>KASTA TERTINGGI 261</h3>
         </div>
@@ -536,18 +440,9 @@
           <p class="about-secondary" style="margin-top: 15px;">Jangan bangga sama gelar virtu lu di sini. Jangankan fisik lu, silsilah keluarga lu dari emak bapak sampe buyut juga bakal dibawa ke meja hijau kalau masih betah jadi budak drama. Sadar atau hancur.</p>
           
           <div style="text-align: center; margin-top: 25px;">
-            <a href="#" onclick="window.open('video/all_sk.mp4', '_blank'); return false;" style="color: #ff4444; text-decoration: underline; font-weight: bold; font-size: 18px; text-shadow: 0 0 8px rgba(255,0,0,0.5);">ALL SK TERBARU ( KLIK DISINI )</a>
+            <a href="#" onclick="window.open('video/all_sk.mp4', '_blank'); return false;" style="color: #fff; text-decoration: underline; font-weight: bold; font-size: 18px; text-shadow: 0 0 8px rgba(255,255,255,0.5);">ALL SK TERBARU ( KLIK DISINI )</a>
           </div>
         </div>
-      </div>
-
-      <div id="chaos" class="page">
-        <h2>KACUNG MARGA</h2>
-        <div class="search-container">
-          <input type="text" id="searchInput" class="search-input" placeholder="CARI MARGA / USERNAME..." onkeyup="searchDatabase()">
-        </div>
-        <div class="result-count" id="resultCount">MENAMPILKAN MARGA</div>
-        <div class="db-grid" id="dbGrid"></div>
       </div>
 
       <div id="allcabang" class="page">
@@ -555,29 +450,44 @@
           <h2 style="text-align: center; margin-bottom: 20px; width: 100%;">SEMUA CABANG 261</h2>
           
           <div class="leader-row">
-            <div class="leader-item">
-              <img src="cabang1.jpg" alt="cabang1" onclick="openSingleModal(this.src)">
+            <div class="leader-item" 
+                 onmousedown="startPress('AREA UTAMA', 'Marcel Fernando', 'AKTIF', 'ROOT')" 
+                 onmouseup="cancelPress()" onmouseleave="cancelPress()" 
+                 ontouchstart="startPress('AREA UTAMA', 'Marcel Fernando', 'AKTIF', 'ROOT')" 
+                 ontouchend="cancelPress()">
+              <img src="cabang1.jpg" alt="cabang1" onclick="handlePhotoClick(this.src)">
             </div>
-          </div>
+            
+            <div class="leader-item"
+                 onmousedown="startPress('CABANG DEVIL', 'Tidak Diketahui', 'ENKRIPSI', 'SUB-NET')" 
+                 onmouseup="cancelPress()" onmouseleave="cancelPress()" 
+                 ontouchstart="startPress('CABANG DEVIL', 'Tidak Diketahui', 'ENKRIPSI', 'SUB-NET')" 
+                 ontouchend="cancelPress()">
+              <img src="cabang2.jpg" alt="cabang2" onclick="handlePhotoClick(this.src)">
+            </div>
+            
+            <div class="leader-item"
+                 onmousedown="startPress('SEKTOR BARAT', 'Ghost_01', 'PANTAUAN', 'EXEC')" 
+                 onmouseup="cancelPress()" onmouseleave="cancelPress()" 
+                 ontouchstart="startPress('SEKTOR BARAT', 'Ghost_01', 'PANTAUAN', 'EXEC')" 
+                 ontouchend="cancelPress()">
+              <img src="cabang3.jpg" alt="cabang3" onclick="handlePhotoClick(this.src)">
+            </div>
+            
+            <div class="leader-item"
+                 onmousedown="startPress('DISTRIK SELATAN', 'ViperX', 'OFFLINE', 'TERBATAS')" 
+                 onmouseup="cancelPress()" onmouseleave="cancelPress()" 
+                 ontouchstart="startPress('DISTRIK SELATAN', 'ViperX', 'OFFLINE', 'TERBATAS')" 
+                 ontouchend="cancelPress()">
+              <img src="cabang4.jpg" alt="cabang4" onclick="handlePhotoClick(this.src)">
+            </div>
 
-          <div class="leader-row">
-            <div class="leader-item">
-              <img src="cabang2.jpg" alt="cabang2" onclick="openSingleModal(this.src)">
-            </div>
-            <div class="leader-item">
-              <img src="cabang3.jpg" alt="cabang3" onclick="openSingleModal(this.src)">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="member" class="page">
-        <div class="leaders-grid">
-          <h2 style="text-align: center; margin-bottom: 20px; width: 100%;">MEMBER 261</h2>
-          
-          <div class="leader-row">
-            <div class="leader-item">
-              <img src="member.jpg" alt="member" onclick="openSingleModal(this.src)">
+            <div class="leader-item"
+                 onmousedown="startPress('INTEL OPS', 'Rahasia', 'TERSEMBUNYI', 'OVERRIDE')" 
+                 onmouseup="cancelPress()" onmouseleave="cancelPress()" 
+                 ontouchstart="startPress('INTEL OPS', 'Rahasia', 'TERSEMBUNYI', 'OVERRIDE')" 
+                 ontouchend="cancelPress()">
+              <img src="cabang5.jpg" alt="cabang5" onclick="handlePhotoClick(this.src)">
             </div>
           </div>
         </div>
@@ -586,26 +496,21 @@
     </div>
   </main>
 
-  <footer id="footer">
-    </footer>
+  <footer id="footer"></footer>
 
   <audio id="bgmusic" loop>
     <source src="bgmusic.mp3" type="audio/mp3">
   </audio>
 
   <script>
-    // Database Marga
-    const databaseMarga = [
-      { foto: ["marga/vian1.jpg", "marga/vian2.jpg"], nama: "vian alber", wangsaff: "6285882457223", gelar: "petinggi ktnyah%D%9", grup: "alberich", tgl: "26 FEB 2026", keluarga: "-" },
-      { foto: ["marga/amel1.jpg", "marga/amel2.jpg"], nama: "amel kacung 628", wangsaff: "682357660965", gelar: "kacung 261", grup: "628 AREA", tgl: "9 MAR 2026", keluarga: "-" },
-      { foto: ["marga/aldi1.jpg", "marga/aldi2.jpg"], nama: "aldi enemi missing%D%9", wangsaff: "6285369046177", gelar: "kacungnya zenboti", grup: "-", tgl: "2 MAR 2026", keluarga: "-" },
-      { foto: ["marga/bocah1.jpg", "marga/bocah2.jpg"], nama: "BOCAH KACUNG NGATAIN ORNG LOMTE ABISTU MISSING%D%9", wangsaff: "6287845279749", gelar: "KACUNG", grup: "GARTEX", tgl: "27 FEB 2026", keluarga: "-" }
-    ];
+    // MATIKAN KLIK KANAN & MENU SAVE IMAGE DI HP GLOBAL
+    window.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+    });
 
     let currentPhotoList = [];
     let currentPhotoIndex = 0;
 
-    // Animasi Tengkorak Terbang
     function spawnSkull() {
       const skull = document.createElement('div');
       skull.innerHTML = '%D%0';
@@ -619,15 +524,12 @@
     }
     setInterval(spawnSkull, 3000);
 
-    // Audio Play Fix
     const bgMusic = document.getElementById('bgmusic');
-    
     function playAudio() {
       if (bgMusic.paused) {
         bgMusic.play().catch(err => console.log("Menunggu interaksi layar untuk putar musik..."));
       }
     }
-
     window.addEventListener('click', playAudio);
     window.addEventListener('touchstart', playAudio);
 
@@ -644,7 +546,6 @@
           navbar.style.display = 'flex';
           main.classList.add('visible');
           if(footer) footer.style.display = 'block';
-          tampilkanDatabase(databaseMarga);
           switchPage('home');
         }, 1200);
       }, 2500);
@@ -656,12 +557,6 @@
       updateModal();
     }
     
-    function openMultipleModal(photoList, index) {
-      currentPhotoList = photoList;
-      currentPhotoIndex = index;
-      updateModal();
-    }
-
     function updateModal() {
       const modal = document.getElementById('imageModal');
       const modalImg = document.getElementById('modalImage');
@@ -685,35 +580,6 @@
 
     function closeModal() { document.getElementById('imageModal').style.display = "none"; }
 
-    function tampilkanDatabase(data) {
-      const grid = document.getElementById('dbGrid');
-      const count = document.getElementById('resultCount');
-      if(data.length === 0) {
-        grid.innerHTML = '<div class="no-result" style="color:#aaa; text-align:center; grid-column:1/-1;">TIDAK ADA MARGA DITEMUKAN</div>';
-        count.innerText = 'MENAMPILKAN 0 MARGA';
-        return;
-      }
-      let html = '';
-      data.forEach((item, idx) => {
-        const fotoCount = item.foto.length;
-        let fotoHtml = `<div class="db-photos" data-count="${fotoCount}">`;
-        item.foto.forEach((foto, i) => {
-          const fotoArrayJson = JSON.stringify(item.foto).replace(/"/g, '&quot;');
-          fotoHtml += `<div class="photo-item" onclick="openMultipleModal(${fotoArrayJson}, ${i})"><img src="${foto}" alt="${item.nama}"></div>`;
-        });
-        fotoHtml += '</div>';
-        html += `<div class="db-card" style="animation-delay: ${idx * 0.05}s">${fotoHtml}<div class="db-content"><div class="db-name">${item.nama}</div><div class="db-wangsaff">${item.wangsaff}</div><div class="db-info"><div><span>GELAR</span> ${item.gelar}</div><div><span>GRUP</span> ${item.grup}</div><div><span>TGL</span> ${item.tgl}</div></div></div></div>`;
-      });
-      grid.innerHTML = html;
-      count.innerText = `MENAMPILKAN ${data.length} MARGA`;
-    }
-
-    function searchDatabase() {
-      const input = document.getElementById('searchInput').value.toLowerCase().trim();
-      const hasil = databaseMarga.filter(item => item.nama.toLowerCase().includes(input) || item.wangsaff.toLowerCase().includes(input) || item.grup.toLowerCase().includes(input));
-      tampilkanDatabase(hasil);
-    }
-
     function switchPage(pageId) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
       const targetPage = document.getElementById(pageId);
@@ -731,33 +597,65 @@
     let touchEndX = 0;
     const mainContent = document.getElementById('main-content');
 
-    mainContent.addEventListener('touchstart', e => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, {passive: true});
-
-    mainContent.addEventListener('touchend', e => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    }, {passive: true});
+    mainContent.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+    mainContent.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, {passive: true});
 
     function handleSwipe() {
       const swipeDistance = touchEndX - touchStartX;
-      const minSwipeDistance = 70; // Sensitivitas geseran
-      
+      const minSwipeDistance = 70; 
       const activePageElement = document.querySelector('.page.active-page');
       if(!activePageElement) return;
-      
       const activePage = activePageElement.id;
       
       if (swipeDistance < -minSwipeDistance) {
-        // Swipe Kiri (Geser jari kanan ke kiri)
-        if (activePage === 'home') switchPage('member');
-        else if (activePage === 'allcabang') switchPage('home');
-      } else if (swipeDistance > minSwipeDistance) {
-        // Swipe Kanan (Geser jari kiri ke kanan)
+        // Swipe Kiri
         if (activePage === 'home') switchPage('allcabang');
-        else if (activePage === 'member') switchPage('home');
+      } else if (swipeDistance > minSwipeDistance) {
+        // Swipe Kanan
+        if (activePage === 'allcabang') switchPage('home');
       }
+    }
+
+    // ===== FUNGSI LONG PRESS (CLASSIFIED INTEL) =====
+    let pressTimer;
+    let isDragging = false;
+    let isLongPress = false;
+
+    window.addEventListener('touchmove', () => { 
+      isDragging = true; 
+      cancelPress(); 
+    }, {passive: true});
+
+    function startPress(cabang, admin, status, level) {
+      isDragging = false;
+      isLongPress = false;
+      pressTimer = setTimeout(() => {
+        if (!isDragging) {
+          isLongPress = true; 
+          showIntelModal(cabang, admin, status, level);
+        }
+      }, 550); 
+    }
+
+    function cancelPress() { clearTimeout(pressTimer); }
+
+    function showIntelModal(cabang, admin, status, level) {
+      if(navigator.vibrate) navigator.vibrate(40);
+      document.getElementById('hk-cabang').innerText = cabang;
+      document.getElementById('hk-admin').innerText = admin;
+      document.getElementById('hk-status').innerText = status;
+      document.getElementById('hk-level').innerText = level;
+      document.getElementById('intelModal').style.display = 'block';
+    }
+
+    function closeIntelModal() {
+      document.getElementById('intelModal').style.display = 'none';
+    }
+
+    // Wrapper klik supaya foto tidak membesar kalau usernya abis nahan lama
+    function handlePhotoClick(src) {
+      if (isLongPress) return; 
+      openSingleModal(src);
     }
   </script>
 </body>
