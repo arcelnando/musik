@@ -49,28 +49,28 @@
       100% { opacity: 0; }
     }
 
-    /* BACKGROUND VIDEO */
+    /* BACKGROUND VIDEO LEBIH TERANG */
     .bg-video {
       position: fixed;
       top: 0; left: 0; 
       width: 100vw; height: 100vh;
       object-fit: cover;
       z-index: -2;
-      opacity: 0.9;
-      filter: grayscale(0.8) contrast(1.1); 
+      opacity: 1.0; /* Full opacity */
+      filter: grayscale(0.2) contrast(1.2); /* Grayscale dikurangi jauh biar warna aslinya keluar */
     }
 
     .bg-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.7); 
+      background: rgba(0, 0, 0, 0.3); /* Transparansi overlay diturunin dari 0.7 ke 0.3 biar terang */
       z-index: -1;
     }
 
     .vignette {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle, transparent 30%, #000 100%);
+      background: radial-gradient(circle, transparent 60%, #000 100%); /* Area tengah terang diperlebar ke 60% */
       z-index: -1;
       pointer-events: none;
     }
@@ -154,19 +154,19 @@
     .nav-inner {
       display: flex;
       gap: 40px;
-      background: rgba(10, 10, 10, 0.4);
+      background: rgba(10, 10, 10, 0.5);
       padding: 8px 30px;
       border-radius: 40px;
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     nav a {
-      color: #aaa;
+      color: #ccc;
       text-decoration: none;
       font-size: 0.9rem;
       letter-spacing: 3px;
-      font-weight: 500;
+      font-weight: 600;
       transition: color 0.3s ease;
       cursor: pointer;
       padding: 5px 0;
@@ -209,34 +209,35 @@
     .leader-row { display: flex; justify-content: center; gap: 45px; flex-wrap: wrap; }
 
     .leader-item img {
-      width: 150px; height: 150px;
+      width: 140px; height: 140px;
       border-radius: 50%;
       object-fit: cover;
-      filter: grayscale(90%) brightness(0.9);
+      filter: grayscale(80%) brightness(0.95);
       transition: all 0.5s ease;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .leader-item:hover img {
-      filter: grayscale(30%) brightness(1.05);
-      transform: scale(1.02);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9);
-      border-color: rgba(255, 255, 255, 0.5);
+      filter: grayscale(10%) brightness(1.1);
+      transform: scale(1.05);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8);
+      border-color: rgba(255, 255, 255, 0.6);
     }
 
     .petinggi-label { text-align: center; margin: 40px 0 25px; animation: fadeUp 0.8s 0.2s both; }
-    .petinggi-label h3 { font-size: 1.2rem; font-weight: 900; letter-spacing: 6px; color: #fff; text-transform: uppercase; }
-    .petinggi-label p { font-size: 0.7rem; color: #ccc; letter-spacing: 4px; margin-top: 8px; font-weight: 600; }
+    .petinggi-label h3 { font-size: 1.2rem; font-weight: 900; letter-spacing: 6px; color: #fff; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+    .petinggi-label p { font-size: 0.7rem; color: #ddd; letter-spacing: 4px; margin-top: 8px; font-weight: 600; }
 
     .content-block {
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
       padding: 28px;
       border-radius: 18px;
       animation: fadeUp 0.8s both;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     @keyframes fadeUp {
@@ -245,9 +246,9 @@
     }
 
     h2 { font-size: 1.2rem; color: #fff; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; border-left: 3px solid #fff; padding-left: 15px; }
-    .about-text { color: #eee; line-height: 1.8; font-weight: 500; margin-bottom: 15px; }
-    .about-highlight { color: #fff; font-weight: 600; }
-    .about-secondary { color: #aaa; margin-top: 15px; }
+    .about-text { color: #eee; line-height: 1.8; font-weight: 500; margin-bottom: 15px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+    .about-highlight { color: #fff; font-weight: 700; }
+    .about-secondary { color: #ddd; margin-top: 15px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 
     .modal {
       display: none; position: fixed; z-index: 10001; padding-top: 50px;
@@ -273,21 +274,21 @@
     .modal-next { right: 20px; }
     .modal-close:hover, .modal-nav:hover { color: #fff; }
 
-    /* MODAL CLASSIFIED INTEL */
+    /* MODAL CLASSIFIED INTEL (DIPERBESAR & ADAPTIF BUAT STRUKTUR ADMIN) */
     #intelModal {
       display: none;
       position: fixed;
       z-index: 10005;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(15, 15, 15, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(15, 15, 15, 0.9);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 16px;
       padding: 30px 25px;
       width: 85%;
-      max-width: 320px;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.05);
+      max-width: 350px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(255, 255, 255, 0.1);
       color: #fff;
       animation: intelAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -303,30 +304,44 @@
       text-align: center;
       letter-spacing: 5px;
       margin-bottom: 25px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       padding-bottom: 15px;
-      color: #dcdcdc;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
 
     .intel-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       font-family: 'Inter', sans-serif;
       font-size: 0.85rem;
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
-      padding-bottom: 8px;
     }
 
-    .intel-label { color: #888; font-weight: 500; letter-spacing: 1px; }
-    .intel-val { color: #fff; font-weight: 600; text-align: right; letter-spacing: 0.5px; }
+    .intel-label { color: #aaa; font-weight: 500; letter-spacing: 1px; }
+    .intel-val { color: #fff; font-weight: 700; text-align: right; letter-spacing: 0.5px; }
+
+    /* Area khusus rincian struktur admin */
+    .intel-details {
+      margin-top: 15px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.15);
+      padding-top: 15px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: #ddd;
+      line-height: 1.7;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .intel-details strong { color: #fff; }
 
     .intel-btn {
       margin-top: 25px;
       width: 100%;
       padding: 12px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       color: #fff;
       font-family: 'Share Tech Mono', monospace;
       font-size: 0.9rem;
@@ -344,13 +359,13 @@
 
     footer {
       display: none; text-align: center; margin-top: 60px; font-size: 0.75rem;
-      color: #888; letter-spacing: 3px; padding: 15px 0;
+      color: #aaa; letter-spacing: 3px; padding: 15px 0;
       animation: fadeUp 1s 0.5s both; border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     @media (max-width: 600px) {
-      .leader-item img { width: 130px; height: 130px; }
-      .leader-row { gap: 25px; }
+      .leader-item img { width: 120px; height: 120px; }
+      .leader-row { gap: 20px; }
       .nav-inner { gap: 20px; padding: 6px 20px; }
       #intro h1 { font-size: 2.5rem; letter-spacing: 4px; }
     }
@@ -374,22 +389,17 @@
   </div>
 
   <div id="intelModal">
-    <div class="intel-header">DATA CLASSIFIED</div>
+    <div class="intel-header">DATA</div>
     <div class="intel-row">
-      <span class="intel-label">SEKTOR</span>
+      <span class="intel-label">CABANG</span>
       <span class="intel-val" id="hk-cabang">-</span>
     </div>
     <div class="intel-row">
-      <span class="intel-label">ADMIN</span>
-      <span class="intel-val" id="hk-admin">-</span>
+      <span class="intel-label">FO UTAMA</span>
+      <span class="intel-val" id="hk-fo">-</span>
     </div>
-    <div class="intel-row">
-      <span class="intel-label">STATUS</span>
-      <span class="intel-val" id="hk-status">-</span>
-    </div>
-    <div class="intel-row">
-      <span class="intel-label">LEVEL</span>
-      <span class="intel-val" id="hk-level">-</span>
+    <div class="intel-details" id="hk-details">
+      -
     </div>
     <button class="intel-btn" onclick="closeIntelModal()">TUTUP</button>
   </div>
@@ -440,7 +450,7 @@
           <p class="about-secondary" style="margin-top: 15px;">Jangan bangga sama gelar virtu lu di sini. Jangankan fisik lu, silsilah keluarga lu dari emak bapak sampe buyut juga bakal dibawa ke meja hijau kalau masih betah jadi budak drama. Sadar atau hancur.</p>
           
           <div style="text-align: center; margin-top: 25px;">
-            <a href="#" onclick="window.open('video/all_sk.mp4', '_blank'); return false;" style="color: #fff; text-decoration: underline; font-weight: bold; font-size: 18px; text-shadow: 0 0 8px rgba(255,255,255,0.5);">ALL SK TERBARU ( KLIK DISINI )</a>
+            <a href="#" onclick="window.open('video/all_sk.mp4', '_blank'); return false;" style="color: #fff; text-decoration: underline; font-weight: bold; font-size: 18px; text-shadow: 0 0 10px rgba(255,255,255,0.7);">ALL SK TERBARU ( KLIK DISINI )</a>
           </div>
         </div>
       </div>
@@ -451,45 +461,56 @@
           
           <div class="leader-row">
             <div class="leader-item" 
-                 onmousedown="startPress('AREA UTAMA', 'Marcel Fernando', 'AKTIF', 'ROOT')" 
+                 onmousedown="startPress('BASE 261 PRIVAT', 'Nando', '<strong>ADMIN:</strong><br>Andi, Alip, Senzi, Araa, Rama, Enjul, Yura, Yara')" 
                  onmouseup="cancelPress()" onmouseleave="cancelPress()" 
-                 ontouchstart="startPress('AREA UTAMA', 'Marcel Fernando', 'AKTIF', 'ROOT')" 
+                 ontouchstart="startPress('BASE 261 PRIVAT', 'Nando', '<strong>ADMIN:</strong><br>Andi, Alip, Senzi, Araa, Rama, Enjul, Yura, Yara')" 
                  ontouchend="cancelPress()">
               <img src="cabang1.jpg" alt="cabang1" onclick="handlePhotoClick(this.src)">
             </div>
             
             <div class="leader-item"
-                 onmousedown="startPress('CABANG DEVIL', 'Tidak Diketahui', 'ENKRIPSI', 'SUB-NET')" 
+                 onmousedown="startPress('GODSTARS', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>FOUNDERR LEADIS:</strong> Enjoel<br><strong>OWNER LDS:</strong> Araa<br><strong>PENGURUS:</strong> Tata')" 
                  onmouseup="cancelPress()" onmouseleave="cancelPress()" 
-                 ontouchstart="startPress('CABANG DEVIL', 'Tidak Diketahui', 'ENKRIPSI', 'SUB-NET')" 
+                 ontouchstart="startPress('GODSTARS', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>FOUNDER LEADIS:</strong> Enjoel<br><strong>OWNER LDS:</strong> Araa<br><strong>PENGURUS:</strong> Tata')" 
                  ontouchend="cancelPress()">
               <img src="cabang2.jpg" alt="cabang2" onclick="handlePhotoClick(this.src)">
             </div>
             
             <div class="leader-item"
-                 onmousedown="startPress('SEKTOR BARAT', 'Ghost_01', 'PANTAUAN', 'EXEC')" 
+                 onmousedown="startPress('TOKYO', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>OWNER LDS:</strong> Araa')" 
                  onmouseup="cancelPress()" onmouseleave="cancelPress()" 
-                 ontouchstart="startPress('SEKTOR BARAT', 'Ghost_01', 'PANTAUAN', 'EXEC')" 
+                 ontouchstart="startPress('TOKYO', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>OWNER LDS:</strong> Araa')" 
                  ontouchend="cancelPress()">
               <img src="cabang3.jpg" alt="cabang3" onclick="handlePhotoClick(this.src)">
             </div>
-            
+          </div>
+
+          <div class="leader-row">
             <div class="leader-item"
-                 onmousedown="startPress('DISTRIK SELATAN', 'ViperX', 'OFFLINE', 'TERBATAS')" 
+                 onmousedown="startPress('EMERLD', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Morado<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS LDS:</strong> Nara Cece<br><strong>ALL ADMIN:</strong> Senzi')" 
                  onmouseup="cancelPress()" onmouseleave="cancelPress()" 
-                 ontouchstart="startPress('DISTRIK SELATAN', 'ViperX', 'OFFLINE', 'TERBATAS')" 
+                 ontouchstart="startPress('EMERLD', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Morado<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS LDS:</strong> Nara Cece<br><strong>ALL ADMIN:</strong> Senzi')" 
                  ontouchend="cancelPress()">
               <img src="cabang4.jpg" alt="cabang4" onclick="handlePhotoClick(this.src)">
             </div>
 
             <div class="leader-item"
-                 onmousedown="startPress('INTEL OPS', 'Rahasia', 'TERSEMBUNYI', 'OVERRIDE')" 
+                 onmousedown="startPress('FORCE', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Andi<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS BOY:</strong> Rapz / Senzi<br><strong>PENGURUS LDS:</strong> Cece Nara')" 
                  onmouseup="cancelPress()" onmouseleave="cancelPress()" 
-                 ontouchstart="startPress('INTEL OPS', 'Rahasia', 'TERSEMBUNYI', 'OVERRIDE')" 
+                 ontouchstart="startPress('FORCE', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Andi<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS BOY:</strong> Rapz / Senzi<br><strong>PENGURUS LDS:</strong> Cece Nara')" 
                  ontouchend="cancelPress()">
               <img src="cabang5.jpg" alt="cabang5" onclick="handlePhotoClick(this.src)">
             </div>
+
+            <div class="leader-item"
+                 onmousedown="startPress('INTI 261', 'Nando', '<strong>ADMIN MIX:</strong><br>Alif, Morado, Andi, Rama, Senzi, Jun, Araa, Enjoel')" 
+                 onmouseup="cancelPress()" onmouseleave="cancelPress()" 
+                 ontouchstart="startPress('INTI 261', 'Nando', '<strong>ADMIN MIX:</strong><br>Alif, Morado, Andi, Rama, Senzi, Jun, Araa, Enjoel')" 
+                 ontouchend="cancelPress()">
+              <img src="cabang6.jpg" alt="cabang6" onclick="handlePhotoClick(this.src)">
+            </div>
           </div>
+
         </div>
       </div>
 
@@ -616,7 +637,7 @@
       }
     }
 
-    // ===== FUNGSI LONG PRESS (CLASSIFIED INTEL) =====
+    // ===== FUNGSI LONG PRESS (CLASSIFIED INTEL - ADAPTIF) =====
     let pressTimer;
     let isDragging = false;
     let isLongPress = false;
@@ -626,25 +647,24 @@
       cancelPress(); 
     }, {passive: true});
 
-    function startPress(cabang, admin, status, level) {
+    function startPress(cabang, foUtama, detailStruktur) {
       isDragging = false;
       isLongPress = false;
       pressTimer = setTimeout(() => {
         if (!isDragging) {
           isLongPress = true; 
-          showIntelModal(cabang, admin, status, level);
+          showIntelModal(cabang, foUtama, detailStruktur);
         }
       }, 550); 
     }
 
     function cancelPress() { clearTimeout(pressTimer); }
 
-    function showIntelModal(cabang, admin, status, level) {
+    function showIntelModal(cabang, foUtama, detailStruktur) {
       if(navigator.vibrate) navigator.vibrate(40);
       document.getElementById('hk-cabang').innerText = cabang;
-      document.getElementById('hk-admin').innerText = admin;
-      document.getElementById('hk-status').innerText = status;
-      document.getElementById('hk-level').innerText = level;
+      document.getElementById('hk-fo').innerText = foUtama;
+      document.getElementById('hk-details').innerHTML = detailStruktur;
       document.getElementById('intelModal').style.display = 'block';
     }
 
