@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYSTEM OVERRIDE | 261 AREA</title>
+  
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+  
+  <style>
+    /* =========================================
+       CSS ADMIN PANEL - BLACK & WHITE CRT THEME
+       ========================================= */
+    * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
+    
+    body {
+        background: #000;
+        color: #fff;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Efek Garis Layar TV Jadul (Sama kayak Game) */
+    body::before {
+        content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+        z-index: 999; background-size: 100% 3px; pointer-events: none;
+    }
+
+    .box {
+        background: #000;
+        border: 2px solid #fff;
+        padding: 40px 30px;
+        width: 90%;
+        max-width: 450px;
+        z-index: 10;
+        position: relative;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 0;
+        letter-spacing: 4px;
+        font-size: 24px;
+        text-transform: uppercase;
+        border-bottom: 2px dashed #fff;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+        text-shadow: 0 0 5px #fff;
+    }
+
+    .input-group { margin-bottom: 20px; text-align: left; }
+    .input-group label {
+        display: block;
+        font-size: 12px;
+        margin-bottom: 8px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        color: #ccc;
+        text-transform: uppercase;
+    }
+
+    input[type="text"], input[type="password"], textarea {
+        width: 100%;
+        padding: 12px;
+        background: #000;
+        border: 1px solid #555;
+        color: #fff;
+        outline: none;
+        font-size: 14px;
+        letter-spacing: 1px;
+        transition: border 0.3s;
+    }
+    
+    input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+        border-color: #fff;
+    }
+
+    textarea { resize: vertical; min-height: 100px; }
+
+    input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        background: #111;
+        border: 1px dashed #555;
+        color: #ccc;
+        font-size: 12px;
+        cursor: pointer;
+        transition: border 0.3s;
+    }
+    
+    input[type="file"]:hover { border-color: #fff; }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        background: #000;
+        color: #fff;
+        border: 2px solid #fff;
+        font-weight: bold;
+        font-size: 16px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-top: 10px;
+    }
+    
+    button:hover { background: #fff; color: #000; box-shadow: 0 0 10px #fff; }
+    button:active { transform: scale(0.98); }
+
+    .footer-text {
+        text-align: center; font-size: 10px; color: #555; margin-top: 25px; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    #admin-screen { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="box" id="login-screen">
+    <h2>PANEL PETINGGI</h2>
+    
+    <div class="input-group">
+        <label>USERNAME</label>
+        <input type="text" id="user" placeholder="username" autocomplete="off">
+    </div>
+    
+    <div class="input-group">
+        <label>PASSWORD</label>
+        <input type="password" id="pass" placeholder="password">
+    </div>
+    
+    <button onclick="login()">MASUK</button>
+    <div class="footer-text">261 AREA</div>
+  </div>
+
+  <div class="box" id="admin-screen">
+    <h2>POST INFO 261</h2>
+    
+    <div class="input-group">
+        <label>JUDUL POSTINGAN (MAX 30 HURUF)</label>
+        <input type="text" id="post-title" placeholder="JUDUL..." maxlength="30">
+    </div>
+
+    <div class="input-group">
+        <label>ISI INFORMASI</label>
+        <textarea id="post-content" placeholder="KETIK PESAN DISINI..."></textarea>
+    </div>
+
+    <div class="input-group">
+        <label>UPLOAD GAMBAR (OPSIONAL)</label>
+        <input type="file" id="img-input" accept="image/*">
+    </div>
+
+    <button id="submit-btn" onclick="kirimPost()">UPDATE</button>
+    <div class="footer-text"></div>
+  </div>
+
+  <script>
+    // CONFIG FIREBASE
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpa1Ml5i0j5Jzs4eQrHKKIuo3FoB7JWrE",
+      authDomain: "clx---14.firebaseapp.com",
+      databaseURL: "https://clx---14-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "clx---14",
+      storageBucket: "clx---14.firebasestorage.app",
+      messagingSenderId: "368765694470",
+      appId: "1:368765694470:web:90ef6dbccc7aa5a4adc987"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function login() {
+      let u = document.getElementById('user').value;
+      let p = document.getElementById('pass').value;
+      if(u === '261area' && p === 'parapetinggi261') {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-screen').style.display = 'block';
+      } else {
+        alert('ACCESS DENIED: Kredensial tidak valid!');
+      }
+    }
+
+    // Sistem kompres foto
+    let imageBase64 = "";
+    document.getElementById('img-input').addEventListener('change', function(e) {
+      let file = e.target.files[0];
+      if(!file) return;
+      let reader = new FileReader();
+      reader.onload = function(event) {
+        let img = new Image();
+        img.onload = function() {
+          let canvas = document.createElement('canvas');
+          let MAX_WIDTH = 600; 
+          let scaleSize = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH; canvas.height = img.height * scaleSize;
+          let ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          imageBase64 = canvas.toDataURL('image/jpeg', 0.6); 
+        }
+        img.src = event.target.result;
+      }
+      reader.readAsDataURL(file);
+    });
+
+    function kirimPost() {
+      let title = document.getElementById('post-title').value;
+      let content = document.getElementById('post-content').value;
+      if(!title || !content) return alert('ERROR: Judul dan Isi harus diisi!');
+
+      let btn = document.getElementById('submit-btn');
+      btn.innerText = "TRANSMITTING..."; btn.disabled = true;
+
+      database.ref('forum_posts').push({
+        title: title,
+        content: content,
+        image: imageBase64,
+        timestamp: Date.now() 
+      }).then(() => {
+        alert('SUCCESS: Data terkirim ke server 261 Area!');
+        document.getElementById('post-title').value = '';
+        document.getElementById('post-content').value = '';
+        document.getElementById('img-input').value = '';
+        imageBase64 = '';
+        btn.innerText = "TRANSMIT DATA"; btn.disabled = false;
+      }).catch(e => {
+        alert('FAILED: ' + e);
+        btn.innerText = "TRANSMIT DATA"; btn.disabled = false;
+      });
+    }
+
+    // Biar bisa pencet Enter buat login
+    document.getElementById('pass').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            login();
+        }
+    });
+  </script>
+</body>
+</html>
