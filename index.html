@@ -6,6 +6,9 @@
   <title>261 AREA</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Eater&display=swap" rel="stylesheet">
   
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+
   <style>
     /* =========================================
        CSS WEB / LANDING PAGE
@@ -281,7 +284,7 @@
     <div id="main-menu" class="game-screen active">
         <h1 class="game-h1">GALAXY<br>SURVIVOR</h1>
         
-        <input type="text" id="pregame-name" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="8">
+        <input type="text" id="pregame-name" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="12">
         
         <button class="game-btn" onclick="checkAndStartGame()">Mulai Game</button>
         <button class="game-btn" onclick="showScreen('leaderboard-menu'); updateLeaderboardUI();">Leaderboard</button>
@@ -298,7 +301,7 @@
             <h2 style="margin-top:0;">TOP SURVIVORS</h2>
             <table class="data-table" id="lb-table">
                 <tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">SCORE</th></tr>
-                </table>
+            </table>
             <button class="game-btn" style="margin-top: 20px; width: 100%;" onclick="showScreen('main-menu')">Kembali</button>
         </div>
     </div>
@@ -360,6 +363,28 @@
   </div>
 
   <script>
+    // ====== KONFIGURASI FIREBASE ======
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpa1Ml5i0j5Jzs4eQrHKKIuo3FoB7JWrE",
+      authDomain: "clx---14.firebaseapp.com",
+      databaseURL: "https://clx---14-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "clx---14",
+      storageBucket: "clx---14.firebasestorage.app",
+      messagingSenderId: "368765694470",
+      appId: "1:368765694470:web:90ef6dbccc7aa5a4adc987",
+      measurementId: "G-T1TNM19W4S"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const leaderboardRef = database.ref('leaderboard_v3');
+
+    // BIKIN SCORE NANDO ABADI DI DATABASE (Auto Create kalau belum ada)
+    leaderboardRef.child('NANDO').once('value').then((snapshot) => {
+        if (!snapshot.exists() || snapshot.val().score < 50000) {
+            leaderboardRef.child('NANDO').set({ name: "NANDO", score: 50000 });
+        }
+    });
+
     // MATIKAN KLIK KANAN DI WEB
     window.addEventListener('contextmenu', function (e) { e.preventDefault(); });
 
@@ -464,24 +489,33 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // LEADERBOARD V3: Mereset yang lama, memisahkan Nando dan Player secara dinamis.
-    let defaultLeaderboard = [ { name: "NANDO", score: 50000 } ];
-    function getLeaderboard() {
-        let lb = localStorage.getItem('area261_leaderboard_v3');
-        if(!lb) { 
-            localStorage.setItem('area261_leaderboard_v3', JSON.stringify(defaultLeaderboard)); 
-            return defaultLeaderboard; 
-        }
-        return JSON.parse(lb);
-    }
+    // LEADERBOARD FIREBASE (TOP 5 INTERAKTIF)
+    let leaderboardData = [];
     
-    function updateLeaderboardUI() {
-        let lb = getLeaderboard();
-        let html = `<tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">SCORE</th></tr>`;
-        lb.forEach((entry, index) => {
-            let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-            html += `<tr><td>#${index + 1}</td><td>${medal}<b>${entry.name}</b></td><td style="text-align:right;">${entry.score}</td></tr>`;
+    leaderboardRef.orderByChild('score').limitToLast(5).on('value', (snapshot) => {
+        let data = [];
+        snapshot.forEach(childSnapshot => {
+            data.push({ id: childSnapshot.key, ...childSnapshot.val() });
         });
+        // Firebase orderByChild mengurutkan Ascending, di-reverse agar score tertinggi di atas
+        leaderboardData = data.reverse();
+        
+        // Update UI secara real-time jika menu sedang terbuka
+        if(document.getElementById('leaderboard-menu').classList.contains('active')) {
+            updateLeaderboardUI();
+        }
+    });
+
+    function updateLeaderboardUI() {
+        let html = `<tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">SCORE</th></tr>`;
+        if (leaderboardData.length === 0) {
+             html += `<tr><td colspan="3" style="text-align:center;">Memuat data...</td></tr>`;
+        } else {
+             leaderboardData.forEach((entry, index) => {
+                let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
+                html += `<tr><td>#${index + 1}</td><td>${medal}<b>${entry.name}</b></td><td style="text-align:right;">${entry.score}</td></tr>`;
+            });
+        }
         document.getElementById('lb-table').innerHTML = html;
     }
 
@@ -516,8 +550,17 @@
             alert("buat NICKNAME dulu sebelum bermain!");
             return;
         }
+
+        // FILTER NICKNAME: Cegah player pakai nama petinggi/founder
+        // Hapus semua spasi dan simbol buat ngecek tulisan aslinya
+        let safeCheck = nameInput.replace(/[^A-Z0-9]/g, ''); 
+        if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) {
+            alert("Akses Ditolak! Lu gabisa pake Nickname founder/petinggi. Ganti nama lain cuy!");
+            return;
+        }
+
         globalPlayerName = nameInput;
-        document.getElementById('ingame-name').innerText = globalPlayerName; // Update nama di UI In-Game
+        document.getElementById('ingame-name').innerText = globalPlayerName; 
         startGame();
     }
 
@@ -607,48 +650,40 @@
     };
 
     function saveHighScore() {
-        let lb = getLeaderboard();
-        
-        // Cari apakah pemain dengan nama ini sudah ada di leaderboard
-        let existingIndex = lb.findIndex(entry => entry.name === globalPlayerName);
-        
-        if (existingIndex !== -1) {
-            // Jika ada, timpa score-nya HANYA jika score yang baru lebih besar
-            if (score > lb[existingIndex].score) {
-                lb[existingIndex].score = score;
+        // Hapus karakter yang tidak valid untuk key firebase (. # $ [ ])
+        let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_');
+        let playerRef = leaderboardRef.child(safeName);
+
+        playerRef.once('value').then((snapshot) => {
+            let existingData = snapshot.val();
+            let isNewHigh = false;
+
+            if (!existingData) {
+                playerRef.set({ name: globalPlayerName, score: score });
+                isNewHigh = true;
+            } else if (score > existingData.score) {
+                playerRef.update({ score: score });
+                isNewHigh = true;
             }
-        } else {
-            // Jika belum ada, masukkan sebagai data baru
-            lb.push({ name: globalPlayerName, score: score });
-        }
-        
-        // Sortir dari score tertinggi ke terendah
-        lb.sort((a, b) => b.score - a.score); 
-        
-        // Simpan hanya Top 5 pemain
-        lb = lb.slice(0, 5);
-        localStorage.setItem('area261_leaderboard_v3', JSON.stringify(lb));
+
+            if (isNewHigh) {
+                document.getElementById('new-hs-msg').style.display = 'block';
+            }
+        });
     }
 
     function checkGameOver() {
-        gameState = 'GAMEOVER'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('final-score').innerText = score; document.getElementById('final-level').innerText = player.lvl;
+        gameState = 'GAMEOVER'; 
+        document.getElementById('game-ui').style.display = 'none'; 
+        document.getElementById('final-score').innerText = score; 
+        document.getElementById('final-level').innerText = player.lvl;
         
-        let lb = getLeaderboard();
-        let isHighScore = false;
-        
-        // Deteksi apakah ini High Score untuk player saat ini
-        let existing = lb.find(e => e.name === globalPlayerName);
-        if ((existing && score > existing.score) || (!existing && (lb.length < 5 || score > lb[lb.length - 1].score))) {
-            isHighScore = true;
-        }
+        // Reset pesan new highscore
+        document.getElementById('new-hs-msg').style.display = 'none';
 
-        saveHighScore(); // Simpan dan seleksi secara otomatis ke storage
+        // Simpan ke database firebase
+        saveHighScore(); 
         
-        if(isHighScore) {
-            document.getElementById('new-hs-msg').style.display = 'block';
-        } else {
-            document.getElementById('new-hs-msg').style.display = 'none';
-        }
         showScreen('game-over-menu');
     }
 
