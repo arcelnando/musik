@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SYSTEM OVERRIDE | 261 AREA</title>
+  <title>261 AREA</title>
   
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
@@ -19,29 +19,30 @@
         color: #fff;
         margin: 0;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
+        padding: 40px 10px; /* Biar bisa di-scroll kalau penuh */
         min-height: 100vh;
-        overflow: hidden;
-        position: relative;
+        overflow-x: hidden;
     }
 
-    /* Efek Garis Layar TV Jadul (Sama kayak Game) */
+    /* Efek Garis Layar TV Jadul ngikutin viewport scroll */
     body::before {
-        content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+        content: " "; display: block; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-        z-index: 999; background-size: 100% 3px; pointer-events: none;
+        z-index: 9999; background-size: 100% 3px; pointer-events: none;
     }
 
     .box {
         background: #000;
         border: 2px solid #fff;
         padding: 40px 30px;
-        width: 90%;
+        width: 100%;
         max-width: 450px;
         z-index: 10;
         position: relative;
         box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
     }
 
     h2 {
@@ -79,11 +80,9 @@
         transition: border 0.3s;
     }
     
-    input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-        border-color: #fff;
-    }
+    input[type="text"]:focus, input[type="password"]:focus, textarea:focus { border-color: #fff; }
 
-    textarea { resize: vertical; min-height: 100px; }
+    textarea { resize: vertical; min-height: 120px; }
 
     input[type="file"] {
         width: 100%;
@@ -116,52 +115,72 @@
     button:hover { background: #fff; color: #000; box-shadow: 0 0 10px #fff; }
     button:active { transform: scale(0.98); }
 
-    .footer-text {
-        text-align: center; font-size: 10px; color: #555; margin-top: 25px; letter-spacing: 1px; text-transform: uppercase;
-    }
+    .footer-text { text-align: center; font-size: 10px; color: #555; margin-top: 25px; letter-spacing: 1px; text-transform: uppercase; }
 
     #admin-screen { display: none; }
+
+    /* CSS BUAT LIST POSTINGAN ADMIN */
+    .admin-post-card {
+        border: 1px dashed #555;
+        padding: 15px;
+        margin-top: 15px;
+        background: rgba(20, 20, 20, 0.5);
+    }
+    .admin-post-card .date { font-size: 10px; color: #888; margin-bottom: 10px; letter-spacing: 1px; }
+    .admin-post-card .text { font-size: 13px; color: #ccc; margin-bottom: 10px; white-space: pre-wrap; line-height: 1.5; }
+    .post-preview-img { width: 100%; border: 1px solid #333; margin-bottom: 10px; }
+    
+    .delete-btn { 
+        width: 100%; background: #000; color: #fff; border: 1px dashed #fff; 
+        padding: 10px; font-size: 12px; margin-top: 5px; 
+    }
+    .delete-btn:hover { background: #fff; color: #000; font-weight: bold; }
+
   </style>
 </head>
 <body>
 
   <div class="box" id="login-screen">
-    <h2>PANEL PETINGGI</h2>
+    <h2>SYSTEM LOGIN</h2>
     
     <div class="input-group">
         <label>USERNAME</label>
-        <input type="text" id="user" placeholder="username" autocomplete="off">
+        <input type="text" id="user" placeholder="INPUT ID" autocomplete="off">
     </div>
     
     <div class="input-group">
         <label>PASSWORD</label>
-        <input type="password" id="pass" placeholder="password">
+        <input type="password" id="pass" placeholder="INPUT KEY">
     </div>
     
-    <button onclick="login()">MASUK</button>
-    <div class="footer-text">261 AREA</div>
+    <button onclick="login()">AUTHORIZE</button>
+    <div class="footer-text">SECURE CONNECTION ESTABLISHED</div>
   </div>
 
-  <div class="box" id="admin-screen">
-    <h2>POST INFO 261</h2>
-    
-    <div class="input-group">
-        <label>JUDUL POSTINGAN (MAX 30 HURUF)</label>
-        <input type="text" id="post-title" placeholder="JUDUL..." maxlength="30">
-    </div>
+  <div id="admin-screen" style="width: 100%; display: none; flex-direction: column; align-items: center;">
+      <div class="box">
+        <h2>TRANSMIT DATA</h2>
+        
+        <div class="input-group">
+            <label>ISI INFORMASI TERTULIS</label>
+            <textarea id="post-content" placeholder="KETIK PESAN DISINI..."></textarea>
+        </div>
 
-    <div class="input-group">
-        <label>ISI INFORMASI</label>
-        <textarea id="post-content" placeholder="KETIK PESAN DISINI..."></textarea>
-    </div>
+        <div class="input-group">
+            <label>UPLOAD GAMBAR (OPSIONAL)</label>
+            <input type="file" id="img-input" accept="image/*">
+        </div>
 
-    <div class="input-group">
-        <label>UPLOAD GAMBAR (OPSIONAL)</label>
-        <input type="file" id="img-input" accept="image/*">
-    </div>
+        <button id="submit-btn" onclick="kirimPost()">TRANSMIT DATA</button>
+        <div class="footer-text">DATA WILL BE AUTO-PURGED IN 5 DAYS</div>
+      </div>
 
-    <button id="submit-btn" onclick="kirimPost()">UPDATE</button>
-    <div class="footer-text"></div>
+      <div class="box" style="margin-top: 20px;">
+        <h2>POST HISTORY</h2>
+        <div id="admin-post-list">
+            <div class="footer-text">LOADING DATA...</div>
+        </div>
+      </div>
   </div>
 
   <script>
@@ -183,10 +202,53 @@
       let p = document.getElementById('pass').value;
       if(u === '261area' && p === 'parapetinggi261') {
         document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('admin-screen').style.display = 'block';
+        document.getElementById('admin-screen').style.display = 'flex';
+        // Jalankan fungsi load postingan kalau login berhasil
+        loadAdminPosts(); 
       } else {
         alert('ACCESS DENIED: Kredensial tidak valid!');
       }
+    }
+
+    // Sistem Render Data Real-Time di Admin
+    function loadAdminPosts() {
+        database.ref('forum_posts').on('value', (snapshot) => {
+            let html = '';
+            let postsArray = [];
+            
+            snapshot.forEach(child => {
+                postsArray.push({ key: child.key, ...child.val() });
+            });
+            
+            // Urutkan dari yang terbaru
+            postsArray.sort((a, b) => b.timestamp - a.timestamp);
+
+            postsArray.forEach(post => {
+                let dateObj = new Date(post.timestamp);
+                let dateStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) + ' - ' + dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+                
+                html += `
+                <div class="admin-post-card">
+                    <div class="date">[ ${dateStr} WIB ]</div>
+                    ${post.image ? `<img src="${post.image}" class="post-preview-img">` : ''}
+                    <div class="text">${post.content ? post.content : ''}</div>
+                    <button class="delete-btn" onclick="hapusPost('${post.key}')">DELETE PERMANENTLY</button>
+                </div>
+                `;
+            });
+
+            if(html === '') html = '<div class="footer-text">NO DATA IN DATABASE</div>';
+            document.getElementById('admin-post-list').innerHTML = html;
+        });
+    }
+
+    // Fungsi Hapus Post
+    window.hapusPost = function(key) {
+        if(confirm("WARNING: Yakin mau hapus data ini dari server 261 Area?")) {
+            database.ref('forum_posts/' + key).remove()
+            .then(() => alert("SUCCESS: Data terhapus permanen!"))
+            .catch(e => alert("FAILED: " + e));
+        }
     }
 
     // Sistem kompres foto
@@ -212,21 +274,21 @@
     });
 
     function kirimPost() {
-      let title = document.getElementById('post-title').value;
       let content = document.getElementById('post-content').value;
-      if(!title || !content) return alert('ERROR: Judul dan Isi harus diisi!');
+      
+      // Validasi: Harus ada teks ATAU gambar. Ga boleh kosong dua-duanya.
+      if(!content && !imageBase64) return alert('ERROR: Masukin pesan atau gambar dulu cuy!');
 
       let btn = document.getElementById('submit-btn');
       btn.innerText = "TRANSMITTING..."; btn.disabled = true;
 
+      // Fitur Judul dihapus, kita kirim teks & foto aja
       database.ref('forum_posts').push({
-        title: title,
         content: content,
         image: imageBase64,
         timestamp: Date.now() 
       }).then(() => {
         alert('SUCCESS: Data terkirim ke server 261 Area!');
-        document.getElementById('post-title').value = '';
         document.getElementById('post-content').value = '';
         document.getElementById('img-input').value = '';
         imageBase64 = '';
@@ -237,11 +299,9 @@
       });
     }
 
-    // Biar bisa pencet Enter buat login
+    // Pencet Enter buat login
     document.getElementById('pass').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            login();
-        }
+        if (e.key === 'Enter') login();
     });
   </script>
 </body>
