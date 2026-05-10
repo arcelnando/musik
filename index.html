@@ -10,13 +10,10 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 
   <style>
-    /* =========================================
-       CSS WEB / LANDING PAGE
-       ========================================= */
+    /* CSS STANDAR LU TETAP SAMA */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: #000; color: #fff; min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; user-select: none; }
-    img { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-user-drag: none; }
-
+    img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
     #web-container { width: 100%; height: 100%; }
 
     .flash-impact { position: fixed; inset: 0; background: #fff; z-index: 10002; opacity: 0; pointer-events: none; animation: flash 0.3s ease-out forwards; }
@@ -36,7 +33,7 @@
 
     nav { position: fixed; top: 0; width: 100%; height: 70px; display: flex; justify-content: center; align-items: center; z-index: 1000; display: none; background: transparent; animation: navSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
     @keyframes navSlideDown { 0% { opacity: 0; transform: translateY(-30px); } 100% { opacity: 1; transform: translateY(0); } }
-    .nav-inner { display: flex; gap: 40px; background: rgba(10, 10, 10, 0.5); padding: 8px 30px; border-radius: 40px; backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .nav-inner { display: flex; gap: 30px; background: rgba(10, 10, 10, 0.5); padding: 8px 30px; border-radius: 40px; backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2); }
     nav a { color: #ccc; text-decoration: none; font-size: 0.9rem; letter-spacing: 3px; font-weight: 600; transition: color 0.3s ease; cursor: pointer; padding: 5px 0; position: relative; }
     nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: #fff; transition: width 0.3s ease; }
     nav a:hover::after, nav a.active::after { width: 100%; }
@@ -86,63 +83,40 @@
     .intel-btn { margin-top: 25px; width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; letter-spacing: 2px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
     .intel-btn:active { background: rgba(255, 255, 255, 0.8); color: #000; transform: scale(0.98); }
 
-    /* TOMBOL MAIN GAME MELAYANG DI POJOK BAWAH */
     .floating-game-btn { position: fixed; bottom: 25px; right: 25px; background: #fff; color: #000; border: 2px solid #000; padding: 12px 20px; font-family: 'Share Tech Mono', monospace; font-weight: bold; font-size: 14px; border-radius: 8px; z-index: 9999; cursor: pointer; box-shadow: 0 4px 15px rgba(255,255,255,0.3); transition: transform 0.2s; text-transform: uppercase; display: none; }
     .floating-game-btn:hover { transform: scale(1.05); }
+
+    /* CSS FORUM BARU */
+    .post-card { background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 20px; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
+    .post-title { font-family: 'Share Tech Mono', monospace; font-size: 1.2rem; color: #fff; letter-spacing: 1px; margin-bottom: 5px; }
+    .post-date { font-size: 0.75rem; color: #888; margin-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; }
+    .post-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
+    .post-text { color: #ccc; font-size: 0.95rem; line-height: 1.6; white-space: pre-wrap; font-family: 'Inter', sans-serif;}
 
     @media (max-width: 600px) {
       .leader-item img { width: 120px; height: 120px; }
       .leader-row { gap: 20px; }
-      .nav-inner { gap: 20px; padding: 6px 20px; }
+      .nav-inner { gap: 15px; padding: 6px 15px; }
+      nav a { font-size: 0.75rem; letter-spacing: 1px; }
       #intro h1 { font-size: 2.5rem; letter-spacing: 4px; }
       .floating-game-btn { font-size: 12px; padding: 10px 15px; bottom: 20px; right: 20px; }
     }
 
-
-    /* =========================================
-       CSS GAME (ISOLASI)
-       ========================================= */
-    #game-page {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: #000000; color: #ffffff; z-index: 20000;
-        font-family: 'Courier New', Courier, monospace;
-        overflow: hidden; touch-action: none; user-select: none;
-        display: none; 
-    }
+    /* CSS GAME TETAP SAMA */
+    #game-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000; color: #ffffff; z-index: 20000; font-family: 'Courier New', Courier, monospace; overflow: hidden; touch-action: none; user-select: none; display: none; }
     #game-page * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
-    
-    .crt::before {
-        content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
-        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-        z-index: 999; background-size: 100% 3px; pointer-events: none;
-    }
-
+    .crt::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); z-index: 999; background-size: 100% 3px; pointer-events: none; }
     #gameCanvas { display: block; }
-    
-    .game-screen {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none;
-        flex-direction: column; justify-content: center; align-items: center; z-index: 200; background: rgba(0, 0, 0, 0.95);
-    }
+    .game-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 200; background: rgba(0, 0, 0, 0.95); }
     .game-screen.active { display: flex !important; }
-
     .game-h1 { font-size: 2.5rem; text-align: center; margin-bottom: 0; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
     .game-subtitle { font-size: 14px; color: #fff; margin-top: 10px; margin-bottom: 25px; text-align: center;}
     .game-credit { font-size: 12px; margin-top: 20px; text-align: center; color: #ccc;}
     .game-credit a { color: #fff; font-weight: bold; text-decoration: underline;}
-
-    .game-btn {
-        background: #000; color: #fff; border: 2px solid #fff; padding: 12px 25px; margin: 8px 0;
-        font-size: 16px; font-weight: bold; font-family: 'Courier New', Courier, monospace;
-        cursor: pointer; width: 80%; max-width: 300px; text-transform: uppercase; transition: all 0.1s;
-    }
+    .game-btn { background: #000; color: #fff; border: 2px solid #fff; padding: 12px 25px; margin: 8px 0; font-size: 16px; font-weight: bold; font-family: 'Courier New', Courier, monospace; cursor: pointer; width: 80%; max-width: 300px; text-transform: uppercase; transition: all 0.1s; }
     .game-btn:active { background: #fff; color: #000; transform: scale(0.95); }
-    .game-input-name {
-        background: #000; color: #fff; border: 2px solid #fff; padding: 12px;
-        font-family: 'Courier New', Courier, monospace; font-weight: bold; width: 80%;
-        max-width: 300px; margin-bottom: 20px; text-transform: uppercase; text-align: center; font-size: 16px;
-    }
+    .game-input-name { background: #000; color: #fff; border: 2px solid #fff; padding: 12px; font-family: 'Courier New', Courier, monospace; font-weight: bold; width: 80%; max-width: 300px; margin-bottom: 20px; text-transform: uppercase; text-align: center; font-size: 16px; }
     .game-input-name::placeholder { color: #666; }
-
     #game-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
     #top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
     .stat-block { width: 140px; }
@@ -150,29 +124,24 @@
     #hp-bar { width: 100%; height: 100%; background: #fff; transition: 0.2s; }
     #xp-bar { width: 0%; height: 100%; background: #fff; transition: 0.2s; }
     .stat-text { font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #fff;}
-
     #center-ui { position: absolute; left: 50%; transform: translateX(-50%); top: 15px; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
     #ingame-name { color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
     #pause-btn { background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-family: 'Courier New', Courier, monospace; font-weight: bold; cursor: pointer; pointer-events: auto; }
-
     #joystick-area { position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: transparent; border: 2px solid #fff; border-radius: 50%; pointer-events: auto; }
     #joystick-knob { position: absolute; width: 40px; height: 40px; background: #fff; border-radius: 50%; top: 38px; left: 38px; pointer-events: none; }
     #fire-btn { position: absolute; bottom: 50px; right: 40px; width: 100px; height: 100px; background: #000; border: 3px solid #fff; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; pointer-events: auto; }
     #fire-btn:active { background: #fff; color: #000; transform: scale(0.92); }
-
     .overlay-box { background: #000; border: 4px solid #fff; padding: 20px; text-align: center; width: 90%; max-width: 400px; }
     .data-table { width: 100%; text-align: left; margin-top: 15px; border-collapse: collapse; }
     .data-table th { border-bottom: 1px solid #fff; padding-bottom: 5px; }
     .data-table td { padding: 5px 0; font-size: 14px;}
     .setting-row { display: flex; justify-content: space-between; margin-top: 15px; font-size: 14px; align-items: center; text-align: left; }
-    
   </style>
 </head>
 <body>
   
   <div id="web-container">
     <div class="flash-impact"></div>
-    
     <video autoplay muted loop playsinline class="bg-video">
       <source src="latar_261.mp4" type="video/mp4">
     </video>
@@ -204,6 +173,7 @@
         <a onclick="switchPage('home')" id="n-home" class="active">HOME</a>
         <a onclick="switchPage('about')" id="n-about">ABOUT</a>
         <a onclick="switchPage('allcabang')" id="n-allcabang">CABANG</a>
+        <a onclick="switchPage('forums')" id="n-forums">FORUMS</a> 
       </div>
     </nav>
 
@@ -218,7 +188,6 @@
               <div class="leader-item"><img src="home3.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
               <div class="leader-item"><img src="home4.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
             </div>
-            
             <div class="leader-row">
               <div class="leader-item"><img src="home5.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
               <div class="leader-item"><img src="home6.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
@@ -269,6 +238,17 @@
             </div>
           </div>
         </div>
+
+        <div id="forums" class="page">
+          <div class="content-block" style="padding: 20px;">
+            <h2>INFORMATION</h2>
+            <p style="font-size: 12px; color: #888; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;"></p>
+            <div id="forum-container">
+              <p style="text-align:center; color:#aaa; font-size: 14px;">Memuat data...</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </main>
     <footer id="footer"></footer>
@@ -283,17 +263,12 @@
 
     <div id="main-menu" class="game-screen active">
         <h1 class="game-h1">GALAXY<br>SURVIVOR</h1>
-        
         <input type="text" id="pregame-name" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="12">
-        
         <button class="game-btn" onclick="checkAndStartGame()">Mulai Game</button>
         <button class="game-btn" onclick="showScreen('leaderboard-menu'); updateLeaderboardUI();">Leaderboard</button>
         <button class="game-btn" onclick="showScreen('settings-menu')">Pengaturan</button>
         <button class="game-btn" onclick="closeGameContainer()" style="border-color: #555; color: #888;">Keluar Web</button>
-        
-        <div class="game-credit">
-            Created: <a href="https://t.me/antidogma14" target="_blank">Klik Disini</a>
-        </div>
+        <div class="game-credit">Created: <a href="https://t.me/antidogma14" target="_blank">Klik Disini</a></div>
     </div>
 
     <div id="leaderboard-menu" class="game-screen">
@@ -320,12 +295,10 @@
     <div id="game-ui" style="display: none;">
         <div id="top-bar">
             <div class="stat-block"><div class="stat-text">NYAWA</div><div class="bar-bg"><div id="hp-bar"></div></div></div>
-            
             <div id="center-ui">
                 <div id="ingame-name">PLAYER</div>
                 <button id="pause-btn" onclick="pauseGame()">STOP</button>
             </div>
-
             <div class="stat-block" style="text-align: right;"><div class="stat-text">LEVEL <span id="lvl-val">1</span> | SCORE: <span id="score-val">0</span></div><div class="bar-bg" style="transform: scaleX(-1);"><div id="xp-bar"></div></div></div>
         </div>
         <div id="joystick-area"><div id="joystick-knob"></div></div>
@@ -351,9 +324,7 @@
             <h1 class="game-h1" style="font-size:2rem;">GOBLOK</h1>
             <p style="font-size: 16px; margin-top:15px; margin-bottom: 5px;">Score Lu: <b id="final-score">0</b></p>
             <p style="font-size: 14px; margin-bottom: 20px; color:#ccc;">Level Terakhir: <span id="final-level">1</span></p>
-            
             <p id="new-hs-msg" style="display: none; color: #fff; font-weight: bold; border-top: 1px dashed #fff; padding-top:15px; margin-bottom: 10px;">NEW HIGH SCORE SAVED!</p>
-
             <div id="game-over-buttons" style="margin-top: 15px;">
                 <button class="game-btn" style="width: 100%;" onclick="checkAndStartGame()">Main Lagi</button>
                 <button class="game-btn" style="width: 100%;" onclick="quitGame()">Menu Utama</button>
@@ -371,23 +342,11 @@
       projectId: "clx---14",
       storageBucket: "clx---14.firebasestorage.app",
       messagingSenderId: "368765694470",
-      appId: "1:368765694470:web:90ef6dbccc7aa5a4adc987",
-      measurementId: "G-T1TNM19W4S"
+      appId: "1:368765694470:web:90ef6dbccc7aa5a4adc987"
     };
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-    const leaderboardRef = database.ref('leaderboard_v3');
-
-    // BIKIN SCORE NANDO ABADI DI DATABASE (Auto Create kalau belum ada)
-    leaderboardRef.child('NANDO').once('value').then((snapshot) => {
-        if (!snapshot.exists() || snapshot.val().score < 50000) {
-            leaderboardRef.child('NANDO').set({ name: "NANDO", score: 50000 });
-        }
-    });
-
-    // MATIKAN KLIK KANAN DI WEB
-    window.addEventListener('contextmenu', function (e) { e.preventDefault(); });
-
+    
     // ====== LOGIK WEB / LANDING PAGE ======
     function spawnSkull() {
       const skull = document.createElement('div');
@@ -421,13 +380,50 @@
       }, 2500);
     });
 
+    // SISTEM FORUM AUTO-DELETE 5 HARI
+    const forumRef = database.ref('forum_posts');
+    forumRef.on('value', (snapshot) => {
+        let html = '';
+        const now = Date.now();
+        const maxAge = 5 * 24 * 60 * 60 * 1000; // Umur maksimal 5 Hari
+
+        let postsArray = [];
+
+        snapshot.forEach(child => {
+            let post = child.val();
+            let key = child.key;
+            if (now - post.timestamp > maxAge) {
+                // Auto hapus dari database Firebase kalau udah basi
+                database.ref('forum_posts/' + key).remove();
+            } else {
+                postsArray.push(post);
+            }
+        });
+
+        // Urutin dari yang paling baru
+        postsArray.sort((a, b) => b.timestamp - a.timestamp);
+
+        postsArray.forEach(post => {
+            let dateObj = new Date(post.timestamp);
+            let dateStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) + ' - ' + dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+            
+            html += `
+            <div class="post-card">
+                <h3 class="post-title">${post.title}</h3>
+                <div class="post-date">🕒 Diposting: ${dateStr} WIB</div>
+                ${post.image ? `<img src="${post.image}" class="post-img">` : ''}
+                <div class="post-text">${post.content}</div>
+            </div>
+            `;
+        });
+
+        if(html === '') html = '<p style="text-align:center; color:#888; font-size:14px; margin-top:30px;">Belum ada informasi terbaru saat ini cuy.</p>';
+        document.getElementById('forum-container').innerHTML = html;
+    });
+
     let currentPhotoList = [], currentPhotoIndex = 0;
     function openSingleModal(imgSrc) { currentPhotoList = [imgSrc]; currentPhotoIndex = 0; updateModal(); }
-    function updateModal() {
-      const modal = document.getElementById('imageModal');
-      document.getElementById('modalImage').src = currentPhotoList[currentPhotoIndex];
-      modal.style.display = "block";
-    }
+    function updateModal() { document.getElementById('modalImage').src = currentPhotoList[currentPhotoIndex]; document.getElementById('imageModal').style.display = "block"; }
     function nextPhoto() { if(currentPhotoList.length > 1) { currentPhotoIndex = (currentPhotoIndex + 1) % currentPhotoList.length; updateModal(); } }
     function prevPhoto() { if(currentPhotoList.length > 1) { currentPhotoIndex = (currentPhotoIndex - 1 + currentPhotoList.length) % currentPhotoList.length; updateModal(); } }
     function closeModal() { document.getElementById('imageModal').style.display = "none"; }
@@ -449,6 +445,7 @@
     function handleSwipe() {
       const minSwipe = 70; const activePageElement = document.querySelector('.page.active-page');
       if(!activePageElement) return; const activePage = activePageElement.id;
+      // Note: Swipe logik ga diupdate untuk forum biar ga nabrak navigasi, klik menu aja buat pindah ke forum
       if (touchEndX - touchStartX < -minSwipe && activePage === 'home') switchPage('allcabang');
       else if (touchEndX - touchStartX > minSwipe && activePage === 'allcabang') switchPage('home');
     }
@@ -470,18 +467,10 @@
     function closeIntelModal() { document.getElementById('intelModal').style.display = 'none'; }
     function handlePhotoClick(src) { if (isLongPress) return; openSingleModal(src); }
 
-    // ====== FUNGSI BUKA / TUTUP GAME ======
-    function openGameContainer() {
-        document.getElementById('web-container').style.display = 'none';
-        document.getElementById('game-page').style.display = 'block';
-        resize(); 
-    }
-    function closeGameContainer() {
-        document.getElementById('game-page').style.display = 'none';
-        document.getElementById('web-container').style.display = 'block';
-    }
+    // ====== FUNGSI GAME ======
+    function openGameContainer() { document.getElementById('web-container').style.display = 'none'; document.getElementById('game-page').style.display = 'block'; resize(); }
+    function closeGameContainer() { document.getElementById('game-page').style.display = 'none'; document.getElementById('web-container').style.display = 'block'; }
 
-    // ====== LOGIK GAME GALAXY SURVIVOR ======
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     let w, h;
@@ -489,21 +478,17 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // LEADERBOARD FIREBASE (TOP 5 INTERAKTIF)
+    const leaderboardRef = database.ref('leaderboard_v3');
+    leaderboardRef.child('NANDO').once('value').then((snapshot) => {
+        if (!snapshot.exists() || snapshot.val().score < 50000) { leaderboardRef.child('NANDO').set({ name: "NANDO", score: 50000 }); }
+    });
+
     let leaderboardData = [];
-    
     leaderboardRef.orderByChild('score').limitToLast(5).on('value', (snapshot) => {
         let data = [];
-        snapshot.forEach(childSnapshot => {
-            data.push({ id: childSnapshot.key, ...childSnapshot.val() });
-        });
-        // Firebase orderByChild mengurutkan Ascending, di-reverse agar score tertinggi di atas
+        snapshot.forEach(childSnapshot => { data.push({ id: childSnapshot.key, ...childSnapshot.val() }); });
         leaderboardData = data.reverse();
-        
-        // Update UI secara real-time jika menu sedang terbuka
-        if(document.getElementById('leaderboard-menu').classList.contains('active')) {
-            updateLeaderboardUI();
-        }
+        if(document.getElementById('leaderboard-menu').classList.contains('active')) { updateLeaderboardUI(); }
     });
 
     function updateLeaderboardUI() {
@@ -519,173 +504,74 @@
         document.getElementById('lb-table').innerHTML = html;
     }
 
-    // PENGATURAN GAME
     let gameConfig = { crt: true, autoFire: false, showHitbox: false, dmgText: true };
     function updateSettings() {
-        gameConfig.crt = document.getElementById('set-crt').checked;
-        gameConfig.autoFire = document.getElementById('set-autofire').checked;
-        gameConfig.showHitbox = document.getElementById('set-hitbox').checked;
-        gameConfig.dmgText = document.getElementById('set-dmgtext').checked;
-        if(gameConfig.crt) document.getElementById('game-page').classList.add('crt');
-        else document.getElementById('game-page').classList.remove('crt');
-        if(gameConfig.autoFire) document.getElementById('fire-btn').style.opacity = '0.3';
-        else document.getElementById('fire-btn').style.opacity = '1';
+        gameConfig.crt = document.getElementById('set-crt').checked; gameConfig.autoFire = document.getElementById('set-autofire').checked; gameConfig.showHitbox = document.getElementById('set-hitbox').checked; gameConfig.dmgText = document.getElementById('set-dmgtext').checked;
+        if(gameConfig.crt) document.getElementById('game-page').classList.add('crt'); else document.getElementById('game-page').classList.remove('crt');
+        if(gameConfig.autoFire) document.getElementById('fire-btn').style.opacity = '0.3'; else document.getElementById('fire-btn').style.opacity = '1';
     }
 
-    let gameState = 'MENU'; 
-    let player, enemies, bullets, particles, gems, texts;
-    let frame = 0, screenShake = 0, score = 0;
-    let input = { x: 0, y: 0 }; let isShooting = false; let camX = 0, camY = 0;
-    let globalPlayerName = "PLAYER";
+    let gameState = 'MENU'; let player, enemies, bullets, particles, gems, texts; let frame = 0, screenShake = 0, score = 0; let input = { x: 0, y: 0 }; let isShooting = false; let camX = 0, camY = 0; let globalPlayerName = "PLAYER";
 
-    function showScreen(id) {
-        document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
-        if(id) document.getElementById(id).classList.add('active');
-    }
+    function showScreen(id) { document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active')); if(id) document.getElementById(id).classList.add('active'); }
 
-    // SISTEM NICKNAME & MULAI GAME
     function checkAndStartGame() {
         let nameInput = document.getElementById('pregame-name').value.trim().toUpperCase();
-        if(!nameInput) {
-            alert("buat NICKNAME dulu sebelum bermain!");
-            return;
-        }
-
-        // FILTER NICKNAME: Cegah player pakai nama petinggi/founder
-        // Hapus semua spasi dan simbol buat ngecek tulisan aslinya
+        if(!nameInput) { alert("buat NICKNAME dulu sebelum bermain!"); return; }
         let safeCheck = nameInput.replace(/[^A-Z0-9]/g, ''); 
         if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) {
-            alert("Akses Ditolak! Lu gabisa pake Nickname founder/petinggi. Ganti nama lain cuy!");
-            return;
+            alert("Akses Ditolak! Lu gabisa pake Nickname founder/petinggi. Ganti nama lain cuy!"); return;
         }
-
-        globalPlayerName = nameInput;
-        document.getElementById('ingame-name').innerText = globalPlayerName; 
-        startGame();
+        globalPlayerName = nameInput; document.getElementById('ingame-name').innerText = globalPlayerName; startGame();
     }
 
-    function startGame() {
-        initGame(); showScreen(null);
-        document.getElementById('game-ui').style.display = 'block';
-        gameState = 'PLAYING';
-    }
+    function startGame() { initGame(); showScreen(null); document.getElementById('game-ui').style.display = 'block'; gameState = 'PLAYING'; }
     function pauseGame() { gameState = 'PAUSED'; document.getElementById('game-ui').style.display = 'none'; showScreen('pause-menu'); }
     function resumeGame() { gameState = 'PLAYING'; showScreen(null); document.getElementById('game-ui').style.display = 'block'; }
     function quitGame() { gameState = 'MENU'; document.getElementById('game-ui').style.display = 'none'; ctx.clearRect(0,0,w,h); showScreen('main-menu'); }
 
-    // KONTROL JOYSTICK & FIRE
-    const joyArea = document.getElementById('joystick-area');
-    const joyKnob = document.getElementById('joystick-knob');
-    const fireBtn = document.getElementById('fire-btn');
+    const joyArea = document.getElementById('joystick-area'); const joyKnob = document.getElementById('joystick-knob'); const fireBtn = document.getElementById('fire-btn');
     let joyActive = false, joyCenter = { x: 0, y: 0 };
-    joyArea.addEventListener('touchstart', e => {
-        joyActive = true; let rect = joyArea.getBoundingClientRect();
-        joyCenter = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 }; handleJoy(e.touches[0].clientX, e.touches[0].clientY);
-    });
+    joyArea.addEventListener('touchstart', e => { joyActive = true; let rect = joyArea.getBoundingClientRect(); joyCenter = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 }; handleJoy(e.touches[0].clientX, e.touches[0].clientY); });
     joyArea.addEventListener('touchmove', e => { if(joyActive) handleJoy(e.touches[0].clientX, e.touches[0].clientY); });
     joyArea.addEventListener('touchend', () => { joyActive = false; input = {x:0, y:0}; joyKnob.style.transform = `translate(0px, 0px)`; });
     function handleJoy(x, y) {
         let dx = x - joyCenter.x, dy = y - joyCenter.y; let dist = Math.hypot(dx, dy), maxDist = 40;
         if (dist > maxDist) { dx = (dx / dist) * maxDist; dy = (dy / dist) * maxDist; }
-        joyKnob.style.transform = `translate(${dx}px, ${dy}px)`;
-        input.x = dx / maxDist; input.y = dy / maxDist;
+        joyKnob.style.transform = `translate(${dx}px, ${dy}px)`; input.x = dx / maxDist; input.y = dy / maxDist;
         if(input.x !== 0 || input.y !== 0) player.angle = Math.atan2(input.y, input.x);
     }
-    fireBtn.addEventListener('touchstart', (e) => { e.preventDefault(); isShooting = true; });
-    fireBtn.addEventListener('touchend', (e) => { e.preventDefault(); isShooting = false; });
-    fireBtn.addEventListener('mousedown', () => isShooting = true);
-    fireBtn.addEventListener('mouseup', () => isShooting = false);
-    fireBtn.addEventListener('mouseleave', () => isShooting = false);
+    fireBtn.addEventListener('touchstart', (e) => { e.preventDefault(); isShooting = true; }); fireBtn.addEventListener('touchend', (e) => { e.preventDefault(); isShooting = false; });
+    fireBtn.addEventListener('mousedown', () => isShooting = true); fireBtn.addEventListener('mouseup', () => isShooting = false); fireBtn.addEventListener('mouseleave', () => isShooting = false);
 
-    const upgradePool = [
-        { id: 'fireRate', name: 'FIRE RATE', desc: 'Senjata menembak lebih cepat' }, { id: 'damage', name: 'DAMAGE', desc: 'Daya hancur peluru meningkat' },
-        { id: 'multi', name: 'SPREAD', desc: 'Menambah jumlah proyektil tembakan' }, { id: 'speed', name: 'THRUSTER', desc: 'Kecepatan pesawat meningkat' },
-        { id: 'maxHp', name: 'HULL PLATING', desc: 'Meningkatkan maksimal HP' }, { id: 'magnet', name: 'MAGNETIC FIELD', desc: 'Memperluas jangkauan ambil EXP' }
-    ];
+    const upgradePool = [ { id: 'fireRate', name: 'FIRE RATE', desc: 'Senjata menembak lebih cepat' }, { id: 'damage', name: 'DAMAGE', desc: 'Daya hancur peluru meningkat' }, { id: 'multi', name: 'SPREAD', desc: 'Menambah jumlah proyektil tembakan' }, { id: 'speed', name: 'THRUSTER', desc: 'Kecepatan pesawat meningkat' }, { id: 'maxHp', name: 'HULL PLATING', desc: 'Meningkatkan maksimal HP' }, { id: 'magnet', name: 'MAGNETIC FIELD', desc: 'Memperluas jangkauan ambil EXP' } ];
 
-    class FloatingText {
-        constructor(x, y, text) { this.x = x; this.y = y; this.text = text; this.life = 30; this.vy = -1; }
-        update() { this.y += this.vy; this.life--; ctx.fillStyle = `rgba(255, 255, 255, ${this.life / 30})`; ctx.font = "bold 14px 'Courier New'"; ctx.fillText(this.text, this.x - 5, this.y); }
-    }
+    class FloatingText { constructor(x, y, text) { this.x = x; this.y = y; this.text = text; this.life = 30; this.vy = -1; } update() { this.y += this.vy; this.life--; ctx.fillStyle = `rgba(255, 255, 255, ${this.life / 30})`; ctx.font = "bold 14px 'Courier New'"; ctx.fillText(this.text, this.x - 5, this.y); } }
     class Enemy {
-        constructor() {
-            this.r = 16; let angle = Math.random() * Math.PI * 2; let spawnDist = Math.max(w, h) / 2 + 100;
-            this.x = player.x + Math.cos(angle) * spawnDist; this.y = player.y + Math.sin(angle) * spawnDist;
-            this.hp = 1 + Math.floor(player.lvl / 3) + Math.floor(frame/10000);
-            this.speed = 1.2 + (player.lvl * 0.1) + (frame / 5000) + (Math.random() * 0.5); this.angle = 0;
-        }
-        draw() {
-            ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
-            ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.beginPath();
-            ctx.moveTo(20, 0); ctx.lineTo(0, 15); ctx.lineTo(-15, 0); ctx.lineTo(0, -15); ctx.closePath(); ctx.stroke();
-            if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); }
-            ctx.restore();
-        }
+        constructor() { this.r = 16; let angle = Math.random() * Math.PI * 2; let spawnDist = Math.max(w, h) / 2 + 100; this.x = player.x + Math.cos(angle) * spawnDist; this.y = player.y + Math.sin(angle) * spawnDist; this.hp = 1 + Math.floor(player.lvl / 3) + Math.floor(frame/10000); this.speed = 1.2 + (player.lvl * 0.1) + (frame / 5000) + (Math.random() * 0.5); this.angle = 0; }
+        draw() { ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, 0); ctx.lineTo(0, 15); ctx.lineTo(-15, 0); ctx.lineTo(0, -15); ctx.closePath(); ctx.stroke(); if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); } ctx.restore(); }
         update() { this.angle = Math.atan2(player.y - this.y, player.x - this.x); this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.draw(); }
     }
-    class Bullet {
-        constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.speed = 18; this.life = 60; }
-        update() { this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - Math.cos(this.angle)*25, this.y - Math.sin(this.angle)*25); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke(); }
-    }
-    class Particle {
-        constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 12; this.vy = (Math.random() - 0.5) * 12; this.alpha = 1; this.size = Math.random() * 3 + 1; }
-        update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.04; ctx.fillStyle = '#ffffff'; ctx.globalAlpha = this.alpha; ctx.fillRect(this.x, this.y, this.size, this.size); ctx.globalAlpha = 1; }
-    }
+    class Bullet { constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.speed = 18; this.life = 60; } update() { this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - Math.cos(this.angle)*25, this.y - Math.sin(this.angle)*25); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke(); } }
+    class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 12; this.vy = (Math.random() - 0.5) * 12; this.alpha = 1; this.size = Math.random() * 3 + 1; } update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.04; ctx.fillStyle = '#ffffff'; ctx.globalAlpha = this.alpha; ctx.fillRect(this.x, this.y, this.size, this.size); ctx.globalAlpha = 1; } }
 
-    function initGame() {
-        player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 20, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0 };
-        enemies = []; bullets = []; particles = []; gems = []; texts = []; frame = 0; screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false;
-        document.getElementById('hp-bar').style.width = '100%'; document.getElementById('xp-bar').style.width = '0%'; document.getElementById('lvl-val').innerText = '1'; document.getElementById('score-val').innerText = '0';
-    }
+    function initGame() { player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 20, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0 }; enemies = []; bullets = []; particles = []; gems = []; texts = []; frame = 0; screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false; document.getElementById('hp-bar').style.width = '100%'; document.getElementById('xp-bar').style.width = '0%'; document.getElementById('lvl-val').innerText = '1'; document.getElementById('score-val').innerText = '0'; }
 
-    function triggerLevelUp() {
-        gameState = 'LEVELUP'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('lvl-val').innerText = player.lvl;
-        let shuffled = [...upgradePool].sort(() => 0.5 - Math.random()); let choices = shuffled.slice(0, 3); let html = '';
-        choices.forEach(c => { html += `<button class="game-btn" style="width: 100%; font-size: 14px; margin-bottom: 10px; padding: 10px;" onclick="applyUpgrade('${c.id}')"><b>${c.name}</b><br><span style="font-size:10px; text-transform:none; color:#ccc;">${c.desc}</span></button>`; });
-        document.getElementById('upgrade-choices').innerHTML = html; showScreen('level-up-menu');
-    }
-    window.applyUpgrade = function(type) {
-        if(type === 'fireRate') player.fireRate = Math.max(4, player.fireRate - 3); if(type === 'damage') player.dmg += 1; if(type === 'multi') player.multi = Math.min(5, player.multi + 1); if(type === 'speed') player.speed += 1; if(type === 'maxHp') { player.maxHp += 20; player.hp += 20; } if(type === 'magnet') player.magnet += 60;
-        player.hp = Math.min(player.maxHp, player.hp + 20); document.getElementById('hp-bar').style.width = (player.hp/player.maxHp * 100) + '%'; resumeGame();
-    };
+    function triggerLevelUp() { gameState = 'LEVELUP'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('lvl-val').innerText = player.lvl; let shuffled = [...upgradePool].sort(() => 0.5 - Math.random()); let choices = shuffled.slice(0, 3); let html = ''; choices.forEach(c => { html += `<button class="game-btn" style="width: 100%; font-size: 14px; margin-bottom: 10px; padding: 10px;" onclick="applyUpgrade('${c.id}')"><b>${c.name}</b><br><span style="font-size:10px; text-transform:none; color:#ccc;">${c.desc}</span></button>`; }); document.getElementById('upgrade-choices').innerHTML = html; showScreen('level-up-menu'); }
+    window.applyUpgrade = function(type) { if(type === 'fireRate') player.fireRate = Math.max(4, player.fireRate - 3); if(type === 'damage') player.dmg += 1; if(type === 'multi') player.multi = Math.min(5, player.multi + 1); if(type === 'speed') player.speed += 1; if(type === 'maxHp') { player.maxHp += 20; player.hp += 20; } if(type === 'magnet') player.magnet += 60; player.hp = Math.min(player.maxHp, player.hp + 20); document.getElementById('hp-bar').style.width = (player.hp/player.maxHp * 100) + '%'; resumeGame(); };
 
     function saveHighScore() {
-        // Hapus karakter yang tidak valid untuk key firebase (. # $ [ ])
         let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_');
         let playerRef = leaderboardRef.child(safeName);
-
         playerRef.once('value').then((snapshot) => {
-            let existingData = snapshot.val();
-            let isNewHigh = false;
-
-            if (!existingData) {
-                playerRef.set({ name: globalPlayerName, score: score });
-                isNewHigh = true;
-            } else if (score > existingData.score) {
-                playerRef.update({ score: score });
-                isNewHigh = true;
-            }
-
-            if (isNewHigh) {
-                document.getElementById('new-hs-msg').style.display = 'block';
-            }
+            let existingData = snapshot.val(); let isNewHigh = false;
+            if (!existingData) { playerRef.set({ name: globalPlayerName, score: score }); isNewHigh = true; } 
+            else if (score > existingData.score) { playerRef.update({ score: score }); isNewHigh = true; }
+            if (isNewHigh) { document.getElementById('new-hs-msg').style.display = 'block'; }
         });
     }
 
-    function checkGameOver() {
-        gameState = 'GAMEOVER'; 
-        document.getElementById('game-ui').style.display = 'none'; 
-        document.getElementById('final-score').innerText = score; 
-        document.getElementById('final-level').innerText = player.lvl;
-        
-        // Reset pesan new highscore
-        document.getElementById('new-hs-msg').style.display = 'none';
-
-        // Simpan ke database firebase
-        saveHighScore(); 
-        
-        showScreen('game-over-menu');
-    }
+    function checkGameOver() { gameState = 'GAMEOVER'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('final-score').innerText = score; document.getElementById('final-level').innerText = player.lvl; document.getElementById('new-hs-msg').style.display = 'none'; saveHighScore(); showScreen('game-over-menu'); }
 
     function manualShoot() {
         if(!isShooting && !gameConfig.autoFire) return; player.lastFire++;
@@ -694,22 +580,14 @@
             if(enemies.length > 0) {
                 let target = enemies[0], minDist = Infinity;
                 enemies.forEach(e => { let d = Math.hypot(e.x - player.x, e.y - player.y); if (d < minDist) { minDist = d; target = e; } });
-                if(minDist < Math.max(w, h)) {
-                    angle = Math.atan2(target.y - player.y, target.x - player.x);
-                    if(gameConfig.autoFire && input.x === 0 && input.y === 0) player.angle = angle;
-                }
+                if(minDist < Math.max(w, h)) { angle = Math.atan2(target.y - player.y, target.x - player.x); if(gameConfig.autoFire && input.x === 0 && input.y === 0) player.angle = angle; }
             }
             let spreadAmt = 0.15; let startAngle = angle - (Math.floor(player.multi/2) * spreadAmt); if(player.multi % 2 === 0) startAngle += spreadAmt/2;
             for(let i=0; i<player.multi; i++) bullets.push(new Bullet(player.x, player.y, startAngle + (i * spreadAmt)));
         }
     }
 
-    function drawBackground() {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; let size = 100;
-        let startX = Math.floor(camX / size) * size; let startY = Math.floor(camY / size) * size;
-        for(let i = startX; i < startX + w + size; i += size) { ctx.beginPath(); ctx.moveTo(i, camY); ctx.lineTo(i, camY + h); ctx.stroke(); }
-        for(let j = startY; j < startY + h + size; j += size) { ctx.beginPath(); ctx.moveTo(camX, j); ctx.lineTo(camX + w, j); ctx.stroke(); }
-    }
+    function drawBackground() { ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; let size = 100; let startX = Math.floor(camX / size) * size; let startY = Math.floor(camY / size) * size; for(let i = startX; i < startX + w + size; i += size) { ctx.beginPath(); ctx.moveTo(i, camY); ctx.lineTo(i, camY + h); ctx.stroke(); } for(let j = startY; j < startY + h + size; j += size) { ctx.beginPath(); ctx.moveTo(camX, j); ctx.lineTo(camX + w, j); ctx.stroke(); } }
 
     function loop() {
         requestAnimationFrame(loop); if (gameState !== 'PLAYING') return; frame++;
@@ -729,9 +607,7 @@
             b.update(); if(b.life <= 0) bullets.splice(i, 1);
             enemies.forEach((e, ei) => {
                 if(Math.hypot(b.x - e.x, b.y - e.y) < e.r + 5) {
-                    e.hp -= player.dmg; bullets.splice(i, 1);
-                    if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, player.dmg));
-                    for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y));
+                    e.hp -= player.dmg; bullets.splice(i, 1); if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, player.dmg)); for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y));
                     if(e.hp <= 0) { gems.push({x: e.x, y: e.y}); score += 15; document.getElementById('score-val').innerText = score; for(let k=0; k<10; k++) particles.push(new Particle(e.x, e.y)); enemies.splice(ei, 1); screenShake = 3; }
                 }
             });
