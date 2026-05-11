@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  
+  <meta property="og:title" content="261 AREA | OFFICIAL COMMUNICATION TERMINAL" />
+  <meta property="og:description" content="KAMI DATANG UNTUK MEMBANGUN SOLIDARITAS BERSAMA! Selamat datang di markas digital 261 Area." />
+  <meta property="og:image" content="https://i.imgur.com/your_logo_here.jpg" />
+  <meta property="og:url" content="https://area261.vercel.app/" />
+  <meta property="og:type" content="cabang1.jpg" />
+  <meta name="theme-color" content="#000000">
+
   <title>261 AREA</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Eater&display=swap" rel="stylesheet">
   
@@ -123,7 +131,7 @@
       .floating-game-btn { font-size: 12px; padding: 10px 15px; bottom: 20px; right: 20px; }
     }
 
-    /* CSS GAME TETAP SAMA */
+    /* CSS GAME */
     #game-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000; color: #ffffff; z-index: 20000; font-family: 'Courier New', Courier, monospace; overflow: hidden; touch-action: none; user-select: none; display: none; }
     #game-page * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
     .crt::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); z-index: 999; background-size: 100% 3px; pointer-events: none; }
@@ -275,7 +283,7 @@
     <footer id="footer"></footer>
     <audio id="bgmusic" loop><source src="bgmusic.mp3" type="audio/mp3"></audio>
 
-    <button id="main-btn-game" class="floating-game-btn" onclick="openGameContainer()">🎮</button>
+    <button id="main-btn-game" class="floating-game-btn" onclick="openGameContainer()">🕹️ MAIN GAME</button>
   </div>
 
 
@@ -309,6 +317,7 @@
             <label class="setting-row"><span>Auto-Fire (Otomatis)</span><input type="checkbox" id="set-autofire" onchange="updateSettings()"></label>
             <label class="setting-row"><span>Tampilkan Angka Damage</span><input type="checkbox" id="set-dmgtext" onchange="updateSettings()" checked></label>
             <label class="setting-row"><span>Tampilkan Hitbox Area</span><input type="checkbox" id="set-hitbox" onchange="updateSettings()"></label>
+            <label class="setting-row"><span>Suara Backsound (BGM)</span><input type="checkbox" id="set-audio" onchange="updateSettings()" checked></label>
             <button class="game-btn" style="margin-top: 25px; width: 100%;" onclick="showScreen('main-menu')">Simpan & Kembali</button>
         </div>
     </div>
@@ -382,7 +391,12 @@
     setInterval(spawnSkull, 3000);
 
     const bgMusic = document.getElementById('bgmusic');
-    function playAudio() { if (bgMusic.paused) bgMusic.play().catch(err => console.log("Menunggu interaksi...")); }
+    // Global variable buat track apakah user pengen music nyala/mati
+    let isAudioEnabled = true; 
+
+    function playAudio() { 
+        if (bgMusic.paused && isAudioEnabled) bgMusic.play().catch(err => console.log("Menunggu interaksi...")); 
+    }
     window.addEventListener('click', playAudio); window.addEventListener('touchstart', playAudio);
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -514,7 +528,19 @@
 
     let gameConfig = { crt: true, autoFire: false, showHitbox: false, dmgText: true };
     function updateSettings() {
-        gameConfig.crt = document.getElementById('set-crt').checked; gameConfig.autoFire = document.getElementById('set-autofire').checked; gameConfig.showHitbox = document.getElementById('set-hitbox').checked; gameConfig.dmgText = document.getElementById('set-dmgtext').checked;
+        gameConfig.crt = document.getElementById('set-crt').checked; 
+        gameConfig.autoFire = document.getElementById('set-autofire').checked; 
+        gameConfig.showHitbox = document.getElementById('set-hitbox').checked; 
+        gameConfig.dmgText = document.getElementById('set-dmgtext').checked;
+        
+        // Logika Suara BGM
+        isAudioEnabled = document.getElementById('set-audio').checked;
+        if (!isAudioEnabled) {
+            bgMusic.pause();
+        } else {
+            bgMusic.play().catch(e => console.log("Menunggu interaksi user untuk play"));
+        }
+
         if(gameConfig.crt) document.getElementById('game-page').classList.add('crt'); else document.getElementById('game-page').classList.remove('crt');
         if(gameConfig.autoFire) document.getElementById('fire-btn').style.opacity = '0.3'; else document.getElementById('fire-btn').style.opacity = '1';
     }
