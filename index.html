@@ -8,7 +8,7 @@
   <meta property="og:description" content="KAMI DATANG UNTUK MEMBANGUN SOLIDARITAS BERSAMA! Selamat datang di markas digital 261 Area." />
   <meta property="og:image" content="https://i.imgur.com/your_logo_here.jpg" />
   <meta property="og:url" content="https://area261.vercel.app/" />
-  <meta property="og:type" content="cabang1.jpg" />
+  <meta property="og:type" content="website" />
   <meta name="theme-color" content="#000000">
 
   <title>261 AREA</title>
@@ -91,7 +91,6 @@
     .intel-btn { margin-top: 25px; width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; letter-spacing: 2px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
     .intel-btn:active { background: rgba(255, 255, 255, 0.8); color: #000; transform: scale(0.98); }
 
-    /* CSS TOMBOL MAIN GAME - VERSI RETRO TANPA GLOW */
     .floating-game-btn { 
         position: fixed; bottom: 30px; right: 30px; 
         background: #000; color: #fff; 
@@ -107,15 +106,8 @@
         letter-spacing: 2px;
         display: none; 
     }
-    .floating-game-btn:hover { 
-        transform: translate(-2px, -2px); 
-        box-shadow: 7px 7px 0px #fff; 
-        background: #fff; color: #000;
-    }
-    .floating-game-btn:active {
-        transform: translate(4px, 4px);
-        box-shadow: 0px 0px 0px #fff;
-    }
+    .floating-game-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0px #fff; background: #fff; color: #000; }
+    .floating-game-btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #fff; }
 
     /* CSS FORUM */
     .post-card { background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 20px; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
@@ -147,6 +139,10 @@
     .game-input-name { background: #000; color: #fff; border: 2px solid #fff; padding: 12px; font-family: 'Courier New', Courier, monospace; font-weight: bold; width: 80%; max-width: 300px; margin-bottom: 20px; text-transform: uppercase; text-align: center; font-size: 16px; }
     .game-input-name::placeholder { color: #666; }
     #game-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+    
+    /* Milestone Text Box */
+    #milestone-msg { position:absolute; top:35%; left:50%; transform:translate(-50%, -50%); color:#0f0; font-family:'Eater', cursive; font-size:26px; font-weight:bold; text-align:center; text-shadow:0 0 15px #0f0; display:none; pointer-events:none; white-space:pre-wrap; z-index:999; letter-spacing:2px; }
+
     #top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
     .stat-block { width: 140px; }
     .bar-bg { width: 100%; height: 12px; background: #000; border: 1px solid #fff; margin-bottom: 5px; }
@@ -287,6 +283,7 @@
   </div>
 
 
+  <!-- GAME UI ISOLATION -->
   <div id="game-page" class="crt">
     <canvas id="gameCanvas"></canvas>
 
@@ -323,6 +320,7 @@
     </div>
 
     <div id="game-ui" style="display: none;">
+        <div id="milestone-msg"></div> <!-- MILESTONE POPUP -->
         <div id="top-bar">
             <div class="stat-block"><div class="stat-text">NYAWA</div><div class="bar-bg"><div id="hp-bar"></div></div></div>
             <div id="center-ui">
@@ -391,7 +389,6 @@
     setInterval(spawnSkull, 3000);
 
     const bgMusic = document.getElementById('bgmusic');
-    // Global variable buat track apakah user pengen music nyala/mati
     let isAudioEnabled = true; 
 
     function playAudio() { 
@@ -400,6 +397,10 @@
     window.addEventListener('click', playAudio); window.addEventListener('touchstart', playAudio);
 
     window.addEventListener('DOMContentLoaded', () => {
+      // Auto-load Nickname yang pernah dipake
+      let savedNick = localStorage.getItem('last_nickname_261');
+      if (savedNick) document.getElementById('pregame-name').value = savedNick;
+
       setTimeout(() => {
         const intro = document.getElementById('intro');
         const main = document.getElementById('main-content');
@@ -415,7 +416,6 @@
       }, 2500);
     });
 
-    // SISTEM FORUM: Auto-Delete 5 Hari & Desain Petinggi 261 Verified
     const forumRef = database.ref('forum_posts');
     forumRef.on('value', (snapshot) => {
         let html = '';
@@ -513,6 +513,14 @@
         if(document.getElementById('leaderboard-menu').classList.contains('active')) { updateLeaderboardUI(); }
     });
 
+    // SISTEM TITLE LEADERBOARD
+    function getPlayerTitle(sc) {
+        if(sc < 5000) return "KROCO";
+        if(sc < 15000) return "MEMBER";
+        if(sc < 30000) return "ELITE";
+        return "LEGEND";
+    }
+
     function updateLeaderboardUI() {
         let html = `<tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">SCORE</th></tr>`;
         if (leaderboardData.length === 0) {
@@ -520,7 +528,8 @@
         } else {
              leaderboardData.forEach((entry, index) => {
                 let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-                html += `<tr><td>#${index + 1}</td><td>${medal}<b>${entry.name}</b></td><td style="text-align:right;">${entry.score}</td></tr>`;
+                let title = getPlayerTitle(entry.score);
+                html += `<tr><td>#${index + 1}</td><td>${medal}<b>${entry.name}</b> <span style="font-size:10px; color:#0f0;">[${title}]</span></td><td style="text-align:right;">${entry.score}</td></tr>`;
             });
         }
         document.getElementById('lb-table').innerHTML = html;
@@ -533,26 +542,34 @@
         gameConfig.showHitbox = document.getElementById('set-hitbox').checked; 
         gameConfig.dmgText = document.getElementById('set-dmgtext').checked;
         
-        // Logika Suara BGM
         isAudioEnabled = document.getElementById('set-audio').checked;
-        if (!isAudioEnabled) {
-            bgMusic.pause();
-        } else {
-            bgMusic.play().catch(e => console.log("Menunggu interaksi user untuk play"));
-        }
+        if (!isAudioEnabled) { bgMusic.pause(); } 
+        else { bgMusic.play().catch(e => console.log("Menunggu interaksi")); }
 
         if(gameConfig.crt) document.getElementById('game-page').classList.add('crt'); else document.getElementById('game-page').classList.remove('crt');
         if(gameConfig.autoFire) document.getElementById('fire-btn').style.opacity = '0.3'; else document.getElementById('fire-btn').style.opacity = '1';
     }
 
-    let gameState = 'MENU'; let player, enemies, bullets, particles, gems, texts; let frame = 0, screenShake = 0, score = 0; let input = { x: 0, y: 0 }; let isShooting = false; let camX = 0, camY = 0; let globalPlayerName = "PLAYER";
+    let gameState = 'MENU'; 
+    let player, enemies, enemyBullets, bullets, particles, gems, texts; 
+    let frame = 0, screenShake = 0, score = 0; let input = { x: 0, y: 0 }; 
+    let isShooting = false; let camX = 0, camY = 0; let globalPlayerName = "PLAYER";
+
+    // MILESTONE DATA
+    const milestonesList = [5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
+    const milestoneMsgs = ["GILA LU SEPUH!", "MAKIN MENGGILA!", "ANJAY KELAS!", "AMPUN BANG JAGO!", "TEMBUSIN TERUS CIK!", "MENYALA ABANGKU!", "MODE DEWA ON!"];
+    let nextMilestoneIdx = 0;
+    let lastBossSpawnedLvl = 0;
 
     function showScreen(id) { document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active')); if(id) document.getElementById(id).classList.add('active'); }
 
-    // SISTEM CONTINUE PROGRESS
     function checkAndStartGame() {
         let nameInput = document.getElementById('pregame-name').value.trim().toUpperCase();
         if(!nameInput) { alert("buat NICKNAME dulu sebelum bermain!"); return; }
+        
+        // Simpan nickname otomatis
+        localStorage.setItem('last_nickname_261', nameInput);
+
         let safeCheck = nameInput.replace(/[^A-Z0-9]/g, ''); 
         if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) {
             alert("Akses Ditolak! Lu gabisa pake Nickname founder/petinggi. Ganti nama lain cuy!"); return;
@@ -569,32 +586,24 @@
             btn.innerText = oriText; btn.disabled = false;
             let data = snap.val();
             
-            // Ngecek kalau player udah punya score tertinggi
             if(data && data.score > 0) {
                 let lvl = data.level || 1;
                 let conf = confirm(`DATA DITEMUKAN!\n\nWelcome back ${globalPlayerName}!\nScore Tertinggi Lu: ${data.score}\nLevel Terakhir: ${lvl}\n\nMau lanjutin progress ini? \n(OK = Lanjut, CANCEL = Ngulang dari awal buat ngejar score baru)`);
-                if(conf) {
-                    startWithProgress(lvl, data.score);
-                } else {
-                    startWithProgress(1, 0);
-                }
-            } else {
-                startWithProgress(1, 0); // User baru main dari nol
-            }
+                if(conf) { startWithProgress(lvl, data.score); } 
+                else { startWithProgress(1, 0); }
+            } else { startWithProgress(1, 0); }
         }).catch(e => {
             btn.innerText = oriText; btn.disabled = false;
             startWithProgress(1, 0);
         });
     }
 
-    // Fungsi mulai game dan apply stats sesuai level sebelumnya
     function startWithProgress(startLevel, startScore) {
         initGame(); 
         if(startLevel > 1) {
             player.lvl = startLevel;
             score = startScore;
             
-            // Boost Stats otomatis berdasarkan level biar kuat lawan musuh
             player.maxHp = 100 + ((startLevel - 1) * 20);
             player.hp = player.maxHp;
             player.dmg = 1 + Math.floor(startLevel / 3);
@@ -602,7 +611,6 @@
             player.speed = 5 + (startLevel * 0.1);
             player.multi = Math.min(5, 1 + Math.floor(startLevel / 5)); 
             
-            // Hitung kebutuhan XP
             let base = 10;
             for(let i=1; i<startLevel; i++){ base = Math.floor(base * 1.5); }
             player.nextXp = base;
@@ -610,6 +618,11 @@
             document.getElementById('score-val').innerText = score;
             document.getElementById('lvl-val').innerText = player.lvl;
             document.getElementById('hp-bar').style.width = '100%';
+
+            // Sinkronisasi milestone tracking
+            nextMilestoneIdx = milestonesList.findIndex(m => m > score);
+            if (nextMilestoneIdx === -1) nextMilestoneIdx = milestonesList.length;
+            lastBossSpawnedLvl = Math.floor(startLevel / 10) * 10;
         }
         
         showScreen(null);
@@ -638,25 +651,151 @@
     const upgradePool = [ { id: 'fireRate', name: 'FIRE RATE', desc: 'Senjata menembak lebih cepat' }, { id: 'damage', name: 'DAMAGE', desc: 'Daya hancur peluru meningkat' }, { id: 'multi', name: 'SPREAD', desc: 'Menambah jumlah proyektil tembakan' }, { id: 'speed', name: 'THRUSTER', desc: 'Kecepatan pesawat meningkat' }, { id: 'maxHp', name: 'HULL PLATING', desc: 'Meningkatkan maksimal HP' }, { id: 'magnet', name: 'MAGNETIC FIELD', desc: 'Memperluas jangkauan ambil EXP' } ];
 
     class FloatingText { constructor(x, y, text) { this.x = x; this.y = y; this.text = text; this.life = 30; this.vy = -1; } update() { this.y += this.vy; this.life--; ctx.fillStyle = `rgba(255, 255, 255, ${this.life / 30})`; ctx.font = "bold 14px 'Courier New'"; ctx.fillText(this.text, this.x - 5, this.y); } }
+    
+    // ENEMY & BOSS CLASS
     class Enemy {
-        constructor() { this.r = 16; let angle = Math.random() * Math.PI * 2; let spawnDist = Math.max(w, h) / 2 + 100; this.x = player.x + Math.cos(angle) * spawnDist; this.y = player.y + Math.sin(angle) * spawnDist; this.hp = 1 + Math.floor(player.lvl / 3) + Math.floor(frame/10000); this.speed = 1.2 + (player.lvl * 0.1) + (frame / 5000) + (Math.random() * 0.5); this.angle = 0; }
-        draw() { ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, 0); ctx.lineTo(0, 15); ctx.lineTo(-15, 0); ctx.lineTo(0, -15); ctx.closePath(); ctx.stroke(); if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); } ctx.restore(); }
-        update() { this.angle = Math.atan2(player.y - this.y, player.x - this.x); this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.draw(); }
+        constructor(isBoss = false) { 
+            this.isBoss = isBoss;
+            let angle = Math.random() * Math.PI * 2; let spawnDist = Math.max(w, h) / 2 + 100; 
+            this.x = player.x + Math.cos(angle) * spawnDist; this.y = player.y + Math.sin(angle) * spawnDist; 
+            
+            if (isBoss) {
+                this.r = 40 + (player.lvl * 0.5);
+                this.hp = player.lvl * 200 + (frame/1000);
+                this.speed = 0.8 + (player.lvl * 0.05);
+                this.angle = 0;
+                this.bossType = Math.floor(Math.random() * 3); // 0: Square, 1: Pentagon, 2: Hexagon
+                this.spin = 0;
+            } else {
+                this.r = 16; 
+                this.hp = 1 + Math.floor(player.lvl / 3) + Math.floor(frame/10000); 
+                // Musuh makin susah & gesit
+                this.speed = 1.5 + (player.lvl * 0.15) + (frame / 5000) + (Math.random() * 0.5); 
+                this.angle = 0; 
+            }
+        }
+        draw() { 
+            ctx.save(); ctx.translate(this.x, this.y); 
+            if (this.isBoss) {
+                this.spin += 0.05;
+                ctx.rotate(this.spin);
+                ctx.strokeStyle = '#ff0000'; ctx.lineWidth = 4;
+                ctx.beginPath();
+                let sides = 4 + this.bossType;
+                for (let i=0; i<sides; i++) {
+                    ctx.lineTo(this.r * Math.cos(i * 2 * Math.PI / sides), this.r * Math.sin(i * 2 * Math.PI / sides));
+                }
+                ctx.closePath(); ctx.stroke();
+                
+                // Inti boss
+                ctx.beginPath(); ctx.arc(0, 0, this.r/2, 0, Math.PI*2); ctx.fillStyle = 'rgba(255,0,0,0.5)'; ctx.fill();
+
+            } else {
+                ctx.rotate(this.angle); 
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, 0); ctx.lineTo(0, 15); ctx.lineTo(-15, 0); ctx.lineTo(0, -15); ctx.closePath(); ctx.stroke(); 
+            }
+            if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); } 
+            ctx.restore(); 
+        }
+        update() { 
+            this.angle = Math.atan2(player.y - this.y, player.x - this.x); 
+            this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
+            
+            // Logika Nembak Musuh / Boss
+            if (this.isBoss && frame % 40 === 0) {
+                for(let i=0; i<8; i++) {
+                    enemyBullets.push(new EnemyBullet(this.x, this.y, (Math.PI/4) * i + this.spin, true));
+                }
+            } else if (!this.isBoss && player.lvl > 3 && Math.random() < 0.003 + (player.lvl * 0.0002)) {
+                enemyBullets.push(new EnemyBullet(this.x, this.y, this.angle, false));
+            }
+            this.draw(); 
+        }
     }
-    class Bullet { constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.speed = 18; this.life = 60; } update() { this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - Math.cos(this.angle)*25, this.y - Math.sin(this.angle)*25); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke(); } }
+
+    class Bullet { 
+        constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.speed = 18; this.life = 60; } 
+        update() { 
+            this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; 
+            ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - Math.cos(this.angle)*25, this.y - Math.sin(this.angle)*25); 
+            // Efek Rainbow Death
+            ctx.strokeStyle = player.rainbow ? `hsl(${Math.random()*360}, 100%, 50%)` : '#ffffff'; 
+            ctx.lineWidth = player.rainbow ? 5 : 3; 
+            ctx.stroke(); 
+        } 
+    }
+
+    class EnemyBullet {
+        constructor(x, y, angle, isBoss) {
+            this.x = x; this.y = y; this.angle = angle;
+            this.speed = isBoss ? 6 : 4 + (player.lvl * 0.05);
+            this.life = 100;
+            this.dmg = isBoss ? 15 : 5 + Math.floor(player.lvl / 5);
+            this.isBoss = isBoss;
+        }
+        update() {
+            this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--;
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.isBoss ? 5 : 3, 0, Math.PI*2);
+            ctx.fillStyle = '#ff0000'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.stroke();
+        }
+    }
+
     class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 12; this.vy = (Math.random() - 0.5) * 12; this.alpha = 1; this.size = Math.random() * 3 + 1; } update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.04; ctx.fillStyle = '#ffffff'; ctx.globalAlpha = this.alpha; ctx.fillRect(this.x, this.y, this.size, this.size); ctx.globalAlpha = 1; } }
 
-    function initGame() { player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 20, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0 }; enemies = []; bullets = []; particles = []; gems = []; texts = []; frame = 0; screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false; document.getElementById('hp-bar').style.width = '100%'; document.getElementById('xp-bar').style.width = '0%'; document.getElementById('lvl-val').innerText = '1'; document.getElementById('score-val').innerText = '0'; }
+    function initGame() { 
+        player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 20, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0, rainbow: false }; 
+        enemies = []; enemyBullets = []; bullets = []; particles = []; gems = []; texts = []; 
+        frame = 0; screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false; 
+        nextMilestoneIdx = 0; lastBossSpawnedLvl = 0;
+        document.getElementById('hp-bar').style.width = '100%'; document.getElementById('xp-bar').style.width = '0%'; document.getElementById('lvl-val').innerText = '1'; document.getElementById('score-val').innerText = '0'; 
+    }
 
-    function triggerLevelUp() { gameState = 'LEVELUP'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('lvl-val').innerText = player.lvl; let shuffled = [...upgradePool].sort(() => 0.5 - Math.random()); let choices = shuffled.slice(0, 3); let html = ''; choices.forEach(c => { html += `<button class="game-btn" style="width: 100%; font-size: 14px; margin-bottom: 10px; padding: 10px;" onclick="applyUpgrade('${c.id}')"><b>${c.name}</b><br><span style="font-size:10px; text-transform:none; color:#ccc;">${c.desc}</span></button>`; }); document.getElementById('upgrade-choices').innerHTML = html; showScreen('level-up-menu'); }
-    window.applyUpgrade = function(type) { if(type === 'fireRate') player.fireRate = Math.max(4, player.fireRate - 3); if(type === 'damage') player.dmg += 1; if(type === 'multi') player.multi = Math.min(5, player.multi + 1); if(type === 'speed') player.speed += 1; if(type === 'maxHp') { player.maxHp += 20; player.hp += 20; } if(type === 'magnet') player.magnet += 60; player.hp = Math.min(player.maxHp, player.hp + 20); document.getElementById('hp-bar').style.width = (player.hp/player.maxHp * 100) + '%'; resumeGame(); };
+    function checkMilestone() {
+        if (nextMilestoneIdx < milestonesList.length && score >= milestonesList[nextMilestoneIdx]) {
+            let msg = milestoneMsgs[Math.floor(Math.random() * milestoneMsgs.length)];
+            let mBox = document.getElementById('milestone-msg');
+            mBox.innerHTML = `SCORE ${milestonesList[nextMilestoneIdx]}<br>${msg}`;
+            mBox.style.display = 'block';
+            setTimeout(() => { mBox.style.display = 'none'; }, 3000);
+            nextMilestoneIdx++;
+        }
+    }
+
+    function triggerLevelUp() { 
+        gameState = 'LEVELUP'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('lvl-val').innerText = player.lvl; 
+        let shuffled = [...upgradePool].sort(() => 0.5 - Math.random()); 
+        let choices;
+        
+        // GACHA 5% DAPET SENJATA RAINBOW MYTHIC
+        if (Math.random() < 0.05 && !player.rainbow) {
+            choices = [{ id: 'rainbow', name: 'RAINBOW DEATH', desc: 'MYTHIC GACHA! Tembakan warna-warni damage brutal' }, ...shuffled.slice(0, 2)];
+        } else {
+            choices = shuffled.slice(0, 3);
+        }
+
+        let html = ''; choices.forEach(c => { 
+            let color = c.id === 'rainbow' ? 'background:linear-gradient(90deg, red, orange, yellow, green, blue, purple); color:#fff; border:2px solid #fff;' : '';
+            html += `<button class="game-btn" style="width: 100%; font-size: 14px; margin-bottom: 10px; padding: 10px; ${color}" onclick="applyUpgrade('${c.id}')"><b>${c.name}</b><br><span style="font-size:10px; text-transform:none; color:${c.id==='rainbow'?'#fff':'#ccc'};">${c.desc}</span></button>`; 
+        }); 
+        document.getElementById('upgrade-choices').innerHTML = html; showScreen('level-up-menu'); 
+    }
+
+    window.applyUpgrade = function(type) { 
+        if(type === 'rainbow') player.rainbow = true;
+        if(type === 'fireRate') player.fireRate = Math.max(4, player.fireRate - 3); 
+        if(type === 'damage') player.dmg += 1; 
+        if(type === 'multi') player.multi = Math.min(5, player.multi + 1); 
+        if(type === 'speed') player.speed += 1; 
+        if(type === 'maxHp') { player.maxHp += 20; player.hp += 20; } 
+        if(type === 'magnet') player.magnet += 60; 
+        player.hp = Math.min(player.maxHp, player.hp + 20); document.getElementById('hp-bar').style.width = (player.hp/player.maxHp * 100) + '%'; resumeGame(); 
+    };
 
     function saveHighScore() {
         let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_');
         let playerRef = leaderboardRef.child(safeName);
         playerRef.once('value').then((snapshot) => {
             let existingData = snapshot.val(); let isNewHigh = false;
-            // Update juga nyimpen level terakhir player main
             if (!existingData) { playerRef.set({ name: globalPlayerName, score: score, level: player.lvl }); isNewHigh = true; } 
             else if (score > existingData.score) { playerRef.update({ score: score, level: player.lvl }); isNewHigh = true; }
             if (isNewHigh) { document.getElementById('new-hs-msg').style.display = 'block'; }
@@ -683,7 +822,7 @@
 
     function loop() {
         requestAnimationFrame(loop); if (gameState !== 'PLAYING') return; frame++;
-        if(frame % 60 === 0) { score += Math.floor(Math.random() * 3) + 1; document.getElementById('score-val').innerText = score; }
+        if(frame % 60 === 0) { score += Math.floor(Math.random() * 3) + 1; document.getElementById('score-val').innerText = score; checkMilestone(); }
         player.x += input.x * player.speed; player.y += input.y * player.speed; camX = player.x - w/2; camY = player.y - h/2;
         ctx.save();
         if (screenShake > 0) { ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake); screenShake *= 0.8; if(screenShake < 0.5) screenShake = 0; }
@@ -693,14 +832,39 @@
         ctx.strokeStyle = '#ffffff'; ctx.fillStyle = '#000000'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, 0); ctx.lineTo(-15, 15); ctx.lineTo(-5, 0); ctx.lineTo(-15, -15); ctx.closePath(); ctx.fill(); ctx.stroke();
         if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, player.magnet, 0, Math.PI*2); ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.stroke(); }
         ctx.restore(); manualShoot();
-        let spawnRate = Math.max(10, 80 - (player.lvl * 2) - Math.floor(frame / 600)); if (frame % spawnRate === 0) enemies.push(new Enemy());
+        
+        // SPAWN BOSS SETIAP KELIPATAN 10 LEVEL
+        if (player.lvl > 0 && player.lvl % 10 === 0 && player.lvl !== lastBossSpawnedLvl) {
+            enemies.push(new Enemy(true));
+            lastBossSpawnedLvl = player.lvl;
+        }
+
+        let spawnRate = Math.max(10, 80 - (player.lvl * 2) - Math.floor(frame / 600)); if (frame % spawnRate === 0) enemies.push(new Enemy(false));
         particles.forEach((p, i) => { p.update(); if(p.alpha <= 0) particles.splice(i, 1); }); texts.forEach((t, i) => { t.update(); if(t.life <= 0) texts.splice(i, 1); });
+        
+        // Cek Enemy Bullets
+        enemyBullets.forEach((eb, i) => {
+            eb.update();
+            if (eb.life <= 0) enemyBullets.splice(i, 1);
+            if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.r + 5) {
+                player.hp -= eb.dmg; player.hitFlash = 10; screenShake = 5; document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%';
+                enemyBullets.splice(i, 1);
+                if (player.hp <= 0) checkGameOver();
+            }
+        });
+
         bullets.forEach((b, i) => {
             b.update(); if(b.life <= 0) bullets.splice(i, 1);
+            let currentDmg = player.rainbow ? player.dmg * 50 : player.dmg; // DAMAGE MYTHIC
             enemies.forEach((e, ei) => {
                 if(Math.hypot(b.x - e.x, b.y - e.y) < e.r + 5) {
-                    e.hp -= player.dmg; bullets.splice(i, 1); if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, player.dmg)); for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y));
-                    if(e.hp <= 0) { gems.push({x: e.x, y: e.y}); score += 15; document.getElementById('score-val').innerText = score; for(let k=0; k<10; k++) particles.push(new Particle(e.x, e.y)); enemies.splice(ei, 1); screenShake = 3; }
+                    e.hp -= currentDmg; bullets.splice(i, 1); if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, currentDmg)); for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y));
+                    if(e.hp <= 0) { 
+                        if(e.isBoss) { player.xp += 1500; score += 5000; checkMilestone(); } // Hadiah Boss
+                        else { gems.push({x: e.x, y: e.y}); }
+                        score += 15; document.getElementById('score-val').innerText = score; checkMilestone(); 
+                        for(let k=0; k<15; k++) particles.push(new Particle(e.x, e.y)); enemies.splice(ei, 1); screenShake = 3; 
+                    }
                 }
             });
         });
@@ -708,11 +872,11 @@
             ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(g.x, g.y - 4); ctx.lineTo(g.x + 4, g.y); ctx.lineTo(g.x, g.y + 4); ctx.lineTo(g.x - 4, g.y); ctx.fill();
             let d = Math.hypot(player.x - g.x, player.y - g.y);
             if(d < player.magnet) { g.x += (player.x - g.x) * 0.1; g.y += (player.y - g.y) * 0.1; }
-            if(d < player.r + 5) { gems.splice(i, 1); player.xp++; score += 5; document.getElementById('score-val').innerText = score; document.getElementById('xp-bar').style.width = (player.xp/player.nextXp * 100) + '%'; if(player.xp >= player.nextXp) { player.xp = 0; player.nextXp = Math.floor(player.nextXp * 1.5); player.lvl++; triggerLevelUp(); } }
+            if(d < player.r + 5) { gems.splice(i, 1); player.xp++; score += 5; document.getElementById('score-val').innerText = score; checkMilestone(); document.getElementById('xp-bar').style.width = (player.xp/player.nextXp * 100) + '%'; if(player.xp >= player.nextXp) { player.xp = 0; player.nextXp = Math.floor(player.nextXp * 1.5); player.lvl++; triggerLevelUp(); } }
         });
         enemies.forEach((e, i) => {
             e.update(); if(Math.hypot(e.x - player.x, e.y - player.y) > Math.max(w, h) * 1.5) enemies.splice(i, 1);
-            if(Math.hypot(e.x - player.x, e.y - player.y) < e.r + player.r) { player.hp -= 2; player.hitFlash = 10; screenShake = 5; document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; if(player.hp <= 0) checkGameOver(); }
+            if(Math.hypot(e.x - player.x, e.y - player.y) < e.r + player.r) { player.hp -= (e.isBoss ? 20 : 2); player.hitFlash = 10; screenShake = 5; document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; if(player.hp <= 0) checkGameOver(); }
         });
         ctx.restore(); 
     }
