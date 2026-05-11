@@ -6,8 +6,7 @@
   
   <meta property="og:title" content="261 AREA | OFFICIAL COMMUNICATION" />
   <meta property="og:description" content="KAMI DATANG UNTUK MEMBANGUN SOLIDARITAS BERSAMA! Selamat datang di markas digital 261 Area." />
-  <meta property="og:image" content="https://i.imgur.com/your_logo_here.jpg" />
-  <meta property="og:image" content="https://area261.vercel.app/cabang1.jpg" />
+  <meta property="og:image" content="https://j.top4top.io/p_3783q2jsm0.jpg" />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#000000">
 
@@ -20,7 +19,16 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: #000; color: #fff; min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; user-select: none; }
-    img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
+    
+    /* PROTEKSI GAMBAR KETAT (Anti-Save & Anti-Drag) */
+    img { 
+        -webkit-touch-callout: none !important; 
+        -webkit-user-select: none !important; 
+        user-select: none !important; 
+        -webkit-user-drag: none !important; 
+        pointer-events: auto;
+    }
+
     #web-container { width: 100%; height: 100%; }
 
     .flash-impact { position: fixed; inset: 0; background: #fff; z-index: 10002; opacity: 0; pointer-events: none; animation: flash 0.3s ease-out forwards; }
@@ -63,7 +71,10 @@
 
     .content-block { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); padding: 28px; border-radius: 18px; animation: fadeUp 0.8s both; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-    h2 { font-size: 1.2rem; color: #fff; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; border-left: 3px solid #fff; padding-left: 15px; }
+    
+    /* HEADER KONSISTEN DI SEMUA PAGE */
+    h2 { font-size: 1.2rem; color: #fff; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; border-left: 3px solid #fff; padding-left: 15px; font-family: 'Share Tech Mono', monospace; }
+    
     .about-text { color: #eee; line-height: 1.8; font-weight: 500; margin-bottom: 15px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
     .about-highlight { color: #fff; font-weight: 700; }
     .about-secondary { color: #ddd; margin-top: 15px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
@@ -213,7 +224,7 @@
     .setting-row { display: flex; justify-content: space-between; margin-top: 15px; font-size: 14px; align-items: center; text-align: left; }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
   
   <div id="web-container">
     <div class="flash-impact"></div>
@@ -257,6 +268,7 @@
         
         <div id="home" class="page active-page">
           <div class="leaders-grid">
+            <h2 style="width: 100%; text-align: center; border: none; padding: 0; margin-bottom: 25px;">KASTA TERTINGGI 261</h2>
             <div class="leader-row">
               <div class="leader-item"><img src="home1.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
               <div class="leader-item"><img src="home2.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
@@ -272,54 +284,36 @@
               <div class="leader-item"><img src="home10.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>   
             </div>
           </div>
-          <div class="petinggi-label">
-            <h3>KASTA TERTINGGI 261</h3>
-          </div>
         </div> 
         
         <div id="about" class="page">
           <div class="content-block">
-            <h2>261 AREA</h2>
+            <h2>INFO 261 AREA</h2>
             <p class="about-text">KAMI DATANG UNTUK MEMBANGUN SOLIDARITAS BERSAMA!</p>
             <p class="about-secondary">Selamat datang di AREA 261. Fokus kami cuma satu: <span class="about-highlight">Menciptakan ruang bernaung yang solid dan jauh dari drama.</span></p>
-            <p class="about-secondary" style="margin-top: 15px;">Di sini kita semua setara. Mari saling menghargai, menjaga pertemanan, dan menikmati waktu kita di dunia virtual dengan energi yang positif dan saling suport satu sama lain. Salam damai dari 261.</p>
+            <p class="about-secondary">Di sini kita semua setara. Mari saling menghargai, menjaga pertemanan, dan menikmati waktu kita di dunia virtual dengan energi yang positif dan saling suport satu sama lain. Salam damai dari 261.</p>
           </div>
         </div>
 
         <div id="allcabang" class="page">
           <div class="leaders-grid">
-            <h2 style="text-align: center; margin-bottom: 20px; width: 100%;">SEMUA CABANG 261</h2>
+            <h2 style="width: 100%; text-align: center; border: none; padding: 0; margin-bottom: 25px;">SEMUA CABANG 261</h2>
             <div class="leader-row">
-              <div class="leader-item" onmousedown="startPress('BASE 261 PRIVAT', 'Nando', '<strong>ADMIN:</strong><br>Andi, Alip, Senzi, Araa, Rama, Enjul, Yura, Yara')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('BASE 261 PRIVAT', 'Nando', '<strong>ADMIN:</strong><br>Andi, Alip, Senzi, Araa, Rama, Enjul, Yura, Yara')" ontouchend="cancelPress()">
-                <img src="cabang1.jpg" alt="cabang1" onclick="handlePhotoClick(this.src)">
-              </div>
-              <div class="leader-item" onmousedown="startPress('GODSTARS', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>FOUNDERR LEADIS:</strong> Enjoel<br><strong>OWNER LDS:</strong> Araa<br><strong>PENGURUS:</strong> Tata')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('GODSTARS', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>FOUNDER LEADIS:</strong> Enjoel<br><strong>OWNER LDS:</strong> Araa<br><strong>PENGURUS:</strong> Tata')" ontouchend="cancelPress()">
-                <img src="cabang2.jpg" alt="cabang2" onclick="handlePhotoClick(this.src)">
-              </div>
-              <div class="leader-item" onmousedown="startPress('TOKYO', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>OWNER LDS:</strong> Araa')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('TOKYO', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>OWNER LDS:</strong> Araa')" ontouchend="cancelPress()">
-                <img src="cabang3.jpg" alt="cabang3" onclick="handlePhotoClick(this.src)">
-              </div>
+              <div class="leader-item" onmousedown="startPress('BASE 261 PRIVAT', 'Nando', '<strong>ADMIN:</strong><br>Andi, Alip, Senzi, Araa, Rama, Enjul, Yura, Yara')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('BASE 261 PRIVAT', 'Nando', '<strong>ADMIN:</strong><br>Andi, Alip, Senzi, Araa, Rama, Enjul, Yura, Yara')" ontouchend="cancelPress()"><img src="cabang1.jpg" alt="cabang1" onclick="handlePhotoClick(this.src)"></div>
+              <div class="leader-item" onmousedown="startPress('GODSTARS', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>FOUNDERR LEADIS:</strong> Enjoel<br><strong>OWNER LDS:</strong> Araa<br><strong>PENGURUS:</strong> Tata')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('GODSTARS', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>FOUNDER LEADIS:</strong> Enjoel<br><strong>OWNER LDS:</strong> Araa<br><strong>PENGURUS:</strong> Tata')" ontouchend="cancelPress()"><img src="cabang2.jpg" alt="cabang2" onclick="handlePhotoClick(this.src)"></div>
+              <div class="leader-item" onmousedown="startPress('TOKYO', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>OWNER LDS:</strong> Araa')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('TOKYO', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>OWNER LDS:</strong> Araa')" ontouchend="cancelPress()"><img src="cabang3.jpg" alt="cabang3" onclick="handlePhotoClick(this.src)"></div>
             </div>
             <div class="leader-row">
-              <div class="leader-item" onmousedown="startPress('EMERLD', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Morado<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS LDS:</strong> Nara Cece<br><strong>ALL ADMIN:</strong> Senzi')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('EMERLD', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Morado<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS LDS:</strong> Nara Cece<br><strong>ALL ADMIN:</strong> Senzi')" ontouchend="cancelPress()">
-                <img src="cabang4.jpg" alt="cabang4" onclick="handlePhotoClick(this.src)">
-              </div>
-              <div class="leader-item" onmousedown="startPress('FORCE', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Andi<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS BOY:</strong> Rapz / Senzi<br><strong>PENGURUS LDS:</strong> Cece Nara')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('FORCE', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Andi<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS BOY:</strong> Rapz / Senzi<br><strong>PENGURUS LDS:</strong> Cece Nara')" ontouchend="cancelPress()">
-                <img src="cabang5.jpg" alt="cabang5" onclick="handlePhotoClick(this.src)">
-              </div>
-              <div class="leader-item" onmousedown="startPress('INTI 261', 'Nando', '<strong>ADMIN MIX:</strong><br>Alif, Morado, Andi, Rama, Senzi, Jun, Araa, Enjoel')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('INTI 261', 'Nando', '<strong>ADMIN MIX:</strong><br>Alif, Morado, Andi, Rama, Senzi, Jun, Araa, Enjoel')" ontouchend="cancelPress()">
-                <img src="cabang6.jpg" alt="cabang6" onclick="handlePhotoClick(this.src)">
-              </div>
+              <div class="leader-item" onmousedown="startPress('EMERLD', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Morado<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS LDS:</strong> Nara Cece<br><strong>ALL ADMIN:</strong> Senzi')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('EMERLD', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Morado<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS LDS:</strong> Nara Cece<br><strong>ALL ADMIN:</strong> Senzi')" ontouchend="cancelPress()"><img src="cabang4.jpg" alt="cabang4" onclick="handlePhotoClick(this.src)"></div>
+              <div class="leader-item" onmousedown="startPress('FORCE', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Andi<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS BOY:</strong> Rapz / Senzi<br><strong>PENGURUS LDS:</strong> Cece Nara')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('FORCE', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Andi<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS BOY:</strong> Rapz / Senzi<br><strong>PENGURUS LDS:</strong> Cece Nara')" ontouchend="cancelPress()"><img src="cabang5.jpg" alt="cabang5" onclick="handlePhotoClick(this.src)"></div>
+              <div class="leader-item" onmousedown="startPress('INTI 261', 'Nando', '<strong>ADMIN MIX:</strong><br>Alif, Morado, Andi, Rama, Senzi, Jun, Araa, Enjoel')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('INTI 261', 'Nando', '<strong>ADMIN MIX:</strong><br>Alif, Morado, Andi, Rama, Senzi, Jun, Araa, Enjoel')" ontouchend="cancelPress()"><img src="cabang6.jpg" alt="cabang6" onclick="handlePhotoClick(this.src)"></div>
             </div>
           </div>
         </div>
 
         <div id="forums" class="page">
-          <div class="content-block" style="padding: 20px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
-                <h2 style="margin:0; border:none; padding:0;">FORUMS</h2>
-                <span style="font-size: 10px; color: #fff; font-family:'Share Tech Mono', monospace; border:1px solid #fff; padding:2px 6px;"></span>
-            </div>
+          <div class="content-block">
+            <h2>FORUMS UPDATE</h2>
             <div id="forum-container">
               <p style="text-align:center; color:#aaa; font-size: 14px;">Memuat transmisi dari server...</p>
             </div>
@@ -382,17 +376,17 @@
     </div>
 
     <div id="game-ui" style="display: none;">
-        <div id="milestone-msg"></div> 
+        <div id="milestone-msg" style="position:absolute; top:35%; left:50%; transform:translate(-50%, -50%); color:#0f0; font-family:'Eater', cursive; font-size:26px; font-weight:bold; text-align:center; text-shadow:0 0 15px #0f0; display:none; pointer-events:none; white-space:pre-wrap; z-index:999; letter-spacing:2px;"></div> 
         <div id="top-bar">
             <div class="stat-block"><div class="stat-text">NYAWA</div><div class="bar-bg"><div id="hp-bar"></div></div></div>
             <div id="center-ui">
-                <div id="ingame-name">PLAYER</div>
-                <button id="pause-btn" onclick="pauseGame()">STOP</button>
+                <div id="ingame-name" style="color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff;">PLAYER</div>
+                <button id="pause-btn" style="background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-weight: bold; cursor: pointer; pointer-events: auto;" onclick="pauseGame()">STOP</button>
             </div>
             <div class="stat-block" style="text-align: right;"><div class="stat-text">LEVEL <span id="lvl-val">1</span> | SCORE: <span id="score-val">0</span></div><div class="bar-bg" style="transform: scaleX(-1);"><div id="xp-bar"></div></div></div>
         </div>
-        <div id="joystick-area"><div id="joystick-knob"></div></div>
-        <div id="fire-btn">FIRE</div>
+        <div id="joystick-area" style="position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: transparent; border: 2px solid #fff; border-radius: 50%; pointer-events: auto;"><div id="joystick-knob" style="position: absolute; width: 40px; height: 40px; background: #fff; border-radius: 50%; top: 38px; left: 38px; pointer-events: none;"></div></div>
+        <div id="fire-btn" style="position: absolute; bottom: 50px; right: 40px; width: 100px; height: 100px; background: #000; border: 3px solid #fff; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; pointer-events: auto;">FIRE</div>
     </div>
 
     <div id="pause-menu" class="game-screen">
@@ -403,7 +397,7 @@
 
     <div id="level-up-menu" class="game-screen">
         <div class="overlay-box">
-            <h2 style="margin:0 0 5px 0;">LEVEL UP!</h2>
+            <h2 style="margin:0 0 5px 0; font-family:'Share Tech Mono', monospace;">LEVEL UP!</h2>
             <p style="font-size: 14px; margin-bottom: 20px; color:#ccc;">Sistem mendeteksi peningkatan, pilih modul:</p>
             <div id="upgrade-choices"></div>
         </div>
@@ -437,7 +431,6 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     
-    // ====== LOGIK WEB / LANDING PAGE ======
     function spawnSkull() {
       const skull = document.createElement('div');
       skull.innerHTML = '%D%0'; skull.className = 'skull';
@@ -477,7 +470,7 @@
       }, 2500);
     });
 
-    // FUNGSI SHARE NATIVE
+    // FUNGSI SHARE
     window.sharePost = function(content) {
         let textToShare = content ? (content.length > 40 ? content.substring(0, 40) + "..." : content) : "Info penting dari petinggi!";
         let shareData = {
@@ -496,11 +489,16 @@
     // FUNGSI REACTION (LONG PRESS ONLY)
     let activePostKey = null;
     let postPressTimer;
+    let isScrolling = false;
     
+    window.addEventListener('scroll', () => { isScrolling = true; clearTimeout(postPressTimer); });
+    window.addEventListener('touchend', () => { setTimeout(() => { isScrolling = false; }, 100); });
+
     window.startPostPress = function(key, event) {
+        if(isScrolling) return;
         postPressTimer = setTimeout(() => {
-            showReactionMenu(key, event);
-        }, 500); // Harus ditahan 0.5 detik
+            if(!isScrolling) showReactionMenu(key, event);
+        }, 500); 
     };
     
     window.cancelPostPress = function() {
@@ -538,13 +536,11 @@
         let reactRef = database.ref(`forum_posts/${activePostKey}/reactions/${emoji}`);
 
         if (localStorage.getItem(lsKey)) {
-            // Kalau udah pernah react, kita tarik react-nya (Unlike)
             reactRef.transaction((currentVotes) => {
                 return Math.max(0, (currentVotes || 0) - 1);
             });
             localStorage.removeItem(lsKey);
         } else {
-            // Belum pernah react, kita tambahin
             reactRef.transaction((currentVotes) => {
                 return (currentVotes || 0) + 1;
             });
@@ -554,7 +550,6 @@
         document.getElementById('reaction-menu').style.display = 'none';
     };
 
-    // FUNGSI SUBMIT POLLING
     window.votePoll = function(postKey, optKey) {
         if(localStorage.getItem('voted_' + postKey)) return; 
         localStorage.setItem('voted_' + postKey, 'true'); 
@@ -565,7 +560,7 @@
         });
     };
 
-    // RENDER FORUM: 30 Hari 
+    // RENDER FORUM
     const forumRef = database.ref('forum_posts');
     forumRef.on('value', (snapshot) => {
         let html = '';
@@ -585,9 +580,7 @@
         postsArray.forEach(post => {
             let dateObj = new Date(post.timestamp);
             let timeStr = dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-            let fullDateStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) + ' - ' + timeStr;
             
-            // RENDERING POLLING UI (Polosan tanpa persen %)
             let pollHtml = '';
             if(post.poll) {
                 let totalVotes = 0;
@@ -609,7 +602,7 @@
                         <div class="poll-result-bar">
                             <div class="poll-progress" style="width: ${pct}%;"></div>
                             <span style="font-weight:bold; z-index:2;">${opt.text}</span>
-                            <span style="z-index:2;"><small style="color:#aaa;">(${votes})</small></span>
+                            <span style="z-index:2; font-size:11px; color:#888;">(${votes})</span>
                         </div>`;
                     } else {
                         pollHtml += `
@@ -619,29 +612,26 @@
                         </button>`;
                     }
                 });
-                pollHtml += `<div style="font-size: 11px; color: #888; margin-top: 5px; text-align: right;">Total Suara: ${totalVotes} Member</div>`;
                 pollHtml += `</div>`;
             }
 
-            // RENDERING REACTIONS UI
             let reactHtml = '';
             if (post.reactions) {
                 for (let em in post.reactions) {
                     if (post.reactions[em] > 0) {
-                        // Tambahin fungsi klik langsung ke badge (bisa buat toggle juga)
                         reactHtml += `<div class="react-badge" onclick="activePostKey='${post.key}'; submitReaction('${em}'); event.stopPropagation();">${em} ${post.reactions[em]}</div>`;
                     }
                 }
             }
 
-            // LONG PRESS EVENT DI DIV POST-CARD
             html += `
             <div class="post-card" 
                  onmousedown="startPostPress('${post.key}', event)" 
                  onmouseup="cancelPostPress()" 
                  onmouseleave="cancelPostPress()" 
                  ontouchstart="startPostPress('${post.key}', event)" 
-                 ontouchend="cancelPostPress()">
+                 ontouchend="cancelPostPress()"
+                 ontouchmove="cancelPostPress()">
                  
                 <div style="display:flex; align-items:center; margin-bottom: 12px;">
                     <div style="width: 36px; height: 36px; border-radius: 50%; margin-right: 12px; display:flex; justify-content:center; align-items:center; background:#111; border: 1px solid #fff; color:#fff; font-family:'Share Tech Mono', monospace; font-weight:bold; font-size:12px;">261</div>
@@ -657,7 +647,7 @@
                 <div class="post-actions">
                     <div class="reactions-display">${reactHtml}</div>
                     <div style="display:flex; align-items:center; gap: 15px;">
-                        <span style="font-size:10px; color:#888;">${timeStr}</span>
+                        <span style="font-size:10px; color:#888; font-family:'Share Tech Mono', monospace;">${timeStr}</span>
                         <button class="share-btn" onclick="sharePost('${(post.content || '').replace(/'/g, "\\'")}')" title="Share">SHARE</button>
                     </div>
                 </div>
@@ -669,7 +659,6 @@
         document.getElementById('forum-container').innerHTML = html;
     });
 
-    // SISA LOGIKA WEB / MODAL FOTO
     let currentPhotoList = [], currentPhotoIndex = 0;
     function openSingleModal(imgSrc) { currentPhotoList = [imgSrc]; currentPhotoIndex = 0; updateModal(); }
     function updateModal() { document.getElementById('modalImage').src = currentPhotoList[currentPhotoIndex]; document.getElementById('imageModal').style.display = "block"; }
@@ -717,7 +706,6 @@
 
     const leaderboardRef = database.ref('leaderboard_v3');
     
-    // UPDATE INITIAL NANDO SCORE KE 1 JUTA
     leaderboardRef.child('NANDO').once('value').then((snapshot) => {
         if (!snapshot.exists() || snapshot.val().score !== 1000000) { 
             leaderboardRef.child('NANDO').set({ name: "NANDO", score: 1000000, level: 99 }); 
@@ -832,6 +820,12 @@
         if(isNandoAccount) {
             score = 1000000;
             player.lvl = 99; 
+            player.maxHp = 999999; 
+            player.hp = 999999;
+            player.dmg = 50; 
+            player.fireRate = 5; 
+            player.speed = 8;
+            player.multi = 3;
             document.getElementById('score-val').innerText = "1000000";
             document.getElementById('lvl-val').innerText = "99";
         } 
@@ -889,20 +883,21 @@
     class Enemy {
         constructor(isBoss = false) { 
             this.isBoss = isBoss;
+            let effLvl = isNandoAccount ? 1 : player.lvl;
             let angle = Math.random() * Math.PI * 2; let spawnDist = Math.max(w, h) / 2 + 100; 
             this.x = player.x + Math.cos(angle) * spawnDist; this.y = player.y + Math.sin(angle) * spawnDist; 
             
             if (isBoss) {
-                this.r = 40 + (player.lvl * 0.5);
-                this.hp = player.lvl * 200 + (frame/1000);
-                this.speed = 0.8 + (player.lvl * 0.05);
+                this.r = 40 + (effLvl * 0.5);
+                this.hp = effLvl * 200 + (frame/1000);
+                this.speed = 0.8 + (effLvl * 0.05);
                 this.angle = 0;
                 this.bossType = Math.floor(Math.random() * 3); 
                 this.spin = 0;
             } else {
                 this.r = 16; 
-                this.hp = 1 + Math.floor(player.lvl / 3) + Math.floor(frame/10000); 
-                this.speed = 1.5 + (player.lvl * 0.15) + (frame / 5000) + (Math.random() * 0.5); 
+                this.hp = 1 + Math.floor(effLvl / 3) + Math.floor(frame/10000); 
+                this.speed = 1.5 + (effLvl * 0.15) + (frame / 5000) + (Math.random() * 0.5); 
                 this.angle = 0; 
             }
         }
@@ -911,14 +906,14 @@
             if (this.isBoss) {
                 this.spin += 0.05;
                 ctx.rotate(this.spin);
-                ctx.strokeStyle = '#ff0000'; ctx.lineWidth = 4;
+                ctx.strokeStyle = '#fff'; ctx.lineWidth = 4;
                 ctx.beginPath();
                 let sides = 4 + this.bossType;
                 for (let i=0; i<sides; i++) {
                     ctx.lineTo(this.r * Math.cos(i * 2 * Math.PI / sides), this.r * Math.sin(i * 2 * Math.PI / sides));
                 }
                 ctx.closePath(); ctx.stroke();
-                ctx.beginPath(); ctx.arc(0, 0, this.r/2, 0, Math.PI*2); ctx.fillStyle = 'rgba(255,0,0,0.5)'; ctx.fill();
+                ctx.beginPath(); ctx.arc(0, 0, this.r/2, 0, Math.PI*2); ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fill();
             } else {
                 ctx.rotate(this.angle); 
                 ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, 0); ctx.lineTo(0, 15); ctx.lineTo(-15, 0); ctx.lineTo(0, -15); ctx.closePath(); ctx.stroke(); 
@@ -927,6 +922,7 @@
             ctx.restore(); 
         }
         update() { 
+            let effLvl = isNandoAccount ? 1 : player.lvl;
             this.angle = Math.atan2(player.y - this.y, player.x - this.x); 
             this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
             
@@ -934,7 +930,7 @@
                 for(let i=0; i<8; i++) {
                     enemyBullets.push(new EnemyBullet(this.x, this.y, (Math.PI/4) * i + this.spin, true));
                 }
-            } else if (!this.isBoss && player.lvl > 3 && Math.random() < 0.003 + (player.lvl * 0.0002)) {
+            } else if (!this.isBoss && effLvl > 3 && Math.random() < 0.003 + (effLvl * 0.0002)) {
                 enemyBullets.push(new EnemyBullet(this.x, this.y, this.angle, false));
             }
             this.draw(); 
@@ -954,16 +950,17 @@
 
     class EnemyBullet {
         constructor(x, y, angle, isBoss) {
+            let effLvl = isNandoAccount ? 1 : player.lvl;
             this.x = x; this.y = y; this.angle = angle;
-            this.speed = isBoss ? 6 : 4 + (player.lvl * 0.05);
+            this.speed = isBoss ? 6 : 4 + (effLvl * 0.05);
             this.life = 100;
-            this.dmg = isBoss ? 15 : 5 + Math.floor(player.lvl / 5);
+            this.dmg = isBoss ? 15 : 5 + Math.floor(effLvl / 5);
             this.isBoss = isBoss;
         }
         update() {
             this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--;
             ctx.beginPath(); ctx.arc(this.x, this.y, this.isBoss ? 5 : 3, 0, Math.PI*2);
-            ctx.fillStyle = '#ff0000'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.stroke();
+            ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = '#555'; ctx.stroke();
         }
     }
 
@@ -989,6 +986,7 @@
     }
 
     function checkLevelUp() {
+        if(isNandoAccount) return; 
         document.getElementById('xp-bar').style.width = Math.min(100, (player.xp/player.nextXp * 100)) + '%'; 
         if(player.xp >= player.nextXp) { 
             player.xp = 0; player.nextXp = Math.floor(player.nextXp * 1.5); player.lvl++; triggerLevelUp(); 
@@ -1076,12 +1074,13 @@
         if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, player.magnet, 0, Math.PI*2); ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.stroke(); }
         ctx.restore(); manualShoot();
         
-        if (player.lvl > 0 && player.lvl % 10 === 0 && player.lvl !== lastBossSpawnedLvl) {
+        let effLvl = isNandoAccount ? 1 : player.lvl;
+        if (effLvl > 0 && effLvl % 10 === 0 && effLvl !== lastBossSpawnedLvl) {
             enemies.push(new Enemy(true));
-            lastBossSpawnedLvl = player.lvl;
+            lastBossSpawnedLvl = effLvl;
         }
 
-        let spawnRate = Math.max(10, 80 - (player.lvl * 2) - Math.floor(frame / 600)); if (frame % spawnRate === 0) enemies.push(new Enemy(false));
+        let spawnRate = Math.max(10, 80 - (effLvl * 2) - Math.floor(frame / 600)); if (frame % spawnRate === 0) enemies.push(new Enemy(false));
         particles.forEach((p, i) => { p.update(); if(p.alpha <= 0) particles.splice(i, 1); }); texts.forEach((t, i) => { t.update(); if(t.life <= 0) texts.splice(i, 1); });
         
         enemyBullets.forEach((eb, i) => {
