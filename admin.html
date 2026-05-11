@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>261 AREA</title>
   
+  <!-- SCRIPT FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
   
@@ -26,7 +27,6 @@
         overflow-x: hidden;
     }
 
-    /* Efek Garis Layar TV Jadul */
     body::before {
         content: " "; display: block; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
@@ -94,82 +94,41 @@
         cursor: pointer;
         transition: border 0.3s;
     }
-    
     input[type="file"]:hover { border-color: #fff; }
 
-    /* Checkbox Styles */
-    .checkbox-group {
-        display: flex;
-        align-items: center;
-        margin-bottom: 25px;
-    }
-    .checkbox-group input {
-        width: auto;
-        margin-right: 10px;
-        cursor: pointer;
-        transform: scale(1.2);
-    }
-    .checkbox-group label {
-        font-size: 12px;
-        color: #ccc;
-        letter-spacing: 1px;
-        cursor: pointer;
-        font-weight: bold;
-    }
+    .checkbox-group { display: flex; align-items: center; margin-bottom: 25px; }
+    .checkbox-group input { width: auto; margin-right: 10px; cursor: pointer; transform: scale(1.2); }
+    .checkbox-group label { font-size: 12px; color: #ccc; letter-spacing: 1px; cursor: pointer; font-weight: bold; }
 
     button {
-        width: 100%;
-        padding: 15px;
-        background: #000;
-        color: #fff;
-        border: 2px solid #fff;
-        font-weight: bold;
-        font-size: 16px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        margin-top: 10px;
+        width: 100%; padding: 15px; background: #000; color: #fff; border: 2px solid #fff;
+        font-weight: bold; font-size: 16px; letter-spacing: 2px; text-transform: uppercase;
+        cursor: pointer; transition: all 0.2s ease; margin-top: 10px;
     }
-    
     button:hover { background: #fff; color: #000; box-shadow: 0 0 10px #fff; }
     button:active { transform: scale(0.98); }
 
-    .btn-danger {
-        border-color: #ff4444;
-        color: #ff4444;
-    }
-    .btn-danger:hover {
-        background: #ff4444;
-        color: #000;
-        box-shadow: 0 0 10px #ff4444;
-    }
+    .btn-danger { border-color: #ff4444; color: #ff4444; }
+    .btn-danger:hover { background: #ff4444; color: #000; box-shadow: 0 0 10px #ff4444; }
 
     .footer-text { text-align: center; font-size: 10px; color: #555; margin-top: 25px; letter-spacing: 1px; text-transform: uppercase; }
 
     #admin-screen { display: none; }
 
-    /* CSS BUAT LIST POSTINGAN ADMIN */
-    .admin-post-card {
-        border: 1px dashed #555;
-        padding: 15px;
-        margin-top: 15px;
-        background: rgba(20, 20, 20, 0.5);
-    }
+    .admin-post-card { border: 1px dashed #555; padding: 15px; margin-top: 15px; background: rgba(20, 20, 20, 0.5); }
     .admin-post-card .date { font-size: 10px; color: #888; margin-bottom: 10px; letter-spacing: 1px; }
     .admin-post-card .text { font-size: 13px; color: #ccc; margin-bottom: 10px; white-space: pre-wrap; line-height: 1.5; }
     .post-preview-img { width: 100%; border: 1px solid #333; margin-bottom: 10px; }
     
-    .delete-btn { 
-        width: 100%; background: #000; color: #fff; border: 1px dashed #fff; 
-        padding: 10px; font-size: 12px; margin-top: 5px; 
-    }
+    .delete-btn { width: 100%; background: #000; color: #fff; border: 1px dashed #fff; padding: 10px; font-size: 12px; margin-top: 5px; }
     .delete-btn:hover { background: #fff; color: #000; font-weight: bold; }
-
+    
+    #poll-container input { margin-bottom: 8px; border-style: dashed; }
   </style>
 </head>
 <body>
 
+  <!-- LAYAR LOGIN -->
   <div class="box" id="login-screen">
     <h2>PANEL LOGIN</h2>
     
@@ -192,6 +151,7 @@
     <div class="footer-text">261area</div>
   </div>
 
+  <!-- LAYAR ADMIN UTAMA -->
   <div id="admin-screen" style="width: 100%; display: none; flex-direction: column; align-items: center;">
       <div class="box">
         <h2>UPDATE DATA</h2>
@@ -206,8 +166,15 @@
             <input type="file" id="img-input" accept="image/*">
         </div>
 
-        <button id="submit-btn" onclick="kirimPost()">KIRIM</button>
-        <div class="footer-text"></div>
+        <!-- SISTEM POLLING -->
+        <div class="input-group" style="border: 1px solid #333; padding: 15px; background: #0a0a0a;">
+            <label style="color:#0f0;">📊 TAMBAH POLLING (OPSIONAL)</label>
+            <div id="poll-container"></div>
+            <button type="button" onclick="addPollOption()" style="padding: 10px; font-size: 12px; border: 1px dashed #0f0; background: transparent; color: #0f0; margin-top: 5px;">+ TAMBAH OPSI POLLING</button>
+        </div>
+
+        <button id="submit-btn" onclick="kirimPost()">KIRIM DATA</button>
+        <div class="footer-text">CREATED : NNDO</div>
       </div>
 
       <div class="box" style="margin-top: 20px;">
@@ -217,7 +184,7 @@
         </div>
       </div>
 
-      <button class="btn-danger" style="max-width: 450px;" onclick="logout()">LOGOUT</button>
+      <button class="btn-danger" style="max-width: 450px;" onclick="logout()">LOGOUT SYSTEM</button>
   </div>
 
   <script>
@@ -234,7 +201,6 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // CEK AUTO LOGIN PAS WEB DIBUKA
     window.onload = function() {
         if(localStorage.getItem('admin261_logged_in') === 'true') {
             document.getElementById('login-screen').style.display = 'none';
@@ -249,11 +215,7 @@
       let remember = document.getElementById('remember-me').checked;
 
       if(u === '261area' && p === 'parapetinggi261') {
-        // Kalau dicentang, simpen token di browser
-        if(remember) {
-            localStorage.setItem('admin261_logged_in', 'true');
-        }
-
+        if(remember) localStorage.setItem('admin261_logged_in', 'true');
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-screen').style.display = 'flex';
         loadAdminPosts(); 
@@ -267,37 +229,40 @@
             localStorage.removeItem('admin261_logged_in');
             document.getElementById('admin-screen').style.display = 'none';
             document.getElementById('login-screen').style.display = 'block';
-            document.getElementById('user').value = '';
-            document.getElementById('pass').value = '';
-            document.getElementById('remember-me').checked = false;
         }
     }
 
-    // Sistem Render Data Real-Time di Admin
+    // Sistem Tambah Opsi Polling
+    let pollCount = 0;
+    function addPollOption() {
+        let div = document.createElement('div');
+        div.innerHTML = `<input type="text" id="poll-opt-${pollCount}" placeholder="Opsi Polling ${pollCount + 1}" autocomplete="off">`;
+        document.getElementById('poll-container').appendChild(div);
+        pollCount++;
+    }
+
     function loadAdminPosts() {
         database.ref('forum_posts').on('value', (snapshot) => {
             let html = '';
             let postsArray = [];
             
-            snapshot.forEach(child => {
-                postsArray.push({ key: child.key, ...child.val() });
-            });
-            
-            // Urutkan dari yang terbaru
+            snapshot.forEach(child => { postsArray.push({ key: child.key, ...child.val() }); });
             postsArray.sort((a, b) => b.timestamp - a.timestamp);
 
             postsArray.forEach(post => {
                 let dateObj = new Date(post.timestamp);
                 let dateStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) + ' - ' + dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
                 
+                let pollInfo = post.poll ? `<div style="color:#0f0; margin-bottom:10px; font-weight:bold;">[📊 Polling Dilampirkan]</div>` : '';
+
                 html += `
                 <div class="admin-post-card">
                     <div class="date">[ ${dateStr} WIB ]</div>
                     ${post.image ? `<img src="${post.image}" class="post-preview-img">` : ''}
+                    ${pollInfo}
                     <div class="text">${post.content ? post.content : ''}</div>
                     <button class="delete-btn" onclick="hapusPost('${post.key}')">DELETE PERMANENTLY</button>
-                </div>
-                `;
+                </div>`;
             });
 
             if(html === '') html = '<div class="footer-text">NO DATA IN DATABASE</div>';
@@ -305,7 +270,6 @@
         });
     }
 
-    // Fungsi Hapus Post
     window.hapusPost = function(key) {
         if(confirm("WARNING: Yakin mau hapus data ini dari server 261 Area?")) {
             database.ref('forum_posts/' + key).remove()
@@ -314,7 +278,6 @@
         }
     }
 
-    // Sistem kompres foto
     let imageBase64 = "";
     document.getElementById('img-input').addEventListener('change', function(e) {
       let file = e.target.files[0];
@@ -339,7 +302,22 @@
     function kirimPost() {
       let content = document.getElementById('post-content').value;
       
-      if(!content && !imageBase64) return alert('ERROR: Masukin pesan atau gambar dulu cuy!');
+      // Kumpulin Data Polling
+      let pollData = null;
+      if(pollCount > 0) {
+          let hasValidOption = false;
+          pollData = {};
+          for(let i=0; i<pollCount; i++) {
+              let el = document.getElementById(`poll-opt-${i}`);
+              if(el && el.value.trim() !== "") {
+                  pollData[`opt_${i}`] = { text: el.value.trim(), votes: 0 };
+                  hasValidOption = true;
+              }
+          }
+          if(!hasValidOption) pollData = null;
+      }
+
+      if(!content && !imageBase64 && !pollData) return alert('ERROR: Masukin pesan, gambar, atau opsi polling dulu cuy!');
 
       let btn = document.getElementById('submit-btn');
       btn.innerText = "TRANSMITTING..."; btn.disabled = true;
@@ -347,11 +325,14 @@
       database.ref('forum_posts').push({
         content: content,
         image: imageBase64,
+        poll: pollData,
         timestamp: Date.now() 
       }).then(() => {
         alert('SUCCESS: Data terkirim ke server 261 Area!');
         document.getElementById('post-content').value = '';
         document.getElementById('img-input').value = '';
+        document.getElementById('poll-container').innerHTML = ''; // Reset Polling
+        pollCount = 0;
         imageBase64 = '';
         btn.innerText = "TRANSMIT DATA"; btn.disabled = false;
       }).catch(e => {
@@ -360,7 +341,6 @@
       });
     }
 
-    // Pencet Enter buat login
     document.getElementById('pass').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') login();
     });
