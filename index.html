@@ -283,7 +283,6 @@
   </div>
 
 
-  <!-- GAME UI ISOLATION -->
   <div id="game-page" class="crt">
     <canvas id="gameCanvas"></canvas>
 
@@ -320,7 +319,7 @@
     </div>
 
     <div id="game-ui" style="display: none;">
-        <div id="milestone-msg"></div> <!-- MILESTONE POPUP -->
+        <div id="milestone-msg"></div> 
         <div id="top-bar">
             <div class="stat-block"><div class="stat-text">NYAWA</div><div class="bar-bg"><div id="hp-bar"></div></div></div>
             <div id="center-ui">
@@ -397,7 +396,6 @@
     window.addEventListener('click', playAudio); window.addEventListener('touchstart', playAudio);
 
     window.addEventListener('DOMContentLoaded', () => {
-      // Auto-load Nickname yang pernah dipake
       let savedNick = localStorage.getItem('last_nickname_261');
       if (savedNick) document.getElementById('pregame-name').value = savedNick;
 
@@ -501,8 +499,12 @@
     resize();
 
     const leaderboardRef = database.ref('leaderboard_v3');
+    
+    // UPDATE INITIAL NANDO SCORE KE 1 JUTA
     leaderboardRef.child('NANDO').once('value').then((snapshot) => {
-        if (!snapshot.exists() || snapshot.val().score < 50000) { leaderboardRef.child('NANDO').set({ name: "NANDO", score: 50000, level: 99 }); }
+        if (!snapshot.exists() || snapshot.val().score !== 1000000) { 
+            leaderboardRef.child('NANDO').set({ name: "NANDO", score: 1000000, level: 99 }); 
+        }
     });
 
     let leaderboardData = [];
@@ -513,7 +515,6 @@
         if(document.getElementById('leaderboard-menu').classList.contains('active')) { updateLeaderboardUI(); }
     });
 
-    // SISTEM TITLE LEADERBOARD
     function getPlayerTitle(sc) {
         if(sc < 5000) return "KROCO";
         if(sc < 15000) return "MEMBER";
@@ -554,8 +555,8 @@
     let player, enemies, enemyBullets, bullets, particles, gems, texts; 
     let frame = 0, screenShake = 0, score = 0; let input = { x: 0, y: 0 }; 
     let isShooting = false; let camX = 0, camY = 0; let globalPlayerName = "PLAYER";
+    let isNandoAccount = false; // FLAG AKUN VIP
 
-    // MILESTONE DATA
     const milestonesList = [5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
     const milestoneMsgs = ["GILA LU SEPUH!", "MAKIN MENGGILA!", "ANJAY KELAS!", "AMPUN BANG JAGO!", "TEMBUSIN TERUS CIK!", "MENYALA ABANGKU!", "MODE DEWA ON!"];
     let nextMilestoneIdx = 0;
@@ -567,13 +568,22 @@
         let nameInput = document.getElementById('pregame-name').value.trim().toUpperCase();
         if(!nameInput) { alert("buat NICKNAME dulu sebelum bermain!"); return; }
         
-        // Simpan nickname otomatis
         localStorage.setItem('last_nickname_261', nameInput);
-
         let safeCheck = nameInput.replace(/[^A-Z0-9]/g, ''); 
+        isNandoAccount = false;
+
+        // PROTEKSI NAMA FOUNDER + BYPASS PASSWORD
         if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) {
-            alert("Akses Ditolak! Lu gabisa pake Nickname founder/petinggi. Ganti nama lain cuy!"); return;
+            let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:");
+            if(pass === "nandoacces") {
+                isNandoAccount = true;
+                alert("ACCESS GRANTED: Selamat datang kembali, Tuan.");
+            } else {
+                alert("ACCESS DENIED: Lu bukan petinggi! Ganti nama woi."); 
+                return;
+            }
         }
+        
         globalPlayerName = nameInput; 
         document.getElementById('ingame-name').innerText = globalPlayerName; 
 
@@ -586,12 +596,14 @@
             btn.innerText = oriText; btn.disabled = false;
             let data = snap.val();
             
-            if(data && data.score > 0) {
+            if(data && data.score > 0 && !isNandoAccount) {
                 let lvl = data.level || 1;
-                let conf = confirm(`DATA DITEMUKAN!\n\nWelcome back ${globalPlayerName}!\nScore Tertinggi Lu: ${data.score}\nLevel Terakhir: ${lvl}\n\nMau lanjutin progress ini? \n(OK = Lanjut, CANCEL = Ngulang dari awal buat ngejar score baru)`);
+                let conf = confirm(`DATA DITEMUKAN!\n\nWelcome back ${globalPlayerName}!\nScore Tertinggi Lu: ${data.score}\nLevel Terakhir: ${lvl}\n\nMau lanjutin progress ini? \n(OK = Lanjut, CANCEL = Ngulang dari awal)`);
                 if(conf) { startWithProgress(lvl, data.score); } 
                 else { startWithProgress(1, 0); }
-            } else { startWithProgress(1, 0); }
+            } else { 
+                startWithProgress(1, 0); 
+            }
         }).catch(e => {
             btn.innerText = oriText; btn.disabled = false;
             startWithProgress(1, 0);
@@ -600,7 +612,15 @@
 
     function startWithProgress(startLevel, startScore) {
         initGame(); 
-        if(startLevel > 1) {
+        
+        // JIKA AKUN NANDO, LOCK SCORE 1 JUTA
+        if(isNandoAccount) {
+            score = 1000000;
+            player.lvl = 99; // Set level tinggi bebas ngoprek
+            document.getElementById('score-val').innerText = "1000000";
+            document.getElementById('lvl-val').innerText = "99";
+        } 
+        else if(startLevel > 1) {
             player.lvl = startLevel;
             score = startScore;
             
@@ -619,7 +639,6 @@
             document.getElementById('lvl-val').innerText = player.lvl;
             document.getElementById('hp-bar').style.width = '100%';
 
-            // Sinkronisasi milestone tracking
             nextMilestoneIdx = milestonesList.findIndex(m => m > score);
             if (nextMilestoneIdx === -1) nextMilestoneIdx = milestonesList.length;
             lastBossSpawnedLvl = Math.floor(startLevel / 10) * 10;
@@ -652,7 +671,6 @@
 
     class FloatingText { constructor(x, y, text) { this.x = x; this.y = y; this.text = text; this.life = 30; this.vy = -1; } update() { this.y += this.vy; this.life--; ctx.fillStyle = `rgba(255, 255, 255, ${this.life / 30})`; ctx.font = "bold 14px 'Courier New'"; ctx.fillText(this.text, this.x - 5, this.y); } }
     
-    // ENEMY & BOSS CLASS
     class Enemy {
         constructor(isBoss = false) { 
             this.isBoss = isBoss;
@@ -664,12 +682,11 @@
                 this.hp = player.lvl * 200 + (frame/1000);
                 this.speed = 0.8 + (player.lvl * 0.05);
                 this.angle = 0;
-                this.bossType = Math.floor(Math.random() * 3); // 0: Square, 1: Pentagon, 2: Hexagon
+                this.bossType = Math.floor(Math.random() * 3); 
                 this.spin = 0;
             } else {
                 this.r = 16; 
                 this.hp = 1 + Math.floor(player.lvl / 3) + Math.floor(frame/10000); 
-                // Musuh makin susah & gesit
                 this.speed = 1.5 + (player.lvl * 0.15) + (frame / 5000) + (Math.random() * 0.5); 
                 this.angle = 0; 
             }
@@ -686,10 +703,7 @@
                     ctx.lineTo(this.r * Math.cos(i * 2 * Math.PI / sides), this.r * Math.sin(i * 2 * Math.PI / sides));
                 }
                 ctx.closePath(); ctx.stroke();
-                
-                // Inti boss
                 ctx.beginPath(); ctx.arc(0, 0, this.r/2, 0, Math.PI*2); ctx.fillStyle = 'rgba(255,0,0,0.5)'; ctx.fill();
-
             } else {
                 ctx.rotate(this.angle); 
                 ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, 0); ctx.lineTo(0, 15); ctx.lineTo(-15, 0); ctx.lineTo(0, -15); ctx.closePath(); ctx.stroke(); 
@@ -701,7 +715,6 @@
             this.angle = Math.atan2(player.y - this.y, player.x - this.x); 
             this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
             
-            // Logika Nembak Musuh / Boss
             if (this.isBoss && frame % 40 === 0) {
                 for(let i=0; i<8; i++) {
                     enemyBullets.push(new EnemyBullet(this.x, this.y, (Math.PI/4) * i + this.spin, true));
@@ -718,7 +731,6 @@
         update() { 
             this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; 
             ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - Math.cos(this.angle)*25, this.y - Math.sin(this.angle)*25); 
-            // Efek Rainbow Death
             ctx.strokeStyle = player.rainbow ? `hsl(${Math.random()*360}, 100%, 50%)` : '#ffffff'; 
             ctx.lineWidth = player.rainbow ? 5 : 3; 
             ctx.stroke(); 
@@ -761,14 +773,21 @@
         }
     }
 
+    // CHECK LEVEL UP HELPER
+    function checkLevelUp() {
+        document.getElementById('xp-bar').style.width = Math.min(100, (player.xp/player.nextXp * 100)) + '%'; 
+        if(player.xp >= player.nextXp) { 
+            player.xp = 0; player.nextXp = Math.floor(player.nextXp * 1.5); player.lvl++; triggerLevelUp(); 
+        }
+    }
+
     function triggerLevelUp() { 
         gameState = 'LEVELUP'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('lvl-val').innerText = player.lvl; 
         let shuffled = [...upgradePool].sort(() => 0.5 - Math.random()); 
         let choices;
         
-        // GACHA 5% DAPET SENJATA RAINBOW MYTHIC
         if (Math.random() < 0.05 && !player.rainbow) {
-            choices = [{ id: 'rainbow', name: 'RAINBOW DEATH', desc: 'MYTHIC GACHA! Tembakan warna-warni damage brutal' }, ...shuffled.slice(0, 2)];
+            choices = [{ id: 'rainbow', name: 'RAINBOW DEATH', desc: 'MYTHIC GACHA! Tembakan warna-warni damage brutal + 1000 EXP' }, ...shuffled.slice(0, 2)];
         } else {
             choices = shuffled.slice(0, 3);
         }
@@ -792,6 +811,8 @@
     };
 
     function saveHighScore() {
+        if (isNandoAccount) return; // AKUN NANDO GA USAH NGE-SAVE SCORE BARU
+
         let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_');
         let playerRef = leaderboardRef.child(safeName);
         playerRef.once('value').then((snapshot) => {
@@ -802,7 +823,7 @@
         });
     }
 
-    function checkGameOver() { gameState = 'GAMEOVER'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('final-score').innerText = score; document.getElementById('final-level').innerText = player.lvl; document.getElementById('new-hs-msg').style.display = 'none'; saveHighScore(); showScreen('game-over-menu'); }
+    function checkGameOver() { gameState = 'GAMEOVER'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('final-score').innerText = isNandoAccount ? "1000000 (LOCKED)" : score; document.getElementById('final-level').innerText = player.lvl; document.getElementById('new-hs-msg').style.display = 'none'; saveHighScore(); showScreen('game-over-menu'); }
 
     function manualShoot() {
         if(!isShooting && !gameConfig.autoFire) return; player.lastFire++;
@@ -822,7 +843,15 @@
 
     function loop() {
         requestAnimationFrame(loop); if (gameState !== 'PLAYING') return; frame++;
-        if(frame % 60 === 0) { score += Math.floor(Math.random() * 3) + 1; document.getElementById('score-val').innerText = score; checkMilestone(); }
+        if(frame % 60 === 0) { 
+            if(!isNandoAccount) {
+                score += Math.floor(Math.random() * 3) + 1; 
+                document.getElementById('score-val').innerText = score; 
+                checkMilestone(); 
+            } else {
+                document.getElementById('score-val').innerText = "1000000";
+            }
+        }
         player.x += input.x * player.speed; player.y += input.y * player.speed; camX = player.x - w/2; camY = player.y - h/2;
         ctx.save();
         if (screenShake > 0) { ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake); screenShake *= 0.8; if(screenShake < 0.5) screenShake = 0; }
@@ -833,7 +862,6 @@
         if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, player.magnet, 0, Math.PI*2); ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.stroke(); }
         ctx.restore(); manualShoot();
         
-        // SPAWN BOSS SETIAP KELIPATAN 10 LEVEL
         if (player.lvl > 0 && player.lvl % 10 === 0 && player.lvl !== lastBossSpawnedLvl) {
             enemies.push(new Enemy(true));
             lastBossSpawnedLvl = player.lvl;
@@ -842,7 +870,6 @@
         let spawnRate = Math.max(10, 80 - (player.lvl * 2) - Math.floor(frame / 600)); if (frame % spawnRate === 0) enemies.push(new Enemy(false));
         particles.forEach((p, i) => { p.update(); if(p.alpha <= 0) particles.splice(i, 1); }); texts.forEach((t, i) => { t.update(); if(t.life <= 0) texts.splice(i, 1); });
         
-        // Cek Enemy Bullets
         enemyBullets.forEach((eb, i) => {
             eb.update();
             if (eb.life <= 0) enemyBullets.splice(i, 1);
@@ -855,14 +882,28 @@
 
         bullets.forEach((b, i) => {
             b.update(); if(b.life <= 0) bullets.splice(i, 1);
-            let currentDmg = player.rainbow ? player.dmg * 50 : player.dmg; // DAMAGE MYTHIC
+            let currentDmg = player.rainbow ? player.dmg * 50 : player.dmg; 
             enemies.forEach((e, ei) => {
                 if(Math.hypot(b.x - e.x, b.y - e.y) < e.r + 5) {
                     e.hp -= currentDmg; bullets.splice(i, 1); if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, currentDmg)); for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y));
                     if(e.hp <= 0) { 
-                        if(e.isBoss) { player.xp += 1500; score += 5000; checkMilestone(); } // Hadiah Boss
-                        else { gems.push({x: e.x, y: e.y}); }
-                        score += 15; document.getElementById('score-val').innerText = score; checkMilestone(); 
+                        if(e.isBoss) { 
+                            player.xp += 1500; checkLevelUp();
+                            if(!isNandoAccount) { score += 5000; checkMilestone(); } 
+                        } 
+                        else { 
+                            if(player.rainbow) {
+                                player.xp += 1000; checkLevelUp(); // MYTHIC EXP GA NGOTAK
+                            } else {
+                                gems.push({x: e.x, y: e.y}); 
+                            }
+                        }
+                        
+                        if(!isNandoAccount) { 
+                            score += 15; 
+                            document.getElementById('score-val').innerText = score; 
+                            checkMilestone(); 
+                        } 
                         for(let k=0; k<15; k++) particles.push(new Particle(e.x, e.y)); enemies.splice(ei, 1); screenShake = 3; 
                     }
                 }
@@ -872,7 +913,12 @@
             ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(g.x, g.y - 4); ctx.lineTo(g.x + 4, g.y); ctx.lineTo(g.x, g.y + 4); ctx.lineTo(g.x - 4, g.y); ctx.fill();
             let d = Math.hypot(player.x - g.x, player.y - g.y);
             if(d < player.magnet) { g.x += (player.x - g.x) * 0.1; g.y += (player.y - g.y) * 0.1; }
-            if(d < player.r + 5) { gems.splice(i, 1); player.xp++; score += 5; document.getElementById('score-val').innerText = score; checkMilestone(); document.getElementById('xp-bar').style.width = (player.xp/player.nextXp * 100) + '%'; if(player.xp >= player.nextXp) { player.xp = 0; player.nextXp = Math.floor(player.nextXp * 1.5); player.lvl++; triggerLevelUp(); } }
+            if(d < player.r + 5) { 
+                gems.splice(i, 1); 
+                player.xp++; 
+                if(!isNandoAccount) { score += 5; document.getElementById('score-val').innerText = score; checkMilestone(); }
+                checkLevelUp();
+            }
         });
         enemies.forEach((e, i) => {
             e.update(); if(Math.hypot(e.x - player.x, e.y - player.y) > Math.max(w, h) * 1.5) enemies.splice(i, 1);
