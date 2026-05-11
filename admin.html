@@ -21,12 +21,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 40px 10px; /* Biar bisa di-scroll kalau penuh */
+        padding: 40px 10px; 
         min-height: 100vh;
         overflow-x: hidden;
     }
 
-    /* Efek Garis Layar TV Jadul ngikutin viewport scroll */
+    /* Efek Garis Layar TV Jadul */
     body::before {
         content: " "; display: block; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
@@ -97,6 +97,26 @@
     
     input[type="file"]:hover { border-color: #fff; }
 
+    /* Checkbox Styles */
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+    .checkbox-group input {
+        width: auto;
+        margin-right: 10px;
+        cursor: pointer;
+        transform: scale(1.2);
+    }
+    .checkbox-group label {
+        font-size: 12px;
+        color: #ccc;
+        letter-spacing: 1px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
     button {
         width: 100%;
         padding: 15px;
@@ -114,6 +134,16 @@
     
     button:hover { background: #fff; color: #000; box-shadow: 0 0 10px #fff; }
     button:active { transform: scale(0.98); }
+
+    .btn-danger {
+        border-color: #ff4444;
+        color: #ff4444;
+    }
+    .btn-danger:hover {
+        background: #ff4444;
+        color: #000;
+        box-shadow: 0 0 10px #ff4444;
+    }
 
     .footer-text { text-align: center; font-size: 10px; color: #555; margin-top: 25px; letter-spacing: 1px; text-transform: uppercase; }
 
@@ -141,25 +171,30 @@
 <body>
 
   <div class="box" id="login-screen">
-    <h2>SYSTEM LOGIN</h2>
+    <h2>PANEL LOGIN</h2>
     
     <div class="input-group">
         <label>USERNAME</label>
-        <input type="text" id="user" placeholder="INPUT ID" autocomplete="off">
+        <input type="text" id="user" placeholder="username" autocomplete="off">
     </div>
     
     <div class="input-group">
         <label>PASSWORD</label>
-        <input type="password" id="pass" placeholder="INPUT KEY">
+        <input type="password" id="pass" placeholder="password">
+    </div>
+
+    <div class="checkbox-group">
+        <input type="checkbox" id="remember-me">
+        <label for="remember-me">SIMPAN SESI LOGIN</label>
     </div>
     
-    <button onclick="login()">AUTHORIZE</button>
-    <div class="footer-text">SECURE CONNECTION ESTABLISHED</div>
+    <button onclick="login()">MASUK</button>
+    <div class="footer-text">261area</div>
   </div>
 
   <div id="admin-screen" style="width: 100%; display: none; flex-direction: column; align-items: center;">
       <div class="box">
-        <h2>TRANSMIT DATA</h2>
+        <h2>UPDATE DATA</h2>
         
         <div class="input-group">
             <label>ISI INFORMASI TERTULIS</label>
@@ -171,8 +206,8 @@
             <input type="file" id="img-input" accept="image/*">
         </div>
 
-        <button id="submit-btn" onclick="kirimPost()">TRANSMIT DATA</button>
-        <div class="footer-text">DATA WILL BE AUTO-PURGED IN 5 DAYS</div>
+        <button id="submit-btn" onclick="kirimPost()">KIRIM</button>
+        <div class="footer-text"></div>
       </div>
 
       <div class="box" style="margin-top: 20px;">
@@ -181,6 +216,8 @@
             <div class="footer-text">LOADING DATA...</div>
         </div>
       </div>
+
+      <button class="btn-danger" style="max-width: 450px;" onclick="logout()">LOGOUT</button>
   </div>
 
   <script>
@@ -197,17 +234,43 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
+    // CEK AUTO LOGIN PAS WEB DIBUKA
+    window.onload = function() {
+        if(localStorage.getItem('admin261_logged_in') === 'true') {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('admin-screen').style.display = 'flex';
+            loadAdminPosts(); 
+        }
+    };
+
     function login() {
       let u = document.getElementById('user').value;
       let p = document.getElementById('pass').value;
+      let remember = document.getElementById('remember-me').checked;
+
       if(u === '261area' && p === 'parapetinggi261') {
+        // Kalau dicentang, simpen token di browser
+        if(remember) {
+            localStorage.setItem('admin261_logged_in', 'true');
+        }
+
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-screen').style.display = 'flex';
-        // Jalankan fungsi load postingan kalau login berhasil
         loadAdminPosts(); 
       } else {
         alert('ACCESS DENIED: Kredensial tidak valid!');
       }
+    }
+
+    function logout() {
+        if(confirm("Yakin mau logout cuy?")) {
+            localStorage.removeItem('admin261_logged_in');
+            document.getElementById('admin-screen').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'block';
+            document.getElementById('user').value = '';
+            document.getElementById('pass').value = '';
+            document.getElementById('remember-me').checked = false;
+        }
     }
 
     // Sistem Render Data Real-Time di Admin
@@ -276,13 +339,11 @@
     function kirimPost() {
       let content = document.getElementById('post-content').value;
       
-      // Validasi: Harus ada teks ATAU gambar. Ga boleh kosong dua-duanya.
       if(!content && !imageBase64) return alert('ERROR: Masukin pesan atau gambar dulu cuy!');
 
       let btn = document.getElementById('submit-btn');
       btn.innerText = "TRANSMITTING..."; btn.disabled = true;
 
-      // Fitur Judul dihapus, kita kirim teks & foto aja
       database.ref('forum_posts').push({
         content: content,
         image: imageBase64,
