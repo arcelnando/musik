@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   
-  <meta property="og:title" content="261 AREA | OFFICIAL COMMUNICATION TERMINAL" />
+  <meta property="og:title" content="261 AREA | OFFICIAL COMMUNICATION" />
   <meta property="og:description" content="KAMI DATANG UNTUK MEMBANGUN SOLIDARITAS BERSAMA! Selamat datang di markas digital 261 Area." />
-  <meta property="og:image" content="https://i.imgur.com/your_logo_here.jpg" />
+  <meta property="og:image" content="cabang1" />
   <meta property="og:url" content="https://area261.vercel.app/" />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#000000">
@@ -140,7 +140,6 @@
     .game-input-name::placeholder { color: #666; }
     #game-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
     
-    /* Milestone Text Box */
     #milestone-msg { position:absolute; top:35%; left:50%; transform:translate(-50%, -50%); color:#0f0; font-family:'Eater', cursive; font-size:26px; font-weight:bold; text-align:center; text-shadow:0 0 15px #0f0; display:none; pointer-events:none; white-space:pre-wrap; z-index:999; letter-spacing:2px; }
 
     #top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
@@ -414,18 +413,33 @@
       }, 2500);
     });
 
+    // FUNGSI SUBMIT POLLING DARI USER
+    window.votePoll = function(postKey, optKey) {
+        if(localStorage.getItem('voted_' + postKey)) return; // Kalo udah vote, abaikan
+        
+        // Simpan dulu biar ga double click
+        localStorage.setItem('voted_' + postKey, 'true'); 
+        
+        let optRef = database.ref(`forum_posts/${postKey}/poll/${optKey}/votes`);
+        optRef.transaction((currentVotes) => {
+            return (currentVotes || 0) + 1;
+        });
+    };
+
+    // SISTEM FORUM: Auto-Delete 30 Hari + Polling
     const forumRef = database.ref('forum_posts');
     forumRef.on('value', (snapshot) => {
         let html = '';
         const now = Date.now();
-        const maxAge = 5 * 24 * 60 * 60 * 1000;
+        // Umur maksimal dirubah jadi 30 Hari
+        const maxAge = 30 * 24 * 60 * 60 * 1000; 
 
         let postsArray = [];
         snapshot.forEach(child => {
             let post = child.val();
             let key = child.key;
             if (now - post.timestamp > maxAge) { database.ref('forum_posts/' + key).remove(); } 
-            else { postsArray.push(post); }
+            else { postsArray.push({ key: key, ...post }); }
         });
 
         postsArray.sort((a, b) => b.timestamp - a.timestamp);
@@ -434,6 +448,45 @@
             let dateObj = new Date(post.timestamp);
             let dateStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) + ' - ' + dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
             
+            // LOGIKA POLLING UI
+            let pollHtml = '';
+            if(post.poll) {
+                let totalVotes = 0;
+                let pollKeys = Object.keys(post.poll);
+                pollKeys.forEach(k => totalVotes += (post.poll[k].votes || 0));
+                
+                let hasVoted = localStorage.getItem('voted_' + post.key) === 'true';
+
+                pollHtml += `<div style="margin-top: 15px; border: 1px solid #333; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.5);">`;
+                pollHtml += `<div style="font-weight: bold; margin-bottom: 12px; color: #0f0; letter-spacing:1px;">📊 POLLING:</div>`;
+
+                pollKeys.forEach(k => {
+                    let opt = post.poll[k];
+                    let votes = opt.votes || 0;
+                    let pct = totalVotes === 0 ? 0 : Math.round((votes / totalVotes) * 100);
+                    
+                    if (hasVoted) {
+                        // Kalau udah vote, tampilin progress bar hasil
+                        pollHtml += `
+                        <div style="background: #222; border-radius: 4px; position: relative; padding: 8px 12px; margin-bottom: 8px; overflow: hidden; z-index: 1; border: 1px solid #444;">
+                            <div style="position: absolute; top: 0; left: 0; height: 100%; width: ${pct}%; background: rgba(0, 255, 0, 0.25); z-index: -1;"></div>
+                            <div style="display: flex; justify-content: space-between; font-size: 13px; color: #fff;">
+                                <span style="font-weight:bold;">${opt.text}</span>
+                                <span>${pct}% <span style="font-size:10px; color:#888;">(${votes})</span></span>
+                            </div>
+                        </div>`;
+                    } else {
+                        // Kalau belum vote, tampilin tombol buat diklik
+                        pollHtml += `
+                        <button onclick="votePoll('${post.key}', '${k}')" style="display:block; width:100%; text-align:left; background:#111; color:#fff; border:1px solid #555; padding:10px 12px; border-radius:4px; margin-bottom:8px; cursor:pointer; font-family:'Inter', sans-serif; font-size:13px; font-weight:bold; transition:all 0.2s;">
+                            ○ ${opt.text}
+                        </button>`;
+                    }
+                });
+                pollHtml += `<div style="font-size: 11px; color: #666; margin-top: 10px; text-align: right; border-top: 1px dashed #333; padding-top: 8px;">Total Suara: ${totalVotes} Member</div>`;
+                pollHtml += `</div>`;
+            }
+
             html += `
             <div class="post-card">
                 <div style="display:flex; align-items:center; margin-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 10px;">
@@ -445,6 +498,7 @@
                 </div>
                 ${post.image ? `<img src="${post.image}" class="post-img">` : ''}
                 <div class="post-text">${post.content ? post.content : ''}</div>
+                ${pollHtml}
             </div>
             `;
         });
@@ -555,7 +609,7 @@
     let player, enemies, enemyBullets, bullets, particles, gems, texts; 
     let frame = 0, screenShake = 0, score = 0; let input = { x: 0, y: 0 }; 
     let isShooting = false; let camX = 0, camY = 0; let globalPlayerName = "PLAYER";
-    let isNandoAccount = false; // FLAG AKUN VIP
+    let isNandoAccount = false; 
 
     const milestonesList = [5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
     const milestoneMsgs = ["GILA LU SEPUH!", "MAKIN MENGGILA!", "ANJAY KELAS!", "AMPUN BANG JAGO!", "TEMBUSIN TERUS CIK!", "MENYALA ABANGKU!", "MODE DEWA ON!"];
@@ -572,10 +626,10 @@
         let safeCheck = nameInput.replace(/[^A-Z0-9]/g, ''); 
         isNandoAccount = false;
 
-        // PROTEKSI NAMA FOUNDER + BYPASS PASSWORD
         if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) {
             let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:");
-            if(pass === "nandoacces") {
+            // GANTI PASSWORD DI BAWAH INI SESUAI KEINGINAN LU
+            if(pass === "parapetinggi261") {
                 isNandoAccount = true;
                 alert("ACCESS GRANTED: Selamat datang kembali, Tuan.");
             } else {
@@ -613,10 +667,9 @@
     function startWithProgress(startLevel, startScore) {
         initGame(); 
         
-        // JIKA AKUN NANDO, LOCK SCORE 1 JUTA
         if(isNandoAccount) {
             score = 1000000;
-            player.lvl = 99; // Set level tinggi bebas ngoprek
+            player.lvl = 99; 
             document.getElementById('score-val').innerText = "1000000";
             document.getElementById('lvl-val').innerText = "99";
         } 
@@ -773,7 +826,6 @@
         }
     }
 
-    // CHECK LEVEL UP HELPER
     function checkLevelUp() {
         document.getElementById('xp-bar').style.width = Math.min(100, (player.xp/player.nextXp * 100)) + '%'; 
         if(player.xp >= player.nextXp) { 
@@ -811,7 +863,7 @@
     };
 
     function saveHighScore() {
-        if (isNandoAccount) return; // AKUN NANDO GA USAH NGE-SAVE SCORE BARU
+        if (isNandoAccount) return; 
 
         let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_');
         let playerRef = leaderboardRef.child(safeName);
@@ -893,7 +945,7 @@
                         } 
                         else { 
                             if(player.rainbow) {
-                                player.xp += 1000; checkLevelUp(); // MYTHIC EXP GA NGOTAK
+                                player.xp += 1000; checkLevelUp(); 
                             } else {
                                 gems.push({x: e.x, y: e.y}); 
                             }
