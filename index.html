@@ -6,7 +6,7 @@
   
   <meta property="og:title" content="261 AREA | OFFICIAL COMMUNICATION" />
   <meta property="og:description" content="KAMI DATANG UNTUK MEMBANGUN SOLIDARITAS BERSAMA! Selamat datang di markas digital 261 Area." />
-  <meta property="og:image" content="https://j.top4top.io/p_3783q2jsm0.jpg" />
+  <meta property="og:image" content="https://area261.vercel.app/cabang1.jpg" />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#000000">
 
@@ -311,6 +311,7 @@
           </div>
         </div>
 
+        <!-- PERBAIKAN HEADER FORUMS -->
         <div id="forums" class="page">
           <div class="content-block">
             <h2>FORUMS UPDATE</h2>
@@ -323,9 +324,12 @@
       </div>
     </main>
     <footer id="footer"></footer>
+    
+    <!-- AUDIO ELEMENTS -->
     <audio id="bgmusic" loop><source src="bgmusic.mp3" type="audio/mp3"></audio>
+    <audio id="game-bgm" loop><source src="game_bgm.mp3" type="audio/mp3"></audio>
 
-    <button id="main-btn-game" class="floating-game-btn" onclick="openGameContainer()">🕹️ MAIN GAME</button>
+    <button id="main-btn-game" class="floating-game-btn" onclick="playSFX(sfxClick); openGameContainer()">🕹️ MAIN GAME</button>
     
     <!-- REACTION OVERLAY (Hidden by default) -->
     <div id="reaction-menu">
@@ -346,10 +350,10 @@
     <div id="main-menu" class="game-screen active">
         <h1 class="game-h1">GALAXY<br>SURVIVOR</h1>
         <input type="text" id="pregame-name" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="12">
-        <button id="btn-start-game" class="game-btn" onclick="checkAndStartGame()">Mulai Game</button>
-        <button class="game-btn" onclick="showScreen('leaderboard-menu'); updateLeaderboardUI();">Leaderboard</button>
-        <button class="game-btn" onclick="showScreen('settings-menu')">Pengaturan</button>
-        <button class="game-btn" onclick="closeGameContainer()" style="border-color: #555; color: #888;">Keluar Web</button>
+        <button id="btn-start-game" class="game-btn" onclick="playSFX(sfxClick); checkAndStartGame()">Mulai Game</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('leaderboard-menu'); updateLeaderboardUI();">Leaderboard</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('settings-menu')">Pengaturan</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); closeGameContainer()" style="border-color: #555; color: #888;">Keluar Web</button>
         <div class="game-credit">Created: <a href="https://t.me/antidogma14" target="_blank">Klik Disini</a></div>
     </div>
 
@@ -359,7 +363,7 @@
             <table class="data-table" id="lb-table">
                 <tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">SCORE</th></tr>
             </table>
-            <button class="game-btn" style="margin-top: 20px; width: 100%;" onclick="showScreen('main-menu')">Kembali</button>
+            <button class="game-btn" style="margin-top: 20px; width: 100%;" onclick="playSFX(sfxClick); showScreen('main-menu')">Kembali</button>
         </div>
     </div>
 
@@ -371,7 +375,7 @@
             <label class="setting-row"><span>Tampilkan Angka Damage</span><input type="checkbox" id="set-dmgtext" onchange="updateSettings()" checked></label>
             <label class="setting-row"><span>Tampilkan Hitbox Area</span><input type="checkbox" id="set-hitbox" onchange="updateSettings()"></label>
             <label class="setting-row"><span>Suara Backsound (BGM)</span><input type="checkbox" id="set-audio" onchange="updateSettings()" checked></label>
-            <button class="game-btn" style="margin-top: 25px; width: 100%;" onclick="showScreen('main-menu')">Simpan & Kembali</button>
+            <button class="game-btn" style="margin-top: 25px; width: 100%;" onclick="playSFX(sfxClick); showScreen('main-menu')">Simpan & Kembali</button>
         </div>
     </div>
 
@@ -381,7 +385,7 @@
             <div class="stat-block"><div class="stat-text">NYAWA</div><div class="bar-bg"><div id="hp-bar"></div></div></div>
             <div id="center-ui">
                 <div id="ingame-name" style="color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff;">PLAYER</div>
-                <button id="pause-btn" style="background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-weight: bold; cursor: pointer; pointer-events: auto;" onclick="pauseGame()">STOP</button>
+                <button id="pause-btn" style="background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-weight: bold; cursor: pointer; pointer-events: auto;" onclick="playSFX(sfxClick); pauseGame()">STOP</button>
             </div>
             <div class="stat-block" style="text-align: right;"><div class="stat-text">LEVEL <span id="lvl-val">1</span> | SCORE: <span id="score-val">0</span></div><div class="bar-bg" style="transform: scaleX(-1);"><div id="xp-bar"></div></div></div>
         </div>
@@ -391,8 +395,8 @@
 
     <div id="pause-menu" class="game-screen">
         <h2 class="game-h1" style="font-size:2rem; margin-bottom:20px;">GAME STOP</h2>
-        <button class="game-btn" onclick="resumeGame()">Lanjut Main</button>
-        <button class="game-btn" onclick="quitGame()">Berhenti & Menu</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); resumeGame()">Lanjut Main</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); quitGame()">Berhenti & Menu</button>
     </div>
 
     <div id="level-up-menu" class="game-screen">
@@ -410,8 +414,8 @@
             <p style="font-size: 14px; margin-bottom: 20px; color:#ccc;">Level Terakhir: <span id="final-level">1</span></p>
             <p id="new-hs-msg" style="display: none; color: #fff; font-weight: bold; border-top: 1px dashed #fff; padding-top:15px; margin-bottom: 10px;">NEW HIGH SCORE SAVED!</p>
             <div id="game-over-buttons" style="margin-top: 15px;">
-                <button class="game-btn" style="width: 100%;" onclick="checkAndStartGame()">Main Lagi</button>
-                <button class="game-btn" style="width: 100%;" onclick="quitGame()">Menu Utama</button>
+                <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); checkAndStartGame()">Main Lagi</button>
+                <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); quitGame()">Menu Utama</button>
             </div>
         </div>
     </div>
@@ -431,6 +435,22 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     
+    // ====== AUDIO OBJECTS ======
+    let isAudioEnabled = true; 
+    const sfxClick = new Audio('click.mp3');
+    const sfxShoot = new Audio('shoot.mp3');
+    const sfxHit = new Audio('hit.mp3');
+    const sfxGameOver = new Audio('gameover.mp3');
+    const sfxScore = new Audio('score.mp3');
+    
+    function playSFX(audioObj) {
+        if(isAudioEnabled) {
+            let a = audioObj.cloneNode();
+            a.volume = 0.5;
+            a.play().catch(err => {});
+        }
+    }
+
     function spawnSkull() {
       const skull = document.createElement('div');
       skull.innerHTML = '%D%0'; skull.className = 'skull';
@@ -444,10 +464,11 @@
     setInterval(spawnSkull, 3000);
 
     const bgMusic = document.getElementById('bgmusic');
-    let isAudioEnabled = true; 
 
     function playAudio() { 
-        if (bgMusic.paused && isAudioEnabled) bgMusic.play().catch(err => console.log("Menunggu interaksi...")); 
+        if (bgMusic.paused && isAudioEnabled && document.getElementById('game-page').style.display !== 'block') {
+            bgMusic.play().catch(err => console.log("Menunggu interaksi...")); 
+        }
     }
     window.addEventListener('click', playAudio); window.addEventListener('touchstart', playAudio);
 
@@ -470,7 +491,7 @@
       }, 2500);
     });
 
-    // FUNGSI SHARE
+    // FUNGSI SHARE NATIVE
     window.sharePost = function(content) {
         let textToShare = content ? (content.length > 40 ? content.substring(0, 40) + "..." : content) : "Info penting dari petinggi!";
         let shareData = {
@@ -486,7 +507,7 @@
         }
     };
 
-    // FUNGSI REACTION (LONG PRESS ONLY)
+    // FUNGSI REACTION (LONG PRESS ONLY & ANTI-SCROLL)
     let activePostKey = null;
     let postPressTimer;
     let isScrolling = false;
@@ -498,7 +519,7 @@
         if(isScrolling) return;
         postPressTimer = setTimeout(() => {
             if(!isScrolling) showReactionMenu(key, event);
-        }, 500); 
+        }, 500); // Tahan setengah detik buat memunculkan emoji
     };
     
     window.cancelPostPress = function() {
@@ -536,11 +557,13 @@
         let reactRef = database.ref(`forum_posts/${activePostKey}/reactions/${emoji}`);
 
         if (localStorage.getItem(lsKey)) {
+            // Un-React
             reactRef.transaction((currentVotes) => {
                 return Math.max(0, (currentVotes || 0) - 1);
             });
             localStorage.removeItem(lsKey);
         } else {
+            // React
             reactRef.transaction((currentVotes) => {
                 return (currentVotes || 0) + 1;
             });
@@ -550,6 +573,7 @@
         document.getElementById('reaction-menu').style.display = 'none';
     };
 
+    // FUNGSI SUBMIT POLLING
     window.votePoll = function(postKey, optKey) {
         if(localStorage.getItem('voted_' + postKey)) return; 
         localStorage.setItem('voted_' + postKey, 'true'); 
@@ -694,8 +718,23 @@
     function handlePhotoClick(src) { if (isLongPress) return; openSingleModal(src); }
 
     // ====== FUNGSI GAME ======
-    function openGameContainer() { document.getElementById('web-container').style.display = 'none'; document.getElementById('game-page').style.display = 'block'; resize(); }
-    function closeGameContainer() { document.getElementById('game-page').style.display = 'none'; document.getElementById('web-container').style.display = 'block'; }
+    function openGameContainer() { 
+        document.getElementById('web-container').style.display = 'none'; 
+        document.getElementById('game-page').style.display = 'block'; 
+        resize(); 
+        bgMusic.pause();
+        if(isAudioEnabled) {
+            let gameBgm = document.getElementById('game-bgm');
+            gameBgm.currentTime = 0;
+            gameBgm.play().catch(e=>console.log(e));
+        }
+    }
+    function closeGameContainer() { 
+        document.getElementById('game-page').style.display = 'none'; 
+        document.getElementById('web-container').style.display = 'block'; 
+        document.getElementById('game-bgm').pause();
+        if(isAudioEnabled) bgMusic.play().catch(e=>console.log(e));
+    }
 
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
@@ -749,8 +788,16 @@
         gameConfig.dmgText = document.getElementById('set-dmgtext').checked;
         
         isAudioEnabled = document.getElementById('set-audio').checked;
-        if (!isAudioEnabled) { bgMusic.pause(); } 
-        else { bgMusic.play().catch(e => console.log("Menunggu interaksi")); }
+        if (!isAudioEnabled) { 
+            bgMusic.pause(); 
+            document.getElementById('game-bgm').pause();
+        } else { 
+            if(document.getElementById('game-page').style.display === 'block') {
+                document.getElementById('game-bgm').play().catch(e=>console.log(e));
+            } else {
+                bgMusic.play().catch(e => console.log("Menunggu interaksi")); 
+            }
+        }
 
         if(gameConfig.crt) document.getElementById('game-page').classList.add('crt'); else document.getElementById('game-page').classList.remove('crt');
         if(gameConfig.autoFire) document.getElementById('fire-btn').style.opacity = '0.3'; else document.getElementById('fire-btn').style.opacity = '1';
@@ -819,8 +866,8 @@
         
         if(isNandoAccount) {
             score = 1000000;
-            player.lvl = 99; 
-            player.maxHp = 999999; 
+            player.lvl = 99; // Bikin musuh super gila
+            player.maxHp = 999999; // HP God Mode
             player.hp = 999999;
             player.dmg = 50; 
             player.fireRate = 5; 
@@ -860,7 +907,7 @@
 
     function pauseGame() { gameState = 'PAUSED'; document.getElementById('game-ui').style.display = 'none'; showScreen('pause-menu'); }
     function resumeGame() { gameState = 'PLAYING'; showScreen(null); document.getElementById('game-ui').style.display = 'block'; }
-    function quitGame() { gameState = 'MENU'; document.getElementById('game-ui').style.display = 'none'; ctx.clearRect(0,0,w,h); showScreen('main-menu'); }
+    function quitGame() { gameState = 'MENU'; document.getElementById('game-ui').style.display = 'none'; ctx.clearRect(0,0,w,h); showScreen('main-menu'); document.getElementById('game-bgm').pause(); if(isAudioEnabled) bgMusic.play(); }
 
     const joyArea = document.getElementById('joystick-area'); const joyKnob = document.getElementById('joystick-knob'); const fireBtn = document.getElementById('fire-btn');
     let joyActive = false, joyCenter = { x: 0, y: 0 };
@@ -883,7 +930,7 @@
     class Enemy {
         constructor(isBoss = false) { 
             this.isBoss = isBoss;
-            let effLvl = isNandoAccount ? 1 : player.lvl;
+            let effLvl = player.lvl; // Musuh sesuai player.lvl murni (kalo Nando 99 ya gila musuhnya)
             let angle = Math.random() * Math.PI * 2; let spawnDist = Math.max(w, h) / 2 + 100; 
             this.x = player.x + Math.cos(angle) * spawnDist; this.y = player.y + Math.sin(angle) * spawnDist; 
             
@@ -922,7 +969,7 @@
             ctx.restore(); 
         }
         update() { 
-            let effLvl = isNandoAccount ? 1 : player.lvl;
+            let effLvl = player.lvl;
             this.angle = Math.atan2(player.y - this.y, player.x - this.x); 
             this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
             
@@ -950,7 +997,7 @@
 
     class EnemyBullet {
         constructor(x, y, angle, isBoss) {
-            let effLvl = isNandoAccount ? 1 : player.lvl;
+            let effLvl = player.lvl;
             this.x = x; this.y = y; this.angle = angle;
             this.speed = isBoss ? 6 : 4 + (effLvl * 0.05);
             this.life = 100;
@@ -980,6 +1027,7 @@
             let mBox = document.getElementById('milestone-msg');
             mBox.innerHTML = `SCORE ${milestonesList[nextMilestoneIdx]}<br>${msg}`;
             mBox.style.display = 'block';
+            playSFX(sfxScore);
             setTimeout(() => { mBox.style.display = 'none'; }, 3000);
             nextMilestoneIdx++;
         }
@@ -995,6 +1043,7 @@
 
     function triggerLevelUp() { 
         gameState = 'LEVELUP'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('lvl-val').innerText = player.lvl; 
+        playSFX(sfxScore);
         let shuffled = [...upgradePool].sort(() => 0.5 - Math.random()); 
         let choices;
         
@@ -1012,6 +1061,7 @@
     }
 
     window.applyUpgrade = function(type) { 
+        playSFX(sfxClick);
         if(type === 'rainbow') player.rainbow = true;
         if(type === 'fireRate') player.fireRate = Math.max(4, player.fireRate - 3); 
         if(type === 'damage') player.dmg += 1; 
@@ -1035,12 +1085,21 @@
         });
     }
 
-    function checkGameOver() { gameState = 'GAMEOVER'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('final-score').innerText = isNandoAccount ? "1000000 (LOCKED)" : score; document.getElementById('final-level').innerText = player.lvl; document.getElementById('new-hs-msg').style.display = 'none'; saveHighScore(); showScreen('game-over-menu'); }
+    function checkGameOver() { 
+        gameState = 'GAMEOVER'; document.getElementById('game-ui').style.display = 'none'; 
+        document.getElementById('final-score').innerText = isNandoAccount ? "1000000 (LOCKED)" : score; 
+        document.getElementById('final-level').innerText = player.lvl; 
+        document.getElementById('new-hs-msg').style.display = 'none'; 
+        saveHighScore(); showScreen('game-over-menu'); 
+        document.getElementById('game-bgm').pause();
+        playSFX(sfxGameOver);
+    }
 
     function manualShoot() {
         if(!isShooting && !gameConfig.autoFire) return; player.lastFire++;
         if (player.lastFire >= player.fireRate) {
             player.lastFire = 0; let angle = player.angle;
+            playSFX(sfxShoot); // Efek suara nembak
             if(enemies.length > 0) {
                 let target = enemies[0], minDist = Infinity;
                 enemies.forEach(e => { let d = Math.hypot(e.x - player.x, e.y - player.y); if (d < minDist) { minDist = d; target = e; } });
@@ -1074,7 +1133,7 @@
         if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, player.magnet, 0, Math.PI*2); ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.stroke(); }
         ctx.restore(); manualShoot();
         
-        let effLvl = isNandoAccount ? 1 : player.lvl;
+        let effLvl = player.lvl;
         if (effLvl > 0 && effLvl % 10 === 0 && effLvl !== lastBossSpawnedLvl) {
             enemies.push(new Enemy(true));
             lastBossSpawnedLvl = effLvl;
@@ -1087,7 +1146,9 @@
             eb.update();
             if (eb.life <= 0) enemyBullets.splice(i, 1);
             if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.r + 5) {
-                player.hp -= eb.dmg; player.hitFlash = 10; screenShake = 5; document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%';
+                player.hp -= eb.dmg; player.hitFlash = 10; screenShake = 5; 
+                if(isNandoAccount) player.hp = player.maxHp; // GOD MODE 
+                document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%';
                 enemyBullets.splice(i, 1);
                 if (player.hp <= 0) checkGameOver();
             }
@@ -1100,6 +1161,7 @@
                 if(Math.hypot(b.x - e.x, b.y - e.y) < e.r + 5) {
                     e.hp -= currentDmg; bullets.splice(i, 1); if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, currentDmg)); for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y));
                     if(e.hp <= 0) { 
+                        playSFX(sfxHit);
                         if(e.isBoss) { 
                             player.xp += 1500; checkLevelUp();
                             if(!isNandoAccount) { score += 5000; checkMilestone(); } 
@@ -1135,7 +1197,12 @@
         });
         enemies.forEach((e, i) => {
             e.update(); if(Math.hypot(e.x - player.x, e.y - player.y) > Math.max(w, h) * 1.5) enemies.splice(i, 1);
-            if(Math.hypot(e.x - player.x, e.y - player.y) < e.r + player.r) { player.hp -= (e.isBoss ? 20 : 2); player.hitFlash = 10; screenShake = 5; document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; if(player.hp <= 0) checkGameOver(); }
+            if(Math.hypot(e.x - player.x, e.y - player.y) < e.r + player.r) { 
+                player.hp -= (e.isBoss ? 20 : 2); player.hitFlash = 10; screenShake = 5; 
+                if(isNandoAccount) player.hp = player.maxHp; // GOD MODE
+                document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; 
+                if(player.hp <= 0) checkGameOver(); 
+            }
         });
         ctx.restore(); 
     }
