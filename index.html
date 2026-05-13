@@ -257,15 +257,10 @@
               <div class="leader-item"><img src="home1.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
               <div class="leader-item"><img src="home2.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
               <div class="leader-item"><img src="home3.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
-              <div class="leader-item"><img src="home4.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
             </div>
             <div class="leader-row">
+              <div class="leader-item"><img src="home4.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
               <div class="leader-item"><img src="home5.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
-              <div class="leader-item"><img src="home6.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
-              <div class="leader-item"><img src="home7.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div> 
-              <div class="leader-item"><img src="home8.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
-              <div class="leader-item"><img src="home9.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
-              <div class="leader-item"><img src="home10.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>   
             </div>
           </div>
         </div> 
@@ -634,12 +629,12 @@
 
     const assets = {
         playerDef: new Image(), player50: new Image(), player99: new Image(),
-        enemy1: new Image(), enemy2: new Image(), boss: new Image(), bsBg: new Image(),
+        enemy1: new Image(), enemy2: new Image(), boss: new Image(),
         motor_cyan: new Image(), motor_merah: new Image(), motor_hijau: new Image(), motor_kuning: new Image(), motor_ungu: new Image(),
         bensin: new Image(), mobil: new Image(), cone: new Image(), genangan: new Image(), koin: new Image()
     };
     assets.playerDef.src = 'player.png'; assets.player50.src = 'player50.png'; assets.player99.src = 'player99.png';
-    assets.enemy1.src = 'enemy1.png'; assets.enemy2.src = 'enemy2.png'; assets.boss.src = 'boss.png'; assets.bsBg.src = 'bs_latar.png'; 
+    assets.enemy1.src = 'enemy1.png'; assets.enemy2.src = 'enemy2.png'; assets.boss.src = 'boss.png'; 
     assets.motor_cyan.src = 'cyan.png'; assets.motor_merah.src = 'merah.png'; assets.motor_hijau.src = 'hijau.png';
     assets.motor_kuning.src = 'kuning.png'; assets.motor_ungu.src = 'ungu.png';
     assets.bensin.src = 'bensin.png'; assets.mobil.src = 'mobil.png'; assets.cone.src = 'cone.png';
@@ -894,10 +889,32 @@
     // ====== GALAXY SURVIVOR LOGIC ======
     let gameDifficulty = 'EASY'; function toggleDifficulty() { gameDifficulty = (gameDifficulty === 'EASY') ? 'HARD' : 'EASY'; document.getElementById('btn-difficulty-galaxy').innerText = 'MODE: ' + gameDifficulty; }
     let player, enemies, enemyBullets, bullets, particles, gems, texts, coinDrops; 
+    let playerDrone; // Penambahan Anak Buah (Drone)
     let screenShake = 0, score = 0; let input = { x: 0, y: 0 }; let isShooting = false; let camX = 0, camY = 0; 
     let nextMilestoneIdx = 0; let lastBossSpawnedLvl = 0;
     const milestonesList = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
     const milestoneMsgs = ["KELAS ABANGKU!", "MAKIN MENGGILA!", "GILA LU SEPUH!", "AMPUN BANG JAGO!", "MENYALA ABANGKU!", "MODE DEWA ON!"];
+
+    class PlayerDrone {
+        constructor() { this.angle = 0; this.x = 0; this.y = 0; }
+        update() {
+            this.angle += 0.08;
+            this.x = player.x + Math.cos(this.angle) * 60;
+            this.y = player.y + Math.sin(this.angle) * 60;
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.angle * 2);
+            ctx.fillStyle = '#0f0';
+            ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(-10, 10); ctx.lineTo(-10, -10); ctx.closePath(); ctx.fill();
+            ctx.restore();
+
+            if ((isShooting || gameConfig.autoFire) && frame % 15 === 0) {
+                let targetAngle = player.angle;
+                if(enemies.length > 0) targetAngle = Math.atan2(enemies[0].y - this.y, enemies[0].x - this.x);
+                bullets.push(new Bullet(this.x, this.y, targetAngle));
+            }
+        }
+    }
 
     function checkAndStartGalaxy() {
         let nName = checkNameAuth('pregame-name-galaxy'); if(!nName) return; globalPlayerName = nName; 
@@ -913,24 +930,25 @@
     }
 
     function startGalaxyWithProgress(startLevel, startScore) {
-        player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 20, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0, rainbow: false }; 
+        player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 8, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0, rainbow: false }; 
+        playerDrone = new PlayerDrone(); // Inisialisasi drone pembantu
         enemies = []; enemyBullets = []; bullets = []; particles = []; gems = []; texts = []; coinDrops = [];
         screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false; nextMilestoneIdx = 0; lastBossSpawnedLvl = 0;
         
         // TERAPKAN STATS DARI PESAWAT & PERKS BLACK MARKET
         if(eqShip === 'titan') { player.maxHp = 250; player.hp = 250; player.dmg = 3; player.speed = 4; player.r = 20; }
-        else if (eqShip === 'phantom') { player.maxHp = 80; player.hp = 80; player.dmg = 1.5; player.speed = 8; player.fireRate = 12; player.multi = 2; }
+        else if (eqShip === 'phantom') { player.maxHp = 80; player.hp = 80; player.dmg = 1.5; player.speed = 8; player.fireRate = 5; player.multi = 2; }
 
         if(unlockedPerks.includes('aura_dewa')) { player.magnet = 350; }
         if(unlockedPerks.includes('vip_261')) { player.rainbow = true; player.dmg *= 5; }
 
         if(isNandoAccount) {
-            score = 1000000; player.lvl = 99; player.maxHp = 999999; player.hp = 999999; player.dmg = 50; player.fireRate = 5; player.speed = 8; player.multi = 3;
+            score = 1000000; player.lvl = 99; player.maxHp = 999999; player.hp = 999999; player.dmg = 50; player.fireRate = 2; player.speed = 8; player.multi = 3;
             document.getElementById('score-val').innerText = "1000000"; document.getElementById('lvl-val').innerText = "99";
         } else if(startLevel > 1) {
             player.lvl = startLevel; score = startScore;
             player.maxHp = player.maxHp + ((startLevel - 1) * 20); player.hp = player.maxHp; player.dmg = player.dmg + Math.floor(startLevel / 3);
-            player.fireRate = Math.max(4, player.fireRate - Math.floor(startLevel / 2)); player.speed = player.speed + (startLevel * 0.1); player.multi = Math.max(player.multi, Math.min(5, 1 + Math.floor(startLevel / 5))); 
+            player.fireRate = Math.max(2, player.fireRate - Math.floor(startLevel / 3)); player.speed = player.speed + (startLevel * 0.1); player.multi = Math.max(player.multi, Math.min(5, 1 + Math.floor(startLevel / 5))); 
             let base = 10; for(let i=1; i<startLevel; i++) base = Math.floor(base * 1.5); player.nextXp = base;
             document.getElementById('score-val').innerText = score; document.getElementById('lvl-val').innerText = player.lvl;
             nextMilestoneIdx = milestonesList.findIndex(m => m > score); if (nextMilestoneIdx === -1) nextMilestoneIdx = milestonesList.length; lastBossSpawnedLvl = Math.floor(startLevel / 10) * 10;
@@ -948,7 +966,7 @@
 
     class FloatingText { constructor(x, y, text, color='#fff') { this.x = x; this.y = y; this.text = text; this.color = color; this.life = 30; this.vy = -1; } update() { this.y += this.vy; this.life--; ctx.fillStyle = this.color; ctx.globalAlpha = this.life / 30; ctx.font = "bold 14px 'Courier New'"; ctx.fillText(this.text, this.x - 5, this.y); ctx.globalAlpha = 1; } }
     class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 12; this.vy = (Math.random() - 0.5) * 12; this.alpha = 1; this.size = Math.random() * 3 + 1; } update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.04; ctx.fillStyle = '#ffffff'; ctx.globalAlpha = this.alpha; ctx.fillRect(this.x, this.y, this.size, this.size); ctx.globalAlpha = 1; } }
-    class Bullet { constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.speed = 18; this.life = 60; } update() { this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - Math.cos(this.angle)*25, this.y - Math.sin(this.angle)*25); ctx.strokeStyle = player.rainbow ? `hsl(${Math.random()*360}, 100%, 50%)` : '#00d2ff'; ctx.lineWidth = player.rainbow ? 5 : 3; ctx.stroke(); } }
+    class Bullet { constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.speed = 28; this.life = 60; } update() { this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - Math.cos(this.angle)*25, this.y - Math.sin(this.angle)*25); ctx.strokeStyle = player.rainbow ? `hsl(${Math.random()*360}, 100%, 50%)` : '#00d2ff'; ctx.lineWidth = player.rainbow ? 5 : 3; ctx.stroke(); } }
     class EnemyBullet { constructor(x, y, angle, isBoss) { let effLvl = player.lvl; let diffMult = gameDifficulty === 'HARD' ? 2 : 1; this.x = x; this.y = y; this.angle = angle; this.speed = isBoss ? (6 + Math.floor(effLvl/10)) : 4 + (effLvl * 0.05); this.life = 100; this.dmg = isBoss ? (15 * diffMult) : (5 + Math.floor(effLvl / 5)) * diffMult; this.isBoss = isBoss; } update() { this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; ctx.beginPath(); ctx.arc(this.x, this.y, this.isBoss ? 6 : 4, 0, Math.PI*2); ctx.fillStyle = '#ff0000'; ctx.fill(); ctx.strokeStyle = '#ff4d4d'; ctx.lineWidth = 2; ctx.stroke(); } }
     class Enemy {
         constructor(isBoss = false) { 
@@ -967,7 +985,7 @@
             let effLvl = player.lvl; this.angle = Math.atan2(player.y - this.y, player.x - this.x); this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
             let bossShootInterval = gameDifficulty === 'HARD' ? 30 : 45;
             if (this.isBoss && frame % bossShootInterval === 0) { playSFX(sfxEnemyShoot); let bCount = 8 + Math.floor(effLvl / 10) * 2; if(gameDifficulty === 'HARD') bCount += 4; for(let i=0; i<bCount; i++) enemyBullets.push(new EnemyBullet(this.x, this.y, ((Math.PI * 2) / bCount) * i + this.spin, true)); } 
-            else if (!this.isBoss && effLvl > 3 && Math.random() < 0.003 + (effLvl * 0.0002)) { playSFX(sfxEnemyShoot); enemyBullets.push(new EnemyBullet(this.x, this.y, this.angle, false)); }
+            else if (!this.isBoss && effLvl > 1 && Math.random() < 0.015 + (effLvl * 0.001)) { playSFX(sfxEnemyShoot); enemyBullets.push(new EnemyBullet(this.x, this.y, this.angle, false)); }
             this.draw(); 
         }
     }
@@ -986,7 +1004,7 @@
     function checkMilestoneGal() { if (nextMilestoneIdx < milestonesList.length && score >= milestonesList[nextMilestoneIdx]) { let mBox = document.getElementById('milestone-msg'); mBox.innerHTML = `SCORE ${milestonesList[nextMilestoneIdx]}<br>${milestoneMsgs[Math.floor(Math.random() * milestoneMsgs.length)]}`; mBox.style.display = 'block'; playSFX(sfxScore); setTimeout(() => { mBox.style.display = 'none'; }, 3000); nextMilestoneIdx++; document.getElementById('ingame-name-gal').innerText = globalPlayerName + " [" + getPlayerTitle(score) + "]"; } }
     function checkLevelUp() { if(isNandoAccount) return; document.getElementById('xp-bar').style.width = Math.min(100, (player.xp/player.nextXp * 100)) + '%'; if(player.xp >= player.nextXp) { player.xp = 0; player.nextXp = Math.floor(player.nextXp * 1.5); player.lvl++; triggerLevelUp(); } }
     function triggerLevelUp() { gameState = 'LEVELUP'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('lvl-val').innerText = player.lvl; playSFX(sfxScore); let shuffled = [...upgradePool].sort(() => 0.5 - Math.random()); let choices = (Math.random() < 0.05 && !player.rainbow) ? [{ id: 'rainbow', name: 'RAINBOW DEATH', desc: 'MYTHIC GACHA! Tembakan brutal + EXP' }, ...shuffled.slice(0, 2)] : shuffled.slice(0, 3); let html = ''; choices.forEach(c => { let color = c.id === 'rainbow' ? 'background:linear-gradient(90deg, red, orange, yellow, green, blue, purple); color:#fff; border:2px solid #fff;' : ''; html += `<button class="game-btn" style="width: 100%; font-size: 14px; margin-bottom: 10px; padding: 10px; ${color}" onclick="applyUpgrade('${c.id}')"><b>${c.name}</b><br><span style="font-size:10px; text-transform:none; color:${c.id==='rainbow'?'#fff':'#ccc'};">${c.desc}</span></button>`; }); document.getElementById('upgrade-choices').innerHTML = html; showScreen('level-up-menu'); }
-    window.applyUpgrade = function(type) { playSFX(sfxClick); if(type === 'rainbow') player.rainbow = true; if(type === 'fireRate') player.fireRate = Math.max(4, player.fireRate - 3); if(type === 'damage') player.dmg += 1; if(type === 'multi') player.multi = Math.min(5, player.multi + 1); if(type === 'speed') player.speed += 1; if(type === 'maxHp') { player.maxHp += 20; player.hp += 20; } if(type === 'magnet') player.magnet += 60; player.hp = Math.min(player.maxHp, player.hp + 20); document.getElementById('hp-bar').style.width = (player.hp/player.maxHp * 100) + '%'; resumeGalaxy(); };
+    window.applyUpgrade = function(type) { playSFX(sfxClick); if(type === 'rainbow') player.rainbow = true; if(type === 'fireRate') player.fireRate = Math.max(2, player.fireRate - 2); if(type === 'damage') player.dmg += 1; if(type === 'multi') player.multi = Math.min(5, player.multi + 1); if(type === 'speed') player.speed += 1; if(type === 'maxHp') { player.maxHp += 20; player.hp += 20; } if(type === 'magnet') player.magnet += 60; player.hp = Math.min(player.maxHp, player.hp + 20); document.getElementById('hp-bar').style.width = (player.hp/player.maxHp * 100) + '%'; resumeGalaxy(); };
     function saveGalHighScore() { if (isNandoAccount) return; let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_'); let pRef = leaderboardGalRef.child(safeName); pRef.once('value').then((snap) => { let ex = snap.val(); let isNew = false; if (!ex) { pRef.set({ name: globalPlayerName, score: score, level: player.lvl }); isNew = true; } else if (score > ex.score) { pRef.update({ score: score, level: player.lvl }); isNew = true; } if (isNew) document.getElementById('new-hs-msg-galaxy').style.display = 'block'; }); }
     function gameOverGalaxy() { gameState = 'GAMEOVER_GALAXY'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('final-score').innerText = isNandoAccount ? "1000000 (LOCKED)" : score; document.getElementById('final-level').innerText = player.lvl; document.getElementById('new-hs-msg-galaxy').style.display = 'none'; saveGalHighScore(); showScreen('game-over-menu-galaxy'); playSFX(sfxGameOver); updateCoinUI(); }
 
@@ -1014,6 +1032,8 @@
         
         ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h); ctx.translate(-camX, -camY); drawGalBackground();
         
+        if (playerDrone) playerDrone.update(); // Update pergerakan & tembakan anak buah
+
         ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle + Math.PI/2);
         if(player.hitFlash > 0) { ctx.globalAlpha = (Math.sin(frame) + 1) / 2; player.hitFlash--; }
         let pImg = assets.playerDef; if(eqShip === 'titan' || isNandoAccount) pImg = assets.player50; if(eqShip === 'phantom') pImg = assets.player99;
@@ -1046,7 +1066,7 @@
 
 
     // ====== BEAT STREET RUN LOGIC ======
-    let bsPlayer = {x: 0, y: 0, w: 55, h: 90, colorKey: 'cyan'}; 
+    let bsPlayer = {x: 0, y: 0, w: 85, h: 140, colorKey: 'cyan'}; 
     let bsObstacles = [];
     let bsScore = 0; let bsSpeed = 6;
     let bsBgY = 0; let bsFuel = 100; let bsIsWheelie = false;
@@ -1071,8 +1091,15 @@
     }
 
     function initBeatStreet() {
-        activeGame = 'BEATSTREET'; roadBoundLeft = w * 0.03; roadBoundRight = w * 0.44; 
-        bsPlayer.x = roadBoundLeft + ((roadBoundRight - roadBoundLeft) / 2) - (bsPlayer.w / 2); bsPlayer.y = h - 150;
+        activeGame = 'BEATSTREET'; 
+        
+        // JALAN DIPERKECIL
+        let maxRoadW = 450;
+        let rW = Math.min(w * 0.6, maxRoadW);
+        roadBoundLeft = (w - rW) / 2 + 10;
+        roadBoundRight = roadBoundLeft + rW - 20;
+
+        bsPlayer.x = roadBoundLeft + ((roadBoundRight - roadBoundLeft) / 2) - (bsPlayer.w / 2); bsPlayer.y = h - 160;
         
         bsGhost.x = bsPlayer.x; bsGhost.y = h - 250; bsGhost.targetX = bsPlayer.x;
         
@@ -1160,21 +1187,126 @@
         ctx.save();
         if (bsScreenShake > 0) { ctx.translate((Math.random() - 0.5) * bsScreenShake, (Math.random() - 0.5) * bsScreenShake); bsScreenShake *= 0.8; if(bsScreenShake < 0.5) bsScreenShake = 0; }
 
-        if (assets.bsBg.complete && assets.bsBg.naturalHeight > 0) {
-            let imgW = w; let imgH = assets.bsBg.naturalHeight * (w / assets.bsBg.naturalWidth); if (imgH < h) imgH = Math.max(h, imgH); 
-            ctx.drawImage(assets.bsBg, 0, bsBgY, imgW, imgH); ctx.drawImage(assets.bsBg, 0, bsBgY - imgH, imgW, imgH);
-            bsBgY += currentSpeed; if (bsBgY >= imgH) bsBgY = 0;
-        } else {
-            ctx.fillStyle = '#222'; ctx.fillRect(0, 0, w, h); ctx.strokeStyle = '#fff'; ctx.lineWidth = 5; ctx.setLineDash([30, 30]);
-            ctx.beginPath(); ctx.moveTo(w/2, bsBgY - h); ctx.lineTo(w/2, h); ctx.stroke(); ctx.setLineDash([]);
-            bsBgY += currentSpeed; if(bsBgY > 60) bsBgY = 0;
+        // --- BACKGROUND BEAT STREET (KOTA, TROTOAR, DAY/NIGHT RANDOM SCENERY) ---
+        // Kalkulasi Waktu (Day/Night Cycle)
+        let cycleSpeed = 0.0005; // Semakin kecil semakin lama gantinya
+        let cyclePhase = (frame * cycleSpeed) % (Math.PI * 2);
+        let isNightPhase = Math.sin(cyclePhase); // 1 = Siang bolong, -1 = Malam gelap
+        let nightAlpha = Math.max(0, -isNightPhase) * 0.8; // Transparansi kegelapan
+
+        let maxRoadW = 450; // JALAN DIPERKECIL
+        let rW = Math.min(w * 0.6, maxRoadW); 
+        let rL = (w - rW) / 2;
+        let rR = rL + rW;
+        let swW = Math.max(20, (w - rW) * 0.15); // Lebar trotoar
+
+        // Tanah dasar (Luar trotoar/Rumah)
+        ctx.fillStyle = '#1b2614'; 
+        ctx.fillRect(0, 0, w, h);
+
+        // Aspal Jalan
+        ctx.fillStyle = '#2c2c2c';
+        ctx.fillRect(rL, 0, rW, h);
+
+        // Trotoar
+        ctx.fillStyle = '#888';
+        ctx.fillRect(rL - swW, 0, swW, h);
+        ctx.fillRect(rR, 0, swW, h);
+
+        // Garis Trotoar (Scrolling)
+        ctx.strokeStyle = '#555'; ctx.lineWidth = 2;
+        for(let y = (bsBgY % 50) - 50; y < h; y += 50) {
+            ctx.beginPath(); ctx.moveTo(rL - swW, y); ctx.lineTo(rL, y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(rR, y); ctx.lineTo(rR + swW, y); ctx.stroke();
         }
+
+        // Garis Pinggir Jalan
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(rL, 0, 4, h);
+        ctx.fillRect(rR - 4, 0, 4, h);
+
+        // Garis Putus-putus Tengah Jalan
+        ctx.fillStyle = '#fff';
+        for(let y = (bsBgY % 100) - 100; y < h; y += 100) {
+            ctx.fillRect(w/2 - 4, y, 8, 50);
+        }
+
+        // SCENERY (RUMAH & POHON RANDOM)
+        let bSpacing = 160;
+        for(let y = (bsBgY % bSpacing) - bSpacing; y < h; y += bSpacing) {
+            // Menggunakan (y - bsBgY) untuk mendapatkan indeks statis dari blok yang sedang di-render agar tidak berkedip
+            let blockId = Math.floor((y - bsBgY) / bSpacing);
+            let r1 = Math.abs(Math.sin(blockId * 11.11)); // Pseudo-random kiri
+            let r2 = Math.abs(Math.cos(blockId * 22.22)); // Pseudo-random kanan
+            
+            const drawHouse = (x, ypos, width, colorHue) => {
+                ctx.fillStyle = `hsl(${colorHue}, 20%, 30%)`; // Tembok
+                ctx.fillRect(x, ypos + 20, width, bSpacing - 40);
+                ctx.fillStyle = `hsl(${colorHue}, 15%, 20%)`; // Atap
+                ctx.beginPath(); ctx.moveTo(x - 5, ypos + 20); ctx.lineTo(x + width + 5, ypos + 20); ctx.lineTo(x + width/2, ypos); ctx.fill();
+                if (nightAlpha > 0.2 && r1 > 0.3) { // Lampu jendela menyala random saat malam
+                    ctx.fillStyle = `rgba(255, 235, 120, ${nightAlpha})`;
+                    ctx.fillRect(x + width/2 - 12, ypos + 45, 24, 30);
+                }
+            };
+
+            const drawTree = (x, ypos) => {
+                ctx.fillStyle = '#3d2314'; // Batang
+                ctx.fillRect(x - 6, ypos + 40, 12, 40);
+                ctx.fillStyle = '#1e5928'; // Daun
+                ctx.beginPath(); ctx.arc(x, ypos + 30, 25, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(x - 15, ypos + 45, 20, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(x + 15, ypos + 45, 20, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = 'rgba(255,255,255,0.05)'; // Highlight daun
+                ctx.beginPath(); ctx.arc(x, ypos + 25, 20, 0, Math.PI*2); ctx.fill();
+            };
+
+            // Scenery Kiri
+            if(r1 > 0.4) drawHouse(0, y, rL - swW, 100 + r1*100);
+            else drawTree((rL - swW) / 2, y);
+
+            // Scenery Kanan
+            if(r2 > 0.4) drawHouse(rR + swW, y, w - (rR + swW), 200 + r2*100);
+            else drawTree(rR + swW + (w - (rR + swW))/2, y);
+        }
+
+        // LAMPU JALAN
+        let lightSpacing = 200;
+        for(let y = (bsBgY % lightSpacing) - lightSpacing; y < h; y += lightSpacing) {
+            ctx.fillStyle = '#444'; // Tiang Lampu
+            ctx.fillRect(rL - swW + 5, y + 10, 4, 30);
+            ctx.fillRect(rR + swW - 9, y + 50, 4, 30); // Kanan dibikin selang-seling letaknya
+
+            ctx.fillStyle = '#111'; // Kepala Lampu
+            ctx.beginPath(); ctx.arc(rL - swW/2, y + 10, 6, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(rR + swW/2, y + 50, 6, 0, Math.PI*2); ctx.fill();
+            
+            // Cahaya lampu saat malam
+            if (nightAlpha > 0.1) {
+                let glowL = ctx.createRadialGradient(rL - swW/2, y+10, 5, rL - swW/2, y+10, 70);
+                glowL.addColorStop(0, `rgba(255, 255, 200, ${nightAlpha})`); glowL.addColorStop(1, 'rgba(255, 255, 200, 0)');
+                ctx.fillStyle = glowL; ctx.beginPath(); ctx.arc(rL - swW/2, y+10, 70, 0, Math.PI*2); ctx.fill();
+
+                let glowR = ctx.createRadialGradient(rR + swW/2, y+50, 5, rR + swW/2, y+50, 70);
+                glowR.addColorStop(0, `rgba(255, 255, 200, ${nightAlpha})`); glowR.addColorStop(1, 'rgba(255, 255, 200, 0)');
+                ctx.fillStyle = glowR; ctx.beginPath(); ctx.arc(rR + swW/2, y+50, 70, 0, Math.PI*2); ctx.fill();
+            }
+        }
+
+        // Filter Malam (Overlay Gelap pada Latar)
+        if (nightAlpha > 0) {
+            ctx.fillStyle = `rgba(5, 10, 25, ${nightAlpha * 0.85})`;
+            ctx.fillRect(0, 0, w, h);
+        }
+        
+        bsBgY += currentSpeed;
+        // --- END BACKGROUND ---
 
         if (frame % Math.max(30, 90 - Math.floor(bsSpeed)) === 0) {
             let rand = Math.random();
             let type = rand > 0.6 ? 'mobil' : (rand > 0.4 ? 'cone' : (rand > 0.2 ? 'speedbump' : 'puddle'));
-            let obsW = type === 'mobil' ? 60 : (type === 'speedbump' ? 120 : (type === 'puddle' ? 70 : 35 + Math.random() * 10));
-            let obsH = type === 'mobil' ? 110 : (type === 'speedbump' ? 25 : (type === 'puddle' ? 45 : 40 + Math.random() * 15));
+            let obsW = type === 'mobil' ? 70 : (type === 'speedbump' ? 120 : (type === 'puddle' ? 70 : 35 + Math.random() * 10));
+            let obsH = type === 'mobil' ? 120 : (type === 'speedbump' ? 25 : (type === 'puddle' ? 45 : 40 + Math.random() * 15));
             let obsX = roadBoundLeft + Math.random() * (roadBoundRight - roadBoundLeft - obsW);
             
             let spdOffset = type === 'mobil' ? 3 + Math.random() * 2 : 0; 
@@ -1264,6 +1396,22 @@
         }
 
         if(gameState === 'PLAYING_BEATSTREET' || gameState === 'GAMEOVER_ANIMATING') {
+            // Lampu Sorot Motor (Menyala di Malam Hari)
+            if (nightAlpha > 0.2 && gameState === 'PLAYING_BEATSTREET') {
+                ctx.save();
+                let grad = ctx.createLinearGradient(bsPlayer.x + bsPlayer.w/2, bsPlayer.y, bsPlayer.x + bsPlayer.w/2, bsPlayer.y - 450);
+                grad.addColorStop(0, `rgba(255, 255, 220, ${nightAlpha * 0.8})`);
+                grad.addColorStop(1, 'rgba(255, 255, 220, 0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.moveTo(bsPlayer.x + bsPlayer.w/2 - 15, bsPlayer.y + 10);
+                ctx.lineTo(bsPlayer.x + bsPlayer.w/2 - 150, bsPlayer.y - 450);
+                ctx.lineTo(bsPlayer.x + bsPlayer.w/2 + 150, bsPlayer.y - 450);
+                ctx.lineTo(bsPlayer.x + bsPlayer.w/2 + 15, bsPlayer.y + 10);
+                ctx.fill();
+                ctx.restore();
+            }
+
             let mImg = assets['motor_' + bsPlayer.colorKey];
             if (mImg && mImg.complete && mImg.naturalWidth > 0) {
                 if(bsIsWheelie && gameState === 'PLAYING_BEATSTREET') {
@@ -1271,7 +1419,7 @@
                 } else { ctx.drawImage(mImg, bsPlayer.x, bsPlayer.y, bsPlayer.w, bsPlayer.h); }
             } else { ctx.fillStyle = getFallbackColor(bsPlayer.colorKey); ctx.shadowBlur = bsIsWheelie ? 20 : 10; ctx.shadowColor = ctx.fillStyle; ctx.fillRect(bsPlayer.x, bsPlayer.y, bsPlayer.w, bsPlayer.h); }
             
-            // Efek Shield Aura pas nyawa cadangan (Item VIP / Beli Nyawa) aktif
+            // Efek Shield Aura pas nyawa cadangan aktif
             if (activeLivesBS > 0) { ctx.save(); ctx.strokeStyle = 'rgba(0, 210, 255, 0.8)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(bsPlayer.x + bsPlayer.w/2, bsPlayer.y + bsPlayer.h/2, bsPlayer.w/1.5, bsPlayer.h/1.5, 0, 0, Math.PI*2); ctx.stroke(); ctx.restore(); }
         }
 
