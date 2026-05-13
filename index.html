@@ -142,14 +142,14 @@
     .game-subtitle { font-size: 14px; color: #fff; margin-top: 10px; margin-bottom: 25px; text-align: center;}
     .game-credit { font-size: 12px; margin-top: 20px; text-align: center; color: #ccc;}
     .game-credit a { color: #fff; font-weight: bold; text-decoration: underline;}
-    .game-btn { background: #000; color: #fff; border: 2px solid #fff; padding: 12px 25px; margin: 8px 0; font-size: 16px; font-weight: bold; font-family: 'Courier New', Courier, monospace; cursor: pointer; width: 80%; max-width: 300px; text-transform: uppercase; transition: all 0.1s; }
+    .game-btn { background: #000; color: #fff; border: 2px solid #fff; padding: 12px 25px; margin: 8px 0; font-size: 16px; font-weight: bold; font-family: 'Courier New', Courier, monospace; cursor: pointer; width: 80%; max-width: 300px; text-transform: uppercase; transition: all 0.1s; border-radius: 4px;}
     .game-btn:active { background: #fff; color: #000; transform: scale(0.95); }
-    .game-input-name { background: #000; color: #fff; border: 2px solid #fff; padding: 12px; font-family: 'Courier New', Courier, monospace; font-weight: bold; width: 80%; max-width: 300px; margin-bottom: 20px; text-transform: uppercase; text-align: center; font-size: 16px; }
+    .game-input-name { background: #000; color: #fff; border: 2px solid #fff; padding: 12px; font-family: 'Courier New', Courier, monospace; font-weight: bold; width: 80%; max-width: 300px; margin-bottom: 20px; text-transform: uppercase; text-align: center; font-size: 16px; border-radius: 4px; }
     .game-input-name::placeholder { color: #666; }
     
     #milestone-msg { position:absolute; top:35%; left:50%; transform:translate(-50%, -50%); color:#0f0; font-family:'Eater', cursive; font-size:26px; font-weight:bold; text-align:center; text-shadow:0 0 15px #0f0; display:none; pointer-events:none; white-space:pre-wrap; z-index:999; letter-spacing:2px; }
 
-    .overlay-box { background: #000; border: 4px solid #fff; padding: 20px; text-align: center; width: 90%; max-width: 400px; }
+    .overlay-box { background: rgba(10, 10, 15, 0.95); border: 3px solid #fff; padding: 20px; text-align: center; width: 90%; max-width: 400px; border-radius: 12px; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
     .data-table { width: 100%; text-align: left; margin-top: 15px; border-collapse: collapse; }
     .data-table th { border-bottom: 1px solid #fff; padding-bottom: 5px; }
     .data-table td { padding: 5px 0; font-size: 14px;}
@@ -157,7 +157,7 @@
 
     /* MENU ARCADE */
     .game-cards-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-    .game-card { background: rgba(15, 15, 15, 0.9); border: 2px solid #fff; width: 160px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 5px 5px 0px rgba(255, 255, 255, 0.5); }
+    .game-card { background: rgba(15, 15, 15, 0.9); border: 2px solid #fff; width: 160px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 5px 5px 0px rgba(255, 255, 255, 0.5); border-radius: 8px;}
     .game-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0px #fff; background: #111; }
     .game-card:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #fff; }
     .game-icon-img { width: 60px; height: 60px; object-fit: contain; margin: 0 auto 15px; display: block; border-radius: 8px; }
@@ -165,40 +165,42 @@
     .game-card-title { font-family: 'Share Tech Mono', monospace; font-weight: bold; font-size: 14px; color: #fff; letter-spacing: 1px; }
     .game-card-status { font-size: 10px; color: #0f0; margin-top: 8px; }
 
-    /* UI GALAXY SURVIVOR */
-    #game-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; display: none; }
+    /* UI GALAXY SURVIVOR & BEAT STREET (POLISHED) */
+    #game-ui, #bs-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; display: none; }
+    
+    /* GALAXY TOP BAR */
     #top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
     .stat-block { width: 140px; }
-    .bar-bg { width: 100%; height: 12px; background: #000; border: 1px solid #fff; margin-bottom: 5px; }
-    #hp-bar { width: 100%; height: 100%; background: #fff; transition: 0.2s; }
-    #xp-bar { width: 0%; height: 100%; background: #fff; transition: 0.2s; }
-    .stat-text { font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #fff;}
+    .bar-bg { width: 100%; height: 14px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.6); margin-bottom: 5px; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.8); }
+    #hp-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #ff0000, #ff4d4d); transition: 0.2s; box-shadow: inset 0 0 5px rgba(255,255,255,0.5); }
+    #xp-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #00d2ff, #3a7bd5); transition: 0.2s; box-shadow: inset 0 0 5px rgba(255,255,255,0.5); }
+    .stat-text { font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+    
     #center-ui { position: absolute; left: 50%; transform: translateX(-50%); top: 15px; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
-    #ingame-name-gal { color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
-    #pause-btn { background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-family: 'Courier New', Courier, monospace; font-weight: bold; cursor: pointer; pointer-events: auto; }
-    #joystick-area { position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: transparent; border: 2px solid #fff; border-radius: 50%; pointer-events: auto; }
-    #joystick-knob { position: absolute; width: 40px; height: 40px; background: #fff; border-radius: 50%; top: 38px; left: 38px; pointer-events: none; }
-    #fire-btn { position: absolute; bottom: 50px; right: 40px; width: 100px; height: 100px; background: #000; border: 3px solid #fff; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; pointer-events: auto; }
+    #ingame-name-gal { color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #00d2ff, 0 0 10px #00d2ff; }
+    #pause-btn { background: rgba(0,0,0,0.8); border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-family: 'Courier New', Courier, monospace; font-weight: bold; cursor: pointer; pointer-events: auto; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+    
+    #joystick-area { position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.4); border-radius: 50%; pointer-events: auto; box-shadow: inset 0 0 15px rgba(255,255,255,0.1); }
+    #joystick-knob { position: absolute; width: 40px; height: 40px; background: rgba(255,255,255,0.8); border-radius: 50%; top: 38px; left: 38px; pointer-events: none; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+    #fire-btn { position: absolute; bottom: 50px; right: 40px; width: 100px; height: 100px; background: rgba(0,0,0,0.6); border: 3px solid rgba(255,255,255,0.5); color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; pointer-events: auto; box-shadow: 0 0 15px rgba(255,255,255,0.2); }
 
-    /* UI BEAT STREET RUN - DIKEMBANGKAN */
-    #bs-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; display: none; }
+    /* BEAT STREET TOP UI */
+    #bs-ui-top { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 10px; width: 160px; }
+    .bs-score-box { background: rgba(0,0,0,0.85); border: 2px solid rgba(255,255,255,0.8); padding: 6px 12px; color: #fff; font-weight: bold; font-size: 15px; font-family: 'Share Tech Mono', monospace; border-radius: 6px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    #bs-fuel-container { width: 100%; height: 16px; border: 2px solid rgba(255,255,255,0.8); background: rgba(0,0,0,0.6); position: relative; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    #bs-fuel-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #00ff00, #33cc33); transition: width 0.2s, background 0.2s; box-shadow: inset 0 0 5px rgba(255,255,255,0.5); }
     
-    #bs-ui-top { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 8px; width: 150px; }
-    .bs-score-box { background: rgba(0,0,0,0.8); border: 2px solid #fff; padding: 5px 10px; color: #fff; font-weight: bold; font-size: 15px; font-family: 'Share Tech Mono', monospace; border-radius: 4px; text-align: left; }
-    #bs-fuel-container { width: 100%; height: 12px; border: 2px solid #fff; background: rgba(0,0,0,0.5); position: relative; border-radius: 2px;}
-    #bs-fuel-bar { width: 100%; height: 100%; background: #0f0; transition: width 0.2s, background 0.2s; }
-    
-    #bs-ingame-name { position: absolute; top: 80px; left: 20px; color: #fff; font-weight: bold; font-size: 14px; font-family: 'Share Tech Mono', monospace; text-align: left; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+    #bs-ingame-name { position: absolute; top: 90px; left: 20px; color: #fff; font-weight: bold; font-size: 14px; font-family: 'Share Tech Mono', monospace; text-align: left; text-shadow: 0 2px 4px rgba(0,0,0,1); }
 
     .bs-controls { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 12px; font-weight: bold; pointer-events: none; font-family: 'Share Tech Mono', monospace; text-shadow: 0 2px 4px #000; text-align: center; width: 100%;}
     
-    .motor-option { display: inline-block; width: 50px; height: 50px; margin: 10px; border: 2px solid #555; cursor: pointer; transition: 0.2s; }
+    .motor-option { display: inline-block; width: 50px; height: 50px; margin: 10px; border: 2px solid #555; cursor: pointer; transition: 0.2s; border-radius: 8px;}
     .motor-option.selected { border: 3px solid #fff; transform: scale(1.1); box-shadow: 0 0 15px #fff; }
 
     #btn-wheelie {
-        position: absolute; bottom: 40px; right: 20px; background: #000; border: 3px solid #fff; color: #fff;
-        font-family: 'Share Tech Mono', monospace; font-weight: bold; font-size: 14px; border-radius: 50%; width: 70px; height: 70px; 
-        display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px #fff; pointer-events: auto; touch-action: none; user-select: none;
+        position: absolute; bottom: 40px; right: 20px; background: rgba(0,0,0,0.8); border: 3px solid #fff; color: #fff;
+        font-family: 'Share Tech Mono', monospace; font-weight: bold; font-size: 14px; border-radius: 50%; width: 75px; height: 75px; 
+        display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(255,255,255,0.3); pointer-events: auto; touch-action: none; user-select: none;
         transition: transform 0.1s, background 0.1s, color 0.1s;
     }
     #btn-wheelie:active { background: #fff; color: #000; transform: scale(0.9); }
@@ -442,13 +444,13 @@
         <div id="top-bar">
             <div class="stat-block"><div class="stat-text">NYAWA</div><div class="bar-bg"><div id="hp-bar"></div></div></div>
             <div id="center-ui">
-                <div id="ingame-name-gal" style="color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff;">PLAYER</div>
-                <button id="pause-btn" style="background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-family: 'Courier New', Courier, monospace; font-weight: bold; cursor: pointer; pointer-events: auto;" onclick="playSFX(sfxClick); pauseGalaxy()">STOP</button>
+                <div id="ingame-name-gal">PLAYER</div>
+                <button id="pause-btn" onclick="playSFX(sfxClick); pauseGalaxy()">|| STOP</button>
             </div>
             <div class="stat-block" style="text-align: right;"><div class="stat-text">LEVEL <span id="lvl-val">1</span> | SCORE: <span id="score-val">0</span></div><div class="bar-bg" style="transform: scaleX(-1);"><div id="xp-bar"></div></div></div>
         </div>
-        <div id="joystick-area" style="position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: transparent; border: 2px solid #fff; border-radius: 50%; pointer-events: auto;"><div id="joystick-knob" style="position: absolute; width: 40px; height: 40px; background: #fff; border-radius: 50%; top: 38px; left: 38px; pointer-events: none;"></div></div>
-        <div id="fire-btn" style="position: absolute; bottom: 50px; right: 40px; width: 100px; height: 100px; background: #000; border: 3px solid #fff; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; pointer-events: auto;">FIRE</div>
+        <div id="joystick-area"><div id="joystick-knob"></div></div>
+        <div id="fire-btn">FIRE</div>
     </div>
 
     <!-- UI BEAT STREET RUN -->
@@ -464,7 +466,7 @@
 
         <div class="bs-controls"></div>
         
-        <button style="position:absolute; top:20px; right:20px; background:#000; border:2px solid #fff; color:#fff; padding:8px 15px; font-family:'Share Tech Mono'; font-weight:bold; cursor: pointer; pointer-events:auto;" onclick="playSFX(sfxClick); pauseBeatStreet()">|| PAUSE</button>
+        <button style="position:absolute; top:20px; right:20px; background:rgba(0,0,0,0.8); border:2px solid #fff; color:#fff; padding:8px 15px; font-family:'Share Tech Mono'; font-weight:bold; cursor: pointer; pointer-events:auto; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.5);" onclick="playSFX(sfxClick); pauseBeatStreet()">|| PAUSE</button>
 
         <button id="btn-wheelie" onmousedown="startWheelie()" onmouseup="stopWheelie()" onmouseleave="stopWheelie()" ontouchstart="startWheelie()" ontouchend="stopWheelie()" ontouchcancel="stopWheelie()">NGENG</button>
     </div>
@@ -481,7 +483,7 @@
             <h1 class="game-h1" style="font-size:2rem;">GOBLOK</h1>
             <p style="font-size: 16px; margin-top:15px; margin-bottom: 5px;">Score Lu: <b id="final-score">0</b></p>
             <p style="font-size: 14px; margin-bottom: 20px; color:#ccc;">Level Terakhir: <span id="final-level">1</span></p>
-            <p id="new-hs-msg-galaxy" style="display: none; color: #fff; font-weight: bold; border-top: 1px dashed #fff; padding-top:15px; margin-bottom: 10px;">NEW HIGH SCORE SAVED!</p>
+            <p id="new-hs-msg-galaxy" style="display: none; color: #0f0; font-weight: bold; border-top: 1px dashed #fff; padding-top:15px; margin-bottom: 10px;">NEW HIGH SCORE SAVED!</p>
             <div id="game-over-buttons" style="margin-top: 15px;">
                 <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); checkAndStartGalaxy()">Mulai Ulang</button>
                 <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); quitGalaxy()">Menu Utama</button>
@@ -491,7 +493,7 @@
 
     <div id="level-up-menu" class="game-screen">
         <div class="overlay-box">
-            <h2 style="margin:0 0 5px 0; font-family:'Share Tech Mono', monospace;">LEVEL UP!</h2>
+            <h2 style="margin:0 0 5px 0; font-family:'Share Tech Mono', monospace; color: #0f0;">LEVEL UP!</h2>
             <p style="font-size: 14px; margin-bottom: 20px; color:#ccc;">Sistem mendeteksi peningkatan, pilih modul:</p>
             <div id="upgrade-choices"></div>
         </div>
@@ -505,9 +507,9 @@
 
     <div id="bs-game-over" class="game-screen">
         <div class="overlay-box">
-            <h1 id="bs-gameover-title" class="game-h1" style="font-size:2rem;">CRASHED! GOBLOK</h1>
+            <h1 id="bs-gameover-title" class="game-h1" style="font-size:2rem; color: #ff4d4d;">CRASHED! GOBLOK</h1>
             <p style="font-size: 16px; margin-top:15px; color:#fff;">Jarak Tempuh: <b id="bs-final-score">0</b> M</p>
-            <p id="new-hs-msg-bs" style="display: none; color: #fff; font-weight: bold; border-top: 1px dashed #fff; padding-top:15px; margin-bottom: 10px;">REKOR BARU DISIMPAN!</p>
+            <p id="new-hs-msg-bs" style="display: none; color: #0f0; font-weight: bold; border-top: 1px dashed #fff; padding-top:15px; margin-bottom: 10px;">REKOR BARU DISIMPAN!</p>
             <button class="game-btn" style="width: 100%; margin-top: 20px;" onclick="playSFX(sfxClick); checkAndStartBeatStreet()">Mulai Ulang</button>
             <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); quitBeatStreet()">Menu Utama</button>
         </div>
@@ -856,7 +858,24 @@
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     let w, h;
-    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+    let stars = []; // Galaxy stars array
+
+    function resize() { 
+        w = canvas.width = window.innerWidth; 
+        h = canvas.height = window.innerHeight; 
+        
+        // Re-init stars when resized to cover new area
+        stars = [];
+        for(let i=0; i<200; i++) {
+            stars.push({ 
+                x: Math.random() * 5000, 
+                y: Math.random() * 5000, 
+                size: Math.random() * 2 + 0.5, 
+                speed: Math.random() * 0.8 + 0.2, 
+                color: (Math.random() > 0.5 ? '#ffffff' : '#e0f0ff') 
+            });
+        }
+    }
     window.addEventListener('resize', resize);
     resize();
 
@@ -1013,7 +1032,13 @@
             this.isBoss = isBoss; let diffMult = gameDifficulty === 'HARD' ? 2 : 1; let speedMult = gameDifficulty === 'HARD' ? 1.5 : 1; let effLvl = player.lvl; let angle = Math.random() * Math.PI * 2; let spawnDist = Math.max(w, h) / 2 + 100; 
             this.x = player.x + Math.cos(angle) * spawnDist; this.y = player.y + Math.sin(angle) * spawnDist; 
             this.img = Math.random() > 0.5 ? assets.enemy1 : assets.enemy2; if(this.isBoss) this.img = assets.boss;
-            if (isBoss) { this.r = 40 + (effLvl * 0.5); this.hp = effLvl * 250 * diffMult + (frame/1000); this.speed = (0.8 + (effLvl * 0.05)) * speedMult; this.angle = 0; this.spin = 0; } 
+            if (isBoss) { 
+                this.r = 75 + (effLvl * 1.2); // BOSS SIZE JAUH LEBIH BESAR
+                this.hp = effLvl * 350 * diffMult + (frame/1000); 
+                this.speed = (0.5 + (effLvl * 0.03)) * speedMult; 
+                this.angle = 0; 
+                this.spin = 0; 
+            } 
             else { this.r = 16; this.hp = (1 + Math.floor(effLvl / 3) + Math.floor(frame/10000)) * diffMult; this.speed = (1.5 + (effLvl * 0.15) + (frame / 5000) + (Math.random() * 0.5)) * speedMult; this.angle = 0; }
         }
         draw() { ctx.save(); ctx.translate(this.x, this.y); 
@@ -1048,14 +1073,38 @@
     function saveGalHighScore() { if (isNandoAccount) return; let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_'); let pRef = leaderboardGalRef.child(safeName); pRef.once('value').then((snap) => { let ex = snap.val(); let isNew = false; if (!ex) { pRef.set({ name: globalPlayerName, score: score, level: player.lvl }); isNew = true; } else if (score > ex.score) { pRef.update({ score: score, level: player.lvl }); isNew = true; } if (isNew) document.getElementById('new-hs-msg-galaxy').style.display = 'block'; }); }
     function gameOverGalaxy() { gameState = 'GAMEOVER_GALAXY'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('final-score').innerText = isNandoAccount ? "1000000 (LOCKED)" : score; document.getElementById('final-level').innerText = player.lvl; document.getElementById('new-hs-msg-galaxy').style.display = 'none'; saveGalHighScore(); showScreen('game-over-menu-galaxy'); playSFX(sfxGameOver); }
 
-    function drawGalBackground() { ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; let size = 100; let startX = Math.floor(camX / size) * size; let startY = Math.floor(camY / size) * size; for(let i = startX; i < startX + w + size; i += size) { ctx.beginPath(); ctx.moveTo(i, camY); ctx.lineTo(i, camY + h); ctx.stroke(); } for(let j = startY; j < startY + h + size; j += size) { ctx.beginPath(); ctx.moveTo(camX, j); ctx.lineTo(camX + w, j); ctx.stroke(); } }
+    function drawGalBackground() { 
+        // Latar Nebula
+        let grd = ctx.createLinearGradient(0, 0, w, h);
+        grd.addColorStop(0, "#020111");
+        grd.addColorStop(0.5, "#150a30");
+        grd.addColorStop(1, "#020111");
+        ctx.fillStyle = grd;
+        ctx.fillRect(camX, camY, w, h);
+
+        // Bintang-bintang luar angkasa
+        stars.forEach(s => {
+            let drawX = camX + (((s.x - camX * s.speed) % w) + w) % w;
+            let drawY = camY + (((s.y - camY * s.speed) % h) + h) % h;
+            
+            ctx.fillStyle = s.color;
+            ctx.globalAlpha = Math.random() > 0.1 ? 0.8 : 0.3; // Twinkle effect
+            ctx.beginPath();
+            ctx.arc(drawX, drawY, s.size, 0, Math.PI*2);
+            ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+    }
 
     function loopGalaxy() {
         let scoreMult = gameDifficulty === 'HARD' ? 2 : 1;
         if(frame % 60 === 0) { if(!isNandoAccount) { score += (Math.floor(Math.random() * 3) + 1) * scoreMult; document.getElementById('score-val').innerText = score; checkMilestone(); } else document.getElementById('score-val').innerText = "1000000"; }
         player.x += input.x * player.speed; player.y += input.y * player.speed; camX = player.x - w/2; camY = player.y - h/2;
         ctx.save(); if (screenShake > 0) { ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake); screenShake *= 0.8; if(screenShake < 0.5) screenShake = 0; }
-        ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h); ctx.translate(-camX, -camY); drawGalBackground();
+        
+        ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h); 
+        ctx.translate(-camX, -camY); 
+        drawGalBackground();
         
         ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle + Math.PI/2);
         if(player.hitFlash > 0) { ctx.globalAlpha = (Math.sin(frame) + 1) / 2; player.hitFlash--; }
@@ -1080,7 +1129,7 @@
 
 
     // ====== BEAT STREET RUN LOGIC ======
-    let bsPlayer = {x: 0, y: 0, w: 50, h: 100, colorKey: 'cyan'}; // Motor diperbesar dari 28x60
+    let bsPlayer = {x: 0, y: 0, w: 55, h: 90, colorKey: 'cyan'}; // Motor Ukuran Sedang, proporsional
     let bsObstacles = [];
     let bsScore = 0; let bsSpeed = 6;
     let bsBgY = 0; let bsFuel = 100; let bsIsWheelie = false;
@@ -1089,8 +1138,6 @@
     let bsFlash = 0;
     
     // Fitur Batas Jalan dari Gambar wmremove-transformed.png
-    // Gambar memiliki aspal di bagian kiri (sekitar 3% - 44% lebar layar). 
-    // Ini buat nyegah pemain keluar dari aspal dan mati konyol nabrak trotoar.
     let roadBoundLeft = 0; let roadBoundRight = 0;
 
     class BSParticle {
@@ -1126,9 +1173,8 @@
 
     function initBeatStreet() {
         activeGame = 'BEATSTREET';
-        // UX Ditingkatkan: Batas area bermain khusus untuk bagian jalan di gambar (Kiri jalanan aspal aja)
-        roadBoundLeft = w * 0.03;  // Sedikit margin kiri dari tepi layar
-        roadBoundRight = w * 0.44; // Batas aspal sebelum masuk area trotoar pejalan kaki
+        roadBoundLeft = w * 0.03;  
+        roadBoundRight = w * 0.44; 
 
         bsPlayer.x = roadBoundLeft + ((roadBoundRight - roadBoundLeft) / 2) - (bsPlayer.w / 2);
         bsPlayer.y = h - 150;
@@ -1138,7 +1184,7 @@
 
         document.getElementById('bs-score').innerText = bsScore;
         document.getElementById('bs-fuel-bar').style.width = '100%';
-        document.getElementById('bs-fuel-bar').style.background = '#0f0';
+        document.getElementById('bs-fuel-bar').style.background = 'linear-gradient(90deg, #00ff00, #33cc33)';
         
         showScreen(null);
         document.getElementById('bs-ui').style.display = 'block';
@@ -1189,7 +1235,7 @@
             else if (bsScore > ex.score) { pRef.update({ score: bsScore }); isNew = true; }
             if (isNew) {
                 document.getElementById('new-hs-msg-bs').style.display = 'block';
-                playSFX(sfxTopScore); // Bunyi saat topscore tercapai
+                playSFX(sfxTopScore); 
             }
         });
     }
@@ -1208,13 +1254,13 @@
     function loopBeatStreet() {
         let currentSpeed = bsSpeed + (bsIsWheelie ? 8 : 0);
         
-        // Logika Bensin
-        bsFuel -= (bsIsWheelie ? 0.35 : 0.08);
+        // Logika Bensin 
+        bsFuel -= (bsIsWheelie ? 0.10 : 0.03);
         if(isNandoAccount) bsFuel = 100;
         
         let fBar = document.getElementById('bs-fuel-bar');
         fBar.style.width = Math.max(0, bsFuel) + '%';
-        fBar.style.background = bsFuel > 30 ? '#0f0' : (bsFuel > 15 ? '#ffeb3b' : '#f00');
+        fBar.style.background = bsFuel > 30 ? 'linear-gradient(90deg, #00ff00, #33cc33)' : (bsFuel > 15 ? 'linear-gradient(90deg, #ffeb3b, #fbc02d)' : 'linear-gradient(90deg, #ff0000, #d32f2f)');
 
         if (bsFuel <= 0) {
             playSFX(sfxGameOver);
@@ -1256,19 +1302,19 @@
             bsBgY += currentSpeed; if(bsBgY > 60) bsBgY = 0;
         }
 
-        // Spawn Rintangan (Diperbesar sesuai request)
+        // Spawn Rintangan (UKURAN NORMAL/LEBIH KECIL DARI SEBELUMNYA)
         if (frame % Math.max(25, 80 - Math.floor(bsSpeed)) === 0) {
-            let obsW = 45 + Math.random() * 25; // Diperbesar dari 20
-            let obsH = 45 + Math.random() * 25; // Diperbesar dari 20
+            let obsW = 25 + Math.random() * 15; // Normal size
+            let obsH = 25 + Math.random() * 15; 
             let obsX = roadBoundLeft + Math.random() * (roadBoundRight - roadBoundLeft - obsW);
             let type = Math.random() > 0.5 ? 'pothole' : 'cone';
             bsObstacles.push({x: obsX, y: -100, w: obsW, h: obsH, type: type});
         }
 
-        // Spawn Bensin (Diperbesar agar seimbang)
+        // Spawn Bensin (Ukuran Normal)
         if (frame % 180 === 0) {
             let obsX = roadBoundLeft + Math.random() * (roadBoundRight - roadBoundLeft - 20);
-            bsObstacles.push({x: obsX, y: -100, w: 35, h: 45, type: 'fuel'}); // Diperbesar dari 18x25
+            bsObstacles.push({x: obsX, y: -100, w: 22, h: 30, type: 'fuel'}); // Normal size fuel
         }
 
         // Render Rintangan
@@ -1297,9 +1343,8 @@
             }
 
             // Tabrakan Logic
-            // PERBAIKAN BUG UX: Hit Margin ditoleransi lebih baik (tidak mati jika tersenggol pixel ujung)
-            let hitMarginX = 6; 
-            let hitMarginY = 10; 
+            let hitMarginX = 15; 
+            let hitMarginY = 15; 
 
             if (obs.type !== 'fuel') {
                 if (!isNandoAccount && 
