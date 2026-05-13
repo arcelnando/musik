@@ -20,15 +20,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: #000; color: #fff; min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; user-select: none; }
     
-    /* PROTEKSI GAMBAR KETAT (Anti-Save & Anti-Drag) */
-    img { 
-        -webkit-touch-callout: none !important; 
-        -webkit-user-select: none !important; 
-        user-select: none !important; 
-        -webkit-user-drag: none !important; 
-        pointer-events: auto;
-    }
-
+    img { -webkit-touch-callout: none !important; -webkit-user-select: none !important; user-select: none !important; -webkit-user-drag: none !important; pointer-events: auto; }
     #web-container { width: 100%; height: 100%; }
 
     .flash-impact { position: fixed; inset: 0; background: #fff; z-index: 10002; opacity: 0; pointer-events: none; animation: flash 0.3s ease-out forwards; }
@@ -73,9 +65,7 @@
     .content-block { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); padding: 28px; border-radius: 18px; animation: fadeUp 0.8s both; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* HEADER KONSISTEN DI SEMUA PAGE */
     h2 { font-size: 1.2rem; color: #fff; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; border-left: 3px solid #fff; padding-left: 15px; font-family: 'Share Tech Mono', monospace; }
-    
     .about-text { color: #eee; line-height: 1.8; font-weight: 500; margin-bottom: 15px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
     .about-highlight { color: #fff; font-weight: 700; }
     .about-secondary { color: #ddd; margin-top: 15px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
@@ -102,21 +92,7 @@
     .intel-btn { margin-top: 25px; width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; letter-spacing: 2px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
     .intel-btn:active { background: rgba(255, 255, 255, 0.8); color: #000; transform: scale(0.98); }
 
-    .floating-game-btn { 
-        position: fixed; bottom: 30px; right: 30px; 
-        background: #000; color: #fff; 
-        border: 2px solid #fff; 
-        padding: 12px 24px; 
-        font-family: 'Share Tech Mono', monospace; 
-        font-weight: bold; font-size: 14px; 
-        border-radius: 0px; 
-        z-index: 9999; cursor: pointer; 
-        box-shadow: 5px 5px 0px #fff; 
-        transition: all 0.2s ease; 
-        text-transform: uppercase; 
-        letter-spacing: 2px;
-        display: none; 
-    }
+    .floating-game-btn { position: fixed; bottom: 30px; right: 30px; background: #000; color: #fff; border: 2px solid #fff; padding: 12px 24px; font-family: 'Share Tech Mono', monospace; font-weight: bold; font-size: 14px; z-index: 9999; cursor: pointer; box-shadow: 5px 5px 0px #fff; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 2px; display: none; }
     .floating-game-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0px #fff; background: #fff; color: #000; }
     .floating-game-btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #fff; }
 
@@ -129,64 +105,33 @@
       .floating-game-btn { font-size: 12px; padding: 10px 15px; bottom: 20px; right: 20px; }
     }
 
-    /* CSS FORUM TEMA HITAM PUTIH / UNDERGROUND */
-    .post-card { 
-        background: rgba(15, 15, 15, 0.85); 
-        border-radius: 8px; 
-        padding: 18px; 
-        margin-bottom: 20px; 
-        box-shadow: 0 4px 15px rgba(0,0,0,0.8); 
-        position: relative;
-        border: 1px solid rgba(255,255,255,0.2);
-        user-select: none;
-    }
+    /* CSS FORUM */
+    .post-card { background: rgba(15, 15, 15, 0.85); border-radius: 8px; padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.8); position: relative; border: 1px solid rgba(255,255,255,0.2); user-select: none; }
     .post-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 4px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); }
     .post-text { color: #eee; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; font-family: 'Inter', sans-serif;}
 
-    /* POLLING UI TEMA UNDERGROUND */
+    /* POLLING UI */
     .poll-wrapper { margin-top: 15px; background: rgba(0,0,0,0.5); border-radius: 6px; padding: 12px; border: 1px dashed rgba(255,255,255,0.3); }
     .poll-header { font-weight: bold; color: #fff; font-size: 13px; margin-bottom: 12px; display: flex; align-items: center; letter-spacing: 1px; }
-    
-    .poll-option-btn {
-        display: flex; align-items: center; width: 100%; background: #111; border: 1px solid #444; color: #fff;
-        padding: 10px 12px; margin-bottom: 6px; cursor: pointer; font-size: 13px; font-family: 'Share Tech Mono', monospace; transition: all 0.2s;
-    }
+    .poll-option-btn { display: flex; align-items: center; width: 100%; background: #111; border: 1px solid #444; color: #fff; padding: 10px 12px; margin-bottom: 6px; cursor: pointer; font-size: 13px; font-family: 'Share Tech Mono', monospace; transition: all 0.2s; }
     .poll-option-btn:active { background: #fff; color: #000; }
     .poll-radio { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #fff; margin-right: 12px; flex-shrink: 0; }
     .poll-option-btn:active .poll-radio { border-color: #000; background: #000; }
+    .poll-result-bar { position: relative; padding: 10px 12px; margin-bottom: 8px; border-radius: 2px; overflow: hidden; background: #111; display: flex; justify-content: space-between; align-items: center; z-index: 1; font-size: 13px; color: #fff; font-family: 'Share Tech Mono', monospace; border: 1px solid #444; }
+    .poll-progress { position: absolute; top: 0; left: 0; height: 100%; background: rgba(255, 255, 255, 0.2); z-index: -1; transition: width 0.5s ease; }
 
-    .poll-result-bar {
-        position: relative; padding: 10px 12px; margin-bottom: 8px; border-radius: 2px; overflow: hidden;
-        background: #111; display: flex; justify-content: space-between; align-items: center; z-index: 1;
-        font-size: 13px; color: #fff; font-family: 'Share Tech Mono', monospace; border: 1px solid #444;
-    }
-    .poll-progress {
-        position: absolute; top: 0; left: 0; height: 100%; background: rgba(255, 255, 255, 0.2); z-index: -1; transition: width 0.5s ease;
-    }
-
-    /* ACTION BAR (Share & React Info) */
-    .post-actions {
-        display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 10px;
-    }
+    .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 10px; }
     .reactions-display { display: flex; gap: 8px; flex-wrap: wrap; }
     .react-badge { background: #000; border-radius: 4px; padding: 4px 10px; font-size: 12px; color: #fff; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: 0.2s; }
     .react-badge:active { transform: scale(0.9); }
-    
-    .share-btn {
-        background: transparent; border: 1px solid #fff; color: #fff; cursor: pointer; font-size: 12px; display: flex; align-items: center; padding: 4px 12px; font-family: 'Share Tech Mono', monospace; border-radius: 4px; transition: 0.2s;
-    }
+    .share-btn { background: transparent; border: 1px solid #fff; color: #fff; cursor: pointer; font-size: 12px; display: flex; align-items: center; padding: 4px 12px; font-family: 'Share Tech Mono', monospace; border-radius: 4px; transition: 0.2s; }
     .share-btn:active { background: #fff; color: #000; }
 
-    /* REACTION POPUP MENU */
-    #reaction-menu {
-        position: absolute; background: #000; padding: 10px 15px; border-radius: 8px;
-        display: none; gap: 15px; box-shadow: 0 5px 15px rgba(255,255,255,0.2); z-index: 1000;
-        transform: translateY(-50px); border: 1px solid #fff;
-    }
+    #reaction-menu { position: absolute; background: #000; padding: 10px 15px; border-radius: 8px; display: none; gap: 15px; box-shadow: 0 5px 15px rgba(255,255,255,0.2); z-index: 1000; transform: translateY(-50px); border: 1px solid #fff; }
     #reaction-menu span { font-size: 22px; cursor: pointer; transition: transform 0.1s; }
     #reaction-menu span:active { transform: scale(1.3); }
 
-    /* CSS GAME */
+    /* CSS GAME OVERALL */
     #game-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000; color: #ffffff; z-index: 20000; font-family: 'Courier New', Courier, monospace; overflow: hidden; touch-action: none; user-select: none; display: none; }
     #game-page * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
     .crt::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); z-index: 999; background-size: 100% 3px; pointer-events: none; }
@@ -201,10 +146,27 @@
     .game-btn:active { background: #fff; color: #000; transform: scale(0.95); }
     .game-input-name { background: #000; color: #fff; border: 2px solid #fff; padding: 12px; font-family: 'Courier New', Courier, monospace; font-weight: bold; width: 80%; max-width: 300px; margin-bottom: 20px; text-transform: uppercase; text-align: center; font-size: 16px; }
     .game-input-name::placeholder { color: #666; }
-    #game-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
     
     #milestone-msg { position:absolute; top:35%; left:50%; transform:translate(-50%, -50%); color:#0f0; font-family:'Eater', cursive; font-size:26px; font-weight:bold; text-align:center; text-shadow:0 0 15px #0f0; display:none; pointer-events:none; white-space:pre-wrap; z-index:999; letter-spacing:2px; }
 
+    .overlay-box { background: #000; border: 4px solid #fff; padding: 20px; text-align: center; width: 90%; max-width: 400px; }
+    .data-table { width: 100%; text-align: left; margin-top: 15px; border-collapse: collapse; }
+    .data-table th { border-bottom: 1px solid #fff; padding-bottom: 5px; }
+    .data-table td { padding: 5px 0; font-size: 14px;}
+    .setting-row { display: flex; justify-content: space-between; margin-top: 15px; font-size: 14px; align-items: center; text-align: left; }
+
+    /* MENU ARCADE */
+    .game-cards-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    .game-card { background: rgba(15, 15, 15, 0.9); border: 2px solid #fff; width: 160px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 5px 5px 0px rgba(255, 255, 255, 0.5); }
+    .game-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0px #fff; background: #111; }
+    .game-card:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #fff; }
+    .game-icon-img { width: 60px; height: 60px; object-fit: contain; margin: 0 auto 15px; display: block; border-radius: 8px; }
+    .game-icon-emoji { font-size: 50px; margin-bottom: 15px; display: block; }
+    .game-card-title { font-family: 'Share Tech Mono', monospace; font-weight: bold; font-size: 14px; color: #fff; letter-spacing: 1px; }
+    .game-card-status { font-size: 10px; color: #0f0; margin-top: 8px; }
+
+    /* UI GALAXY SURVIVOR */
+    #game-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; display: none; }
     #top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
     .stat-block { width: 140px; }
     .bar-bg { width: 100%; height: 12px; background: #000; border: 1px solid #fff; margin-bottom: 5px; }
@@ -212,29 +174,35 @@
     #xp-bar { width: 0%; height: 100%; background: #fff; transition: 0.2s; }
     .stat-text { font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #fff;}
     #center-ui { position: absolute; left: 50%; transform: translateX(-50%); top: 15px; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
-    #ingame-name { color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+    #ingame-name-gal { color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
     #pause-btn { background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-family: 'Courier New', Courier, monospace; font-weight: bold; cursor: pointer; pointer-events: auto; }
     #joystick-area { position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: transparent; border: 2px solid #fff; border-radius: 50%; pointer-events: auto; }
     #joystick-knob { position: absolute; width: 40px; height: 40px; background: #fff; border-radius: 50%; top: 38px; left: 38px; pointer-events: none; }
     #fire-btn { position: absolute; bottom: 50px; right: 40px; width: 100px; height: 100px; background: #000; border: 3px solid #fff; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; pointer-events: auto; }
-    #fire-btn:active { background: #fff; color: #000; transform: scale(0.92); }
-    .overlay-box { background: #000; border: 4px solid #fff; padding: 20px; text-align: center; width: 90%; max-width: 400px; }
-    .data-table { width: 100%; text-align: left; margin-top: 15px; border-collapse: collapse; }
-    .data-table th { border-bottom: 1px solid #fff; padding-bottom: 5px; }
-    .data-table td { padding: 5px 0; font-size: 14px;}
-    .setting-row { display: flex; justify-content: space-between; margin-top: 15px; font-size: 14px; align-items: center; text-align: left; }
 
-    /* ARCADE MENU & BEAT STREET UI */
-    .game-cards-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-    .game-card { background: rgba(15, 15, 15, 0.9); border: 2px solid #fff; width: 160px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 5px 5px 0px rgba(255, 255, 255, 0.5); }
-    .game-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0px #fff; background: #111; }
-    .game-card:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #fff; }
-    .game-icon { font-size: 50px; margin-bottom: 15px; display: block; }
-    .game-card-title { font-family: 'Share Tech Mono', monospace; font-weight: bold; font-size: 14px; color: #fff; letter-spacing: 1px; }
-    .game-card-status { font-size: 10px; color: #0f0; margin-top: 8px; }
+    /* UI BEAT STREET RUN - DIKEMBANGKAN */
     #bs-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; display: none; }
-    .bs-score-box { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); border: 2px solid #0ff; padding: 10px 20px; color: #0ff; font-weight: bold; font-size: 20px; text-shadow: 0 0 10px #0ff; font-family: 'Share Tech Mono', monospace;}
-    .bs-controls { position: absolute; bottom: 30px; width: 100%; text-align: center; color: rgba(255,255,255,0.5); font-size: 12px; pointer-events: none; font-family: 'Share Tech Mono', monospace;}
+    
+    #bs-ui-top { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 8px; width: 150px; }
+    .bs-score-box { background: rgba(0,0,0,0.8); border: 2px solid #fff; padding: 5px 10px; color: #fff; font-weight: bold; font-size: 15px; font-family: 'Share Tech Mono', monospace; border-radius: 4px; text-align: left; }
+    #bs-fuel-container { width: 100%; height: 12px; border: 2px solid #fff; background: rgba(0,0,0,0.5); position: relative; border-radius: 2px;}
+    #bs-fuel-bar { width: 100%; height: 100%; background: #0f0; transition: width 0.2s, background 0.2s; }
+    
+    #bs-ingame-name { position: absolute; top: 80px; left: 20px; color: #fff; font-weight: bold; font-size: 14px; font-family: 'Share Tech Mono', monospace; text-align: left; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+
+    .bs-controls { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 12px; font-weight: bold; pointer-events: none; font-family: 'Share Tech Mono', monospace; text-shadow: 0 2px 4px #000; text-align: center; width: 100%;}
+    
+    .motor-option { display: inline-block; width: 50px; height: 50px; margin: 10px; border: 2px solid #555; cursor: pointer; transition: 0.2s; }
+    .motor-option.selected { border: 3px solid #fff; transform: scale(1.1); box-shadow: 0 0 15px #fff; }
+
+    #btn-wheelie {
+        position: absolute; bottom: 40px; right: 20px; background: #000; border: 3px solid #fff; color: #fff;
+        font-family: 'Share Tech Mono', monospace; font-weight: bold; font-size: 14px; border-radius: 50%; width: 70px; height: 70px; 
+        display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px #fff; pointer-events: auto; touch-action: none; user-select: none;
+        transition: transform 0.1s, background 0.1s, color 0.1s;
+    }
+    #btn-wheelie:active { background: #fff; color: #000; transform: scale(0.9); }
+
   </style>
 </head>
 <body oncontextmenu="return false;">
@@ -339,7 +307,8 @@
     
     <!-- AUDIO ELEMENTS -->
     <audio id="bgmusic" loop><source src="bgmusic.mp3" type="audio/mp3"></audio>
-    <audio id="game-bgm" loop><source src="game_bgm.mp3" type="audio/mp3"></audio>
+    <audio id="game-bgm" loop><source src="gamebgm.mp3" type="audio/mp3"></audio>
+    <audio id="bs-bgm" loop><source src="bs_bgm.mp3" type="audio/mp3"></audio>
 
     <button id="main-btn-game" class="floating-game-btn" onclick="playSFX(sfxClick); openGameContainer()">🕹️ MAIN GAME</button>
     
@@ -359,69 +328,122 @@
   <div id="game-page" class="crt">
     <canvas id="gameCanvas"></canvas>
 
-    <!-- 261 ARCADE MENU -->
+    <!-- MENU 261 ARCADE -->
     <div id="game-selection-menu" class="game-screen active">
         <h1 class="game-h1">261 ARCADE</h1>
-        <p class="game-subtitle">PILIH GAME UNTUK DIMAINKAN</p>
+        <p class="game-subtitle">PILIH TRANSMISI SIMULASI</p>
         
         <div class="game-cards-container">
-            <div class="game-card" onclick="playSFX(sfxClick); showScreen('main-menu')">
-                <span class="game-icon">🚀</span>
+            <div class="game-card" onclick="playSFX(sfxClick); showScreen('main-menu-galaxy')">
+                <img src="galaxy.png" alt="🚀" class="game-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="game-icon-emoji" style="display:none;">🚀</span>
                 <div class="game-card-title">GALAXY<br>SURVIVOR</div>
-                <div class="game-card-status">ONLINE</div>
             </div>
 
-            <div class="game-card" style="border-color: #0ff; box-shadow: 5px 5px 0px #0ff;" onclick="playSFX(sfxClick); initBeatStreet()">
-                <span class="game-icon">🏍️</span>
+            <div class="game-card" onclick="playSFX(sfxClick); showScreen('bs-main-menu')">
+                <img src="beat.png" alt="🏍️" class="game-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="game-icon-emoji" style="display:none;">🏍️</span>
                 <div class="game-card-title">BEAT STREET<br>RUN</div>
-                <div class="game-card-status" style="color: #0ff;">PROTOTYPE TEST</div>
             </div>
         </div>
 
         <button class="game-btn" onclick="playSFX(sfxClick); closeGameContainer()" style="margin-top: 40px; border-color: #555; color: #888;">Kembali ke Base</button>
     </div>
 
-    <div id="main-menu" class="game-screen">
+    <!-- MAIN MENU GALAXY SURVIVOR -->
+    <div id="main-menu-galaxy" class="game-screen">
         <h1 class="game-h1">GALAXY<br>SURVIVOR</h1>
         
-        <input type="text" id="pregame-name" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="12">
-        <button id="btn-difficulty" class="game-btn" onclick="playSFX(sfxClick); toggleDifficulty()" style="border-color: #0f0; color: #0f0;">MODE: EASY</button>
-        <button id="btn-start-game" class="game-btn" onclick="playSFX(sfxClick); checkAndStartGame()">Mulai Game</button>
-        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('leaderboard-menu'); updateLeaderboardUI();">Leaderboard</button>
-        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('settings-menu')">Pengaturan</button>
+        <input type="text" id="pregame-name-galaxy" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="12">
+        <button id="btn-difficulty-galaxy" class="game-btn" onclick="playSFX(sfxClick); toggleDifficulty()">MODE: EASY</button>
+        <button id="btn-start-game-galaxy" class="game-btn" onclick="playSFX(sfxClick); checkAndStartGalaxy()">Mulai Game</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('leaderboard-menu-galaxy'); updateGalaxyLeaderboardUI();">Leaderboard</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('settings-menu-galaxy')">Pengaturan</button>
         <button class="game-btn" onclick="playSFX(sfxClick); showScreen('game-selection-menu')" style="border-color: #555; color: #888;">Ganti Game</button>
-        <div class="game-credit">Created: <a href="https://t.me/antidogma14" target="_blank">Klik Disini</a></div>
     </div>
 
-    <div id="leaderboard-menu" class="game-screen">
+    <!-- MAIN MENU BEAT STREET RUN -->
+    <div id="bs-main-menu" class="game-screen">
+        <h1 class="game-h1">BEAT STREET<br>RUN</h1>
+        
+        <input type="text" id="pregame-name-bs" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="12">
+        <button id="btn-start-game-bs" class="game-btn" onclick="playSFX(sfxClick); checkAndStartBeatStreet()">Gass Pol (Start)</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('bs-garage-menu')">Pilih Motor</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('bs-leaderboard-menu'); updateBSLeaderboardUI();">Leaderboard Joki</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('settings-menu-bs')">Pengaturan</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('game-selection-menu')" style="border-color: #555; color: #888;">Ganti Game</button>
+    </div>
+
+    <!-- GARAGE BEAT STREET -->
+    <div id="bs-garage-menu" class="game-screen">
         <div class="overlay-box">
-            <h2 style="margin-top:0;">TOP SURVIVORS</h2>
-            <table class="data-table" id="lb-table">
-                <tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">SCORE</th></tr>
-            </table>
-            <button class="game-btn" style="margin-top: 20px; width: 100%;" onclick="playSFX(sfxClick); showScreen('main-menu')">Kembali</button>
+            <h2 style="margin-top:0;">BENGKEL MOTOR</h2>
+            <p style="font-size: 14px; margin-bottom: 20px; color:#ccc;">Pilih warna motor pacuan lu:</p>
+            
+            <div>
+                <div class="motor-option selected" style="background-color: #0ff;" onclick="selectMotor('cyan', this)"></div>
+                <div class="motor-option" style="background-color: #f00;" onclick="selectMotor('merah', this)"></div>
+                <div class="motor-option" style="background-color: #0f0;" onclick="selectMotor('hijau', this)"></div>
+                <div class="motor-option" style="background-color: #ff0;" onclick="selectMotor('kuning', this)"></div>
+                <div class="motor-option" style="background-color: #f0f;" onclick="selectMotor('ungu', this)"></div>
+            </div>
+
+            <button class="game-btn" style="margin-top: 25px; width: 100%;" onclick="playSFX(sfxClick); showScreen('bs-main-menu')">Pilih & Kembali</button>
         </div>
     </div>
 
-    <div id="settings-menu" class="game-screen">
+    <!-- LEADERBOARDS -->
+    <div id="leaderboard-menu-galaxy" class="game-screen">
+        <div class="overlay-box">
+            <h2 style="margin-top:0;">TOP SURVIVORS</h2>
+            <table class="data-table" id="lb-table-galaxy">
+                <tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">SCORE</th></tr>
+            </table>
+            <button class="game-btn" style="margin-top: 20px; width: 100%;" onclick="playSFX(sfxClick); showScreen('main-menu-galaxy')">Kembali</button>
+        </div>
+    </div>
+
+    <div id="bs-leaderboard-menu" class="game-screen">
+        <div class="overlay-box">
+            <h2 style="margin-top:0;">TOP JOKI JALANAN</h2>
+            <table class="data-table" id="lb-table-bs">
+                <tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">JARAK (M)</th></tr>
+            </table>
+            <button class="game-btn" style="margin-top: 20px; width: 100%;" onclick="playSFX(sfxClick); showScreen('bs-main-menu')">Kembali</button>
+        </div>
+    </div>
+
+    <!-- SETTINGS GALAXY -->
+    <div id="settings-menu-galaxy" class="game-screen">
         <div class="overlay-box">
             <h2 style="margin-top:0;">SYSTEM SETTINGS</h2>
             <label class="setting-row"><span>Efek Layar CRT</span><input type="checkbox" id="set-crt" onchange="updateSettings()" checked></label>
-            <label class="setting-row"><span>Auto-Fire (Otomatis)</span><input type="checkbox" id="set-autofire" onchange="updateSettings()"></label>
-            <label class="setting-row"><span>Tampilkan Angka Damage</span><input type="checkbox" id="set-dmgtext" onchange="updateSettings()" checked></label>
+            <label class="setting-row"><span>Auto-Fire (Otomatis) - Galaxy</span><input type="checkbox" id="set-autofire" onchange="updateSettings()"></label>
+            <label class="setting-row"><span>Tampilkan Angka Damage - Galaxy</span><input type="checkbox" id="set-dmgtext" onchange="updateSettings()" checked></label>
             <label class="setting-row"><span>Tampilkan Hitbox Area</span><input type="checkbox" id="set-hitbox" onchange="updateSettings()"></label>
             <label class="setting-row"><span>Suara Backsound (BGM)</span><input type="checkbox" id="set-audio" onchange="updateSettings()" checked></label>
-            <button class="game-btn" style="margin-top: 25px; width: 100%;" onclick="playSFX(sfxClick); showScreen('main-menu')">Simpan & Kembali</button>
+            <button class="game-btn" style="margin-top: 25px; width: 100%;" onclick="playSFX(sfxClick); showScreen('main-menu-galaxy')">Simpan & Kembali</button>
         </div>
     </div>
 
+    <!-- SETTINGS BEAT STREET RUN (Spesifik) -->
+    <div id="settings-menu-bs" class="game-screen">
+        <div class="overlay-box">
+            <h2 style="margin-top:0;">PENGATURAN JOKI</h2>
+            <label class="setting-row"><span>Efek Layar CRT</span><input type="checkbox" id="set-crt-bs" onchange="updateSettingsBS()" checked></label>
+            <label class="setting-row"><span>Suara Backsound (BGM)</span><input type="checkbox" id="set-audio-bs" onchange="updateSettingsBS()" checked></label>
+            <button class="game-btn" style="margin-top: 25px; width: 100%;" onclick="playSFX(sfxClick); showScreen('bs-main-menu')">Simpan & Kembali</button>
+        </div>
+    </div>
+
+    <!-- UI GALAXY SURVIVOR -->
     <div id="game-ui" style="display: none;">
         <div id="milestone-msg" style="position:absolute; top:35%; left:50%; transform:translate(-50%, -50%); color:#0f0; font-family:'Eater', cursive; font-size:26px; font-weight:bold; text-align:center; text-shadow:0 0 15px #0f0; display:none; pointer-events:none; white-space:pre-wrap; z-index:999; letter-spacing:2px;"></div> 
         <div id="top-bar">
             <div class="stat-block"><div class="stat-text">NYAWA</div><div class="bar-bg"><div id="hp-bar"></div></div></div>
             <div id="center-ui">
-                <div id="ingame-name" style="color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff;">PLAYER</div>
-                <button id="pause-btn" style="background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-family: 'Courier New', Courier, monospace; font-weight: bold; cursor: pointer; pointer-events: auto;" onclick="playSFX(sfxClick); pauseGame()">STOP</button>
+                <div id="ingame-name-gal" style="color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff;">PLAYER</div>
+                <button id="pause-btn" style="background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-family: 'Courier New', Courier, monospace; font-weight: bold; cursor: pointer; pointer-events: auto;" onclick="playSFX(sfxClick); pauseGalaxy()">STOP</button>
             </div>
             <div class="stat-block" style="text-align: right;"><div class="stat-text">LEVEL <span id="lvl-val">1</span> | SCORE: <span id="score-val">0</span></div><div class="bar-bg" style="transform: scaleX(-1);"><div id="xp-bar"></div></div></div>
         </div>
@@ -429,10 +451,42 @@
         <div id="fire-btn" style="position: absolute; bottom: 50px; right: 40px; width: 100px; height: 100px; background: #000; border: 3px solid #fff; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; pointer-events: auto;">FIRE</div>
     </div>
 
-    <div id="pause-menu" class="game-screen">
+    <!-- UI BEAT STREET RUN -->
+    <div id="bs-ui" style="display: none;">
+        <!-- UI Kiri Atas - Score & Bensin Menyatu -->
+        <div id="bs-ui-top">
+            <div class="bs-score-box">JARAK: <span id="bs-score">0</span> M</div>
+            <div id="bs-fuel-container">
+                <div id="bs-fuel-bar"></div>
+            </div>
+        </div>
+        <div id="bs-ingame-name">PLAYER</div>
+
+        <div class="bs-controls"><<< GESER KIRI / KANAN >>></div>
+        
+        <button style="position:absolute; top:20px; right:20px; background:#000; border:2px solid #fff; color:#fff; padding:8px 15px; font-family:'Share Tech Mono'; font-weight:bold; cursor: pointer; pointer-events:auto;" onclick="playSFX(sfxClick); pauseBeatStreet()">|| PAUSE</button>
+
+        <button id="btn-wheelie" onmousedown="startWheelie()" onmouseup="stopWheelie()" onmouseleave="stopWheelie()" ontouchstart="startWheelie()" ontouchend="stopWheelie()" ontouchcancel="stopWheelie()">NGENG</button>
+    </div>
+
+    <!-- MENUS GAME OVER / PAUSE -->
+    <div id="pause-menu-galaxy" class="game-screen">
         <h2 class="game-h1" style="font-size:2rem; margin-bottom:20px;">GAME STOP</h2>
-        <button class="game-btn" onclick="playSFX(sfxClick); resumeGame()">Lanjut Main</button>
-        <button class="game-btn" onclick="playSFX(sfxClick); quitGame()">Berhenti & Menu</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); resumeGalaxy()">Lanjut Main</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); quitGalaxy()">Berhenti & Menu</button>
+    </div>
+
+    <div id="game-over-menu-galaxy" class="game-screen">
+        <div class="overlay-box">
+            <h1 class="game-h1" style="font-size:2rem;">GOBLOK</h1>
+            <p style="font-size: 16px; margin-top:15px; margin-bottom: 5px;">Score Lu: <b id="final-score">0</b></p>
+            <p style="font-size: 14px; margin-bottom: 20px; color:#ccc;">Level Terakhir: <span id="final-level">1</span></p>
+            <p id="new-hs-msg-galaxy" style="display: none; color: #fff; font-weight: bold; border-top: 1px dashed #fff; padding-top:15px; margin-bottom: 10px;">NEW HIGH SCORE SAVED!</p>
+            <div id="game-over-buttons" style="margin-top: 15px;">
+                <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); checkAndStartGalaxy()">Mulai Ulang</button>
+                <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); quitGalaxy()">Menu Utama</button>
+            </div>
+        </div>
     </div>
 
     <div id="level-up-menu" class="game-screen">
@@ -443,38 +497,19 @@
         </div>
     </div>
 
-    <div id="game-over-menu" class="game-screen">
-        <div class="overlay-box">
-            <h1 class="game-h1" style="font-size:2rem;">GOBLOK</h1>
-            <p style="font-size: 16px; margin-top:15px; margin-bottom: 5px;">Score Lu: <b id="final-score">0</b></p>
-            <p style="font-size: 14px; margin-bottom: 20px; color:#ccc;">Level Terakhir: <span id="final-level">1</span></p>
-            <p id="new-hs-msg" style="display: none; color: #fff; font-weight: bold; border-top: 1px dashed #fff; padding-top:15px; margin-bottom: 10px;">NEW HIGH SCORE SAVED!</p>
-            <div id="game-over-buttons" style="margin-top: 15px;">
-                <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); checkAndStartGame()">Main Lagi</button>
-                <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); quitGame()">Menu Utama</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- UI BEAT STREET RUN -->
-    <div id="bs-ui">
-        <div class="bs-score-box">SCORE: <span id="bs-score">0</span></div>
-        <div class="bs-controls"></div>
-        <button style="position:absolute; top:20px; right:20px; background:#000; border:2px solid #0ff; color:#0ff; padding:5px 10px; font-family:'Share Tech Mono'; pointer-events:auto;" onclick="playSFX(sfxClick); gameState='PAUSED'; showScreen('bs-pause-menu')">|| PAUSE</button>
-    </div>
-
     <div id="bs-pause-menu" class="game-screen">
-        <h2 class="game-h1" style="font-size:2rem; color:#0ff;">BALIK KE MENU</h2>
-        <button class="game-btn" style="border-color:#0ff; color:#0ff;" onclick="playSFX(sfxClick); gameState='PLAYING_BEATSTREET'; showScreen(null)">Gass Lagi</button>
-        <button class="game-btn" onclick="playSFX(sfxClick); quitBeatStreet()">Berhenti</button>
+        <h2 class="game-h1" style="font-size:2rem;">PIT STOP</h2>
+        <button class="game-btn" onclick="playSFX(sfxClick); resumeBeatStreet()">Gass Lagi</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); quitBeatStreet()">Berhenti & Menu</button>
     </div>
 
     <div id="bs-game-over" class="game-screen">
-        <div class="overlay-box" style="border-color:#f00;">
-            <h1 class="game-h1" style="font-size:2rem; color:#f00;">CRASHED!</h1>
+        <div class="overlay-box">
+            <h1 id="bs-gameover-title" class="game-h1" style="font-size:2rem;">CRASHED! GOBLOK</h1>
             <p style="font-size: 16px; margin-top:15px; color:#fff;">Jarak Tempuh: <b id="bs-final-score">0</b> M</p>
-            <button class="game-btn" style="width: 100%; margin-top: 20px; border-color:#0ff; color:#0ff;" onclick="playSFX(sfxClick); initBeatStreet()">Main Lagi</button>
-            <button class="game-btn" style="width: 100%; border-color:#555; color:#888;" onclick="playSFX(sfxClick); quitBeatStreet()">Menu Utama</button>
+            <p id="new-hs-msg-bs" style="display: none; color: #fff; font-weight: bold; border-top: 1px dashed #fff; padding-top:15px; margin-bottom: 10px;">REKOR BARU DISIMPAN!</p>
+            <button class="game-btn" style="width: 100%; margin-top: 20px;" onclick="playSFX(sfxClick); checkAndStartBeatStreet()">Mulai Ulang</button>
+            <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); quitBeatStreet()">Menu Utama</button>
         </div>
     </div>
   </div>
@@ -502,18 +537,40 @@
     const sfxGameOver = new Audio('gameover.mp3');
     const sfxScore = new Audio('score.mp3');
     
+    // Custom Audio Beat Street
+    const sfxCrash = new Audio('crash.mp3');
+    const sfxFuel = new Audio('fuel.mp3');
+    const sfxMotor = new Audio('motor.mp3'); 
+    const sfxNgebut = new Audio('ngebut.mp3'); 
+    const sfxTopScore = new Audio('topscore.mp3'); 
+    let bsMotorSoundPlaying = false;
+
     function playSFX(audioObj) {
-        if(isAudioEnabled) {
+        if(isAudioEnabled && audioObj) {
             let a = audioObj.cloneNode();
             a.volume = 0.5;
             a.play().catch(err => {});
         }
     }
 
-    // ====== ASSETS PESAWAT DENGAN LOADER ======
+    function playMotorSound() {
+        if(!bsMotorSoundPlaying && isAudioEnabled) {
+            sfxMotor.currentTime = 0; sfxMotor.loop = true; sfxMotor.volume = 0.4;
+            sfxMotor.play().catch(e=>{}); bsMotorSoundPlaying = true;
+        }
+    }
+    function stopMotorSound() {
+        sfxMotor.pause(); bsMotorSoundPlaying = false;
+        if(typeof sfxNgebut !== 'undefined') { sfxNgebut.pause(); sfxNgebut.currentTime = 0; }
+    }
+
+    // ====== ASSETS LOADER ======
     const assets = {
         playerDef: new Image(), player50: new Image(), player99: new Image(),
-        enemy1: new Image(), enemy2: new Image(), boss: new Image()
+        enemy1: new Image(), enemy2: new Image(), boss: new Image(),
+        bsBg: new Image(),
+        motor_cyan: new Image(), motor_merah: new Image(), motor_hijau: new Image(), motor_kuning: new Image(), motor_ungu: new Image(),
+        bensin: new Image(), lubang: new Image(), cone: new Image()
     };
     assets.playerDef.src = 'player.png';
     assets.player50.src = 'player50.png';
@@ -521,6 +578,17 @@
     assets.enemy1.src = 'enemy1.png';
     assets.enemy2.src = 'enemy2.png';
     assets.boss.src = 'boss.png';
+    assets.bsBg.src = 'bs_latar.png'; 
+    
+    // Asset Beat Street Run
+    assets.motor_cyan.src = 'cyan.png';
+    assets.motor_merah.src = 'merah.png';
+    assets.motor_hijau.src = 'hijau.png';
+    assets.motor_kuning.src = 'kuning.png';
+    assets.motor_ungu.src = 'ungu.png';
+    assets.bensin.src = 'bensin.png';
+    assets.lubang.src = 'lubang.png';
+    assets.cone.src = 'cone.png';
 
     let assetsLoaded = 0;
     Object.values(assets).forEach(img => {
@@ -541,17 +609,22 @@
     setInterval(spawnSkull, 3000);
 
     const bgMusic = document.getElementById('bgmusic');
+    const gameBgm = document.getElementById('game-bgm');
+    const bsBgm = document.getElementById('bs-bgm');
 
     function playAudio() { 
-        if (bgMusic.paused && isAudioEnabled && document.getElementById('game-page').style.display !== 'block') {
-            bgMusic.play().catch(err => console.log("Menunggu interaksi...")); 
+        if (isAudioEnabled && document.getElementById('game-page').style.display !== 'block') {
+            if(bgMusic.paused) bgMusic.play().catch(err => {}); 
         }
     }
     window.addEventListener('click', playAudio); window.addEventListener('touchstart', playAudio);
 
     window.addEventListener('DOMContentLoaded', () => {
       let savedNick = localStorage.getItem('last_nickname_261');
-      if (savedNick) document.getElementById('pregame-name').value = savedNick;
+      if (savedNick) {
+          document.getElementById('pregame-name-galaxy').value = savedNick;
+          document.getElementById('pregame-name-bs').value = savedNick;
+      }
 
       setTimeout(() => {
         const intro = document.getElementById('intro');
@@ -584,7 +657,7 @@
         }
     };
 
-    // FUNGSI REACTION (LONG PRESS ONLY & ANTI-SCROLL)
+    // FUNGSI REACTION
     let activePostKey = null;
     let postPressTimer;
     let isScrolling = false;
@@ -596,17 +669,14 @@
         if(isScrolling) return;
         postPressTimer = setTimeout(() => {
             if(!isScrolling) showReactionMenu(key, event);
-        }, 500); // Tahan setengah detik buat memunculkan emoji
+        }, 500); 
     };
     
-    window.cancelPostPress = function() {
-        clearTimeout(postPressTimer);
-    };
+    window.cancelPostPress = function() { clearTimeout(postPressTimer); };
 
     function showReactionMenu(key, event) {
         activePostKey = key;
         let menu = document.getElementById('reaction-menu');
-        
         let x = event.touches ? event.touches[0].clientX : event.clientX;
         let y = event.touches ? event.touches[0].clientY : event.clientY;
 
@@ -626,39 +696,26 @@
         }
     });
 
-    // SISTEM TOGGLE REACTION
     window.submitReaction = function(emoji) {
         if (!activePostKey) return;
-        
         let lsKey = `react_${activePostKey}_${emoji}`;
         let reactRef = database.ref(`forum_posts/${activePostKey}/reactions/${emoji}`);
 
         if (localStorage.getItem(lsKey)) {
-            // Un-React
-            reactRef.transaction((currentVotes) => {
-                return Math.max(0, (currentVotes || 0) - 1);
-            });
+            reactRef.transaction((currentVotes) => Math.max(0, (currentVotes || 0) - 1));
             localStorage.removeItem(lsKey);
         } else {
-            // React
-            reactRef.transaction((currentVotes) => {
-                return (currentVotes || 0) + 1;
-            });
+            reactRef.transaction((currentVotes) => (currentVotes || 0) + 1);
             localStorage.setItem(lsKey, 'true');
         }
-
         document.getElementById('reaction-menu').style.display = 'none';
     };
 
-    // FUNGSI SUBMIT POLLING
     window.votePoll = function(postKey, optKey) {
         if(localStorage.getItem('voted_' + postKey)) return; 
         localStorage.setItem('voted_' + postKey, 'true'); 
-        
         let optRef = database.ref(`forum_posts/${postKey}/poll/${optKey}/votes`);
-        optRef.transaction((currentVotes) => {
-            return (currentVotes || 0) + 1;
-        });
+        optRef.transaction((currentVotes) => (currentVotes || 0) + 1);
     };
 
     // RENDER FORUM
@@ -688,30 +745,18 @@
                 let totalVotes = 0;
                 let pollKeys = Object.keys(post.poll);
                 pollKeys.forEach(k => totalVotes += (post.poll[k].votes || 0));
-                
                 let hasVoted = localStorage.getItem('voted_' + post.key) === 'true';
 
-                pollHtml += `<div class="poll-wrapper">`;
-                pollHtml += `<div class="poll-header">📊 PILIH OPSI DI BAWAH:</div>`;
-
+                pollHtml += `<div class="poll-wrapper"><div class="poll-header">📊 PILIH OPSI DI BAWAH:</div>`;
                 pollKeys.forEach(k => {
                     let opt = post.poll[k];
                     let votes = opt.votes || 0;
                     let pct = totalVotes === 0 ? 0 : Math.round((votes / totalVotes) * 100);
                     
                     if (hasVoted) {
-                        pollHtml += `
-                        <div class="poll-result-bar">
-                            <div class="poll-progress" style="width: ${pct}%;"></div>
-                            <span style="font-weight:bold; z-index:2;">${opt.text}</span>
-                            <span style="z-index:2; font-size:11px; color:#888;">(${votes})</span>
-                        </div>`;
+                        pollHtml += `<div class="poll-result-bar"><div class="poll-progress" style="width: ${pct}%;"></div><span style="font-weight:bold; z-index:2;">${opt.text}</span><span style="z-index:2; font-size:11px; color:#888;">(${votes})</span></div>`;
                     } else {
-                        pollHtml += `
-                        <button class="poll-option-btn" onclick="votePoll('${post.key}', '${k}')">
-                            <div class="poll-radio"></div>
-                            ${opt.text}
-                        </button>`;
+                        pollHtml += `<button class="poll-option-btn" onclick="votePoll('${post.key}', '${k}')"><div class="poll-radio"></div>${opt.text}</button>`;
                     }
                 });
                 pollHtml += `</div>`;
@@ -720,21 +765,12 @@
             let reactHtml = '';
             if (post.reactions) {
                 for (let em in post.reactions) {
-                    if (post.reactions[em] > 0) {
-                        reactHtml += `<div class="react-badge" onclick="activePostKey='${post.key}'; submitReaction('${em}'); event.stopPropagation();">${em} ${post.reactions[em]}</div>`;
-                    }
+                    if (post.reactions[em] > 0) reactHtml += `<div class="react-badge" onclick="activePostKey='${post.key}'; submitReaction('${em}'); event.stopPropagation();">${em} ${post.reactions[em]}</div>`;
                 }
             }
 
             html += `
-            <div class="post-card" 
-                 onmousedown="startPostPress('${post.key}', event)" 
-                 onmouseup="cancelPostPress()" 
-                 onmouseleave="cancelPostPress()" 
-                 ontouchstart="startPostPress('${post.key}', event)" 
-                 ontouchend="cancelPostPress()"
-                 ontouchmove="cancelPostPress()">
-                 
+            <div class="post-card" onmousedown="startPostPress('${post.key}', event)" onmouseup="cancelPostPress()" onmouseleave="cancelPostPress()" ontouchstart="startPostPress('${post.key}', event)" ontouchend="cancelPostPress()" ontouchmove="cancelPostPress()">
                 <div style="display:flex; align-items:center; margin-bottom: 12px;">
                     <div style="width: 36px; height: 36px; border-radius: 50%; margin-right: 12px; display:flex; justify-content:center; align-items:center; background:#111; border: 1px solid #fff; color:#fff; font-family:'Share Tech Mono', monospace; font-weight:bold; font-size:12px;">261</div>
                     <div>
@@ -742,19 +778,14 @@
                         <div style="font-size: 10px; color: #888; font-family: 'Share Tech Mono', monospace; margin-top:2px;">${fullDateStr}</div>
                     </div>
                 </div>
-                
                 ${post.image ? `<img src="${post.image}" class="post-img">` : ''}
                 <div class="post-text">${post.content ? post.content : ''}</div>
                 ${pollHtml}
-                
                 <div class="post-actions">
                     <div class="reactions-display">${reactHtml}</div>
-                    <div style="display:flex; align-items:center; gap: 15px;">
-                        <button class="share-btn" onclick="sharePost('${(post.content || '').replace(/'/g, "\\'")}')" title="Share">SHARE</button>
-                    </div>
+                    <div style="display:flex; align-items:center; gap: 15px;"><button class="share-btn" onclick="sharePost('${(post.content || '').replace(/'/g, "\\'")}')" title="Share">SHARE</button></div>
                 </div>
-            </div>
-            `;
+            </div>`;
         });
 
         if(html === '') html = '<p style="text-align:center; color:#888; font-size:14px; margin-top:30px;">Belum ada transmisi.</p>';
@@ -795,37 +826,31 @@
     function closeIntelModal() { document.getElementById('intelModal').style.display = 'none'; }
     function handlePhotoClick(src) { if (isLongPress) return; openSingleModal(src); }
 
-    // ====== FUNGSI GAME ======
-    let gameDifficulty = 'EASY';
-    function toggleDifficulty() {
-        gameDifficulty = (gameDifficulty === 'EASY') ? 'HARD' : 'EASY';
-        let btn = document.getElementById('btn-difficulty');
-        btn.innerText = 'MODE: ' + gameDifficulty;
-        if(gameDifficulty === 'HARD') {
-            btn.style.borderColor = '#f00'; btn.style.color = '#f00';
-        } else {
-            btn.style.borderColor = '#0f0'; btn.style.color = '#0f0';
-        }
-    }
+
+    // ====== MANAJEMEN GAME UTAMA ======
+    let activeGame = 'MENU'; 
+    let gameState = 'MENU'; 
+    let frame = 0; let globalPlayerName = "PLAYER"; let isNandoAccount = false; 
 
     function openGameContainer() { 
         document.getElementById('web-container').style.display = 'none'; 
         document.getElementById('game-page').style.display = 'block'; 
         showScreen('game-selection-menu');
-        activeGame = 'MENU';
+        activeGame = 'MENU'; gameState = 'MENU';
         resize(); 
-        bgMusic.pause();
-        if(isAudioEnabled) {
-            let gameBgm = document.getElementById('game-bgm');
-            gameBgm.currentTime = 0;
-            gameBgm.play().catch(e=>console.log(e));
-        }
+        bgMusic.pause(); gameBgm.pause(); bsBgm.pause();
     }
+    
     function closeGameContainer() { 
         document.getElementById('game-page').style.display = 'none'; 
         document.getElementById('web-container').style.display = 'block'; 
-        document.getElementById('game-bgm').pause();
+        gameBgm.pause(); bsBgm.pause(); stopMotorSound();
         if(isAudioEnabled) bgMusic.play().catch(e=>console.log(e));
+    }
+
+    function showScreen(id) { 
+        document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active')); 
+        if(id) document.getElementById(id).classList.add('active'); 
     }
 
     const canvas = document.getElementById('gameCanvas');
@@ -835,621 +860,528 @@
     window.addEventListener('resize', resize);
     resize();
 
-    const leaderboardRef = database.ref('leaderboard_v3');
+    // ====== DATABASE LEADERBOARDS ======
+    const leaderboardGalRef = database.ref('leaderboard_v3');
+    const leaderboardBSRef = database.ref('leaderboard_bs');
     
-    leaderboardRef.child('NANDO').once('value').then((snapshot) => {
-        if (!snapshot.exists() || snapshot.val().score !== 1000000) { 
-            leaderboardRef.child('NANDO').set({ name: "NANDO", score: 1000000, level: 99 }); 
-        }
+    leaderboardGalRef.child('NANDO').once('value').then((snap) => { if (!snap.exists()) leaderboardGalRef.child('NANDO').set({ name: "NANDO", score: 1000000, level: 99 }); });
+    leaderboardBSRef.child('NANDO').once('value').then((snap) => { if (!snap.exists()) leaderboardBSRef.child('NANDO').set({ name: "NANDO", score: 999999 }); });
+
+    let lbDataGalaxy = [], lbDataBS = [];
+    
+    leaderboardGalRef.orderByChild('score').limitToLast(5).on('value', (snap) => {
+        let data = []; snap.forEach(c => { data.push({ id: c.key, ...c.val() }); }); lbDataGalaxy = data.reverse();
+        if(document.getElementById('leaderboard-menu-galaxy').classList.contains('active')) updateGalaxyLeaderboardUI();
     });
 
-    let leaderboardData = [];
-    leaderboardRef.orderByChild('score').limitToLast(5).on('value', (snapshot) => {
-        let data = [];
-        snapshot.forEach(childSnapshot => { data.push({ id: childSnapshot.key, ...childSnapshot.val() }); });
-        leaderboardData = data.reverse();
-        if(document.getElementById('leaderboard-menu').classList.contains('active')) { updateLeaderboardUI(); }
+    leaderboardBSRef.orderByChild('score').limitToLast(5).on('value', (snap) => {
+        let data = []; snap.forEach(c => { data.push({ id: c.key, ...c.val() }); }); lbDataBS = data.reverse();
+        if(document.getElementById('bs-leaderboard-menu').classList.contains('active')) updateBSLeaderboardUI();
     });
 
-    function getPlayerTitle(sc) {
-        if(sc < 5000) return "KROCO";
-        if(sc < 15000) return "MEMBER";
-        if(sc < 30000) return "ELITE";
-        return "LEGEND";
-    }
+    function getPlayerTitle(sc) { if(sc < 5000) return "KROCO"; if(sc < 15000) return "MEMBER"; if(sc < 30000) return "ELITE"; return "LEGEND"; }
 
-    function updateLeaderboardUI() {
+    function updateGalaxyLeaderboardUI() {
         let html = `<tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">SCORE</th></tr>`;
-        if (leaderboardData.length === 0) {
-             html += `<tr><td colspan="3" style="text-align:center;">Memuat data...</td></tr>`;
-        } else {
-             leaderboardData.forEach((entry, index) => {
-                let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-                let title = getPlayerTitle(entry.score);
-                html += `<tr><td>#${index + 1}</td><td>${medal}<b>${entry.name}</b> <span style="font-size:10px; color:#0f0;">[${title}]</span></td><td style="text-align:right;">${entry.score}</td></tr>`;
-            });
-        }
-        document.getElementById('lb-table').innerHTML = html;
+        if (lbDataGalaxy.length === 0) html += `<tr><td colspan="3" style="text-align:center;">Memuat data...</td></tr>`;
+        else lbDataGalaxy.forEach((e, i) => { let medal = i===0?"🥇 ":i===1?"🥈 ":i===2?"🥉 ":""; html += `<tr><td>#${i + 1}</td><td>${medal}<b>${e.name}</b> <span style="font-size:10px; color:#0f0;">[${getPlayerTitle(e.score)}]</span></td><td style="text-align:right;">${e.score}</td></tr>`; });
+        document.getElementById('lb-table-galaxy').innerHTML = html;
     }
 
+    function updateBSLeaderboardUI() {
+        let html = `<tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">JARAK (M)</th></tr>`;
+        if (lbDataBS.length === 0) html += `<tr><td colspan="3" style="text-align:center;">Memuat data...</td></tr>`;
+        else lbDataBS.forEach((e, i) => { let medal = i===0?"🥇 ":i===1?"🥈 ":i===2?"🥉 ":""; html += `<tr><td>#${i + 1}</td><td>${medal}<b>${e.name}</b></td><td style="text-align:right;">${e.score}</td></tr>`; });
+        document.getElementById('lb-table-bs').innerHTML = html;
+    }
+
+    // ====== PENGATURAN UMUM ======
     let gameConfig = { crt: true, autoFire: false, showHitbox: false, dmgText: true };
+    
     function updateSettings() {
         gameConfig.crt = document.getElementById('set-crt').checked; 
         gameConfig.autoFire = document.getElementById('set-autofire').checked; 
         gameConfig.showHitbox = document.getElementById('set-hitbox').checked; 
         gameConfig.dmgText = document.getElementById('set-dmgtext').checked;
-        
         isAudioEnabled = document.getElementById('set-audio').checked;
-        if (!isAudioEnabled) { 
-            bgMusic.pause(); 
-            document.getElementById('game-bgm').pause();
-        } else { 
-            if(document.getElementById('game-page').style.display === 'block') {
-                document.getElementById('game-bgm').play().catch(e=>console.log(e));
-            } else {
-                bgMusic.play().catch(e => console.log("Menunggu interaksi")); 
-            }
-        }
-
-        if(gameConfig.crt) document.getElementById('game-page').classList.add('crt'); else document.getElementById('game-page').classList.remove('crt');
-        if(gameConfig.autoFire) document.getElementById('fire-btn').style.opacity = '0.3'; else document.getElementById('fire-btn').style.opacity = '1';
+        applySettingsGlobal();
     }
 
-    let activeGame = 'MENU'; // 'MENU', 'GALAXY', 'BEATSTREET'
-    let gameState = 'MENU'; 
-    let player, enemies, enemyBullets, bullets, particles, gems, texts; 
-    let frame = 0, screenShake = 0, score = 0; let input = { x: 0, y: 0 }; 
-    let isShooting = false; let camX = 0, camY = 0; let globalPlayerName = "PLAYER";
-    let isNandoAccount = false; 
+    function updateSettingsBS() {
+        gameConfig.crt = document.getElementById('set-crt-bs').checked;
+        isAudioEnabled = document.getElementById('set-audio-bs').checked;
+        document.getElementById('set-crt').checked = gameConfig.crt;
+        document.getElementById('set-audio').checked = isAudioEnabled;
+        applySettingsGlobal();
+    }
 
-    const milestonesList = [5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
-    const milestoneMsgs = ["GILA LU SEPUH!", "MAKIN MENGGILA!", "ANJAY KELAS!", "AMPUN BANG JAGO!", "TEMBUSIN TERUS CIK!", "MENYALA ABANGKU!", "MODE DEWA ON!"];
-    let nextMilestoneIdx = 0;
-    let lastBossSpawnedLvl = 0;
+    function applySettingsGlobal() {
+        if (!isAudioEnabled) { 
+            bgMusic.pause(); gameBgm.pause(); bsBgm.pause(); stopMotorSound();
+        } else { 
+            if(document.getElementById('game-page').style.display === 'block') {
+                if(activeGame === 'GALAXY') gameBgm.play().catch(e=>{});
+                else if(activeGame === 'BEATSTREET') bsBgm.play().catch(e=>{});
+            } else { bgMusic.play().catch(e=>{}); }
+        }
+        if(gameConfig.crt) document.getElementById('game-page').classList.add('crt'); else document.getElementById('game-page').classList.remove('crt');
+    }
 
-    // VARIABEL BEAT STREET
-    let bsPlayer = {x: 0, y: 0, w: 40, h: 70, color: '#0ff'};
-    let bsObstacles = [];
-    let bsScore = 0;
-    let bsSpeed = 8;
-    let bsRoadLines = [];
-
-    function showScreen(id) { document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active')); if(id) document.getElementById(id).classList.add('active'); }
-
-    function checkAndStartGame() {
-        let nameInput = document.getElementById('pregame-name').value.trim().toUpperCase();
-        if(!nameInput) { alert("buat NICKNAME dulu sebelum bermain!"); return; }
-        
+    function checkNameAuth(inputId) {
+        let nameInput = document.getElementById(inputId).value.trim().toUpperCase();
+        if(!nameInput) { alert("Buat NICKNAME dulu sebelum bermain!"); return null; }
         localStorage.setItem('last_nickname_261', nameInput);
         let safeCheck = nameInput.replace(/[^A-Z0-9]/g, ''); 
         isNandoAccount = false;
 
         if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) {
             let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:");
-            if(pass === "parapetinggi261") {
-                isNandoAccount = true;
-                alert("ACCESS GRANTED: Selamat datang kembali, Tuan.");
-            } else {
-                alert("ACCESS DENIED: Lu bukan petinggi! Ganti nama woi."); 
-                return;
-            }
+            if(pass === "parapetinggi261") { isNandoAccount = true; alert("ACCESS GRANTED: Selamat datang kembali, Tuan."); } 
+            else { alert("ACCESS DENIED: Lu bukan petinggi! Ganti nama woi."); return null; }
         }
-        
-        globalPlayerName = nameInput; 
-        document.getElementById('ingame-name').innerText = globalPlayerName; 
+        return nameInput;
+    }
 
-        let btn = document.getElementById('btn-start-game');
-        let oriText = btn.innerText;
-        btn.innerText = "LOADING DATA..."; btn.disabled = true;
+    // ====== GALAXY SURVIVOR LOGIC ======
+    let gameDifficulty = 'EASY';
+    function toggleDifficulty() {
+        gameDifficulty = (gameDifficulty === 'EASY') ? 'HARD' : 'EASY';
+        let btn = document.getElementById('btn-difficulty-galaxy');
+        btn.innerText = 'MODE: ' + gameDifficulty;
+    }
+
+    let player, enemies, enemyBullets, bullets, particles, gems, texts; 
+    let screenShake = 0, score = 0; let input = { x: 0, y: 0 }; 
+    let isShooting = false; let camX = 0, camY = 0; 
+    let nextMilestoneIdx = 0; let lastBossSpawnedLvl = 0;
+    const milestonesList = [5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
+    const milestoneMsgs = ["GILA LU SEPUH!", "MAKIN MENGGILA!", "ANJAY KELAS!", "AMPUN BANG JAGO!", "TEMBUSIN TERUS CIK!", "MENYALA ABANGKU!", "MODE DEWA ON!"];
+
+    function checkAndStartGalaxy() {
+        let nName = checkNameAuth('pregame-name-galaxy'); if(!nName) return;
+        globalPlayerName = nName; document.getElementById('ingame-name-gal').innerText = globalPlayerName; 
+
+        let btn = document.getElementById('btn-start-game-galaxy');
+        let oriText = btn.innerText; btn.innerText = "LOADING DATA..."; btn.disabled = true;
 
         let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_');
-        leaderboardRef.child(safeName).once('value').then(snap => {
+        leaderboardGalRef.child(safeName).once('value').then(snap => {
             btn.innerText = oriText; btn.disabled = false;
             let data = snap.val();
-            
             if(data && data.score > 0 && !isNandoAccount) {
-                let lvl = data.level || 1;
-                let conf = confirm(`DATA DITEMUKAN!\n\nWelcome back ${globalPlayerName}!\nScore Tertinggi Lu: ${data.score}\nLevel Terakhir: ${lvl}\n\nMau lanjutin progress ini? \n(OK = Lanjut, CANCEL = Ngulang dari awal)`);
-                if(conf) { startWithProgress(lvl, data.score); } 
-                else { startWithProgress(1, 0); }
-            } else { 
-                startWithProgress(1, 0); 
-            }
-        }).catch(e => {
-            btn.innerText = oriText; btn.disabled = false;
-            startWithProgress(1, 0);
-        });
+                let conf = confirm(`DATA DITEMUKAN!\n\nWelcome back ${globalPlayerName}!\nScore Tertinggi Lu: ${data.score}\nLevel: ${data.level||1}\n\nMau lanjutin progress ini?`);
+                if(conf) startGalaxyWithProgress(data.level||1, data.score); else startGalaxyWithProgress(1, 0);
+            } else startGalaxyWithProgress(1, 0);
+        }).catch(e => { btn.innerText = oriText; btn.disabled = false; startGalaxyWithProgress(1, 0); });
     }
 
-    function startWithProgress(startLevel, startScore) {
-        initGame(); 
+    function startGalaxyWithProgress(startLevel, startScore) {
+        player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 20, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0, rainbow: false }; 
+        enemies = []; enemyBullets = []; bullets = []; particles = []; gems = []; texts = []; 
+        screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false; nextMilestoneIdx = 0; lastBossSpawnedLvl = 0;
         
         if(isNandoAccount) {
-            score = 1000000;
-            player.lvl = 99; // Bikin musuh super gila
-            player.maxHp = 999999; // HP God Mode
-            player.hp = 999999;
-            player.dmg = 50; 
-            player.fireRate = 5; 
-            player.speed = 8;
-            player.multi = 3;
-            document.getElementById('score-val').innerText = "1000000";
-            document.getElementById('lvl-val').innerText = "99";
-        } 
-        else if(startLevel > 1) {
-            player.lvl = startLevel;
-            score = startScore;
-            
-            player.maxHp = 100 + ((startLevel - 1) * 20);
-            player.hp = player.maxHp;
-            player.dmg = 1 + Math.floor(startLevel / 3);
-            player.fireRate = Math.max(4, 20 - Math.floor(startLevel / 2));
-            player.speed = 5 + (startLevel * 0.1);
-            player.multi = Math.min(5, 1 + Math.floor(startLevel / 5)); 
-            
-            let base = 10;
-            for(let i=1; i<startLevel; i++){ base = Math.floor(base * 1.5); }
-            player.nextXp = base;
-            
-            document.getElementById('score-val').innerText = score;
-            document.getElementById('lvl-val').innerText = player.lvl;
-            document.getElementById('hp-bar').style.width = '100%';
-
-            nextMilestoneIdx = milestonesList.findIndex(m => m > score);
-            if (nextMilestoneIdx === -1) nextMilestoneIdx = milestonesList.length;
-            lastBossSpawnedLvl = Math.floor(startLevel / 10) * 10;
+            score = 1000000; player.lvl = 99; player.maxHp = 999999; player.hp = 999999; player.dmg = 50; player.fireRate = 5; player.speed = 8; player.multi = 3;
+            document.getElementById('score-val').innerText = "1000000"; document.getElementById('lvl-val').innerText = "99";
+        } else if(startLevel > 1) {
+            player.lvl = startLevel; score = startScore;
+            player.maxHp = 100 + ((startLevel - 1) * 20); player.hp = player.maxHp; player.dmg = 1 + Math.floor(startLevel / 3);
+            player.fireRate = Math.max(4, 20 - Math.floor(startLevel / 2)); player.speed = 5 + (startLevel * 0.1); player.multi = Math.min(5, 1 + Math.floor(startLevel / 5)); 
+            let base = 10; for(let i=1; i<startLevel; i++) base = Math.floor(base * 1.5); player.nextXp = base;
+            document.getElementById('score-val').innerText = score; document.getElementById('lvl-val').innerText = player.lvl;
+            nextMilestoneIdx = milestonesList.findIndex(m => m > score); if (nextMilestoneIdx === -1) nextMilestoneIdx = milestonesList.length; lastBossSpawnedLvl = Math.floor(startLevel / 10) * 10;
         }
+        document.getElementById('hp-bar').style.width = '100%'; document.getElementById('xp-bar').style.width = '0%';
         
-        activeGame = 'GALAXY';
-        showScreen(null);
-        document.getElementById('game-ui').style.display = 'block';
-        gameState = 'PLAYING';
+        activeGame = 'GALAXY'; gameState = 'PLAYING_GALAXY';
+        showScreen(null); document.getElementById('game-ui').style.display = 'block'; frame=0;
+        
+        bsBgm.pause(); bgMusic.pause();
+        if(isAudioEnabled) { gameBgm.currentTime = 0; gameBgm.play().catch(e=>{}); }
     }
 
-    function pauseGame() { gameState = 'PAUSED'; document.getElementById('game-ui').style.display = 'none'; showScreen('pause-menu'); }
-    function resumeGame() { gameState = 'PLAYING'; showScreen(null); document.getElementById('game-ui').style.display = 'block'; }
-    
-    function quitGame() { 
-        gameState = 'MENU'; 
-        activeGame = 'MENU';
-        document.getElementById('game-ui').style.display = 'none'; 
-        ctx.clearRect(0,0,w,h); 
-        showScreen('game-selection-menu'); 
-    }
-
-    function quitBeatStreet() {
-        gameState = 'MENU'; 
-        activeGame = 'MENU';
-        document.getElementById('bs-ui').style.display = 'none'; 
-        ctx.clearRect(0,0,w,h); 
-        showScreen('game-selection-menu'); 
-    }
-
-    const joyArea = document.getElementById('joystick-area'); const joyKnob = document.getElementById('joystick-knob'); const fireBtn = document.getElementById('fire-btn');
-    let joyActive = false, joyCenter = { x: 0, y: 0 };
-    joyArea.addEventListener('touchstart', e => { joyActive = true; let rect = joyArea.getBoundingClientRect(); joyCenter = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 }; handleJoy(e.touches[0].clientX, e.touches[0].clientY); });
-    joyArea.addEventListener('touchmove', e => { if(joyActive) handleJoy(e.touches[0].clientX, e.touches[0].clientY); });
-    joyArea.addEventListener('touchend', () => { joyActive = false; input = {x:0, y:0}; joyKnob.style.transform = `translate(0px, 0px)`; });
-    function handleJoy(x, y) {
-        let dx = x - joyCenter.x, dy = y - joyCenter.y; let dist = Math.hypot(dx, dy), maxDist = 40;
-        if (dist > maxDist) { dx = (dx / dist) * maxDist; dy = (dy / dist) * maxDist; }
-        joyKnob.style.transform = `translate(${dx}px, ${dy}px)`; input.x = dx / maxDist; input.y = dy / maxDist;
-        if(input.x !== 0 || input.y !== 0) player.angle = Math.atan2(input.y, input.x);
-    }
-    fireBtn.addEventListener('touchstart', (e) => { e.preventDefault(); isShooting = true; }); fireBtn.addEventListener('touchend', (e) => { e.preventDefault(); isShooting = false; });
-    fireBtn.addEventListener('mousedown', () => isShooting = true); fireBtn.addEventListener('mouseup', () => isShooting = false); fireBtn.addEventListener('mouseleave', () => isShooting = false);
-
-    // KONTROL BEAT STREET RUN
-    canvas.addEventListener('touchmove', (e) => {
-        if(activeGame === 'BEATSTREET' && gameState === 'PLAYING_BEATSTREET') {
-            let touchX = e.touches[0].clientX;
-            bsPlayer.x = Math.max(10, Math.min(w - bsPlayer.w - 10, touchX - bsPlayer.w/2));
-        }
-    });
-
-    const upgradePool = [ { id: 'fireRate', name: 'FIRE RATE', desc: 'Senjata menembak lebih cepat' }, { id: 'damage', name: 'DAMAGE', desc: 'Daya hancur peluru meningkat' }, { id: 'multi', name: 'SPREAD', desc: 'Menambah jumlah proyektil tembakan' }, { id: 'speed', name: 'THRUSTER', desc: 'Kecepatan pesawat meningkat' }, { id: 'maxHp', name: 'HULL PLATING', desc: 'Meningkatkan maksimal HP' }, { id: 'magnet', name: 'MAGNETIC FIELD', desc: 'Memperluas jangkauan ambil EXP' } ];
+    function pauseGalaxy() { gameState = 'PAUSED'; document.getElementById('game-ui').style.display = 'none'; showScreen('pause-menu-galaxy'); }
+    function resumeGalaxy() { gameState = 'PLAYING_GALAXY'; showScreen(null); document.getElementById('game-ui').style.display = 'block'; }
+    function quitGalaxy() { gameState = 'MENU'; activeGame = 'MENU'; document.getElementById('game-ui').style.display = 'none'; ctx.clearRect(0,0,w,h); showScreen('main-menu-galaxy'); gameBgm.pause(); }
 
     class FloatingText { constructor(x, y, text) { this.x = x; this.y = y; this.text = text; this.life = 30; this.vy = -1; } update() { this.y += this.vy; this.life--; ctx.fillStyle = `rgba(255, 255, 255, ${this.life / 30})`; ctx.font = "bold 14px 'Courier New'"; ctx.fillText(this.text, this.x - 5, this.y); } }
-    
+    class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 12; this.vy = (Math.random() - 0.5) * 12; this.alpha = 1; this.size = Math.random() * 3 + 1; } update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.04; ctx.fillStyle = '#ffffff'; ctx.globalAlpha = this.alpha; ctx.fillRect(this.x, this.y, this.size, this.size); ctx.globalAlpha = 1; } }
+    class Bullet { constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.speed = 18; this.life = 60; } update() { this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - Math.cos(this.angle)*25, this.y - Math.sin(this.angle)*25); ctx.strokeStyle = player.rainbow ? `hsl(${Math.random()*360}, 100%, 50%)` : '#ffffff'; ctx.lineWidth = player.rainbow ? 5 : 3; ctx.stroke(); } }
+    class EnemyBullet { constructor(x, y, angle, isBoss) { let effLvl = player.lvl; let diffMult = gameDifficulty === 'HARD' ? 2 : 1; this.x = x; this.y = y; this.angle = angle; this.speed = isBoss ? (6 + Math.floor(effLvl/10)) : 4 + (effLvl * 0.05); this.life = 100; this.dmg = isBoss ? (15 * diffMult) : (5 + Math.floor(effLvl / 5)) * diffMult; this.isBoss = isBoss; } update() { this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; ctx.beginPath(); ctx.arc(this.x, this.y, this.isBoss ? 5 : 3, 0, Math.PI*2); ctx.fillStyle = '#ff0000'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.stroke(); } }
     class Enemy {
         constructor(isBoss = false) { 
-            this.isBoss = isBoss;
-            let diffMult = gameDifficulty === 'HARD' ? 2 : 1;
-            let speedMult = gameDifficulty === 'HARD' ? 1.5 : 1;
-
-            let effLvl = player.lvl; // Musuh ikut level player asli
-            let angle = Math.random() * Math.PI * 2; let spawnDist = Math.max(w, h) / 2 + 100; 
+            this.isBoss = isBoss; let diffMult = gameDifficulty === 'HARD' ? 2 : 1; let speedMult = gameDifficulty === 'HARD' ? 1.5 : 1; let effLvl = player.lvl; let angle = Math.random() * Math.PI * 2; let spawnDist = Math.max(w, h) / 2 + 100; 
             this.x = player.x + Math.cos(angle) * spawnDist; this.y = player.y + Math.sin(angle) * spawnDist; 
-            
-            this.img = Math.random() > 0.5 ? assets.enemy1 : assets.enemy2;
-            if(this.isBoss) this.img = assets.boss;
-
-            if (isBoss) {
-                this.r = 40 + (effLvl * 0.5);
-                this.hp = effLvl * 250 * diffMult + (frame/1000);
-                this.speed = (0.8 + (effLvl * 0.05)) * speedMult;
-                this.angle = 0;
-                this.spin = 0;
-            } else {
-                this.r = 16; 
-                this.hp = (1 + Math.floor(effLvl / 3) + Math.floor(frame/10000)) * diffMult; 
-                this.speed = (1.5 + (effLvl * 0.15) + (frame / 5000) + (Math.random() * 0.5)) * speedMult; 
-                this.angle = 0; 
-            }
+            this.img = Math.random() > 0.5 ? assets.enemy1 : assets.enemy2; if(this.isBoss) this.img = assets.boss;
+            if (isBoss) { this.r = 40 + (effLvl * 0.5); this.hp = effLvl * 250 * diffMult + (frame/1000); this.speed = (0.8 + (effLvl * 0.05)) * speedMult; this.angle = 0; this.spin = 0; } 
+            else { this.r = 16; this.hp = (1 + Math.floor(effLvl / 3) + Math.floor(frame/10000)) * diffMult; this.speed = (1.5 + (effLvl * 0.15) + (frame / 5000) + (Math.random() * 0.5)) * speedMult; this.angle = 0; }
         }
-        draw() { 
-            ctx.save(); ctx.translate(this.x, this.y); 
-            if (this.isBoss) {
-                this.spin += 0.05;
-                ctx.rotate(this.spin);
-                if(this.img.complete && this.img.naturalWidth !== 0) {
-                    ctx.drawImage(this.img, -this.r, -this.r, this.r*2, this.r*2);
-                } else {
-                    ctx.strokeStyle = '#fff'; ctx.lineWidth = 4;
-                    ctx.beginPath();
-                    let sides = 4 + (Math.floor(Math.random() * 3));
-                    for (let i=0; i<sides; i++) {
-                        ctx.lineTo(this.r * Math.cos(i * 2 * Math.PI / sides), this.r * Math.sin(i * 2 * Math.PI / sides));
-                    }
-                    ctx.closePath(); ctx.stroke();
-                    ctx.beginPath(); ctx.arc(0, 0, this.r/2, 0, Math.PI*2); ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fill();
-                }
-            } else {
-                ctx.rotate(this.angle + Math.PI/2); 
-                if(this.img.complete && this.img.naturalWidth !== 0) {
-                    ctx.drawImage(this.img, -this.r*1.5, -this.r*1.5, this.r*3, this.r*3);
-                } else {
-                    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(15, 15); ctx.lineTo(-15, 15); ctx.closePath(); ctx.stroke(); 
-                }
-            }
-            if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); } 
+        draw() { ctx.save(); ctx.translate(this.x, this.y); 
+            if (this.isBoss) { this.spin += 0.05; ctx.rotate(this.spin); if(this.img.complete && this.img.naturalWidth !== 0) ctx.drawImage(this.img, -this.r, -this.r, this.r*2, this.r*2); else { ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.beginPath(); let sides = 4 + (Math.floor(Math.random() * 3)); for (let i=0; i<sides; i++) ctx.lineTo(this.r * Math.cos(i * 2 * Math.PI / sides), this.r * Math.sin(i * 2 * Math.PI / sides)); ctx.closePath(); ctx.stroke(); } } 
+            else { ctx.rotate(this.angle + Math.PI/2); if(this.img.complete && this.img.naturalWidth !== 0) ctx.drawImage(this.img, -this.r*1.5, -this.r*1.5, this.r*3, this.r*3); else { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(15, 15); ctx.lineTo(-15, 15); ctx.closePath(); ctx.stroke(); } }
             ctx.restore(); 
         }
         update() { 
-            let effLvl = player.lvl;
-            this.angle = Math.atan2(player.y - this.y, player.x - this.x); 
-            this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
-            
+            let effLvl = player.lvl; this.angle = Math.atan2(player.y - this.y, player.x - this.x); this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; 
             let bossShootInterval = gameDifficulty === 'HARD' ? 30 : 45;
-            if (this.isBoss && frame % bossShootInterval === 0) {
-                playSFX(sfxEnemyShoot);
-                let bCount = 8 + Math.floor(effLvl / 10) * 2; 
-                if(gameDifficulty === 'HARD') bCount += 4;
-                for(let i=0; i<bCount; i++) {
-                    enemyBullets.push(new EnemyBullet(this.x, this.y, ((Math.PI * 2) / bCount) * i + this.spin, true));
-                }
-            } else if (!this.isBoss && effLvl > 3 && Math.random() < 0.003 + (effLvl * 0.0002)) {
-                playSFX(sfxEnemyShoot);
-                enemyBullets.push(new EnemyBullet(this.x, this.y, this.angle, false));
-            }
+            if (this.isBoss && frame % bossShootInterval === 0) { playSFX(sfxEnemyShoot); let bCount = 8 + Math.floor(effLvl / 10) * 2; if(gameDifficulty === 'HARD') bCount += 4; for(let i=0; i<bCount; i++) enemyBullets.push(new EnemyBullet(this.x, this.y, ((Math.PI * 2) / bCount) * i + this.spin, true)); } 
+            else if (!this.isBoss && effLvl > 3 && Math.random() < 0.003 + (effLvl * 0.0002)) { playSFX(sfxEnemyShoot); enemyBullets.push(new EnemyBullet(this.x, this.y, this.angle, false)); }
             this.draw(); 
         }
     }
 
-    class Bullet { 
-        constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.speed = 18; this.life = 60; } 
-        update() { 
-            this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--; 
-            ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - Math.cos(this.angle)*25, this.y - Math.sin(this.angle)*25); 
-            ctx.strokeStyle = player.rainbow ? `hsl(${Math.random()*360}, 100%, 50%)` : '#ffffff'; 
-            ctx.lineWidth = player.rainbow ? 5 : 3; 
-            ctx.stroke(); 
-        } 
-    }
+    const joyArea = document.getElementById('joystick-area'); const joyKnob = document.getElementById('joystick-knob'); const fireBtn = document.getElementById('fire-btn');
+    let joyActive = false, joyCenter = { x: 0, y: 0 };
+    joyArea.addEventListener('touchstart', e => { if(activeGame !== 'GALAXY') return; joyActive = true; let rect = joyArea.getBoundingClientRect(); joyCenter = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 }; handleJoy(e.touches[0].clientX, e.touches[0].clientY); });
+    joyArea.addEventListener('touchmove', e => { if(joyActive && activeGame === 'GALAXY') handleJoy(e.touches[0].clientX, e.touches[0].clientY); });
+    joyArea.addEventListener('touchend', () => { if(activeGame !== 'GALAXY') return; joyActive = false; input = {x:0, y:0}; joyKnob.style.transform = `translate(0px, 0px)`; });
+    function handleJoy(x, y) { let dx = x - joyCenter.x, dy = y - joyCenter.y; let dist = Math.hypot(dx, dy), maxDist = 40; if (dist > maxDist) { dx = (dx / dist) * maxDist; dy = (dy / dist) * maxDist; } joyKnob.style.transform = `translate(${dx}px, ${dy}px)`; input.x = dx / maxDist; input.y = dy / maxDist; if(input.x !== 0 || input.y !== 0) player.angle = Math.atan2(input.y, input.x); }
+    fireBtn.addEventListener('touchstart', (e) => { e.preventDefault(); if(activeGame==='GALAXY') isShooting = true; }); fireBtn.addEventListener('touchend', (e) => { e.preventDefault(); isShooting = false; });
+    fireBtn.addEventListener('mousedown', () => { if(activeGame==='GALAXY') isShooting = true; }); fireBtn.addEventListener('mouseup', () => isShooting = false);
 
-    class EnemyBullet {
-        constructor(x, y, angle, isBoss) {
-            let effLvl = player.lvl;
-            let diffMult = gameDifficulty === 'HARD' ? 2 : 1;
-            this.x = x; this.y = y; this.angle = angle;
-            this.speed = isBoss ? (6 + Math.floor(effLvl/10)) : 4 + (effLvl * 0.05);
-            this.life = 100;
-            this.dmg = isBoss ? (15 * diffMult) : (5 + Math.floor(effLvl / 5)) * diffMult;
-            this.isBoss = isBoss;
-        }
-        update() {
-            this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed; this.life--;
-            ctx.beginPath(); ctx.arc(this.x, this.y, this.isBoss ? 5 : 3, 0, Math.PI*2);
-            ctx.fillStyle = '#ff0000'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.stroke();
-        }
-    }
+    const upgradePool = [ { id: 'fireRate', name: 'FIRE RATE', desc: 'Senjata menembak lebih cepat' }, { id: 'damage', name: 'DAMAGE', desc: 'Daya hancur peluru meningkat' }, { id: 'multi', name: 'SPREAD', desc: 'Menambah jumlah proyektil tembakan' }, { id: 'speed', name: 'THRUSTER', desc: 'Kecepatan pesawat meningkat' }, { id: 'maxHp', name: 'HULL PLATING', desc: 'Meningkatkan HP' }, { id: 'magnet', name: 'MAGNET', desc: 'Jangkauan EXP' } ];
 
-    class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 12; this.vy = (Math.random() - 0.5) * 12; this.alpha = 1; this.size = Math.random() * 3 + 1; } update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.04; ctx.fillStyle = '#ffffff'; ctx.globalAlpha = this.alpha; ctx.fillRect(this.x, this.y, this.size, this.size); ctx.globalAlpha = 1; } }
+    function checkMilestone() { if (nextMilestoneIdx < milestonesList.length && score >= milestonesList[nextMilestoneIdx]) { let mBox = document.getElementById('milestone-msg'); mBox.innerHTML = `SCORE ${milestonesList[nextMilestoneIdx]}<br>${milestoneMsgs[Math.floor(Math.random() * milestoneMsgs.length)]}`; mBox.style.display = 'block'; playSFX(sfxScore); setTimeout(() => { mBox.style.display = 'none'; }, 3000); nextMilestoneIdx++; } }
+    function checkLevelUp() { if(isNandoAccount) return; document.getElementById('xp-bar').style.width = Math.min(100, (player.xp/player.nextXp * 100)) + '%'; if(player.xp >= player.nextXp) { player.xp = 0; player.nextXp = Math.floor(player.nextXp * 1.5); player.lvl++; triggerLevelUp(); } }
+    function triggerLevelUp() { gameState = 'LEVELUP'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('lvl-val').innerText = player.lvl; playSFX(sfxScore); let shuffled = [...upgradePool].sort(() => 0.5 - Math.random()); let choices = (Math.random() < 0.05 && !player.rainbow) ? [{ id: 'rainbow', name: 'RAINBOW DEATH', desc: 'MYTHIC GACHA! Tembakan brutal + EXP' }, ...shuffled.slice(0, 2)] : shuffled.slice(0, 3); let html = ''; choices.forEach(c => { let color = c.id === 'rainbow' ? 'background:linear-gradient(90deg, red, orange, yellow, green, blue, purple); color:#fff; border:2px solid #fff;' : ''; html += `<button class="game-btn" style="width: 100%; font-size: 14px; margin-bottom: 10px; padding: 10px; ${color}" onclick="applyUpgrade('${c.id}')"><b>${c.name}</b><br><span style="font-size:10px; text-transform:none; color:${c.id==='rainbow'?'#fff':'#ccc'};">${c.desc}</span></button>`; }); document.getElementById('upgrade-choices').innerHTML = html; showScreen('level-up-menu'); }
+    window.applyUpgrade = function(type) { playSFX(sfxClick); if(type === 'rainbow') player.rainbow = true; if(type === 'fireRate') player.fireRate = Math.max(4, player.fireRate - 3); if(type === 'damage') player.dmg += 1; if(type === 'multi') player.multi = Math.min(5, player.multi + 1); if(type === 'speed') player.speed += 1; if(type === 'maxHp') { player.maxHp += 20; player.hp += 20; } if(type === 'magnet') player.magnet += 60; player.hp = Math.min(player.maxHp, player.hp + 20); document.getElementById('hp-bar').style.width = (player.hp/player.maxHp * 100) + '%'; resumeGalaxy(); };
+    function saveGalHighScore() { if (isNandoAccount) return; let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_'); let pRef = leaderboardGalRef.child(safeName); pRef.once('value').then((snap) => { let ex = snap.val(); let isNew = false; if (!ex) { pRef.set({ name: globalPlayerName, score: score, level: player.lvl }); isNew = true; } else if (score > ex.score) { pRef.update({ score: score, level: player.lvl }); isNew = true; } if (isNew) document.getElementById('new-hs-msg-galaxy').style.display = 'block'; }); }
+    function gameOverGalaxy() { gameState = 'GAMEOVER_GALAXY'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('final-score').innerText = isNandoAccount ? "1000000 (LOCKED)" : score; document.getElementById('final-level').innerText = player.lvl; document.getElementById('new-hs-msg-galaxy').style.display = 'none'; saveGalHighScore(); showScreen('game-over-menu-galaxy'); playSFX(sfxGameOver); }
 
-    function initGame() { 
-        player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 20, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0, rainbow: false }; 
-        enemies = []; enemyBullets = []; bullets = []; particles = []; gems = []; texts = []; 
-        frame = 0; screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false; 
-        nextMilestoneIdx = 0; lastBossSpawnedLvl = 0;
-        document.getElementById('hp-bar').style.width = '100%'; document.getElementById('xp-bar').style.width = '0%'; document.getElementById('lvl-val').innerText = '1'; document.getElementById('score-val').innerText = '0'; 
-    }
-
-    function checkMilestone() {
-        if (nextMilestoneIdx < milestonesList.length && score >= milestonesList[nextMilestoneIdx]) {
-            let msg = milestoneMsgs[Math.floor(Math.random() * milestoneMsgs.length)];
-            let mBox = document.getElementById('milestone-msg');
-            mBox.innerHTML = `SCORE ${milestonesList[nextMilestoneIdx]}<br>${msg}`;
-            mBox.style.display = 'block';
-            playSFX(sfxScore);
-            setTimeout(() => { mBox.style.display = 'none'; }, 3000);
-            nextMilestoneIdx++;
-        }
-    }
-
-    function checkLevelUp() {
-        if(isNandoAccount) return; 
-        document.getElementById('xp-bar').style.width = Math.min(100, (player.xp/player.nextXp * 100)) + '%'; 
-        if(player.xp >= player.nextXp) { 
-            player.xp = 0; player.nextXp = Math.floor(player.nextXp * 1.5); player.lvl++; triggerLevelUp(); 
-        }
-    }
-
-    function triggerLevelUp() { 
-        gameState = 'LEVELUP'; document.getElementById('game-ui').style.display = 'none'; document.getElementById('lvl-val').innerText = player.lvl; 
-        playSFX(sfxScore);
-        let shuffled = [...upgradePool].sort(() => 0.5 - Math.random()); 
-        let choices;
-        
-        if (Math.random() < 0.05 && !player.rainbow) {
-            choices = [{ id: 'rainbow', name: 'RAINBOW DEATH', desc: 'MYTHIC GACHA! Tembakan warna-warni damage brutal + 1000 EXP' }, ...shuffled.slice(0, 2)];
-        } else {
-            choices = shuffled.slice(0, 3);
-        }
-
-        let html = ''; choices.forEach(c => { 
-            let color = c.id === 'rainbow' ? 'background:linear-gradient(90deg, red, orange, yellow, green, blue, purple); color:#fff; border:2px solid #fff;' : '';
-            html += `<button class="game-btn" style="width: 100%; font-size: 14px; margin-bottom: 10px; padding: 10px; ${color}" onclick="applyUpgrade('${c.id}')"><b>${c.name}</b><br><span style="font-size:10px; text-transform:none; color:${c.id==='rainbow'?'#fff':'#ccc'};">${c.desc}</span></button>`; 
-        }); 
-        document.getElementById('upgrade-choices').innerHTML = html; showScreen('level-up-menu'); 
-    }
-
-    window.applyUpgrade = function(type) { 
-        playSFX(sfxClick);
-        if(type === 'rainbow') player.rainbow = true;
-        if(type === 'fireRate') player.fireRate = Math.max(4, player.fireRate - 3); 
-        if(type === 'damage') player.dmg += 1; 
-        if(type === 'multi') player.multi = Math.min(5, player.multi + 1); 
-        if(type === 'speed') player.speed += 1; 
-        if(type === 'maxHp') { player.maxHp += 20; player.hp += 20; } 
-        if(type === 'magnet') player.magnet += 60; 
-        player.hp = Math.min(player.maxHp, player.hp + 20); document.getElementById('hp-bar').style.width = (player.hp/player.maxHp * 100) + '%'; resumeGame(); 
-    };
-
-    function saveHighScore() {
-        if (isNandoAccount) return; 
-
-        let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_');
-        let playerRef = leaderboardRef.child(safeName);
-        playerRef.once('value').then((snapshot) => {
-            let existingData = snapshot.val(); let isNewHigh = false;
-            if (!existingData) { playerRef.set({ name: globalPlayerName, score: score, level: player.lvl }); isNewHigh = true; } 
-            else if (score > existingData.score) { playerRef.update({ score: score, level: player.lvl }); isNewHigh = true; }
-            if (isNewHigh) { document.getElementById('new-hs-msg').style.display = 'block'; }
-        });
-    }
-
-    function checkGameOver() { 
-        gameState = 'GAMEOVER'; document.getElementById('game-ui').style.display = 'none'; 
-        document.getElementById('final-score').innerText = isNandoAccount ? "1000000 (LOCKED)" : score; 
-        document.getElementById('final-level').innerText = player.lvl; 
-        document.getElementById('new-hs-msg').style.display = 'none'; 
-        saveHighScore(); showScreen('game-over-menu'); 
-        
-        document.getElementById('game-bgm').pause();
-        playSFX(sfxGameOver);
-    }
-
-    function manualShoot() {
-        if(!isShooting && !gameConfig.autoFire) return; player.lastFire++;
-        if (player.lastFire >= player.fireRate) {
-            player.lastFire = 0; let angle = player.angle;
-            playSFX(sfxShoot); 
-            if(enemies.length > 0) {
-                let target = enemies[0], minDist = Infinity;
-                enemies.forEach(e => { let d = Math.hypot(e.x - player.x, e.y - player.y); if (d < minDist) { minDist = d; target = e; } });
-                if(minDist < Math.max(w, h)) { angle = Math.atan2(target.y - player.y, target.x - player.x); if(gameConfig.autoFire && input.x === 0 && input.y === 0) player.angle = angle; }
-            }
-            let spreadAmt = 0.15; let startAngle = angle - (Math.floor(player.multi/2) * spreadAmt); if(player.multi % 2 === 0) startAngle += spreadAmt/2;
-            for(let i=0; i<player.multi; i++) bullets.push(new Bullet(player.x, player.y, startAngle + (i * spreadAmt)));
-        }
-    }
-
-    function drawBackground() { ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; let size = 100; let startX = Math.floor(camX / size) * size; let startY = Math.floor(camY / size) * size; for(let i = startX; i < startX + w + size; i += size) { ctx.beginPath(); ctx.moveTo(i, camY); ctx.lineTo(i, camY + h); ctx.stroke(); } for(let j = startY; j < startY + h + size; j += size) { ctx.beginPath(); ctx.moveTo(camX, j); ctx.lineTo(camX + w, j); ctx.stroke(); } }
+    function drawGalBackground() { ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; let size = 100; let startX = Math.floor(camX / size) * size; let startY = Math.floor(camY / size) * size; for(let i = startX; i < startX + w + size; i += size) { ctx.beginPath(); ctx.moveTo(i, camY); ctx.lineTo(i, camY + h); ctx.stroke(); } for(let j = startY; j < startY + h + size; j += size) { ctx.beginPath(); ctx.moveTo(camX, j); ctx.lineTo(camX + w, j); ctx.stroke(); } }
 
     function loopGalaxy() {
         let scoreMult = gameDifficulty === 'HARD' ? 2 : 1;
-
-        if(frame % 60 === 0) { 
-            if(!isNandoAccount) {
-                score += (Math.floor(Math.random() * 3) + 1) * scoreMult; 
-                document.getElementById('score-val').innerText = score; 
-                checkMilestone(); 
-            } else {
-                document.getElementById('score-val').innerText = "1000000";
-            }
-        }
+        if(frame % 60 === 0) { if(!isNandoAccount) { score += (Math.floor(Math.random() * 3) + 1) * scoreMult; document.getElementById('score-val').innerText = score; checkMilestone(); } else document.getElementById('score-val').innerText = "1000000"; }
         player.x += input.x * player.speed; player.y += input.y * player.speed; camX = player.x - w/2; camY = player.y - h/2;
-        ctx.save();
-        if (screenShake > 0) { ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake); screenShake *= 0.8; if(screenShake < 0.5) screenShake = 0; }
-        ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h); ctx.translate(-camX, -camY); drawBackground();
+        ctx.save(); if (screenShake > 0) { ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake); screenShake *= 0.8; if(screenShake < 0.5) screenShake = 0; }
+        ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h); ctx.translate(-camX, -camY); drawGalBackground();
         
         ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle + Math.PI/2);
         if(player.hitFlash > 0) { ctx.globalAlpha = (Math.sin(frame) + 1) / 2; player.hitFlash--; }
-        
-        let pImg = assets.playerDef;
-        if(isNandoAccount || player.lvl >= 99) pImg = assets.player99;
-        else if(player.lvl >= 50) pImg = assets.player50;
-        
-        if(pImg.complete && pImg.naturalWidth !== 0) {
-            ctx.drawImage(pImg, -25, -25, 50, 50);
-        } else {
-            ctx.strokeStyle = '#ffffff'; ctx.fillStyle = '#000000'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(15, 15); ctx.lineTo(0, 5); ctx.lineTo(-15, 15); ctx.closePath(); ctx.fill(); ctx.stroke();
-        }
+        let pImg = assets.playerDef; if(isNandoAccount || player.lvl >= 99) pImg = assets.player99; else if(player.lvl >= 50) pImg = assets.player50;
+        if(pImg.complete && pImg.naturalWidth !== 0) ctx.drawImage(pImg, -25, -25, 50, 50); else { ctx.strokeStyle = '#fff'; ctx.fillStyle = '#000'; ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(15, 15); ctx.lineTo(0, 5); ctx.lineTo(-15, 15); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+        ctx.restore(); 
 
-        if(gameConfig.showHitbox) { ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI*2); ctx.strokeStyle='#ffffff'; ctx.setLineDash([5, 5]); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, player.magnet, 0, Math.PI*2); ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.stroke(); }
-        ctx.restore(); manualShoot();
+        if(!isShooting && !gameConfig.autoFire) {} else { player.lastFire++; if (player.lastFire >= player.fireRate) { player.lastFire = 0; let angle = player.angle; playSFX(sfxShoot); if(enemies.length > 0) { let target = enemies[0], minDist = Infinity; enemies.forEach(e => { let d = Math.hypot(e.x - player.x, e.y - player.y); if (d < minDist) { minDist = d; target = e; } }); if(minDist < Math.max(w, h)) { angle = Math.atan2(target.y - player.y, target.x - player.x); if(gameConfig.autoFire && input.x === 0 && input.y === 0) player.angle = angle; } } let spreadAmt = 0.15; let startAngle = angle - (Math.floor(player.multi/2) * spreadAmt); if(player.multi % 2 === 0) startAngle += spreadAmt/2; for(let i=0; i<player.multi; i++) bullets.push(new Bullet(player.x, player.y, startAngle + (i * spreadAmt))); } }
         
         let effLvl = player.lvl;
-        if (effLvl > 0 && effLvl % 10 === 0 && effLvl !== lastBossSpawnedLvl) {
-            enemies.push(new Enemy(true));
-            lastBossSpawnedLvl = effLvl;
-        }
-
+        if (effLvl > 0 && effLvl % 10 === 0 && effLvl !== lastBossSpawnedLvl) { enemies.push(new Enemy(true)); lastBossSpawnedLvl = effLvl; }
         let spawnRate = Math.max(gameDifficulty === 'HARD' ? 5 : 10, 80 - (effLvl * 2) - Math.floor(frame / (gameDifficulty === 'HARD' ? 300 : 600))); 
         if (frame % spawnRate === 0) enemies.push(new Enemy(false));
         particles.forEach((p, i) => { p.update(); if(p.alpha <= 0) particles.splice(i, 1); }); texts.forEach((t, i) => { t.update(); if(t.life <= 0) texts.splice(i, 1); });
         
-        enemyBullets.forEach((eb, i) => {
-            eb.update();
-            if (eb.life <= 0) enemyBullets.splice(i, 1);
-            if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.r + 5) {
-                player.hp -= eb.dmg; player.hitFlash = 10; screenShake = 5; 
-                if(isNandoAccount) player.hp = player.maxHp; 
-                document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%';
-                enemyBullets.splice(i, 1);
-                if (player.hp <= 0) checkGameOver();
-            }
-        });
-
-        bullets.forEach((b, i) => {
-            b.update(); if(b.life <= 0) bullets.splice(i, 1);
-            let currentDmg = player.rainbow ? player.dmg * 50 : player.dmg; 
-            enemies.forEach((e, ei) => {
-                if(Math.hypot(b.x - e.x, b.y - e.y) < e.r + 5) {
-                    e.hp -= currentDmg; bullets.splice(i, 1); if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, currentDmg)); for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y));
-                    if(e.hp <= 0) { 
-                        playSFX(sfxHit);
-                        if(e.isBoss) { 
-                            player.xp += 1500; checkLevelUp();
-                            if(!isNandoAccount) { score += 5000 * scoreMult; checkMilestone(); } 
-                        } 
-                        else { 
-                            if(player.rainbow) {
-                                player.xp += 1000; checkLevelUp(); 
-                            } else {
-                                gems.push({x: e.x, y: e.y}); 
-                            }
-                        }
-                        
-                        if(!isNandoAccount) { 
-                            score += 15 * scoreMult; 
-                            document.getElementById('score-val').innerText = score; 
-                            checkMilestone(); 
-                        } 
-                        for(let k=0; k<15; k++) particles.push(new Particle(e.x, e.y)); enemies.splice(ei, 1); screenShake = 3; 
-                    }
-                }
-            });
-        });
-        gems.forEach((g, i) => {
-            ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(g.x, g.y - 4); ctx.lineTo(g.x + 4, g.y); ctx.lineTo(g.x, g.y + 4); ctx.lineTo(g.x - 4, g.y); ctx.fill();
-            let d = Math.hypot(player.x - g.x, player.y - g.y);
-            if(d < player.magnet) { g.x += (player.x - g.x) * 0.1; g.y += (player.y - g.y) * 0.1; }
-            if(d < player.r + 5) { 
-                gems.splice(i, 1); 
-                player.xp++; 
-                if(!isNandoAccount) { score += 5 * scoreMult; document.getElementById('score-val').innerText = score; checkMilestone(); }
-                checkLevelUp();
-            }
-        });
-        enemies.forEach((e, i) => {
-            e.update(); if(Math.hypot(e.x - player.x, e.y - player.y) > Math.max(w, h) * 1.5) enemies.splice(i, 1);
-            if(Math.hypot(e.x - player.x, e.y - player.y) < e.r + player.r) { 
-                player.hp -= (e.isBoss ? 20 : 2); player.hitFlash = 10; screenShake = 5; 
-                if(isNandoAccount) player.hp = player.maxHp; 
-                document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; 
-                if(player.hp <= 0) checkGameOver(); 
-            }
-        });
+        enemyBullets.forEach((eb, i) => { eb.update(); if (eb.life <= 0) enemyBullets.splice(i, 1); if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.r + 5) { player.hp -= eb.dmg; player.hitFlash = 10; screenShake = 5; if(isNandoAccount) player.hp = player.maxHp; document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; enemyBullets.splice(i, 1); if (player.hp <= 0) gameOverGalaxy(); } });
+        bullets.forEach((b, i) => { b.update(); if(b.life <= 0) bullets.splice(i, 1); let currentDmg = player.rainbow ? player.dmg * 50 : player.dmg; enemies.forEach((e, ei) => { if(Math.hypot(b.x - e.x, b.y - e.y) < e.r + 5) { e.hp -= currentDmg; bullets.splice(i, 1); if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, currentDmg)); for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y)); if(e.hp <= 0) { playSFX(sfxHit); if(e.isBoss) { player.xp += 1500; checkLevelUp(); if(!isNandoAccount) { score += 5000 * scoreMult; checkMilestone(); } } else { if(player.rainbow) { player.xp += 1000; checkLevelUp(); } else { gems.push({x: e.x, y: e.y}); } } if(!isNandoAccount) { score += 15 * scoreMult; document.getElementById('score-val').innerText = score; checkMilestone(); } for(let k=0; k<15; k++) particles.push(new Particle(e.x, e.y)); enemies.splice(ei, 1); screenShake = 3; } } }); });
+        gems.forEach((g, i) => { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(g.x, g.y - 4); ctx.lineTo(g.x + 4, g.y); ctx.lineTo(g.x, g.y + 4); ctx.lineTo(g.x - 4, g.y); ctx.fill(); let d = Math.hypot(player.x - g.x, player.y - g.y); if(d < player.magnet) { g.x += (player.x - g.x) * 0.1; g.y += (player.y - g.y) * 0.1; } if(d < player.r + 5) { gems.splice(i, 1); player.xp++; if(!isNandoAccount) { score += 5 * scoreMult; document.getElementById('score-val').innerText = score; checkMilestone(); } checkLevelUp(); } });
+        enemies.forEach((e, i) => { e.update(); if(Math.hypot(e.x - player.x, e.y - player.y) > Math.max(w, h) * 1.5) enemies.splice(i, 1); if(Math.hypot(e.x - player.x, e.y - player.y) < e.r + player.r) { player.hp -= (e.isBoss ? 20 : 2); player.hitFlash = 10; screenShake = 5; if(isNandoAccount) player.hp = player.maxHp; document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; if(player.hp <= 0) gameOverGalaxy(); } });
         ctx.restore(); 
     }
 
-    // --- INISIALISASI BEAT STREET RUN ---
+
+    // ====== BEAT STREET RUN LOGIC ======
+    let bsPlayer = {x: 0, y: 0, w: 28, h: 60, colorKey: 'cyan'}; // Motor diperkecil proporsional
+    let bsObstacles = [];
+    let bsScore = 0; let bsSpeed = 6;
+    let bsBgY = 0; let bsFuel = 100; let bsIsWheelie = false;
+    let bsScreenShake = 0;
+    let bsParticles = [];
+    let bsFlash = 0;
+    
+    // Fitur Batas Jalan dari Gambar wmremove-transformed.png
+    // Gambar memiliki aspal di bagian kiri (sekitar 3% - 44% lebar layar). 
+    // Ini buat nyegah pemain keluar dari aspal dan mati konyol nabrak trotoar.
+    let roadBoundLeft = 0; let roadBoundRight = 0;
+
+    class BSParticle {
+        constructor(x, y, color, vx, vy, life) {
+            this.x = x; this.y = y; this.color = color;
+            this.vx = vx; this.vy = vy; this.life = life; this.maxLife = life;
+        }
+        update() {
+            this.x += this.vx; this.y += this.vy; this.life--;
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = Math.max(0, this.life / this.maxLife);
+            ctx.fillRect(this.x, this.y, 6, 6);
+            ctx.globalAlpha = 1;
+        }
+    }
+
+    function selectMotor(key, element) {
+        bsPlayer.colorKey = key;
+        document.querySelectorAll('.motor-option').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+    }
+
+    function getFallbackColor(key) {
+        const colors = { 'cyan':'#0ff', 'merah':'#f00', 'hijau':'#0f0', 'kuning':'#ffeb3b', 'ungu':'#f0f' };
+        return colors[key] || '#0ff';
+    }
+
+    function checkAndStartBeatStreet() {
+        let nName = checkNameAuth('pregame-name-bs'); if(!nName) return;
+        globalPlayerName = nName; document.getElementById('bs-ingame-name').innerText = globalPlayerName; 
+        initBeatStreet();
+    }
+
     function initBeatStreet() {
         activeGame = 'BEATSTREET';
-        bsPlayer.x = w/2 - bsPlayer.w/2;
-        bsPlayer.y = h - 120;
-        bsObstacles = [];
-        bsScore = 0;
-        bsSpeed = 8;
-        bsRoadLines = [0, 150, 300, 450, 600, 750, 900];
-        document.getElementById('bs-score').innerText = '0';
+        // UX Ditingkatkan: Batas area bermain khusus untuk bagian jalan di gambar (Kiri jalanan aspal aja)
+        roadBoundLeft = w * 0.03;  // Sedikit margin kiri dari tepi layar
+        roadBoundRight = w * 0.44; // Batas aspal sebelum masuk area trotoar pejalan kaki
+
+        bsPlayer.x = roadBoundLeft + ((roadBoundRight - roadBoundLeft) / 2) - (bsPlayer.w / 2);
+        bsPlayer.y = h - 150;
+        
+        bsObstacles = []; bsParticles = []; bsScore = 0; bsSpeed = 8; bsBgY = 0; bsFuel = 100; bsIsWheelie = false; bsScreenShake = 0; bsFlash = 0;
+        if(isNandoAccount) { bsSpeed = 15; bsScore = 999900; } 
+
+        document.getElementById('bs-score').innerText = bsScore;
+        document.getElementById('bs-fuel-bar').style.width = '100%';
+        document.getElementById('bs-fuel-bar').style.background = '#0f0';
         
         showScreen(null);
         document.getElementById('bs-ui').style.display = 'block';
         gameState = 'PLAYING_BEATSTREET';
+        frame = 0;
+        
+        bgMusic.pause();
+        if(isAudioEnabled) { bsBgm.currentTime = 0; bsBgm.play().catch(e=>{}); playMotorSound(); }
+    }
+
+    function pauseBeatStreet() { gameState = 'PAUSED'; document.getElementById('bs-ui').style.display = 'none'; showScreen('bs-pause-menu'); stopMotorSound(); }
+    function resumeBeatStreet() { gameState = 'PLAYING_BEATSTREET'; showScreen(null); document.getElementById('bs-ui').style.display = 'block'; playMotorSound(); }
+    function quitBeatStreet() { gameState = 'MENU'; activeGame = 'MENU'; document.getElementById('bs-ui').style.display = 'none'; ctx.clearRect(0,0,w,h); showScreen('bs-main-menu'); bsBgm.pause(); stopMotorSound(); }
+
+    function startWheelie() { 
+        if(gameState === 'PLAYING_BEATSTREET') { 
+            bsIsWheelie = true; 
+            if(isAudioEnabled) { 
+                sfxNgebut.currentTime = 0; sfxNgebut.loop = true; 
+                sfxNgebut.play().catch(e=>{}); 
+                sfxMotor.pause(); 
+            }
+        } 
+    }
+    function stopWheelie() { 
+        bsIsWheelie = false; 
+        if(isAudioEnabled) {
+            sfxNgebut.pause(); 
+            if(gameState === 'PLAYING_BEATSTREET') sfxMotor.play().catch(e=>{});
+        }
+    }
+
+    // Input Control Geser Layar
+    canvas.addEventListener('touchmove', (e) => {
+        if(activeGame === 'BEATSTREET' && gameState === 'PLAYING_BEATSTREET') {
+            let touchX = e.touches[0].clientX;
+            bsPlayer.x = Math.max(roadBoundLeft, Math.min(roadBoundRight - bsPlayer.w, touchX - bsPlayer.w/2));
+        }
+    }, {passive: false});
+
+    function saveBSHighScore() {
+        if (isNandoAccount) return; 
+        let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_');
+        let pRef = leaderboardBSRef.child(safeName);
+        pRef.once('value').then((snap) => {
+            let ex = snap.val(); let isNew = false;
+            if (!ex) { pRef.set({ name: globalPlayerName, score: bsScore }); isNew = true; } 
+            else if (bsScore > ex.score) { pRef.update({ score: bsScore }); isNew = true; }
+            if (isNew) {
+                document.getElementById('new-hs-msg-bs').style.display = 'block';
+                playSFX(sfxTopScore); // Bunyi saat topscore tercapai
+            }
+        });
+    }
+
+    function gameOverBeatStreet(reason = "CRASHED! GOBLOK") {
+        gameState = 'GAMEOVER_BEATSTREET';
+        stopMotorSound();
+        document.getElementById('bs-ui').style.display = 'none';
+        document.getElementById('bs-gameover-title').innerText = reason;
+        document.getElementById('bs-final-score').innerText = isNandoAccount ? "999999 (LOCKED)" : bsScore;
+        document.getElementById('new-hs-msg-bs').style.display = 'none';
+        saveBSHighScore();
+        showScreen('bs-game-over');
     }
 
     function loopBeatStreet() {
-        bsScore += Math.floor(bsSpeed / 5);
-        document.getElementById('bs-score').innerText = bsScore;
+        let currentSpeed = bsSpeed + (bsIsWheelie ? 8 : 0);
+        
+        // Logika Bensin
+        bsFuel -= (bsIsWheelie ? 0.35 : 0.08);
+        if(isNandoAccount) bsFuel = 100;
+        
+        let fBar = document.getElementById('bs-fuel-bar');
+        fBar.style.width = Math.max(0, bsFuel) + '%';
+        fBar.style.background = bsFuel > 30 ? '#0f0' : (bsFuel > 15 ? '#ffeb3b' : '#f00');
 
-        if (frame % 300 === 0) bsSpeed += 0.5; // Makin lama makin ngebut
-
-        // Jalan Aspal
-        ctx.fillStyle = '#0a0a0a'; 
-        ctx.fillRect(0, 0, w, h);
-
-        // Garis Jalan
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-        for (let i=0; i<bsRoadLines.length; i++) {
-            bsRoadLines[i] += bsSpeed;
-            if (bsRoadLines[i] > h) bsRoadLines[i] = -100;
-            ctx.fillRect(w/2 - 5, bsRoadLines[i], 10, 60);
+        if (bsFuel <= 0) {
+            playSFX(sfxGameOver);
+            gameOverBeatStreet("MOGOK! BENSIN ABIS");
+            return;
         }
 
-        // Spawn Rintangan (Mobil / Razia dll)
-        if (frame % Math.max(20, 70 - Math.floor(bsSpeed)) === 0) {
-            let obsW = 50 + Math.random() * 80;
-            let obsX = Math.random() * (w - obsW);
-            bsObstacles.push({x: obsX, y: -100, w: obsW, h: 40, passed: false});
+        // Score 
+        if(frame % 5 === 0) {
+            bsScore += Math.floor(currentSpeed / 5);
+            if(isNandoAccount) bsScore = 999999;
+            document.getElementById('bs-score').innerText = bsScore;
         }
 
-        // Update Rintangan & Tabrakan
+        if (frame % 300 === 0 && !isNandoAccount) bsSpeed += 0.5;
+
+        // --- RENDER AREA START ---
+        ctx.save();
+        if (bsScreenShake > 0) { 
+            ctx.translate((Math.random() - 0.5) * bsScreenShake, (Math.random() - 0.5) * bsScreenShake); 
+            bsScreenShake *= 0.8; 
+            if(bsScreenShake < 0.5) bsScreenShake = 0; 
+        }
+
+        // RENDER JALAN TANPA GRAYSCALE (Warna cerah sesuai asset aslinya, filter dibuang)
+        if (assets.bsBg.complete && assets.bsBg.naturalHeight > 0) {
+            let imgW = w;
+            let imgH = assets.bsBg.naturalHeight * (w / assets.bsBg.naturalWidth);
+            if (imgH < h) imgH = Math.max(h, imgH); 
+            ctx.drawImage(assets.bsBg, 0, bsBgY, imgW, imgH);
+            ctx.drawImage(assets.bsBg, 0, bsBgY - imgH, imgW, imgH);
+            bsBgY += currentSpeed;
+            if (bsBgY >= imgH) bsBgY = 0;
+        } else {
+            ctx.fillStyle = '#222'; ctx.fillRect(0, 0, w, h);
+            ctx.strokeStyle = '#fff'; ctx.lineWidth = 5; ctx.setLineDash([30, 30]);
+            ctx.beginPath(); ctx.moveTo(w/2, bsBgY - h); ctx.lineTo(w/2, h); ctx.stroke();
+            ctx.setLineDash([]);
+            bsBgY += currentSpeed; if(bsBgY > 60) bsBgY = 0;
+        }
+
+        // Spawn Rintangan (Diperkecil Proporsional)
+        if (frame % Math.max(25, 80 - Math.floor(bsSpeed)) === 0) {
+            let obsW = 20 + Math.random() * 15; 
+            let obsH = 20 + Math.random() * 15;
+            let obsX = roadBoundLeft + Math.random() * (roadBoundRight - roadBoundLeft - obsW);
+            let type = Math.random() > 0.5 ? 'pothole' : 'cone';
+            bsObstacles.push({x: obsX, y: -100, w: obsW, h: obsH, type: type});
+        }
+
+        // Spawn Bensin (Diperkecil Proporsional)
+        if (frame % 180 === 0) {
+            let obsX = roadBoundLeft + Math.random() * (roadBoundRight - roadBoundLeft - 20);
+            bsObstacles.push({x: obsX, y: -100, w: 18, h: 25, type: 'fuel'});
+        }
+
+        // Render Rintangan
         for (let i = bsObstacles.length - 1; i >= 0; i--) {
             let obs = bsObstacles[i];
-            obs.y += bsSpeed;
+            obs.y += currentSpeed;
             
-            ctx.fillStyle = '#ff003c';
-            ctx.shadowBlur = 15; ctx.shadowColor = '#ff003c';
-            ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
-            ctx.shadowBlur = 0; 
-            
-            if (bsPlayer.x < obs.x + obs.w && bsPlayer.x + bsPlayer.w > obs.x &&
-                bsPlayer.y < obs.y + obs.h && bsPlayer.y + bsPlayer.h > obs.y) {
-                gameState = 'GAMEOVER_BEATSTREET';
-                document.getElementById('bs-ui').style.display = 'none';
-                document.getElementById('bs-final-score').innerText = bsScore;
-                playSFX(sfxGameOver);
-                showScreen('bs-game-over');
+            if (obs.type === 'pothole') {
+                if (assets.lubang.complete && assets.lubang.naturalWidth > 0) {
+                    ctx.drawImage(assets.lubang, obs.x, obs.y, obs.w, obs.h);
+                } else {
+                    ctx.fillStyle = '#0a0a0a'; ctx.beginPath(); ctx.ellipse(obs.x + obs.w/2, obs.y + obs.h/2, obs.w/2, obs.h/2, 0, 0, Math.PI*2); ctx.fill();
+                }
+            } else if (obs.type === 'cone') {
+                if (assets.cone.complete && assets.cone.naturalWidth > 0) {
+                    ctx.drawImage(assets.cone, obs.x, obs.y, obs.w, obs.h);
+                } else {
+                    ctx.fillStyle = '#ff6a00'; ctx.beginPath(); ctx.moveTo(obs.x + obs.w/2, obs.y); ctx.lineTo(obs.x + obs.w, obs.y + obs.h); ctx.lineTo(obs.x, obs.y + obs.h); ctx.fill();
+                }
+            } else if (obs.type === 'fuel') {
+                if (assets.bensin.complete && assets.bensin.naturalWidth > 0) {
+                    ctx.drawImage(assets.bensin, obs.x, obs.y, obs.w, obs.h);
+                } else {
+                    ctx.fillStyle = '#ffeb3b'; ctx.fillRect(obs.x, obs.y + 5, obs.w, obs.h - 5); ctx.fillStyle = '#fff'; ctx.fillRect(obs.x + 3, obs.y, obs.w - 6, 5);
+                }
             }
 
-            if (obs.y > h) bsObstacles.splice(i, 1);
+            // Tabrakan Logic
+            // PERBAIKAN BUG UX: Hit Margin ditoleransi lebih baik (tidak mati jika tersenggol pixel ujung)
+            let hitMarginX = 6; 
+            let hitMarginY = 10; 
+
+            if (obs.type !== 'fuel') {
+                if (!isNandoAccount && 
+                    bsPlayer.x + hitMarginX < obs.x + obs.w && bsPlayer.x + bsPlayer.w - hitMarginX > obs.x &&
+                    bsPlayer.y + hitMarginY < obs.y + obs.h && bsPlayer.y + bsPlayer.h - hitMarginY > obs.y) {
+                    
+                    // TABRAKAN
+                    bsScreenShake = 30;
+                    bsFlash = 1.0;
+                    playSFX(sfxCrash);
+                    for(let k=0; k<40; k++) bsParticles.push(new BSParticle(bsPlayer.x + bsPlayer.w/2, bsPlayer.y + bsPlayer.h/2, '#f00', (Math.random()-0.5)*15, (Math.random()-0.5)*15, 40));
+                    
+                    setTimeout(() => { playSFX(sfxGameOver); gameOverBeatStreet(); }, 800); 
+                    gameState = 'GAMEOVER_ANIMATING'; 
+                }
+            } else if (obs.type === 'fuel') {
+                let fuelHitMargin = 0; 
+                if (bsPlayer.x + fuelHitMargin < obs.x + obs.w && bsPlayer.x + bsPlayer.w - fuelHitMargin > obs.x &&
+                    bsPlayer.y + fuelHitMargin < obs.y + obs.h && bsPlayer.y + bsPlayer.h - fuelHitMargin > obs.y) {
+                    
+                    bsFuel = Math.min(100, bsFuel + 35);
+                    playSFX(sfxFuel);
+                    bsFlash = 0.3; 
+                    for(let k=0; k<20; k++) bsParticles.push(new BSParticle(obs.x + obs.w/2, obs.y + obs.h/2, '#0f0', (Math.random()-0.5)*10, (Math.random()-0.5)*10, 25));
+                    
+                    bsObstacles.splice(i, 1);
+                }
+            }
+
+            if (obs.y > h && gameState === 'PLAYING_BEATSTREET') {
+                bsObstacles.splice(i, 1);
+            }
         }
 
-        // Gambar Player (Motor Kotak Neon)
-        ctx.fillStyle = bsPlayer.color;
-        ctx.shadowBlur = 20; ctx.shadowColor = bsPlayer.color;
-        ctx.fillRect(bsPlayer.x, bsPlayer.y, bsPlayer.w, bsPlayer.h);
-        
-        // Efek Lampu Motor
-        ctx.fillStyle = 'rgba(255, 255, 100, 0.15)';
-        ctx.shadowBlur = 0;
-        ctx.beginPath();
-        ctx.moveTo(bsPlayer.x + bsPlayer.w/2, bsPlayer.y);
-        ctx.lineTo(bsPlayer.x - 60, bsPlayer.y - 300);
-        ctx.lineTo(bsPlayer.x + bsPlayer.w + 60, bsPlayer.y - 300);
-        ctx.fill();
+        // Efek Wheelie / Standing (Partikel Api/Asap dari belakang motor)
+        if(bsIsWheelie && gameState === 'PLAYING_BEATSTREET') {
+            bsParticles.push(new BSParticle(bsPlayer.x + bsPlayer.w/2 + (Math.random()-0.5)*10, bsPlayer.y + bsPlayer.h - 10, '#0ff', (Math.random()-0.5)*3, currentSpeed * 0.6, 20));
+            bsParticles.push(new BSParticle(bsPlayer.x + bsPlayer.w/2 + (Math.random()-0.5)*5, bsPlayer.y + bsPlayer.h, '#fff', (Math.random()-0.5)*2, currentSpeed * 0.9, 15));
+        }
+
+        // Render Motor Player
+        if(gameState === 'PLAYING_BEATSTREET' || gameState === 'GAMEOVER_ANIMATING') {
+            let mImg = assets['motor_' + bsPlayer.colorKey];
+            if (mImg && mImg.complete && mImg.naturalWidth > 0) {
+                if(bsIsWheelie && gameState === 'PLAYING_BEATSTREET') {
+                    ctx.save();
+                    ctx.shadowBlur = 20; ctx.shadowColor = getFallbackColor(bsPlayer.colorKey);
+                    ctx.translate(bsPlayer.x + bsPlayer.w/2, bsPlayer.y + bsPlayer.h);
+                    ctx.scale(1.15, 1.15);
+                    ctx.drawImage(mImg, -bsPlayer.w/2, -bsPlayer.h - 15, bsPlayer.w, bsPlayer.h);
+                    ctx.restore();
+                } else {
+                    ctx.drawImage(mImg, bsPlayer.x, bsPlayer.y, bsPlayer.w, bsPlayer.h);
+                }
+            } else {
+                ctx.fillStyle = getFallbackColor(bsPlayer.colorKey);
+                ctx.shadowBlur = bsIsWheelie ? 20 : 10; ctx.shadowColor = ctx.fillStyle;
+                ctx.fillRect(bsPlayer.x, bsPlayer.y, bsPlayer.w, bsPlayer.h);
+            }
+        }
+
+        // Render Particles
+        bsParticles.forEach((p, i) => { p.update(); if(p.life <= 0) bsParticles.splice(i, 1); });
+
+        // Screen Flash Overlay (saat tabrakan / dapet bensin)
+        if(bsFlash > 0) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${bsFlash})`;
+            ctx.fillRect(0, 0, w, h);
+            bsFlash -= 0.05;
+        }
+
+        ctx.restore();
     }
 
-    // --- MASTER LOOP GAME ---
+    // ====== MASTER LOOP GAME ======
     function masterLoop() {
         requestAnimationFrame(masterLoop);
         
-        if (activeGame === 'GALAXY' && gameState === 'PLAYING') {
+        if (activeGame === 'GALAXY' && gameState === 'PLAYING_GALAXY') {
             frame++;
             loopGalaxy();
-        } else if (activeGame === 'BEATSTREET' && gameState === 'PLAYING_BEATSTREET') {
+        } else if (activeGame === 'BEATSTREET' && (gameState === 'PLAYING_BEATSTREET' || gameState === 'GAMEOVER_ANIMATING')) {
             frame++;
             loopBeatStreet();
         }
