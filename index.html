@@ -331,7 +331,7 @@
     <!-- MENU 261 ARCADE -->
     <div id="game-selection-menu" class="game-screen active">
         <h1 class="game-h1">261 ARCADE</h1>
-        <p class="game-subtitle">PILIH TRANSMISI SIMULASI</p>
+        <p class="game-subtitle">PILIH GAME</p>
         
         <div class="game-cards-container">
             <div class="game-card" onclick="playSFX(sfxClick); showScreen('main-menu-galaxy')">
@@ -462,7 +462,7 @@
         </div>
         <div id="bs-ingame-name">PLAYER</div>
 
-        <div class="bs-controls"><<< GESER KIRI / KANAN >>></div>
+        <div class="bs-controls"></div>
         
         <button style="position:absolute; top:20px; right:20px; background:#000; border:2px solid #fff; color:#fff; padding:8px 15px; font-family:'Share Tech Mono'; font-weight:bold; cursor: pointer; pointer-events:auto;" onclick="playSFX(sfxClick); pauseBeatStreet()">|| PAUSE</button>
 
@@ -1080,7 +1080,7 @@
 
 
     // ====== BEAT STREET RUN LOGIC ======
-    let bsPlayer = {x: 0, y: 0, w: 28, h: 60, colorKey: 'cyan'}; // Motor diperkecil proporsional
+    let bsPlayer = {x: 0, y: 0, w: 50, h: 100, colorKey: 'cyan'}; // Motor diperbesar dari 28x60
     let bsObstacles = [];
     let bsScore = 0; let bsSpeed = 6;
     let bsBgY = 0; let bsFuel = 100; let bsIsWheelie = false;
@@ -1256,19 +1256,19 @@
             bsBgY += currentSpeed; if(bsBgY > 60) bsBgY = 0;
         }
 
-        // Spawn Rintangan (Diperkecil Proporsional)
+        // Spawn Rintangan (Diperbesar sesuai request)
         if (frame % Math.max(25, 80 - Math.floor(bsSpeed)) === 0) {
-            let obsW = 20 + Math.random() * 15; 
-            let obsH = 20 + Math.random() * 15;
+            let obsW = 45 + Math.random() * 25; // Diperbesar dari 20
+            let obsH = 45 + Math.random() * 25; // Diperbesar dari 20
             let obsX = roadBoundLeft + Math.random() * (roadBoundRight - roadBoundLeft - obsW);
             let type = Math.random() > 0.5 ? 'pothole' : 'cone';
             bsObstacles.push({x: obsX, y: -100, w: obsW, h: obsH, type: type});
         }
 
-        // Spawn Bensin (Diperkecil Proporsional)
+        // Spawn Bensin (Diperbesar agar seimbang)
         if (frame % 180 === 0) {
             let obsX = roadBoundLeft + Math.random() * (roadBoundRight - roadBoundLeft - 20);
-            bsObstacles.push({x: obsX, y: -100, w: 18, h: 25, type: 'fuel'});
+            bsObstacles.push({x: obsX, y: -100, w: 35, h: 45, type: 'fuel'}); // Diperbesar dari 18x25
         }
 
         // Render Rintangan
