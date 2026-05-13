@@ -102,9 +102,17 @@
       .floating-game-btn { font-size: 12px; padding: 10px 15px; bottom: 20px; right: 20px; }
     }
 
+    /* FORUM CSS UPDATES */
     .post-card { background: rgba(15, 15, 15, 0.85); border-radius: 12px; padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.2); user-select: none; }
     .post-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); }
-    .post-text { color: #eee; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; font-family: 'Inter', sans-serif;}
+    
+    .post-text-content { color: #eee; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; font-family: 'Inter', sans-serif; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; transition: all 0.3s; }
+    .post-text-content.expanded { display: block; -webkit-line-clamp: unset; }
+    .read-more-btn { color: #00d2ff; cursor: pointer; font-size: 12px; margin-top: 8px; font-family: 'Share Tech Mono', monospace; font-weight: bold; letter-spacing: 1px; display: inline-block;}
+    .read-more-btn:active { transform: scale(0.95); }
+
+    .rainbow-check { background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 13px; font-weight: bold; margin-left: 3px;}
+
     .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 10px; }
     .reactions-display { display: flex; gap: 8px; flex-wrap: wrap; }
     .react-badge { background: #000; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #fff; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: 0.2s; }
@@ -312,7 +320,6 @@
     <div id="reaction-menu">
         <span onclick="submitReaction('👍')">👍</span>
         <span onclick="submitReaction('❤️')">❤️</span>
-        <span onclick="submitReaction('😂')">😂</span>
         <span onclick="submitReaction('😮')">😮</span>
         <span onclick="submitReaction('😢')">😢</span>
         <span onclick="submitReaction('🙏')">🙏</span>
@@ -615,6 +622,9 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     
+    // Global Storage For Posts Data
+    window.forumPostsData = {};
+
     let isAudioEnabled = true; 
     const sfxClick = new Audio('click.mp3'); const sfxShoot = new Audio('shoot.mp3'); const sfxEnemyShoot = new Audio('enemy.mp3');
     const sfxHit = new Audio('hit.mp3'); const sfxGameOver = new Audio('gameover.mp3'); const sfxScore = new Audio('score.mp3');
@@ -654,6 +664,10 @@
     const bgMusic = document.getElementById('bgmusic'); const gameBgm = document.getElementById('game-bgm'); const bsBgm = document.getElementById('bs-bgm');
     function playAudio() { if (isAudioEnabled && document.getElementById('game-page').style.display !== 'block') { if(bgMusic.paused) bgMusic.play().catch(err => {}); } }
     window.addEventListener('click', playAudio); window.addEventListener('touchstart', playAudio);
+
+    // Generate Device ID untuk anti-inject sederhana
+    let userDeviceId = localStorage.getItem('261_device_id');
+    if(!userDeviceId) { userDeviceId = 'dev_' + Math.random().toString(36).substr(2, 9); localStorage.setItem('261_device_id', userDeviceId); }
 
     window.addEventListener('DOMContentLoaded', () => {
       let savedNick = localStorage.getItem('last_nickname_261');
@@ -715,11 +729,48 @@
         } else { alert("Koin lu gak cukup!"); }
     }
 
-    window.sharePost = function(content) {
-        let textToShare = content ? (content.length > 40 ? content.substring(0, 40) + "..." : content) : "Info penting dari petinggi!";
-        let shareData = { title: '261 AREA UPDATE', text: `[Info 261 AREA] ${textToShare}\n\nVote/Cek selengkapnya di markas:`, url: window.location.href };
-        if (navigator.share) navigator.share(shareData).catch(console.error);
-        else { navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`); alert("Link disalin ke clipboard!"); }
+    // ====== FORUM SYSTEM UPDATE ======
+    
+    function formatPostText(rawText) {
+        if(!rawText) return '';
+        let div = document.createElement('div');
+        div.innerText = rawText; // Mencegah XSS
+        let escaped = div.innerHTML;
+        escaped = escaped.replace(/(#[a-zA-Z0-9_]+)/g, '<span style="color: #00d2ff; font-weight: bold;">$1</span>');
+        escaped = escaped.replace(/(@[a-zA-Z0-9_]+)/g, '<span style="color: #ffeb3b; font-weight: bold;">$1</span>');
+        return escaped;
+    }
+
+    window.toggleReadMore = function(key) {
+        let el = document.getElementById('text-content-' + key);
+        let btn = document.getElementById('btn-readmore-' + key);
+        if(el.classList.contains('expanded')) { el.classList.remove('expanded'); btn.innerText = 'LIHAT SELENGKAPNYA'; } 
+        else { el.classList.add('expanded'); btn.innerText = 'SEMBUNYIKAN'; }
+    };
+
+    window.sharePost = function(postKey) {
+        let post = window.forumPostsData[postKey];
+        if(!post) return;
+        
+        let shareText = '';
+        if(post.poll) {
+            shareText += `📊 *VOTING 261 AREA*\n\n${post.content ? post.content + '\n\n' : ''}Pilih opsi di bawah:\n`;
+            let num = 1;
+            for(let k in post.poll) {
+                shareText += `${num}️⃣ ${post.poll[k].text}\n`;
+                num++;
+            }
+            shareText += `\nVote langsung di markas:\n`;
+        } else {
+            let shortContent = post.content ? (post.content.length > 60 ? post.content.substring(0, 60) + "..." : post.content) : "Info penting!";
+            shareText += `[Info 261 AREA] ${shortContent}\n\nCek selengkapnya di markas:\n`;
+        }
+        
+        let shareUrl = window.location.href.split('?')[0] + "?post=" + postKey;
+        let shareData = { title: '261 AREA UPDATE', text: shareText, url: shareUrl };
+        
+        if (navigator.share) { navigator.share(shareData).catch(console.error); } 
+        else { navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`); alert("Link & Detail disalin ke clipboard!"); }
     };
 
     let activePostKey = null; let postPressTimer; let isScrolling = false;
@@ -745,18 +796,32 @@
     };
 
     window.votePoll = function(postKey, optKey) {
-        if(localStorage.getItem('voted_' + postKey)) return; 
-        localStorage.setItem('voted_' + postKey, 'true'); 
-        let optRef = database.ref(`forum_posts/${postKey}/poll/${optKey}/votes`); optRef.transaction((currentVotes) => (currentVotes || 0) + 1);
+        if(localStorage.getItem('voted_' + postKey)) { alert("Gagal: Sistem mendeteksi lu udah pernah vote!"); return; } 
+        
+        let optRef = database.ref(`forum_posts/${postKey}/poll/${optKey}/votes`); 
+        
+        // Transaksi anti-inject basic
+        optRef.transaction((currentVotes) => {
+            return (currentVotes || 0) + 1;
+        }, (error, committed, snapshot) => {
+            if (error) { alert("Gagal memproses vote! Sistem mendeteksi anomali."); } 
+            else if (!committed) { alert("Vote ditolak server."); } 
+            else { localStorage.setItem('voted_' + postKey, 'true'); }
+        });
     };
 
     const forumRef = database.ref('forum_posts');
     forumRef.on('value', (snapshot) => {
         let html = ''; const now = Date.now(); const maxAge = 30 * 24 * 60 * 60 * 1000; 
         let postsArray = [];
+        window.forumPostsData = {}; // Clear cache
+
         snapshot.forEach(child => {
             let post = child.val(); let key = child.key;
-            if (now - post.timestamp > maxAge) { database.ref('forum_posts/' + key).remove(); } else { postsArray.push({ key: key, ...post }); }
+            if (now - post.timestamp > maxAge) { database.ref('forum_posts/' + key).remove(); } else { 
+                postsArray.push({ key: key, ...post }); 
+                window.forumPostsData[key] = post; // Save to global
+            }
         });
         postsArray.sort((a, b) => b.timestamp - a.timestamp);
 
@@ -780,6 +845,10 @@
             let reactHtml = '';
             if (post.reactions) { for (let em in post.reactions) { if (post.reactions[em] > 0) reactHtml += `<div class="react-badge" onclick="activePostKey='${post.key}'; submitReaction('${em}'); event.stopPropagation();">${em} ${post.reactions[em]}</div>`; } }
 
+            let rawContent = post.content || '';
+            let needsReadMore = rawContent.length > 200 || (rawContent.match(/\n/g) || []).length > 3;
+            let formattedText = formatPostText(rawContent);
+
             html += `
             <div class="post-card" onmousedown="startPostPress('${post.key}', event)" onmouseup="cancelPostPress()" onmouseleave="cancelPostPress()" ontouchstart="startPostPress('${post.key}', event)" ontouchend="cancelPostPress()" ontouchmove="cancelPostPress()">
                 <div style="display:flex; align-items:center; margin-bottom: 12px;">
@@ -787,9 +856,12 @@
                     <div><div style="font-size: 14px; font-weight: bold; color: #fff; font-family: 'Share Tech Mono', monospace;">Petinggi 261 <span style="color: #0f0; font-size: 13px;">✔</span></div><div style="font-size: 10px; color: #888; font-family: 'Share Tech Mono', monospace; margin-top:2px;">${fullDateStr}</div></div>
                 </div>
                 ${post.image ? `<img src="${post.image}" class="post-img">` : ''}
-                <div class="post-text">${post.content ? post.content : ''}</div>
+                
+                <div class="post-text-content" id="text-content-${post.key}">${formattedText}</div>
+                ${needsReadMore ? `<div class="read-more-btn" id="btn-readmore-${post.key}" onclick="toggleReadMore('${post.key}')">LIHAT SELENGKAPNYA</div>` : ''}
+                
                 ${pollHtml}
-                <div class="post-actions"><div class="reactions-display">${reactHtml}</div><div style="display:flex; align-items:center; gap: 15px;"><button class="share-btn" onclick="sharePost('${(post.content || '').replace(/'/g, "\\'")}')" title="Share">SHARE</button></div></div>
+                <div class="post-actions"><div class="reactions-display">${reactHtml}</div><div style="display:flex; align-items:center; gap: 15px;"><button class="share-btn" onclick="sharePost('${post.key}')" title="Share">SHARE</button></div></div>
             </div>`;
         });
         if(html === '') html = '<p style="text-align:center; color:#888; font-size:14px; margin-top:30px;">Belum ada transmisi.</p>';
@@ -1093,7 +1165,6 @@
     function initBeatStreet() {
         activeGame = 'BEATSTREET'; 
         
-        // JALAN DIPERKECIL
         let maxRoadW = 450;
         let rW = Math.min(w * 0.6, maxRoadW);
         roadBoundLeft = (w - rW) / 2 + 10;
