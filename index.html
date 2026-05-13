@@ -223,6 +223,18 @@
     .data-table th { border-bottom: 1px solid #fff; padding-bottom: 5px; }
     .data-table td { padding: 5px 0; font-size: 14px;}
     .setting-row { display: flex; justify-content: space-between; margin-top: 15px; font-size: 14px; align-items: center; text-align: left; }
+
+    /* ARCADE MENU & BEAT STREET UI */
+    .game-cards-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    .game-card { background: rgba(15, 15, 15, 0.9); border: 2px solid #fff; width: 160px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 5px 5px 0px rgba(255, 255, 255, 0.5); }
+    .game-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0px #fff; background: #111; }
+    .game-card:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #fff; }
+    .game-icon { font-size: 50px; margin-bottom: 15px; display: block; }
+    .game-card-title { font-family: 'Share Tech Mono', monospace; font-weight: bold; font-size: 14px; color: #fff; letter-spacing: 1px; }
+    .game-card-status { font-size: 10px; color: #0f0; margin-top: 8px; }
+    #bs-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; display: none; }
+    .bs-score-box { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); border: 2px solid #0ff; padding: 10px 20px; color: #0ff; font-weight: bold; font-size: 20px; text-shadow: 0 0 10px #0ff; font-family: 'Share Tech Mono', monospace;}
+    .bs-controls { position: absolute; bottom: 30px; width: 100%; text-align: center; color: rgba(255,255,255,0.5); font-size: 12px; pointer-events: none; font-family: 'Share Tech Mono', monospace;}
   </style>
 </head>
 <body oncontextmenu="return false;">
@@ -347,20 +359,37 @@
   <div id="game-page" class="crt">
     <canvas id="gameCanvas"></canvas>
 
-    <div id="main-menu" class="game-screen active">
-        <h1 class="game-h1">GALAXY<br>SURVIVOR</h1>
+    <!-- 261 ARCADE MENU -->
+    <div id="game-selection-menu" class="game-screen active">
+        <h1 class="game-h1">261 ARCADE</h1>
+        <p class="game-subtitle">PILIH GAME UNTUK DIMAINKAN</p>
         
-        <!-- PEMBERITAHUAN GAME BARU -->
-        <div style="margin-bottom: 20px; font-family: 'Share Tech Mono', monospace; font-size: 12px; color: #ffeb3b; letter-spacing: 2px; text-align: center; animation: pulseText 1.5s infinite;">
-            🚀 COMING SOON: AKAN RILIS GAME BEAT STREET RUN
+        <div class="game-cards-container">
+            <div class="game-card" onclick="playSFX(sfxClick); showScreen('main-menu')">
+                <span class="game-icon">🚀</span>
+                <div class="game-card-title">GALAXY<br>SURVIVOR</div>
+                <div class="game-card-status">ONLINE</div>
+            </div>
+
+            <div class="game-card" style="border-color: #0ff; box-shadow: 5px 5px 0px #0ff;" onclick="playSFX(sfxClick); initBeatStreet()">
+                <span class="game-icon">🏍️</span>
+                <div class="game-card-title">BEAT STREET<br>RUN</div>
+                <div class="game-card-status" style="color: #0ff;">PROTOTYPE TEST</div>
+            </div>
         </div>
 
+        <button class="game-btn" onclick="playSFX(sfxClick); closeGameContainer()" style="margin-top: 40px; border-color: #555; color: #888;">Kembali ke Base</button>
+    </div>
+
+    <div id="main-menu" class="game-screen">
+        <h1 class="game-h1">GALAXY<br>SURVIVOR</h1>
+        
         <input type="text" id="pregame-name" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="12">
         <button id="btn-difficulty" class="game-btn" onclick="playSFX(sfxClick); toggleDifficulty()" style="border-color: #0f0; color: #0f0;">MODE: EASY</button>
         <button id="btn-start-game" class="game-btn" onclick="playSFX(sfxClick); checkAndStartGame()">Mulai Game</button>
         <button class="game-btn" onclick="playSFX(sfxClick); showScreen('leaderboard-menu'); updateLeaderboardUI();">Leaderboard</button>
         <button class="game-btn" onclick="playSFX(sfxClick); showScreen('settings-menu')">Pengaturan</button>
-        <button class="game-btn" onclick="playSFX(sfxClick); closeGameContainer()" style="border-color: #555; color: #888;">Keluar Web</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('game-selection-menu')" style="border-color: #555; color: #888;">Ganti Game</button>
         <div class="game-credit">Created: <a href="https://t.me/antidogma14" target="_blank">Klik Disini</a></div>
     </div>
 
@@ -392,7 +421,7 @@
             <div class="stat-block"><div class="stat-text">NYAWA</div><div class="bar-bg"><div id="hp-bar"></div></div></div>
             <div id="center-ui">
                 <div id="ingame-name" style="color: #fff; font-weight: bold; font-size: 16px; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px #fff, 0 0 10px #fff;">PLAYER</div>
-                <button id="pause-btn" style="background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-weight: bold; cursor: pointer; pointer-events: auto;" onclick="playSFX(sfxClick); pauseGame()">STOP</button>
+                <button id="pause-btn" style="background: #000; border: 2px solid #fff; color: #fff; padding: 6px 20px; font-size: 14px; font-family: 'Courier New', Courier, monospace; font-weight: bold; cursor: pointer; pointer-events: auto;" onclick="playSFX(sfxClick); pauseGame()">STOP</button>
             </div>
             <div class="stat-block" style="text-align: right;"><div class="stat-text">LEVEL <span id="lvl-val">1</span> | SCORE: <span id="score-val">0</span></div><div class="bar-bg" style="transform: scaleX(-1);"><div id="xp-bar"></div></div></div>
         </div>
@@ -424,6 +453,28 @@
                 <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); checkAndStartGame()">Main Lagi</button>
                 <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); quitGame()">Menu Utama</button>
             </div>
+        </div>
+    </div>
+
+    <!-- UI BEAT STREET RUN -->
+    <div id="bs-ui">
+        <div class="bs-score-box">SCORE: <span id="bs-score">0</span></div>
+        <div class="bs-controls"></div>
+        <button style="position:absolute; top:20px; right:20px; background:#000; border:2px solid #0ff; color:#0ff; padding:5px 10px; font-family:'Share Tech Mono'; pointer-events:auto;" onclick="playSFX(sfxClick); gameState='PAUSED'; showScreen('bs-pause-menu')">|| PAUSE</button>
+    </div>
+
+    <div id="bs-pause-menu" class="game-screen">
+        <h2 class="game-h1" style="font-size:2rem; color:#0ff;">BALIK KE MENU</h2>
+        <button class="game-btn" style="border-color:#0ff; color:#0ff;" onclick="playSFX(sfxClick); gameState='PLAYING_BEATSTREET'; showScreen(null)">Gass Lagi</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); quitBeatStreet()">Berhenti</button>
+    </div>
+
+    <div id="bs-game-over" class="game-screen">
+        <div class="overlay-box" style="border-color:#f00;">
+            <h1 class="game-h1" style="font-size:2rem; color:#f00;">CRASHED!</h1>
+            <p style="font-size: 16px; margin-top:15px; color:#fff;">Jarak Tempuh: <b id="bs-final-score">0</b> M</p>
+            <button class="game-btn" style="width: 100%; margin-top: 20px; border-color:#0ff; color:#0ff;" onclick="playSFX(sfxClick); initBeatStreet()">Main Lagi</button>
+            <button class="game-btn" style="width: 100%; border-color:#555; color:#888;" onclick="playSFX(sfxClick); quitBeatStreet()">Menu Utama</button>
         </div>
     </div>
   </div>
@@ -760,6 +811,8 @@
     function openGameContainer() { 
         document.getElementById('web-container').style.display = 'none'; 
         document.getElementById('game-page').style.display = 'block'; 
+        showScreen('game-selection-menu');
+        activeGame = 'MENU';
         resize(); 
         bgMusic.pause();
         if(isAudioEnabled) {
@@ -842,6 +895,7 @@
         if(gameConfig.autoFire) document.getElementById('fire-btn').style.opacity = '0.3'; else document.getElementById('fire-btn').style.opacity = '1';
     }
 
+    let activeGame = 'MENU'; // 'MENU', 'GALAXY', 'BEATSTREET'
     let gameState = 'MENU'; 
     let player, enemies, enemyBullets, bullets, particles, gems, texts; 
     let frame = 0, screenShake = 0, score = 0; let input = { x: 0, y: 0 }; 
@@ -852,6 +906,13 @@
     const milestoneMsgs = ["GILA LU SEPUH!", "MAKIN MENGGILA!", "ANJAY KELAS!", "AMPUN BANG JAGO!", "TEMBUSIN TERUS CIK!", "MENYALA ABANGKU!", "MODE DEWA ON!"];
     let nextMilestoneIdx = 0;
     let lastBossSpawnedLvl = 0;
+
+    // VARIABEL BEAT STREET
+    let bsPlayer = {x: 0, y: 0, w: 40, h: 70, color: '#0ff'};
+    let bsObstacles = [];
+    let bsScore = 0;
+    let bsSpeed = 8;
+    let bsRoadLines = [];
 
     function showScreen(id) { document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active')); if(id) document.getElementById(id).classList.add('active'); }
 
@@ -939,6 +1000,7 @@
             lastBossSpawnedLvl = Math.floor(startLevel / 10) * 10;
         }
         
+        activeGame = 'GALAXY';
         showScreen(null);
         document.getElementById('game-ui').style.display = 'block';
         gameState = 'PLAYING';
@@ -949,12 +1011,18 @@
     
     function quitGame() { 
         gameState = 'MENU'; 
+        activeGame = 'MENU';
         document.getElementById('game-ui').style.display = 'none'; 
         ctx.clearRect(0,0,w,h); 
-        showScreen('main-menu'); 
-        
-        document.getElementById('game-bgm').pause(); 
-        if(isAudioEnabled) bgMusic.play(); 
+        showScreen('game-selection-menu'); 
+    }
+
+    function quitBeatStreet() {
+        gameState = 'MENU'; 
+        activeGame = 'MENU';
+        document.getElementById('bs-ui').style.display = 'none'; 
+        ctx.clearRect(0,0,w,h); 
+        showScreen('game-selection-menu'); 
     }
 
     const joyArea = document.getElementById('joystick-area'); const joyKnob = document.getElementById('joystick-knob'); const fireBtn = document.getElementById('fire-btn');
@@ -970,6 +1038,14 @@
     }
     fireBtn.addEventListener('touchstart', (e) => { e.preventDefault(); isShooting = true; }); fireBtn.addEventListener('touchend', (e) => { e.preventDefault(); isShooting = false; });
     fireBtn.addEventListener('mousedown', () => isShooting = true); fireBtn.addEventListener('mouseup', () => isShooting = false); fireBtn.addEventListener('mouseleave', () => isShooting = false);
+
+    // KONTROL BEAT STREET RUN
+    canvas.addEventListener('touchmove', (e) => {
+        if(activeGame === 'BEATSTREET' && gameState === 'PLAYING_BEATSTREET') {
+            let touchX = e.touches[0].clientX;
+            bsPlayer.x = Math.max(10, Math.min(w - bsPlayer.w - 10, touchX - bsPlayer.w/2));
+        }
+    });
 
     const upgradePool = [ { id: 'fireRate', name: 'FIRE RATE', desc: 'Senjata menembak lebih cepat' }, { id: 'damage', name: 'DAMAGE', desc: 'Daya hancur peluru meningkat' }, { id: 'multi', name: 'SPREAD', desc: 'Menambah jumlah proyektil tembakan' }, { id: 'speed', name: 'THRUSTER', desc: 'Kecepatan pesawat meningkat' }, { id: 'maxHp', name: 'HULL PLATING', desc: 'Meningkatkan maksimal HP' }, { id: 'magnet', name: 'MAGNETIC FIELD', desc: 'Memperluas jangkauan ambil EXP' } ];
 
@@ -1180,9 +1256,7 @@
 
     function drawBackground() { ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; let size = 100; let startX = Math.floor(camX / size) * size; let startY = Math.floor(camY / size) * size; for(let i = startX; i < startX + w + size; i += size) { ctx.beginPath(); ctx.moveTo(i, camY); ctx.lineTo(i, camY + h); ctx.stroke(); } for(let j = startY; j < startY + h + size; j += size) { ctx.beginPath(); ctx.moveTo(camX, j); ctx.lineTo(camX + w, j); ctx.stroke(); } }
 
-    function loop() {
-        requestAnimationFrame(loop); if (gameState !== 'PLAYING') return; frame++;
-        
+    function loopGalaxy() {
         let scoreMult = gameDifficulty === 'HARD' ? 2 : 1;
 
         if(frame % 60 === 0) { 
@@ -1289,7 +1363,99 @@
         });
         ctx.restore(); 
     }
-    loop();
+
+    // --- INISIALISASI BEAT STREET RUN ---
+    function initBeatStreet() {
+        activeGame = 'BEATSTREET';
+        bsPlayer.x = w/2 - bsPlayer.w/2;
+        bsPlayer.y = h - 120;
+        bsObstacles = [];
+        bsScore = 0;
+        bsSpeed = 8;
+        bsRoadLines = [0, 150, 300, 450, 600, 750, 900];
+        document.getElementById('bs-score').innerText = '0';
+        
+        showScreen(null);
+        document.getElementById('bs-ui').style.display = 'block';
+        gameState = 'PLAYING_BEATSTREET';
+    }
+
+    function loopBeatStreet() {
+        bsScore += Math.floor(bsSpeed / 5);
+        document.getElementById('bs-score').innerText = bsScore;
+
+        if (frame % 300 === 0) bsSpeed += 0.5; // Makin lama makin ngebut
+
+        // Jalan Aspal
+        ctx.fillStyle = '#0a0a0a'; 
+        ctx.fillRect(0, 0, w, h);
+
+        // Garis Jalan
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        for (let i=0; i<bsRoadLines.length; i++) {
+            bsRoadLines[i] += bsSpeed;
+            if (bsRoadLines[i] > h) bsRoadLines[i] = -100;
+            ctx.fillRect(w/2 - 5, bsRoadLines[i], 10, 60);
+        }
+
+        // Spawn Rintangan (Mobil / Razia dll)
+        if (frame % Math.max(20, 70 - Math.floor(bsSpeed)) === 0) {
+            let obsW = 50 + Math.random() * 80;
+            let obsX = Math.random() * (w - obsW);
+            bsObstacles.push({x: obsX, y: -100, w: obsW, h: 40, passed: false});
+        }
+
+        // Update Rintangan & Tabrakan
+        for (let i = bsObstacles.length - 1; i >= 0; i--) {
+            let obs = bsObstacles[i];
+            obs.y += bsSpeed;
+            
+            ctx.fillStyle = '#ff003c';
+            ctx.shadowBlur = 15; ctx.shadowColor = '#ff003c';
+            ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+            ctx.shadowBlur = 0; 
+            
+            if (bsPlayer.x < obs.x + obs.w && bsPlayer.x + bsPlayer.w > obs.x &&
+                bsPlayer.y < obs.y + obs.h && bsPlayer.y + bsPlayer.h > obs.y) {
+                gameState = 'GAMEOVER_BEATSTREET';
+                document.getElementById('bs-ui').style.display = 'none';
+                document.getElementById('bs-final-score').innerText = bsScore;
+                playSFX(sfxGameOver);
+                showScreen('bs-game-over');
+            }
+
+            if (obs.y > h) bsObstacles.splice(i, 1);
+        }
+
+        // Gambar Player (Motor Kotak Neon)
+        ctx.fillStyle = bsPlayer.color;
+        ctx.shadowBlur = 20; ctx.shadowColor = bsPlayer.color;
+        ctx.fillRect(bsPlayer.x, bsPlayer.y, bsPlayer.w, bsPlayer.h);
+        
+        // Efek Lampu Motor
+        ctx.fillStyle = 'rgba(255, 255, 100, 0.15)';
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.moveTo(bsPlayer.x + bsPlayer.w/2, bsPlayer.y);
+        ctx.lineTo(bsPlayer.x - 60, bsPlayer.y - 300);
+        ctx.lineTo(bsPlayer.x + bsPlayer.w + 60, bsPlayer.y - 300);
+        ctx.fill();
+    }
+
+    // --- MASTER LOOP GAME ---
+    function masterLoop() {
+        requestAnimationFrame(masterLoop);
+        
+        if (activeGame === 'GALAXY' && gameState === 'PLAYING') {
+            frame++;
+            loopGalaxy();
+        } else if (activeGame === 'BEATSTREET' && gameState === 'PLAYING_BEATSTREET') {
+            frame++;
+            loopBeatStreet();
+        }
+    }
+    masterLoop(); 
+
   </script>
 </body>
 </html>
