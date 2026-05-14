@@ -73,7 +73,7 @@
     .modal-content { margin: auto; display: block; max-width: 90%; max-height: 80vh; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9); animation: modalZoom 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
     @keyframes modalZoom { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     .modal-close, .modal-nav { position: absolute; color: #ccc; font-weight: 300; cursor: pointer; transition: color 0.2s; }
-    .modal-close { top: 15px; right: 35px; font-size: 40px; }
+    .modal-close { top: 15px; right: 35px; font-size: 40px; z-index: 99;}
     .modal-nav { top: 50%; transform: translateY(-50%); font-size: 45px; padding: 20px; user-select: none; }
     .modal-prev { left: 20px; }
     .modal-next { right: 20px; }
@@ -111,8 +111,6 @@
     .read-more-btn { color: #00d2ff; cursor: pointer; font-size: 12px; margin-top: 8px; font-family: 'Share Tech Mono', monospace; font-weight: bold; letter-spacing: 1px; display: inline-block;}
     .read-more-btn:active { transform: scale(0.95); }
 
-    .rainbow-check { background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 13px; font-weight: bold; margin-left: 3px;}
-
     .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 10px; }
     .reactions-display { display: flex; gap: 8px; flex-wrap: wrap; }
     .react-badge { background: #000; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #fff; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: 0.2s; }
@@ -123,6 +121,38 @@
     #reaction-menu { position: absolute; background: #000; padding: 10px 15px; border-radius: 30px; display: none; gap: 15px; box-shadow: 0 5px 15px rgba(255,255,255,0.2); z-index: 1000; transform: translateY(-50px); border: 1px solid #fff; }
     #reaction-menu span { font-size: 22px; cursor: pointer; transition: transform 0.1s; }
     #reaction-menu span:active { transform: scale(1.3); }
+
+    /* CSS FOR KOMENTAR */
+    .comment-trigger { margin-top: 15px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; color: #aaa; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-family: 'Share Tech Mono', monospace;}
+    .comment-trigger:hover { color: #fff; }
+    .comment-trigger .btn-text { background: #111; padding: 4px 12px; border-radius: 12px; border: 1px solid #333; }
+    
+    #commentModal { display: none; position: fixed; z-index: 10005; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
+    .comment-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 85vh; background: #111; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 -5px 25px rgba(0,0,0,0.8); animation: slideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border-top: 1px solid rgba(255,255,255,0.2); }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    
+    .comment-header { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .comment-header h3 { font-size: 16px; font-family: 'Share Tech Mono', monospace; margin: 0; }
+    .comment-close { color: #fff; font-size: 24px; cursor: pointer; line-height: 1; }
+    
+    .comment-list { flex-grow: 1; overflow-y: auto; padding: 20px; }
+    .comment-item { margin-bottom: 15px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; border-left: 2px solid #555; position: relative;}
+    .comment-author { font-size: 13px; font-weight: bold; color: #fff; font-family: 'Share Tech Mono', monospace; display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .comment-time { font-size: 10px; color: #888; font-weight: normal; }
+    .comment-body { font-size: 14px; color: #ddd; line-height: 1.4; white-space: pre-wrap; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .comment-body.expanded { display: block; -webkit-line-clamp: unset; }
+    .comment-reply-btn { font-size: 11px; color: #888; cursor: pointer; margin-top: 8px; display: inline-block; font-weight: bold;}
+    .comment-reply-btn:hover { color: #fff; }
+    
+    .comment-input-area { padding: 15px; background: #0a0a0a; border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; gap: 10px;}
+    .replying-to-badge { font-size: 11px; color: #ffeb3b; background: rgba(255,235,59,0.1); padding: 4px 8px; border-radius: 4px; display: none; align-items: center; justify-content: space-between;}
+    .replying-to-badge span { cursor: pointer; color: #fff; font-weight: bold; padding-left: 10px;}
+    .comment-form-row { display: flex; gap: 10px; }
+    .comment-input-name { width: 30%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 8px; font-size: 14px; outline: none; }
+    .comment-input-text { width: 70%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 8px; font-size: 14px; outline: none; resize: none;}
+    .comment-submit-btn { background: #fff; color: #000; border: none; padding: 10px; border-radius: 8px; font-family: 'Share Tech Mono', monospace; font-weight: bold; cursor: pointer; transition: 0.2s;}
+    .comment-submit-btn:active { transform: scale(0.95); }
+
 
     /* CSS GAME OVERALL */
     #game-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000; color: #ffffff; z-index: 20000; font-family: 'Courier New', Courier, monospace; overflow: hidden; touch-action: none; user-select: none; display: none; }
@@ -240,6 +270,31 @@
       <div class="intel-row"><span class="intel-label">FO UTAMA</span><span class="intel-val" id="hk-fo">-</span></div>
       <div class="intel-details" id="hk-details">-</div>
       <button class="intel-btn" onclick="closeIntelModal()">TUTUP</button>
+    </div>
+
+    <!-- MODAL KOMENTAR ANONIM -->
+    <div id="commentModal">
+      <div class="comment-container">
+          <div class="comment-header">
+              <h3>KOMENTAR <span id="comment-count-badge" style="color:#888; font-size:12px;">(0)</span></h3>
+              <span class="comment-close" onclick="closeCommentModal()">×</span>
+          </div>
+          
+          <div class="comment-list" id="comment-list-container">
+              <!-- Komentar bakal di-load ke sini -->
+          </div>
+
+          <div class="comment-input-area">
+              <div class="replying-to-badge" id="reply-badge">
+                  Membalas: <b id="reply-to-name">Anon</b> <span onclick="cancelReply()">✕ Batal</span>
+              </div>
+              <div class="comment-form-row">
+                  <input type="text" id="comment-name" class="comment-input-name" placeholder="Nama Anonim" maxlength="15">
+                  <textarea id="comment-text" class="comment-input-text" rows="2" placeholder="Ketikan sesuatu..." maxlength="500"></textarea>
+              </div>
+              <button class="comment-submit-btn" onclick="submitComment()">KIRIM</button>
+          </div>
+      </div>
     </div>
 
     <div id="intro">
@@ -672,6 +727,10 @@
     window.addEventListener('DOMContentLoaded', () => {
       let savedNick = localStorage.getItem('last_nickname_261');
       if (savedNick) { document.getElementById('pregame-name-galaxy').value = savedNick; document.getElementById('pregame-name-bs').value = savedNick; }
+      
+      let savedAnon = localStorage.getItem('anon_name_261');
+      if (savedAnon) { document.getElementById('comment-name').value = savedAnon; }
+      
       updateCoinUI();
 
       setTimeout(() => {
@@ -748,6 +807,13 @@
         else { el.classList.add('expanded'); btn.innerText = 'SEMBUNYIKAN'; }
     };
 
+    window.toggleCommentReadMore = function(key) {
+        let el = document.getElementById('comment-body-' + key);
+        let btn = document.getElementById('btn-comment-readmore-' + key);
+        if(el.classList.contains('expanded')) { el.classList.remove('expanded'); btn.innerText = 'BACA SELENGKAPNYA'; } 
+        else { el.classList.add('expanded'); btn.innerText = 'SEMBUNYIKAN'; }
+    };
+
     window.sharePost = function(postKey) {
         let post = window.forumPostsData[postKey];
         if(!post) return;
@@ -810,8 +876,161 @@
         });
     };
 
-    const forumRef = database.ref('forum_posts');
-    forumRef.on('value', (snapshot) => {
+    // ====== SISTEM KOMENTAR ======
+    let currentCommentPostKey = null;
+    let currentReplyToId = null;
+    let commentListenerRef = null;
+
+    window.openCommentModal = function(postKey) {
+        currentCommentPostKey = postKey;
+        document.getElementById('commentModal').style.display = 'block';
+        document.body.style.overflow = 'hidden'; // prevent background scroll
+        cancelReply(); // reset
+        loadComments();
+    };
+
+    window.closeCommentModal = function() {
+        document.getElementById('commentModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        if (commentListenerRef) {
+            commentListenerRef.off(); // matikan listener biar enteng
+        }
+    };
+
+    window.replyToComment = function(commentId, authorName) {
+        currentReplyToId = commentId;
+        document.getElementById('reply-to-name').innerText = authorName;
+        document.getElementById('reply-badge').style.display = 'flex';
+        document.getElementById('comment-text').focus();
+    };
+
+    window.cancelReply = function() {
+        currentReplyToId = null;
+        document.getElementById('reply-badge').style.display = 'none';
+    };
+
+    window.submitComment = function() {
+        let nameInput = document.getElementById('comment-name').value.trim();
+        let textInput = document.getElementById('comment-text').value.trim();
+
+        if (!nameInput) { alert("Woi isi nama dulu (Anonim bebas)!"); return; }
+        if (!textInput) { alert("Isi pesannya kosong bang!"); return; }
+        
+        let safeCheckName = nameInput.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+        if(safeCheckName.includes("NANDO") || safeCheckName.includes("ARCEL") || safeCheckName.includes("MARCEL") || safeCheckName.includes("ANTIDOGMA")) { 
+            let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:"); 
+            if(pass !== "parapetinggi261") { alert("ACCESS DENIED: Lu bukan petinggi! Ganti nama woi."); return; } 
+        }
+
+        localStorage.setItem('anon_name_261', nameInput);
+        let submitBtn = document.querySelector('.comment-submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "MENGIRIM...";
+
+        let commentData = {
+            author: nameInput,
+            text: textInput,
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            replyTo: currentReplyToId
+        };
+
+        database.ref(`forum_posts/${currentCommentPostKey}/comments`).push(commentData)
+        .then(() => {
+            document.getElementById('comment-text').value = '';
+            cancelReply();
+            submitBtn.disabled = false;
+            submitBtn.innerText = "KIRIM TRANSMISI";
+            // Komen akan otomatis ter-load karena ada Realtime Listener
+        })
+        .catch((e) => {
+            console.error(e);
+            alert("Gagal kirim komentar.");
+            submitBtn.disabled = false;
+            submitBtn.innerText = "KIRIM TRANSMISI";
+        });
+    };
+
+    function loadComments() {
+        let listContainer = document.getElementById('comment-list-container');
+        listContainer.innerHTML = '<p style="text-align:center; color:#888; font-size:12px;">Memuat komentar...</p>';
+        document.getElementById('comment-count-badge').innerText = "(0)";
+
+        if (commentListenerRef) commentListenerRef.off();
+        
+        commentListenerRef = database.ref(`forum_posts/${currentCommentPostKey}/comments`);
+        commentListenerRef.on('value', (snapshot) => {
+            if (!snapshot.exists()) {
+                listContainer.innerHTML = '<p style="text-align:center; color:#888; font-size:12px; margin-top:20px;">Belum ada komentar. Jadilah yang pertama!</p>';
+                document.getElementById('comment-count-badge').innerText = "(0)";
+                return;
+            }
+
+            let comments = [];
+            snapshot.forEach(child => {
+                comments.push({ id: child.key, ...child.val() });
+            });
+            
+            document.getElementById('comment-count-badge').innerText = `(${comments.length})`;
+            
+            // Susun jadi tree logic (Buat reply)
+            let commentDict = {};
+            comments.forEach(c => { 
+                c.children = [];
+                commentDict[c.id] = c; 
+            });
+
+            let rootComments = [];
+            comments.forEach(c => {
+                if(c.replyTo && commentDict[c.replyTo]) {
+                    commentDict[c.replyTo].children.push(c);
+                } else {
+                    rootComments.push(c);
+                }
+            });
+
+            // Render Function
+            let renderHtml = '';
+            const renderCommentNode = (node, isReply) => {
+                let dateObj = new Date(node.timestamp); 
+                let timeStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'short'}) + ' ' + dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+                
+                let rawText = node.text || '';
+                let needsReadMore = rawText.length > 150 || (rawText.match(/\n/g) || []).length > 3;
+                let formattedText = formatPostText(rawText);
+
+                let badge = '';
+                let safeAuthor = node.author.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                if (safeAuthor.includes("NANDO") || safeAuthor.includes("MARCEL") || safeAuthor.includes("ANTIDOGMA")) badge = ' <span style="color: #0f0; font-size: 11px;">✔</span>';
+
+                let html = `
+                <div class="comment-item" style="margin-left: ${isReply ? '25px' : '0'}; border-color: ${isReply ? '#333' : '#555'};">
+                    <div class="comment-author">${node.author}${badge} <span class="comment-time">${timeStr}</span></div>
+                    <div class="comment-body" id="comment-body-${node.id}">${formattedText}</div>
+                    ${needsReadMore ? `<div class="comment-reply-btn" style="color:#00d2ff;" id="btn-comment-readmore-${node.id}" onclick="toggleCommentReadMore('${node.id}')">BACA SELENGKAPNYA</div><br>` : ''}
+                    <span class="comment-reply-btn" onclick="replyToComment('${node.id}', '${node.author.replace(/'/g, "\\'")}')">Balas</span>
+                </div>
+                `;
+                
+                if (node.children && node.children.length > 0) {
+                    node.children.forEach(child => {
+                        html += renderCommentNode(child, true);
+                    });
+                }
+                return html;
+            };
+
+            rootComments.forEach(root => {
+                renderHtml += renderCommentNode(root, false);
+            });
+
+            listContainer.innerHTML = renderHtml;
+            // Auto scroll to bottom (optional)
+            // listContainer.scrollTop = listContainer.scrollHeight;
+        });
+    }
+
+    const forumPostsRef = database.ref('forum_posts');
+    forumPostsRef.on('value', (snapshot) => {
         let html = ''; const now = Date.now(); const maxAge = 30 * 24 * 60 * 60 * 1000; 
         let postsArray = [];
         window.forumPostsData = {}; // Clear cache
@@ -848,6 +1067,9 @@
             let rawContent = post.content || '';
             let needsReadMore = rawContent.length > 200 || (rawContent.match(/\n/g) || []).length > 3;
             let formattedText = formatPostText(rawContent);
+            
+            let commentCount = 0;
+            if (post.comments) commentCount = Object.keys(post.comments).length;
 
             html += `
             <div class="post-card" onmousedown="startPostPress('${post.key}', event)" onmouseup="cancelPostPress()" onmouseleave="cancelPostPress()" ontouchstart="startPostPress('${post.key}', event)" ontouchend="cancelPostPress()" ontouchmove="cancelPostPress()">
@@ -862,6 +1084,11 @@
                 
                 ${pollHtml}
                 <div class="post-actions"><div class="reactions-display">${reactHtml}</div><div style="display:flex; align-items:center; gap: 15px;"><button class="share-btn" onclick="sharePost('${post.key}')" title="Share">SHARE</button></div></div>
+                
+                <div class="comment-trigger" onclick="openCommentModal('${post.key}')">
+                    <span>Kirim komentar anonim...</span>
+                    <span class="btn-text"> ${commentCount > 0 ? commentCount : 'Komen'}</span>
+                </div>
             </div>`;
         });
         if(html === '') html = '<p style="text-align:center; color:#888; font-size:14px; margin-top:30px;">Belum ada transmisi.</p>';
