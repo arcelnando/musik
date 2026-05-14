@@ -731,10 +731,10 @@
         secretTapCount++;
         if(secretTapCount >= 5) {
             secretTapCount = 0;
-            let pass = prompt("SYSTEM OVERRIDE: MENGAKSES KONTROL PETINGGI.\n\nMasukkan Password:");
-            if(pass === "parapetinggi261") {
+            let pass = prompt("MENGAKSES KONTROL NANDO.\n\nMasukkan Password:");
+            if(pass === "nandoacces") {
                 localStorage.setItem('anon_name_261', 'NANDO');
-                alert("ACCESS GRANTED. Sistem mendeteksi Petinggi Nando.");
+                alert("Sistem mendeteksi Nando.");
             }
         }
     }
@@ -1112,7 +1112,7 @@
                 <div class="post-actions"><div class="reactions-display">${reactHtml}</div><div style="display:flex; align-items:center; gap: 15px;"><button class="share-btn" onclick="sharePost('${post.key}')" title="Share">SHARE</button></div></div>
                 
                 <div class="comment-trigger" onclick="openCommentModal('${post.key}')">
-                    <span>Kirim transmisi anonim...</span>
+                    <span>Kirim pesan anonim...</span>
                     <span class="btn-text"> ${commentCount > 0 ? commentCount : 'Komen'}</span>
                 </div>
             </div>`;
@@ -1207,7 +1207,7 @@
         let nameInput = document.getElementById(inputId).value.trim().toUpperCase();
         if(!nameInput) { alert("Buat NICKNAME dulu sebelum bermain!"); return null; }
         localStorage.setItem('last_nickname_261', nameInput); let safeCheck = nameInput.replace(/[^A-Z0-9]/g, ''); isNandoAccount = false;
-        if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) { let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:"); if(pass === "parapetinggi261") { isNandoAccount = true; alert("ACCESS GRANTED: Selamat datang kembali, Tuan."); } else { alert("ACCESS DENIED: Lu bukan petinggi! Ganti nama woi."); return null; } }
+        if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) { let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:"); if(pass === "nandoacces") { isNandoAccount = true; alert("Selamat datang kembali, Tuan."); } else { alert("Lu bukan nando! Ganti nama woi."); return null; } }
         return nameInput;
     }
 
