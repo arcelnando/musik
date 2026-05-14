@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>261 AREA | ADMIN PANEL</title>
+  <title>261 AREA</title>
   
   <!-- SCRIPT FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -35,26 +35,26 @@
 
     .box {
         background: #000;
-        border: 2px solid #fff;
+        border: 2px solid #333;
         padding: 40px 30px;
         width: 100%;
-        max-width: 450px;
+        max-width: 500px;
         z-index: 10;
         position: relative;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         margin-bottom: 20px;
+        border-radius: 8px;
     }
 
     h2 {
         text-align: center;
         margin-top: 0;
         letter-spacing: 4px;
-        font-size: 24px;
+        font-size: 20px;
         text-transform: uppercase;
-        border-bottom: 2px dashed #fff;
+        border-bottom: 1px dashed #444;
         padding-bottom: 15px;
         margin-bottom: 30px;
-        text-shadow: 0 0 5px #fff;
+        color: #00d2ff;
     }
 
     .input-group { margin-bottom: 20px; text-align: left; }
@@ -71,79 +71,78 @@
     input[type="text"], input[type="password"], textarea {
         width: 100%;
         padding: 12px;
-        background: #000;
-        border: 1px solid #555;
+        background: #0a0a0a;
+        border: 1px solid #333;
         color: #fff;
         outline: none;
         font-size: 14px;
         letter-spacing: 1px;
         transition: border 0.3s;
+        border-radius: 4px;
     }
     
-    input[type="text"]:focus, input[type="password"]:focus, textarea:focus { border-color: #fff; }
+    input[type="text"]:focus, input[type="password"]:focus, textarea:focus { border-color: #00d2ff; }
 
     textarea { resize: vertical; min-height: 120px; }
 
     input[type="file"] {
         width: 100%;
         padding: 10px;
-        background: #111;
-        border: 1px dashed #555;
+        background: #0a0a0a;
+        border: 1px dashed #444;
         color: #ccc;
         font-size: 12px;
         cursor: pointer;
         transition: border 0.3s;
+        border-radius: 4px;
     }
-    input[type="file"]:hover { border-color: #fff; }
+    input[type="file"]:hover { border-color: #00d2ff; }
 
     .checkbox-group { display: flex; align-items: center; margin-bottom: 25px; }
     .checkbox-group input { width: auto; margin-right: 10px; cursor: pointer; transform: scale(1.2); }
     .checkbox-group label { font-size: 12px; color: #ccc; letter-spacing: 1px; cursor: pointer; font-weight: bold; }
 
     button {
-        width: 100%; padding: 15px; background: #000; color: #fff; border: 2px solid #fff;
-        font-weight: bold; font-size: 16px; letter-spacing: 2px; text-transform: uppercase;
-        cursor: pointer; transition: all 0.2s ease; margin-top: 10px;
+        width: 100%; padding: 15px; background: transparent; color: #00d2ff; border: 1px solid #00d2ff;
+        font-weight: bold; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+        cursor: pointer; transition: all 0.2s ease; margin-top: 10px; border-radius: 4px;
     }
-    button:hover { background: #fff; color: #000; box-shadow: 0 0 10px #fff; }
+    button:hover { background: #00d2ff; color: #000; }
     button:active { transform: scale(0.98); }
 
     .btn-danger { border-color: #ff4444; color: #ff4444; }
-    .btn-danger:hover { background: #ff4444; color: #000; box-shadow: 0 0 10px #ff4444; }
-
-    .btn-nuke { border-color: #ff0000; color: #ff0000; margin-bottom: 20px;}
-    .btn-nuke:hover { background: #ff0000; color: #fff; box-shadow: 0 0 15px #ff0000; }
+    .btn-danger:hover { background: #ff4444; color: #000; }
 
     .footer-text { text-align: center; font-size: 10px; color: #555; margin-top: 25px; letter-spacing: 1px; text-transform: uppercase; }
 
     #admin-screen { display: none; }
 
-    .admin-post-card { border: 1px dashed #555; padding: 15px; margin-top: 15px; background: rgba(20, 20, 20, 0.5); }
-    .admin-post-card .date { font-size: 10px; color: #888; margin-bottom: 10px; letter-spacing: 1px; }
-    .admin-post-card .text { font-size: 13px; color: #ccc; margin-bottom: 10px; white-space: pre-wrap; line-height: 1.5; border-left: 2px solid #fff; padding-left: 10px;}
-    .post-preview-img { width: 100%; border: 1px solid #333; margin-bottom: 10px; }
+    .admin-post-card { border: 1px solid #333; padding: 20px; margin-top: 20px; background: #0a0a0a; border-radius: 8px;}
+    .admin-post-card .date { font-size: 11px; color: #00d2ff; margin-bottom: 15px; font-family: 'Share Tech Mono', monospace; border-bottom: 1px dashed #333; padding-bottom: 10px;}
+    .admin-post-card .text { font-size: 14px; color: #eee; margin-bottom: 15px; white-space: pre-wrap; line-height: 1.5; font-family: 'Inter', sans-serif;}
+    .post-preview-img { width: 100%; border: 1px solid #333; margin-bottom: 10px; border-radius: 4px;}
     
-    .delete-btn { width: 100%; background: #000; color: #fff; border: 1px dashed #fff; padding: 10px; font-size: 12px; margin-top: 5px; }
-    .delete-btn:hover { background: #fff; color: #000; font-weight: bold; }
+    .delete-btn { width: 100%; background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 12px; font-size: 14px; margin-top: 5px; font-family: 'Share Tech Mono', monospace; font-weight: bold;}
+    .delete-btn:hover { background: #ff4444; color: #000; }
     
     #poll-container input { margin-bottom: 8px; border-style: dashed; }
 
     /* CSS KOMENTAR DI ADMIN PANEL */
-    .admin-comments-section { margin-top: 15px; padding-top: 15px; border-top: 1px solid #333; }
-    .admin-comment-box { background: #111; margin-top: 8px; padding: 10px; border-radius: 4px; border-left: 2px solid #00d2ff; position: relative; }
-    .admin-comment-box.reply { margin-left: 25px; border-left-color: #ffeb3b; }
-    .admin-comment-author { font-size: 12px; font-weight: bold; color: #fff; }
-    .admin-comment-time { font-size: 10px; color: #666; margin-left: 5px; }
-    .admin-comment-text { font-size: 12px; color: #ccc; margin-top: 5px; white-space: pre-wrap; word-break: break-word;}
-    .admin-btn-delete-comment { background: #ff4444; color: #fff; border: none; padding: 4px 8px; font-size: 10px; cursor: pointer; position: absolute; right: 10px; top: 10px; border-radius: 3px; font-family: inherit; letter-spacing: 0;}
-    .admin-btn-delete-comment:hover { background: #cc0000; }
+    .admin-comments-section { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #333; }
+    .admin-comment-box { background: transparent; margin-top: 10px; padding: 10px 0; position: relative; border-bottom: 1px solid #111; }
+    .admin-comment-box.reply { margin-left: 20px; border-left: 2px solid #333; padding-left: 15px; border-bottom: none; }
+    .admin-comment-author { font-size: 13px; font-weight: bold; color: #0f0; }
+    .admin-comment-time { font-size: 11px; color: #666; margin-left: 5px; }
+    .admin-comment-text { font-size: 13px; color: #ccc; margin-top: 5px; white-space: pre-wrap; word-break: break-word; font-family: 'Inter', sans-serif;}
+    .admin-btn-delete-comment { background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 4px 8px; font-size: 10px; cursor: pointer; position: absolute; right: 0; top: 5px; border-radius: 4px; font-family: inherit; font-weight: bold;}
+    .admin-btn-delete-comment:hover { background: #ff4444; color: #000; }
   </style>
 </head>
 <body>
 
   <!-- LAYAR LOGIN -->
   <div class="box" id="login-screen">
-    <h2>PANEL LOGIN</h2>
+    <h2>SYSTEM LOGIN</h2>
     
     <div class="input-group">
         <label>USERNAME</label>
@@ -161,13 +160,13 @@
     </div>
     
     <button onclick="login()">MASUK</button>
-    <div class="footer-text">261area</div>
+    <div class="footer-text">261area ADMIN PROTOCOL</div>
   </div>
 
   <!-- LAYAR ADMIN UTAMA -->
   <div id="admin-screen" style="width: 100%; display: none; flex-direction: column; align-items: center;">
       <div class="box">
-        <h2>UPDATE DATA</h2>
+        <h2>UPDATE DATA BARU</h2>
         
         <div class="input-group">
             <label>ISI INFORMASI TERTULIS</label>
@@ -180,26 +179,25 @@
         </div>
 
         <!-- SISTEM POLLING -->
-        <div class="input-group" style="border: 1px solid #333; padding: 15px; background: #0a0a0a;">
+        <div class="input-group" style="border: 1px dashed #333; padding: 15px; border-radius: 8px;">
             <label style="color:#0f0;">📊 TAMBAH POLLING (OPSIONAL)</label>
             <div id="poll-container"></div>
-            <button type="button" onclick="addPollOption()" style="padding: 10px; font-size: 12px; border: 1px dashed #0f0; background: transparent; color: #0f0; margin-top: 5px;">+ TAMBAH OPSI POLLING</button>
+            <button type="button" onclick="addPollOption()" style="padding: 10px; font-size: 12px; border: 1px dashed #0f0; color: #0f0; margin-top: 5px;">+ TAMBAH OPSI</button>
         </div>
 
         <button id="submit-btn" onclick="kirimPost()">KIRIM DATA</button>
-        <div class="footer-text">CREATED : NNDO</div>
+        <div class="footer-text">CREATED : NANDO</div>
       </div>
 
-      <div class="box" style="margin-top: 20px;">
+      <div class="box" style="margin-top: 10px;">
         <h2>POST & KOMENTAR</h2>
-        <button class="btn-nuke" onclick="nukeAllComments()">HAPUS SEMUA KOMENTAR</button>
         
         <div id="admin-post-list">
-            <div class="footer-text">LOADING DATA...</div>
+            <div class="footer-text">LOADING DATA DARI SERVER...</div>
         </div>
       </div>
 
-      <button class="btn-danger" style="max-width: 450px;" onclick="logout()">LOGOUT SYSTEM</button>
+      <button class="btn-danger" style="max-width: 500px; margin-bottom: 40px;" onclick="logout()">LOGOUT SYSTEM</button>
   </div>
 
   <script>
@@ -229,7 +227,7 @@
       let p = document.getElementById('pass').value;
       let remember = document.getElementById('remember-me').checked;
 
-      if(u === '261area' && p === 'parapetinggi261') {
+      if(u === '261area' && p === 'petinggi261') {
         if(remember) localStorage.setItem('admin261_logged_in', 'true');
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-screen').style.display = 'flex';
@@ -268,11 +266,11 @@
                 let dateObj = new Date(post.timestamp);
                 let dateStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) + ' - ' + dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
                 
-                let pollInfo = post.poll ? `<div style="color:#0f0; margin-bottom:10px; font-weight:bold;">[📊 Polling Dilampirkan]</div>` : '';
+                let pollInfo = post.poll ? `<div style="color:#0f0; margin-bottom:10px; font-weight:bold; font-size:12px;">[📊 Polling Dilampirkan]</div>` : '';
                 
                 let commentsHtml = '';
                 if(post.comments) {
-                    commentsHtml += `<div class="admin-comments-section"><div style="font-size:12px; color:#00d2ff; margin-bottom:10px;">KOMENTAR:</div>`;
+                    commentsHtml += `<div class="admin-comments-section"><div style="font-size:12px; color:#00d2ff; margin-bottom:10px; font-weight:bold;">KOMENTAR MASUK:</div>`;
                     let commentsList = [];
                     for(let cKey in post.comments) { commentsList.push({id: cKey, ...post.comments[cKey]}); }
                     
@@ -285,7 +283,7 @@
                             <span class="admin-comment-time">[${cDate}]</span>
                             ${c.replyTo ? `<span style="color:#ffeb3b; font-size:10px;"> [Replying]</span>` : ''}
                             <div class="admin-comment-text">${c.text}</div>
-                            <button class="admin-btn-delete-comment" onclick="deleteComment('${post.key}', '${c.id}')">X</button>
+                            <button class="admin-btn-delete-comment" onclick="deleteComment('${post.key}', '${c.id}')">HAPUS</button>
                         </div>`;
                     });
                     commentsHtml += `</div>`;
@@ -293,18 +291,18 @@
 
                 html += `
                 <div class="admin-post-card">
-                    <div class="date">[ ID: ${post.key} ] | [ ${dateStr} WIB ]</div>
+                    <div class="date">[ ID: ${post.key} ]<br>[ ${dateStr} WIB ]</div>
                     ${post.image ? `<img src="${post.image}" class="post-preview-img">` : ''}
                     ${pollInfo}
                     <div class="text">${post.content ? post.content : '(Tanpa Teks)'}</div>
                     
                     ${commentsHtml}
 
-                    <button class="delete-btn" style="margin-top:15px; border-color:#ff4444; color:#ff4444;" onclick="hapusPost('${post.key}')">HAPUS POSTINGAN INI</button>
+                    <button class="delete-btn" style="margin-top:20px;" onclick="hapusPost('${post.key}')">HAPUS POSTINGAN INI</button>
                 </div>`;
             });
 
-            if(html === '') html = '<div class="footer-text">NO DATA IN DATABASE</div>';
+            if(html === '') html = '<div class="footer-text">BELUM ADA DATA DI SERVER</div>';
             document.getElementById('admin-post-list').innerHTML = html;
         });
     }
@@ -319,37 +317,10 @@
 
     // Fungsi Hapus Komentar Individual
     window.deleteComment = function(postKey, commentId) {
-        if(confirm("Yakin mau hapus komentar ini?")) {
+        if(confirm("Yakin mau hapus komentar anonim ini?")) {
             database.ref(`forum_posts/${postKey}/comments/${commentId}`).remove()
             .then(() => console.log("Komentar dihapus."))
             .catch(e => alert("Error: " + e));
-        }
-    };
-
-    // Fungsi Nuke: Hapus Seluruh Komentar
-    window.nukeAllComments = function() {
-        if(confirm("DANGER!! YAKIN MAU HAPUS SEMUA KOMENTAR DARI SELURUH POSTINGAN? \nINI TIDAK BISA DIBATALKAN!")) {
-            let pass2 = prompt("Ketik 'HAPUS' untuk konfirmasi penghapusan massal:");
-            if(pass2 === "HAPUS") {
-                database.ref('forum_posts').once('value').then(snap => {
-                    let updates = {};
-                    snap.forEach(p => {
-                        if(p.val().comments) {
-                            updates[`forum_posts/${p.key}/comments`] = null;
-                        }
-                    });
-                    
-                    if (Object.keys(updates).length > 0) {
-                        database.ref().update(updates)
-                        .then(() => alert("SUKSES: Seluruh database komentar telah dibersihkan!"))
-                        .catch(e => alert("Error: " + e));
-                    } else {
-                        alert("Tidak ada komentar untuk dihapus.");
-                    }
-                });
-            } else {
-                alert("Operasi dibatalkan.");
-            }
         }
     };
 
