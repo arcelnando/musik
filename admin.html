@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>261 AREA</title>
+  <title>261 AREA | ADMIN PANEL</title>
   
   <!-- SCRIPT FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -111,19 +111,32 @@
     .btn-danger { border-color: #ff4444; color: #ff4444; }
     .btn-danger:hover { background: #ff4444; color: #000; box-shadow: 0 0 10px #ff4444; }
 
+    .btn-nuke { border-color: #ff0000; color: #ff0000; margin-bottom: 20px;}
+    .btn-nuke:hover { background: #ff0000; color: #fff; box-shadow: 0 0 15px #ff0000; }
+
     .footer-text { text-align: center; font-size: 10px; color: #555; margin-top: 25px; letter-spacing: 1px; text-transform: uppercase; }
 
     #admin-screen { display: none; }
 
     .admin-post-card { border: 1px dashed #555; padding: 15px; margin-top: 15px; background: rgba(20, 20, 20, 0.5); }
     .admin-post-card .date { font-size: 10px; color: #888; margin-bottom: 10px; letter-spacing: 1px; }
-    .admin-post-card .text { font-size: 13px; color: #ccc; margin-bottom: 10px; white-space: pre-wrap; line-height: 1.5; }
+    .admin-post-card .text { font-size: 13px; color: #ccc; margin-bottom: 10px; white-space: pre-wrap; line-height: 1.5; border-left: 2px solid #fff; padding-left: 10px;}
     .post-preview-img { width: 100%; border: 1px solid #333; margin-bottom: 10px; }
     
     .delete-btn { width: 100%; background: #000; color: #fff; border: 1px dashed #fff; padding: 10px; font-size: 12px; margin-top: 5px; }
     .delete-btn:hover { background: #fff; color: #000; font-weight: bold; }
     
     #poll-container input { margin-bottom: 8px; border-style: dashed; }
+
+    /* CSS KOMENTAR DI ADMIN PANEL */
+    .admin-comments-section { margin-top: 15px; padding-top: 15px; border-top: 1px solid #333; }
+    .admin-comment-box { background: #111; margin-top: 8px; padding: 10px; border-radius: 4px; border-left: 2px solid #00d2ff; position: relative; }
+    .admin-comment-box.reply { margin-left: 25px; border-left-color: #ffeb3b; }
+    .admin-comment-author { font-size: 12px; font-weight: bold; color: #fff; }
+    .admin-comment-time { font-size: 10px; color: #666; margin-left: 5px; }
+    .admin-comment-text { font-size: 12px; color: #ccc; margin-top: 5px; white-space: pre-wrap; word-break: break-word;}
+    .admin-btn-delete-comment { background: #ff4444; color: #fff; border: none; padding: 4px 8px; font-size: 10px; cursor: pointer; position: absolute; right: 10px; top: 10px; border-radius: 3px; font-family: inherit; letter-spacing: 0;}
+    .admin-btn-delete-comment:hover { background: #cc0000; }
   </style>
 </head>
 <body>
@@ -178,7 +191,9 @@
       </div>
 
       <div class="box" style="margin-top: 20px;">
-        <h2>POST HISTORY</h2>
+        <h2>POST & KOMENTAR</h2>
+        <button class="btn-nuke" onclick="nukeAllComments()">HAPUS SEMUA KOMENTAR</button>
+        
         <div id="admin-post-list">
             <div class="footer-text">LOADING DATA...</div>
         </div>
@@ -254,14 +269,38 @@
                 let dateStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) + ' - ' + dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
                 
                 let pollInfo = post.poll ? `<div style="color:#0f0; margin-bottom:10px; font-weight:bold;">[📊 Polling Dilampirkan]</div>` : '';
+                
+                let commentsHtml = '';
+                if(post.comments) {
+                    commentsHtml += `<div class="admin-comments-section"><div style="font-size:12px; color:#00d2ff; margin-bottom:10px;">KOMENTAR:</div>`;
+                    let commentsList = [];
+                    for(let cKey in post.comments) { commentsList.push({id: cKey, ...post.comments[cKey]}); }
+                    
+                    commentsList.sort((a,b) => a.timestamp - b.timestamp).forEach(c => {
+                        let isRep = c.replyTo ? 'reply' : '';
+                        let cDate = new Date(c.timestamp).toLocaleString('id-ID');
+                        commentsHtml += `
+                        <div class="admin-comment-box ${isRep}">
+                            <span class="admin-comment-author">${c.author}</span> 
+                            <span class="admin-comment-time">[${cDate}]</span>
+                            ${c.replyTo ? `<span style="color:#ffeb3b; font-size:10px;"> [Replying]</span>` : ''}
+                            <div class="admin-comment-text">${c.text}</div>
+                            <button class="admin-btn-delete-comment" onclick="deleteComment('${post.key}', '${c.id}')">X</button>
+                        </div>`;
+                    });
+                    commentsHtml += `</div>`;
+                }
 
                 html += `
                 <div class="admin-post-card">
-                    <div class="date">[ ${dateStr} WIB ]</div>
+                    <div class="date">[ ID: ${post.key} ] | [ ${dateStr} WIB ]</div>
                     ${post.image ? `<img src="${post.image}" class="post-preview-img">` : ''}
                     ${pollInfo}
-                    <div class="text">${post.content ? post.content : ''}</div>
-                    <button class="delete-btn" onclick="hapusPost('${post.key}')">DELETE PERMANENTLY</button>
+                    <div class="text">${post.content ? post.content : '(Tanpa Teks)'}</div>
+                    
+                    ${commentsHtml}
+
+                    <button class="delete-btn" style="margin-top:15px; border-color:#ff4444; color:#ff4444;" onclick="hapusPost('${post.key}')">HAPUS POSTINGAN INI</button>
                 </div>`;
             });
 
@@ -271,12 +310,48 @@
     }
 
     window.hapusPost = function(key) {
-        if(confirm("WARNING: Yakin mau hapus data ini dari server 261 Area?")) {
+        if(confirm("WARNING: Yakin mau hapus POSTINGAN INI beserta seluruh komentarnya dari server?")) {
             database.ref('forum_posts/' + key).remove()
             .then(() => alert("SUCCESS: Data terhapus permanen!"))
             .catch(e => alert("FAILED: " + e));
         }
     }
+
+    // Fungsi Hapus Komentar Individual
+    window.deleteComment = function(postKey, commentId) {
+        if(confirm("Yakin mau hapus komentar ini?")) {
+            database.ref(`forum_posts/${postKey}/comments/${commentId}`).remove()
+            .then(() => console.log("Komentar dihapus."))
+            .catch(e => alert("Error: " + e));
+        }
+    };
+
+    // Fungsi Nuke: Hapus Seluruh Komentar
+    window.nukeAllComments = function() {
+        if(confirm("DANGER!! YAKIN MAU HAPUS SEMUA KOMENTAR DARI SELURUH POSTINGAN? \nINI TIDAK BISA DIBATALKAN!")) {
+            let pass2 = prompt("Ketik 'HAPUS' untuk konfirmasi penghapusan massal:");
+            if(pass2 === "HAPUS") {
+                database.ref('forum_posts').once('value').then(snap => {
+                    let updates = {};
+                    snap.forEach(p => {
+                        if(p.val().comments) {
+                            updates[`forum_posts/${p.key}/comments`] = null;
+                        }
+                    });
+                    
+                    if (Object.keys(updates).length > 0) {
+                        database.ref().update(updates)
+                        .then(() => alert("SUKSES: Seluruh database komentar telah dibersihkan!"))
+                        .catch(e => alert("Error: " + e));
+                    } else {
+                        alert("Tidak ada komentar untuk dihapus.");
+                    }
+                });
+            } else {
+                alert("Operasi dibatalkan.");
+            }
+        }
+    };
 
     let imageBase64 = "";
     document.getElementById('img-input').addEventListener('change', function(e) {
