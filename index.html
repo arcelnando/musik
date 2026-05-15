@@ -108,8 +108,28 @@
     
     .post-text-content { color: #eee; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; font-family: 'Inter', sans-serif; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; transition: all 0.3s; }
     .post-text-content.expanded { display: block; -webkit-line-clamp: unset; }
+    
+    /* LINK DI FORUM & KOMENTAR */
+    .post-link { color: #00d2ff; text-decoration: underline; font-weight: 500; cursor: pointer; }
+    .post-link:hover { color: #ffeb3b; }
+
     .read-more-btn { color: #00d2ff; cursor: pointer; font-size: 12px; margin-top: 8px; font-family: 'Share Tech Mono', monospace; font-weight: bold; letter-spacing: 1px; display: inline-block;}
     .read-more-btn:active { transform: scale(0.95); }
+
+    /* WHATSAPP STYLE POLLING CSS */
+    .poll-wrapper { margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 15px; background: rgba(20,20,25,0.8); }
+    .poll-header { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 15px; display: flex; align-items: center; font-family: 'Inter', sans-serif;}
+    
+    .poll-option-row { display: flex; align-items: center; padding: 12px 15px; margin-bottom: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; transition: 0.2s;}
+    .poll-option-row:hover { background: rgba(255,255,255,0.1); border-color: #00c853; }
+    .poll-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #888; margin-right: 15px; flex-shrink: 0; }
+    .poll-text { flex-grow: 1; font-size: 14px; color: #eee; font-family: 'Inter', sans-serif; }
+    
+    .poll-result-row { position: relative; margin-bottom: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;}
+    .poll-progress-bg { position: absolute; left: 0; top: 0; height: 100%; background: rgba(0, 200, 83, 0.2); z-index: 1; transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .poll-result-text { z-index: 2; font-size: 14px; color: #fff; display: flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif;}
+    .poll-result-pct { z-index: 2; font-size: 13px; color: #00c853; font-weight: bold; font-family: 'Inter', sans-serif;}
+    .voted-check { color: #00c853; font-weight: bold; font-size: 12px; background: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; justify-content: center; align-items: center; padding-top:1px;}
 
     .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 10px; }
     .reactions-display { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -413,6 +433,13 @@
                 <div class="game-card-title">BEAT STREET<br>RUN</div>
             </div>
             
+            <!-- TOMBOL KOTA 261 PARKOUR -->
+            <div class="game-card" onclick="playSFX(sfxClick); showScreen('preview-kota-menu')">
+                <img src="parkour.png" alt="🏃" class="game-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="game-icon-emoji" style="display:none;">🏙️</span>
+                <div class="game-card-title">KOTA 261<br>PARKOUR</div>
+            </div>
+
             <div class="game-card" onclick="playSFX(sfxClick); openShop()" style="border-color: #ffeb3b;">
                 <span class="game-icon-emoji" style="margin-bottom: 5px; font-size:40px;">🛒</span>
                 <div class="game-card-title" style="color: #ffeb3b;">BLACK MARKET</div>
@@ -420,6 +447,16 @@
         </div>
 
         <button class="game-btn" onclick="playSFX(sfxClick); closeGameContainer()" style="margin-top: 40px; border-color: #555; color: #888;">Kembali ke Base</button>
+    </div>
+
+    <!-- KOTA 261 PREVIEW MENU -->
+    <div id="preview-kota-menu" class="game-screen">
+        <canvas id="previewCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; opacity:0.3;"></canvas>
+        <h1 class="game-h1" style="text-shadow: 0 0 10px #00d2ff;">KOTA 261</h1>
+        <p class="game-subtitle" style="margin-top:10px; color:#00d2ff; font-weight:bold; letter-spacing:3px;">OPEN WORLD PARKOUR</p>
+        
+        <button class="game-btn" disabled style="background:#222; color:#888; border-color:#555; cursor:not-allowed;">[ COMING SOON ]</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('game-selection-menu')" style="margin-top:20px;">Kembali</button>
     </div>
 
     <!-- BLACK MARKET / SHOP MENU -->
@@ -742,7 +779,6 @@
     function checkAnonName() {
         let savedAnon = localStorage.getItem('anon_name_261');
         if (!savedAnon) {
-            // Gunakan Firebase Transaction agar namanya "Anonymous 1", "Anonymous 2", dst.
             let counterRef = database.ref('system_data/anon_counter');
             counterRef.transaction((current) => {
                 return (current || 0) + 1;
@@ -761,8 +797,7 @@
       let savedNick = localStorage.getItem('last_nickname_261');
       if (savedNick) { document.getElementById('pregame-name-galaxy').value = savedNick; document.getElementById('pregame-name-bs').value = savedNick; }
       
-      checkAnonName(); // Generate Anon on Load
-      
+      checkAnonName(); 
       updateCoinUI();
 
       setTimeout(() => {
@@ -793,7 +828,6 @@
     }
 
     function addCoins(amt) { myCoins += amt; updateCoinUI(); }
-
     function openShop() { showScreen('shop-menu'); updateCoinUI(); }
 
     function buyItem(id, price) {
@@ -825,8 +859,15 @@
     function formatPostText(rawText) {
         if(!rawText) return '';
         let div = document.createElement('div');
-        div.innerText = rawText; // Mencegah XSS
+        div.innerText = rawText; 
         let escaped = div.innerHTML;
+        
+        // Auto-link URLs
+        let urlRegex = /(https?:\/\/[^\s]+)/g;
+        escaped = escaped.replace(urlRegex, function(url) {
+            return '<a href="' + url + '" target="_blank" class="post-link">' + url + '</a>';
+        });
+
         escaped = escaped.replace(/(#[a-zA-Z0-9_]+)/g, '<span style="color: #00d2ff; font-weight: bold;">$1</span>');
         escaped = escaped.replace(/(@[a-zA-Z0-9_]+)/g, '<span style="color: #ffeb3b; font-weight: bold;">$1</span>');
         return escaped;
@@ -893,6 +934,7 @@
         document.getElementById('reaction-menu').style.display = 'none';
     };
 
+    // UPDATE: Voting system ala WhatsApp
     window.votePoll = function(postKey, optKey) {
         if(localStorage.getItem('voted_' + postKey)) { alert("Gagal: Sistem mendeteksi lu udah pernah vote!"); return; } 
         
@@ -902,7 +944,7 @@
         }, (error, committed, snapshot) => {
             if (error) { alert("Gagal memproses vote! Sistem mendeteksi anomali."); } 
             else if (!committed) { alert("Vote ditolak server."); } 
-            else { localStorage.setItem('voted_' + postKey, 'true'); }
+            else { localStorage.setItem('voted_' + postKey, optKey); } // Simpan optKey yang dipilih
         });
     };
 
@@ -940,7 +982,6 @@
     };
 
     window.submitComment = function() {
-        // Ambil nama dari system localstorage (Auto Anonymous atau Petinggi)
         let nameInput = localStorage.getItem('anon_name_261');
         if(!nameInput) {
             nameInput = 'Anonymous ' + Math.floor(Math.random() * 9999);
@@ -998,7 +1039,6 @@
             
             document.getElementById('comment-count-badge').innerText = `(${comments.length})`;
             
-            // Susun jadi tree logic (Buat reply)
             let commentDict = {};
             comments.forEach(c => { 
                 c.children = [];
@@ -1014,7 +1054,6 @@
                 }
             });
 
-            // Render Function
             let renderHtml = '';
             const renderCommentNode = (node, isReply) => {
                 let dateObj = new Date(node.timestamp); 
@@ -1077,12 +1116,27 @@
             let pollHtml = '';
             if(post.poll) {
                 let totalVotes = 0; let pollKeys = Object.keys(post.poll); pollKeys.forEach(k => totalVotes += (post.poll[k].votes || 0));
-                let hasVoted = localStorage.getItem('voted_' + post.key) === 'true';
+                let votedOpt = localStorage.getItem('voted_' + post.key);
+                
                 pollHtml += `<div class="poll-wrapper"><div class="poll-header">📊 PILIH OPSI DI BAWAH:</div>`;
                 pollKeys.forEach(k => {
                     let opt = post.poll[k]; let votes = opt.votes || 0; let pct = totalVotes === 0 ? 0 : Math.round((votes / totalVotes) * 100);
-                    if (hasVoted) pollHtml += `<div class="poll-result-bar"><div class="poll-progress" style="width: ${pct}%;"></div><span style="font-weight:bold; z-index:2;">${opt.text}</span><span style="z-index:2; font-size:11px; color:#888;">(${votes})</span></div>`;
-                    else pollHtml += `<button class="poll-option-btn" onclick="votePoll('${post.key}', '${k}')"><div class="poll-radio"></div>${opt.text}</button>`;
+                    
+                    if (votedOpt) {
+                        let isMyVote = (votedOpt === k) ? '<span class="voted-check">✔</span>' : '';
+                        pollHtml += `
+                        <div class="poll-result-row">
+                            <div class="poll-progress-bg" style="width: ${pct}%;"></div>
+                            <div class="poll-result-text">${opt.text} ${isMyVote}</div>
+                            <div class="poll-result-pct">${pct}%</div>
+                        </div>`;
+                    } else {
+                        pollHtml += `
+                        <div class="poll-option-row" onclick="votePoll('${post.key}', '${k}')">
+                            <div class="poll-radio"></div>
+                            <div class="poll-text">${opt.text}</div>
+                        </div>`;
+                    }
                 });
                 pollHtml += `</div>`;
             }
@@ -1172,6 +1226,42 @@
         else if (id === 'game-selection-menu' || id === 'shop-menu') { gameBgm.pause(); bsBgm.pause(); stopMotorSound(); if (bgMusic.paused) bgMusic.play().catch(e=>{}); }
     }
 
+    // SIMULASI BACKGROUND KOTA 261 PREVIEW
+    const pCanvas = document.getElementById('previewCanvas');
+    const pCtx = pCanvas ? pCanvas.getContext('2d') : null;
+    let pw, ph;
+    let pBgBuildings = [];
+    function resizeP() { 
+        if(!pCanvas) return;
+        pw = pCanvas.width = window.innerWidth; 
+        ph = pCanvas.height = window.innerHeight; 
+    }
+    window.addEventListener('resize', resizeP); resizeP();
+    
+    function loopPreview() {
+        if(pCanvas && document.getElementById('preview-kota-menu').classList.contains('active')) {
+            pCtx.clearRect(0,0,pw,ph);
+            // Langit Cyber
+            let grad = pCtx.createLinearGradient(0, 0, 0, ph);
+            grad.addColorStop(0, "#010105"); grad.addColorStop(1, "#120520");
+            pCtx.fillStyle = grad; pCtx.fillRect(0, 0, pw, ph);
+            
+            // Animasi Gedung Latar
+            for(let i=0; i<pBgBuildings.length; i++) {
+                let b = pBgBuildings[i];
+                b.x -= 1.5;
+                pCtx.fillStyle = '#07070a'; pCtx.fillRect(b.x, b.y, b.w, ph-b.y);
+                pCtx.strokeStyle = '#00d2ff'; pCtx.lineWidth=1; pCtx.strokeRect(b.x, b.y, b.w, ph-b.y);
+                if(b.x + b.w < 0) { pBgBuildings.splice(i,1); i--; }
+            }
+            if(pBgBuildings.length === 0 || pBgBuildings[pBgBuildings.length-1].x < pw - 120) {
+                pBgBuildings.push({x: pw, w: 100+Math.random()*150, y: ph*0.4 + Math.random()*200});
+            }
+        }
+        requestAnimationFrame(loopPreview);
+    }
+    loopPreview();
+
     const canvas = document.getElementById('gameCanvas'); const ctx = canvas.getContext('2d'); let w, h; let stars = []; 
     function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; stars = []; for(let i=0; i<200; i++) { stars.push({ x: Math.random() * 5000, y: Math.random() * 5000, size: Math.random() * 2 + 0.5, speed: Math.random() * 0.8 + 0.2, color: (Math.random() > 0.5 ? '#ffffff' : '#e0f0ff') }); } }
     window.addEventListener('resize', resize); resize();
@@ -1207,14 +1297,14 @@
         let nameInput = document.getElementById(inputId).value.trim().toUpperCase();
         if(!nameInput) { alert("Buat NICKNAME dulu sebelum bermain!"); return null; }
         localStorage.setItem('last_nickname_261', nameInput); let safeCheck = nameInput.replace(/[^A-Z0-9]/g, ''); isNandoAccount = false;
-        if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) { let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:"); if(pass === "nandoacces") { isNandoAccount = true; alert("Selamat datang kembali, Tuan."); } else { alert("Lu bukan nando! Ganti nama woi."); return null; } }
+        if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) { let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:"); if(pass === "parapetinggi261") { isNandoAccount = true; alert("ACCESS GRANTED: Selamat datang kembali, Tuan."); } else { alert("ACCESS DENIED: Lu bukan petinggi! Ganti nama woi."); return null; } }
         return nameInput;
     }
 
     // ====== GALAXY SURVIVOR LOGIC ======
     let gameDifficulty = 'EASY'; function toggleDifficulty() { gameDifficulty = (gameDifficulty === 'EASY') ? 'HARD' : 'EASY'; document.getElementById('btn-difficulty-galaxy').innerText = 'MODE: ' + gameDifficulty; }
     let player, enemies, enemyBullets, bullets, particles, gems, texts, coinDrops; 
-    let playerDrone; // Penambahan Anak Buah (Drone)
+    let playerDrone; 
     let screenShake = 0, score = 0; let input = { x: 0, y: 0 }; let isShooting = false; let camX = 0, camY = 0; 
     let nextMilestoneIdx = 0; let lastBossSpawnedLvl = 0;
     const milestonesList = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
@@ -1256,11 +1346,10 @@
 
     function startGalaxyWithProgress(startLevel, startScore) {
         player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 8, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0, rainbow: false }; 
-        playerDrone = new PlayerDrone(); // Inisialisasi drone pembantu
+        playerDrone = new PlayerDrone(); 
         enemies = []; enemyBullets = []; bullets = []; particles = []; gems = []; texts = []; coinDrops = [];
         screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false; nextMilestoneIdx = 0; lastBossSpawnedLvl = 0;
         
-        // TERAPKAN STATS DARI PESAWAT & PERKS BLACK MARKET
         if(eqShip === 'titan') { player.maxHp = 250; player.hp = 250; player.dmg = 3; player.speed = 4; player.r = 20; }
         else if (eqShip === 'phantom') { player.maxHp = 80; player.hp = 80; player.dmg = 1.5; player.speed = 8; player.fireRate = 5; player.multi = 2; }
 
