@@ -224,7 +224,8 @@
     const database = firebase.database();
 
     window.onload = function() {
-        if(localStorage.getItem('admin261_logged_in') === 'true') {
+        // Ganti nama key session untuk log-out otomatis user lama
+        if(localStorage.getItem('admin261_session_v2') === 'true') {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('admin-screen').style.display = 'flex';
             loadAdminPosts(); 
@@ -236,8 +237,10 @@
       let p = document.getElementById('pass').value;
       let remember = document.getElementById('remember-me').checked;
 
-      if(u === '261area' && p === 'petinggi261') {
-        if(remember) localStorage.setItem('admin261_logged_in', 'true');
+      // Username: nandoacces
+      // Password: "nandoacces261" telah di-encode jadi "bmFuZG9hY2NlczI2MQ==" pake metode btoa
+      if(u === 'nandoacces' && btoa(p) === 'bmFuZG9hY2NlczI2MQ==') {
+        if(remember) localStorage.setItem('admin261_session_v2', 'true');
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-screen').style.display = 'flex';
         loadAdminPosts(); 
@@ -248,7 +251,7 @@
 
     function logout() {
         if(confirm("Yakin mau logout cuy?")) {
-            localStorage.removeItem('admin261_logged_in');
+            localStorage.removeItem('admin261_session_v2');
             document.getElementById('admin-screen').style.display = 'none';
             document.getElementById('login-screen').style.display = 'block';
         }
