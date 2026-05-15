@@ -122,10 +122,13 @@
     
     .poll-option-row { display: flex; align-items: center; padding: 12px 15px; margin-bottom: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; transition: 0.2s;}
     .poll-option-row:hover { background: rgba(255,255,255,0.1); border-color: #00c853; }
+    .poll-option-row:active { transform: scale(0.98); }
     .poll-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #888; margin-right: 15px; flex-shrink: 0; }
     .poll-text { flex-grow: 1; font-size: 14px; color: #eee; font-family: 'Inter', sans-serif; }
     
-    .poll-result-row { position: relative; margin-bottom: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;}
+    .poll-result-row { position: relative; margin-bottom: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.2s;}
+    .poll-result-row:hover { border-color: #00c853; }
+    .poll-result-row:active { transform: scale(0.98); }
     .poll-progress-bg { position: absolute; left: 0; top: 0; height: 100%; background: rgba(0, 200, 83, 0.2); z-index: 1; transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
     .poll-result-text { z-index: 2; font-size: 14px; color: #fff; display: flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif;}
     .poll-result-pct { z-index: 2; font-size: 13px; color: #00c853; font-weight: bold; font-family: 'Inter', sans-serif;}
@@ -934,18 +937,24 @@
         document.getElementById('reaction-menu').style.display = 'none';
     };
 
-    // UPDATE: Voting system ala WhatsApp
-    window.votePoll = function(postKey, optKey) {
-        if(localStorage.getItem('voted_' + postKey)) { alert("Gagal: Sistem mendeteksi lu udah pernah vote!"); return; } 
+    // UPDATE: Voting system ala WhatsApp (Bisa ganti vote & batalin)
+    window.handleVote = function(postKey, targetOptKey) {
+        let prevOptKey = localStorage.getItem('voted_' + postKey);
         
-        let optRef = database.ref(`forum_posts/${postKey}/poll/${optKey}/votes`); 
-        optRef.transaction((currentVotes) => {
-            return (currentVotes || 0) + 1;
-        }, (error, committed, snapshot) => {
-            if (error) { alert("Gagal memproses vote! Sistem mendeteksi anomali."); } 
-            else if (!committed) { alert("Vote ditolak server."); } 
-            else { localStorage.setItem('voted_' + postKey, optKey); } // Simpan optKey yang dipilih
-        });
+        if (prevOptKey === targetOptKey) {
+            // UNVOTE (Batalin Vote)
+            database.ref(`forum_posts/${postKey}/poll/${prevOptKey}/votes`).transaction(v => Math.max(0, (v || 0) - 1));
+            localStorage.removeItem('voted_' + postKey);
+        } else if (prevOptKey) {
+            // CHANGE VOTE (Pindah Opsi)
+            database.ref(`forum_posts/${postKey}/poll/${prevOptKey}/votes`).transaction(v => Math.max(0, (v || 0) - 1));
+            database.ref(`forum_posts/${postKey}/poll/${targetOptKey}/votes`).transaction(v => (v || 0) + 1);
+            localStorage.setItem('voted_' + postKey, targetOptKey);
+        } else {
+            // NEW VOTE (Vote Baru)
+            database.ref(`forum_posts/${postKey}/poll/${targetOptKey}/votes`).transaction(v => (v || 0) + 1);
+            localStorage.setItem('voted_' + postKey, targetOptKey);
+        }
     };
 
     // ====== SISTEM KOMENTAR ======
@@ -1125,14 +1134,14 @@
                     if (votedOpt) {
                         let isMyVote = (votedOpt === k) ? '<span class="voted-check">✔</span>' : '';
                         pollHtml += `
-                        <div class="poll-result-row">
+                        <div class="poll-result-row" onclick="handleVote('${post.key}', '${k}')" style="cursor:pointer;">
                             <div class="poll-progress-bg" style="width: ${pct}%;"></div>
                             <div class="poll-result-text">${opt.text} ${isMyVote}</div>
                             <div class="poll-result-pct">${pct}%</div>
                         </div>`;
                     } else {
                         pollHtml += `
-                        <div class="poll-option-row" onclick="votePoll('${post.key}', '${k}')">
+                        <div class="poll-option-row" onclick="handleVote('${post.key}', '${k}')">
                             <div class="poll-radio"></div>
                             <div class="poll-text">${opt.text}</div>
                         </div>`;
@@ -1304,7 +1313,7 @@
     // ====== GALAXY SURVIVOR LOGIC ======
     let gameDifficulty = 'EASY'; function toggleDifficulty() { gameDifficulty = (gameDifficulty === 'EASY') ? 'HARD' : 'EASY'; document.getElementById('btn-difficulty-galaxy').innerText = 'MODE: ' + gameDifficulty; }
     let player, enemies, enemyBullets, bullets, particles, gems, texts, coinDrops; 
-    let playerDrone; 
+    let playerDrone; // Penambahan Anak Buah (Drone)
     let screenShake = 0, score = 0; let input = { x: 0, y: 0 }; let isShooting = false; let camX = 0, camY = 0; 
     let nextMilestoneIdx = 0; let lastBossSpawnedLvl = 0;
     const milestonesList = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
@@ -1346,10 +1355,11 @@
 
     function startGalaxyWithProgress(startLevel, startScore) {
         player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 8, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0, rainbow: false }; 
-        playerDrone = new PlayerDrone(); 
+        playerDrone = new PlayerDrone(); // Inisialisasi drone pembantu
         enemies = []; enemyBullets = []; bullets = []; particles = []; gems = []; texts = []; coinDrops = [];
         screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false; nextMilestoneIdx = 0; lastBossSpawnedLvl = 0;
         
+        // TERAPKAN STATS DARI PESAWAT & PERKS BLACK MARKET
         if(eqShip === 'titan') { player.maxHp = 250; player.hp = 250; player.dmg = 3; player.speed = 4; player.r = 20; }
         else if (eqShip === 'phantom') { player.maxHp = 80; player.hp = 80; player.dmg = 1.5; player.speed = 8; player.fireRate = 5; player.multi = 2; }
 
