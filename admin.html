@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>261 AREA</title>
+  <title>261 AREA | ADMIN PANEL</title>
   
   <!-- SCRIPT FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -36,7 +36,7 @@
     .box {
         background: #000;
         border: 2px solid #333;
-        padding: 40px 30px;
+        padding: 30px 20px;
         width: 100%;
         max-width: 500px;
         z-index: 10;
@@ -117,24 +117,33 @@
 
     #admin-screen { display: none; }
 
-    .admin-post-card { border: 1px solid #333; padding: 20px; margin-top: 20px; background: #0a0a0a; border-radius: 8px;}
+    /* PERBAIKAN POST CARD BIAR GAK TUMPANG TINDIH */
+    .admin-post-card { border: 1px solid #333; padding: 20px; margin-top: 20px; background: #0a0a0a; border-radius: 8px; word-wrap: break-word; overflow: hidden;}
     .admin-post-card .date { font-size: 11px; color: #00d2ff; margin-bottom: 15px; font-family: 'Share Tech Mono', monospace; border-bottom: 1px dashed #333; padding-bottom: 10px;}
-    .admin-post-card .text { font-size: 14px; color: #eee; margin-bottom: 15px; white-space: pre-wrap; line-height: 1.5; font-family: 'Inter', sans-serif;}
-    .post-preview-img { width: 100%; border: 1px solid #333; margin-bottom: 10px; border-radius: 4px;}
+    .admin-post-card .text { font-size: 14px; color: #eee; margin-bottom: 15px; white-space: pre-wrap; line-height: 1.5; font-family: sans-serif; word-break: break-word;}
+    .post-preview-img { width: 100%; height: auto; max-height: 300px; object-fit: contain; border: 1px solid #333; margin-bottom: 10px; border-radius: 4px; background: #000;}
     
     .delete-btn { width: 100%; background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 12px; font-size: 14px; margin-top: 5px; font-family: 'Share Tech Mono', monospace; font-weight: bold;}
     .delete-btn:hover { background: #ff4444; color: #000; }
     
     #poll-container input { margin-bottom: 8px; border-style: dashed; }
 
+    /* CSS MONITOR POLLING */
+    .admin-poll-container { margin-bottom: 15px; background: rgba(0,0,0,0.6); border: 1px solid #222; border-radius: 8px; padding: 15px; }
+    .admin-poll-header { color: #00d2ff; font-weight: bold; font-size: 12px; margin-bottom: 12px; border-bottom: 1px dashed #333; padding-bottom: 8px; display: flex; justify-content: space-between; }
+    .admin-poll-row { position: relative; padding: 10px 12px; margin-bottom: 8px; background: rgba(255,255,255,0.05); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; overflow: hidden; border: 1px solid #111;}
+    .admin-poll-bg { position: absolute; left: 0; top: 0; height: 100%; background: rgba(0, 210, 255, 0.2); z-index: 1; transition: width 0.5s ease; }
+    .admin-poll-text { z-index: 2; font-size: 13px; color: #fff; font-family: sans-serif; max-width: 60%; word-break: break-word;}
+    .admin-poll-stats { z-index: 2; font-size: 12px; color: #00d2ff; font-weight: bold; font-family: 'Courier New', Courier, monospace;}
+
     /* CSS KOMENTAR DI ADMIN PANEL */
     .admin-comments-section { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #333; }
-    .admin-comment-box { background: transparent; margin-top: 10px; padding: 10px 0; position: relative; border-bottom: 1px solid #111; }
+    .admin-comment-box { background: transparent; margin-top: 10px; padding: 10px 0; position: relative; border-bottom: 1px solid #111; word-wrap: break-word;}
     .admin-comment-box.reply { margin-left: 20px; border-left: 2px solid #333; padding-left: 15px; border-bottom: none; }
-    .admin-comment-author { font-size: 13px; font-weight: bold; color: #0f0; }
-    .admin-comment-time { font-size: 11px; color: #666; margin-left: 5px; }
-    .admin-comment-text { font-size: 13px; color: #ccc; margin-top: 5px; white-space: pre-wrap; word-break: break-word; font-family: 'Inter', sans-serif;}
-    .admin-btn-delete-comment { background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 4px 8px; font-size: 10px; cursor: pointer; position: absolute; right: 0; top: 5px; border-radius: 4px; font-family: inherit; font-weight: bold;}
+    .admin-comment-author { font-size: 12px; font-weight: bold; color: #0f0; }
+    .admin-comment-time { font-size: 10px; color: #666; margin-left: 5px; }
+    .admin-comment-text { font-size: 13px; color: #ccc; margin-top: 5px; white-space: pre-wrap; word-break: break-word; font-family: sans-serif; padding-right: 50px;} /* Kasih ruang buat tombol delete */
+    .admin-btn-delete-comment { background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 5px 10px; font-size: 10px; cursor: pointer; position: absolute; right: 0; top: 5px; border-radius: 4px; font-family: inherit; font-weight: bold;}
     .admin-btn-delete-comment:hover { background: #ff4444; color: #000; }
   </style>
 </head>
@@ -182,14 +191,14 @@
         <div class="input-group" style="border: 1px dashed #333; padding: 15px; border-radius: 8px;">
             <label style="color:#0f0;">📊 TAMBAH POLLING (OPSIONAL)</label>
             <div id="poll-container"></div>
-            <button type="button" onclick="addPollOption()" style="padding: 10px; font-size: 12px; border: 1px dashed #0f0; color: #0f0; margin-top: 5px;">+ TAMBAH OPSI</button>
+            <button type="button" onclick="addPollOption()" style="padding: 10px; font-size: 12px; border: 1px dashed #0f0; color: #0f0; margin-top: 5px; background: transparent;">+ TAMBAH OPSI</button>
         </div>
 
         <button id="submit-btn" onclick="kirimPost()">KIRIM DATA</button>
         <div class="footer-text">CREATED : NANDO</div>
       </div>
 
-      <div class="box" style="margin-top: 10px;">
+      <div class="box" style="margin-top: 10px; padding: 15px;">
         <h2>POST & KOMENTAR</h2>
         
         <div id="admin-post-list">
@@ -266,8 +275,37 @@
                 let dateObj = new Date(post.timestamp);
                 let dateStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) + ' - ' + dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
                 
-                let pollInfo = post.poll ? `<div style="color:#0f0; margin-bottom:10px; font-weight:bold; font-size:12px;">[📊 Polling Dilampirkan]</div>` : '';
+                // SISTEM MONITOR POLLING (BARU)
+                let pollMonitorHtml = '';
+                if(post.poll) {
+                    let totalVotes = 0;
+                    let pollKeys = Object.keys(post.poll);
+                    pollKeys.forEach(k => totalVotes += (post.poll[k].votes || 0));
+
+                    pollMonitorHtml += `
+                    <div class="admin-poll-container">
+                        <div class="admin-poll-header">
+                            <span>📊 MONITOR POLLING</span>
+                            <span style="color:#fff;">${totalVotes} Suara</span>
+                        </div>`;
+                        
+                    pollKeys.forEach(k => {
+                        let opt = post.poll[k];
+                        let votes = opt.votes || 0;
+                        let pct = totalVotes === 0 ? 0 : Math.round((votes / totalVotes) * 100);
+                        
+                        pollMonitorHtml += `
+                        <div class="admin-poll-row">
+                            <div class="admin-poll-bg" style="width: ${pct}%;"></div>
+                            <div class="admin-poll-text">${opt.text}</div>
+                            <div class="admin-poll-stats">${votes} VOTE (${pct}%)</div>
+                        </div>`;
+                    });
+                    
+                    pollMonitorHtml += `</div>`;
+                }
                 
+                // SISTEM RENDER KOMENTAR
                 let commentsHtml = '';
                 if(post.comments) {
                     commentsHtml += `<div class="admin-comments-section"><div style="font-size:12px; color:#00d2ff; margin-bottom:10px; font-weight:bold;">KOMENTAR MASUK:</div>`;
@@ -293,9 +331,10 @@
                 <div class="admin-post-card">
                     <div class="date">[ ID: ${post.key} ]<br>[ ${dateStr} WIB ]</div>
                     ${post.image ? `<img src="${post.image}" class="post-preview-img">` : ''}
-                    ${pollInfo}
-                    <div class="text">${post.content ? post.content : '(Tanpa Teks)'}</div>
                     
+                    <div class="text">${post.content ? post.content : '(Tanpa Teks / Hanya Gambar atau Poll)'}</div>
+                    
+                    ${pollMonitorHtml}
                     ${commentsHtml}
 
                     <button class="delete-btn" style="margin-top:20px;" onclick="hapusPost('${post.key}')">HAPUS POSTINGAN INI</button>
@@ -308,7 +347,7 @@
     }
 
     window.hapusPost = function(key) {
-        if(confirm("WARNING: Yakin mau hapus POSTINGAN INI beserta seluruh komentarnya dari server?")) {
+        if(confirm("WARNING: Yakin mau hapus POSTINGAN INI beserta seluruh komentar & pollingnya dari server?")) {
             database.ref('forum_posts/' + key).remove()
             .then(() => alert("SUCCESS: Data terhapus permanen!"))
             .catch(e => alert("FAILED: " + e));
@@ -380,10 +419,10 @@
         document.getElementById('poll-container').innerHTML = ''; // Reset Polling
         pollCount = 0;
         imageBase64 = '';
-        btn.innerText = "TRANSMIT DATA"; btn.disabled = false;
+        btn.innerText = "KIRIM DATA"; btn.disabled = false;
       }).catch(e => {
         alert('FAILED: ' + e);
-        btn.innerText = "TRANSMIT DATA"; btn.disabled = false;
+        btn.innerText = "KIRIM DATA"; btn.disabled = false;
       });
     }
 
