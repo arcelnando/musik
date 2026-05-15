@@ -116,9 +116,7 @@
     .read-more-btn { color: #00d2ff; cursor: pointer; font-size: 12px; margin-top: 8px; font-family: 'Share Tech Mono', monospace; font-weight: bold; letter-spacing: 1px; display: inline-block;}
     .read-more-btn:active { transform: scale(0.95); }
 
-    /* =========================================
-       WHATSAPP STYLE POLLING CSS & IG CHECK
-       ========================================= */
+    /* WHATSAPP STYLE POLLING CSS & IG CHECK */
     .poll-wrapper { margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 15px; background: rgba(20,20,25,0.8); }
     .poll-header { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; font-family: 'Inter', sans-serif;}
     
@@ -136,7 +134,6 @@
     .poll-result-text { z-index: 2; font-size: 14px; color: #fff; display: flex; align-items: center; gap: 10px; font-family: 'Inter', sans-serif;}
     .poll-result-pct { z-index: 2; font-size: 13px; color: #0095f6; font-weight: bold; font-family: 'Inter', sans-serif;}
     
-    /* CENTANG BIRU IG */
     .ig-check { background: #0095f6; color: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; flex-shrink: 0;}
 
     .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 10px; }
@@ -870,7 +867,6 @@
         div.innerText = rawText; 
         let escaped = div.innerHTML;
         
-        // Auto-link URLs
         let urlRegex = /(https?:\/\/[^\s]+)/g;
         escaped = escaped.replace(urlRegex, function(url) {
             return '<a href="' + url + '" target="_blank" class="post-link">' + url + '</a>';
@@ -942,23 +938,24 @@
         document.getElementById('reaction-menu').style.display = 'none';
     };
 
-    // UPDATE: Voting system ala WhatsApp (Bisa ganti vote & batalin)
+    // UPDATE: Voting system ala WhatsApp (Bisa ganti vote & batalin) FIX
     window.handleVote = function(postKey, targetOptKey) {
-        let prevOptKey = localStorage.getItem('voted_' + postKey);
+        let lsKey = 'poll_voted_' + postKey;
+        let prevOptKey = localStorage.getItem(lsKey);
         
         if (prevOptKey === targetOptKey) {
             // UNVOTE (Batalin Vote)
             database.ref(`forum_posts/${postKey}/poll/${prevOptKey}/votes`).transaction(v => Math.max(0, (v || 0) - 1));
-            localStorage.removeItem('voted_' + postKey);
+            localStorage.removeItem(lsKey);
         } else if (prevOptKey) {
             // CHANGE VOTE (Pindah Opsi)
             database.ref(`forum_posts/${postKey}/poll/${prevOptKey}/votes`).transaction(v => Math.max(0, (v || 0) - 1));
             database.ref(`forum_posts/${postKey}/poll/${targetOptKey}/votes`).transaction(v => (v || 0) + 1);
-            localStorage.setItem('voted_' + postKey, targetOptKey);
+            localStorage.setItem(lsKey, targetOptKey);
         } else {
             // NEW VOTE (Vote Baru)
             database.ref(`forum_posts/${postKey}/poll/${targetOptKey}/votes`).transaction(v => (v || 0) + 1);
-            localStorage.setItem('voted_' + postKey, targetOptKey);
+            localStorage.setItem(lsKey, targetOptKey);
         }
     };
 
@@ -1130,7 +1127,12 @@
             let pollHtml = '';
             if(post.poll) {
                 let totalVotes = 0; let pollKeys = Object.keys(post.poll); pollKeys.forEach(k => totalVotes += (post.poll[k].votes || 0));
-                let votedOpt = localStorage.getItem('voted_' + post.key);
+                
+                // Gunakan prefix 'poll_voted_' agar terhindar dari bug versi lama
+                let votedOpt = localStorage.getItem('poll_voted_' + post.key);
+                
+                // Pastikan votedOpt yang kesimpen beneran ada di data Firebase
+                if(votedOpt && !post.poll[votedOpt]) votedOpt = null;
                 
                 pollHtml += `<div class="poll-wrapper"><div class="poll-header">📊 PILIH OPSI DI BAWAH: <span style="margin-left:auto; font-size:12px; color:#aaa; font-weight:normal;">${totalVotes} suara</span></div>`;
                 pollKeys.forEach(k => {
@@ -1140,7 +1142,7 @@
                         let isMyVote = (votedOpt === k) ? '<div class="ig-check">✔</div>' : '';
                         let activeClass = (votedOpt === k) ? 'active-vote' : '';
                         pollHtml += `
-                        <div class="poll-result-row ${activeClass}" onclick="window.handleVote('${post.key}', '${k}')">
+                        <div class="poll-result-row ${activeClass}" onclick="window.handleVote('${post.key}', '${k}')" style="cursor:pointer;">
                             <div class="poll-progress-bg" style="width: ${pct}%;"></div>
                             <div class="poll-result-text">${opt.text} ${isMyVote}</div>
                             <div class="poll-result-pct">${pct}%</div>
@@ -1312,7 +1314,7 @@
         let nameInput = document.getElementById(inputId).value.trim().toUpperCase();
         if(!nameInput) { alert("Buat NICKNAME dulu sebelum bermain!"); return null; }
         localStorage.setItem('last_nickname_261', nameInput); let safeCheck = nameInput.replace(/[^A-Z0-9]/g, ''); isNandoAccount = false;
-        if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) { let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:"); if(pass === "parapetinggi261") { isNandoAccount = true; alert("ACCESS GRANTED: Selamat datang kembali, Tuan."); } else { alert("ACCESS DENIED: Lu bukan petinggi! Ganti nama woi."); return null; } }
+        if(safeCheck.includes("NANDO") || safeCheck.includes("ARCEL") || safeCheck.includes("MARCEL") || safeCheck.includes("ANTIDOGMA")) { let pass = prompt("WARNING! SISTEM MENDETEKSI NICKNAME PETINGGI.\n\nMasukkan Password Akses:"); if(pass === "nandoacces") { isNandoAccount = true; alert("ACCESS GRANTED: Selamat datang kembali, Tuan."); } else { alert("ACCESS DENIED: Lu bukan petinggi! Ganti nama woi."); return null; } }
         return nameInput;
     }
 
