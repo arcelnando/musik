@@ -439,7 +439,7 @@
             </div>
             
             <!-- TOMBOL KOTA 261 PARKOUR -->
-            <div class="game-card" onclick="playSFX(sfxClick); showScreen('preview-kota-menu')">
+            <div class="game-card" onclick="playSFX(sfxClick); showScreen('main-menu-parkour')">
                 <img src="parkour.png" alt="🏃" class="game-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                 <span class="game-icon-emoji" style="display:none;">🏙️</span>
                 <div class="game-card-title">KOTA 261<br>PARKOUR</div>
@@ -454,14 +454,15 @@
         <button class="game-btn" onclick="playSFX(sfxClick); closeGameContainer()" style="margin-top: 40px; border-color: #555; color: #888;">Kembali ke Base</button>
     </div>
 
-    <!-- KOTA 261 PREVIEW MENU -->
-    <div id="preview-kota-menu" class="game-screen">
-        <canvas id="previewCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; opacity:0.3;"></canvas>
-        <h1 class="game-h1" style="text-shadow: 0 0 10px #00d2ff;">KOTA 261</h1>
-        <p class="game-subtitle" style="margin-top:10px; color:#00d2ff; font-weight:bold; letter-spacing:3px;">OPEN WORLD PARKOUR</p>
+    <!-- KOTA 261 PARKOUR MENU -->
+    <div id="main-menu-parkour" class="game-screen">
+        <h1 class="game-h1" style="text-shadow: 0 0 15px #ff0055; font-size: 3rem;"><span>261</span> ROOFTOP</h1>
+        <p class="game-subtitle" style="margin-top:10px; color:#ff0055; font-weight:bold; letter-spacing:3px;">OPEN WORLD PARKOUR</p>
         
-        <button class="game-btn" disabled style="background:#222; color:#888; border-color:#555; cursor:not-allowed;">[ COMING SOON ]</button>
-        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('game-selection-menu')" style="margin-top:20px;">Kembali</button>
+        <input type="text" id="pregame-name-pk" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="12" style="border-color: #ff0055;">
+        <button id="btn-start-game-pk" class="game-btn" onclick="playSFX(sfxClick); checkAndStartParkour()" style="border-color: #ff0055;">Mulai Lari</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('pk-leaderboard-menu'); updatePKLeaderboardUI();" style="border-color: #ff0055;">Leaderboard Jumper</button>
+        <button class="game-btn" onclick="playSFX(sfxClick); showScreen('game-selection-menu')" style="border-color: #555; color: #888;">Kembali</button>
     </div>
 
     <!-- BLACK MARKET / SHOP MENU -->
@@ -472,7 +473,36 @@
             
             <div style="max-height: 45vh; overflow-y: auto; padding-right: 5px;">
                 
-                <h3 style="color:#0f0; font-size: 14px; text-align:left; margin-bottom: 10px; font-family:'Share Tech Mono';">=> BEAT STREET ITEMS</h3>
+                <h3 style="color:#ff0055; font-size: 14px; text-align:left; margin-top: 10px; margin-bottom: 10px; font-family:'Share Tech Mono';">=> KOTA 261 PARKOUR</h3>
+                <div class="shop-item-card">
+                    <div class="shop-item-info">
+                        <h4>SHIELD MATRIX</h4>
+                        <p>Tahan 1x tabrakan rintangan (1x pakai).</p>
+                    </div>
+                    <button class="shop-buy-btn" onclick="buyItem('shield_pk', 200)">
+                        <img src="koin.png" onerror="this.style.display='none';"> 200
+                    </button>
+                </div>
+                <div class="shop-item-card" style="border-color: #f0f;">
+                    <div class="shop-item-info">
+                        <h4 style="color: #f0f;">SEPATU ANTI-GRAVITASI</h4>
+                        <p>Lompatan super ringan & melayang (Permanen).</p>
+                    </div>
+                    <button class="shop-buy-btn" id="btn-buy-shoes" onclick="buyPerk('sepatu_gravitasi', 3500)">
+                        <img src="koin.png" onerror="this.style.display='none';"> 3500
+                    </button>
+                </div>
+                <div class="shop-item-card" style="border-color: #ffeb3b;">
+                    <div class="shop-item-info">
+                        <h4 style="color: #ffeb3b;">MAGNET DATA</h4>
+                        <p>Otomatis menyedot Koin Data di sekitar (Permanen).</p>
+                    </div>
+                    <button class="shop-buy-btn" id="btn-buy-magnetpk" onclick="buyPerk('magnet_pk', 5000)">
+                        <img src="koin.png" onerror="this.style.display='none';"> 5000
+                    </button>
+                </div>
+
+                <h3 style="color:#0f0; font-size: 14px; text-align:left; margin-top: 20px; margin-bottom: 10px; font-family:'Share Tech Mono';">=> BEAT STREET RUN</h3>
                 
                 <div class="shop-item-card">
                     <div class="shop-item-info">
@@ -494,7 +524,7 @@
                     </button>
                 </div>
 
-                <h3 style="color:#00d2ff; font-size: 14px; text-align:left; margin-top: 20px; margin-bottom: 10px; font-family:'Share Tech Mono';">=> GALAXY ITEMS</h3>
+                <h3 style="color:#00d2ff; font-size: 14px; text-align:left; margin-top: 20px; margin-bottom: 10px; font-family:'Share Tech Mono';">=> GALAXY SURVIVOR</h3>
                 
                 <div class="shop-item-card">
                     <div class="shop-item-info">
@@ -531,7 +561,7 @@
                 <div class="shop-item-card" style="border-color: #ffeb3b; background: rgba(50,40,0,0.9);">
                     <div class="shop-item-info">
                         <h4 style="color: #ffeb3b;">KARTU VIP 261 (MYTHIC)</h4>
-                        <p>Beat: +3 Nyawa awal. Galaxy: Rainbow Shot.</p>
+                        <p>Semua benefit rahasia terbuka!</p>
                     </div>
                     <button class="shop-buy-btn" id="btn-buy-vip" onclick="buyPerk('vip_261', 15000)">
                         <img src="koin.png" onerror="this.style.display='none';"> 15000
@@ -607,6 +637,16 @@
         </div>
     </div>
 
+    <div id="pk-leaderboard-menu" class="game-screen">
+        <div class="overlay-box">
+            <h2 style="margin-top:0;">TOP JUMPER 261</h2>
+            <table class="data-table" id="lb-table-pk">
+                <tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">JARAK (M)</th></tr>
+            </table>
+            <button class="game-btn" style="margin-top: 20px; width: 100%; border-color: #ff0055;" onclick="playSFX(sfxClick); showScreen('main-menu-parkour')">Kembali</button>
+        </div>
+    </div>
+
     <!-- SETTINGS GALAXY -->
     <div id="settings-menu-galaxy" class="game-screen">
         <div class="overlay-box">
@@ -663,6 +703,20 @@
         <button id="btn-wheelie" onmousedown="startWheelie()" onmouseup="stopWheelie()" onmouseleave="stopWheelie()" ontouchstart="startWheelie()" ontouchend="stopWheelie()" ontouchcancel="stopWheelie()">NGENG</button>
     </div>
 
+    <!-- UI KOTA 261 PARKOUR -->
+    <div id="pk-ui" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:50;">
+        <div id="milestone-msg-pk" style="position:absolute; top:35%; left:50%; transform:translate(-50%, -50%); color:#ff0055; font-family:'Eater', cursive; font-size:26px; font-weight:bold; text-align:center; text-shadow:0 0 15px #ff0055; display:none; pointer-events:none; white-space:pre-wrap; z-index:999; letter-spacing:2px;"></div>
+        
+        <div style="position: absolute; top: 20px; left: 20px; text-align: left;">
+            <div style="font-size: 24px; font-weight: 900; color: #ff0055; text-shadow: 0 0 15px #ff0055; font-family: 'Share Tech Mono', monospace;">JARAK: <span id="pk-score">0</span> M</div>
+            <div id="pk-ingame-name" style="color: #fff; font-weight: bold; font-size: 14px; font-family: 'Share Tech Mono', monospace; text-shadow: 0 2px 4px rgba(0,0,0,1); margin-top:5px;">PLAYER</div>
+        </div>
+        
+        <button style="position:absolute; top:20px; right:20px; background:rgba(0,0,0,0.8); border:2px solid #ff0055; color:#fff; padding:8px 15px; font-family:'Share Tech Mono'; font-weight:bold; cursor: pointer; pointer-events:auto; border-radius: 20px; box-shadow: 0 0 10px rgba(255,0,85,0.5);" onclick="playSFX(sfxClick); pauseParkour()">|| PAUSE</button>
+
+        <div id="hint-text-pk" style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); color: #ff0055; font-size: 18px; font-weight: bold; opacity: 0.8; letter-spacing: 3px; text-shadow: 0 0 15px #ff0055; animation: blink 1.2s infinite alternate; font-family: 'Courier New', Courier, monospace; display: none;">TAP LAYAR UNTUK LOMPAT</div>
+    </div>
+
     <!-- MENUS GAME OVER / PAUSE -->
     <div id="pause-menu-galaxy" class="game-screen">
         <h2 class="game-h1" style="font-size:2rem; margin-bottom:20px;">GAME STOP</h2>
@@ -706,6 +760,24 @@
             <button class="game-btn" style="width: 100%;" onclick="playSFX(sfxClick); quitBeatStreet()">Menu Utama</button>
         </div>
     </div>
+
+    <!-- PARKOUR PAUSE & GAMEOVER -->
+    <div id="pk-pause-menu" class="game-screen">
+        <h2 class="game-h1" style="font-size:2rem; color: #ff0055; text-shadow: 0 0 10px #ff0055;">MISI DITUNDA</h2>
+        <button class="game-btn" style="border-color: #ff0055;" onclick="playSFX(sfxClick); resumeParkour()">Lanjut Misi</button>
+        <button class="game-btn" style="border-color: #ff0055;" onclick="playSFX(sfxClick); quitParkour()">Berhenti & Menu</button>
+    </div>
+
+    <div id="pk-game-over" class="game-screen">
+        <div class="overlay-box" style="border-color: #ff0055; box-shadow: 0 0 20px rgba(255,0,85,0.3);">
+            <h1 class="game-h1" style="font-size:2.5rem; color: #ff0055; text-shadow: 0 0 15px #ff0055;">WASTED!</h1>
+            <p style="font-size: 16px; margin-top:15px; color:#fff;">Jarak Tempuh: <b id="pk-final-score" style="color: #ff0055;">0</b> M</p>
+            <p id="new-hs-msg-pk" style="display: none; color: #0f0; font-weight: bold; border-top: 1px dashed #ff0055; padding-top:15px; margin-bottom: 10px;">REKOR JUMPER BARU!</p>
+            <button class="game-btn" style="width: 100%; margin-top: 20px; border-color: #ff0055;" onclick="playSFX(sfxClick); checkAndStartParkour()">Coba Lagi</button>
+            <button class="game-btn" style="width: 100%; border-color: #ff0055;" onclick="playSFX(sfxClick); quitParkour()">Menu Utama</button>
+        </div>
+    </div>
+
   </div>
 
   <script>
@@ -800,7 +872,11 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       let savedNick = localStorage.getItem('last_nickname_261');
-      if (savedNick) { document.getElementById('pregame-name-galaxy').value = savedNick; document.getElementById('pregame-name-bs').value = savedNick; }
+      if (savedNick) { 
+          document.getElementById('pregame-name-galaxy').value = savedNick; 
+          document.getElementById('pregame-name-bs').value = savedNick; 
+          document.getElementById('pregame-name-pk').value = savedNick; 
+      }
       
       checkAnonName(); 
       updateCoinUI();
@@ -813,16 +889,23 @@
     });
 
     // ====== SHOP, KOIN & PERKS SYSTEM ======
-    let myCoins = parseInt(localStorage.getItem('261_koin')) || 0;
+    let myCoins = 0;
+    try {
+        let encryptedCoins = localStorage.getItem('261_koin_secure');
+        myCoins = encryptedCoins ? parseInt(atob(encryptedCoins)) : (parseInt(localStorage.getItem('261_koin')) || 0);
+    } catch(e) { myCoins = 0; }
+
     let unlockedShips = JSON.parse(localStorage.getItem('261_ships')) || ['def'];
     let unlockedPerks = JSON.parse(localStorage.getItem('261_perks')) || [];
     let eqShip = localStorage.getItem('261_eq_ship') || 'def';
     let extraLifeBSBought = parseInt(localStorage.getItem('261_extralife')) || 0; 
+    let extraLifePKBought = parseInt(localStorage.getItem('261_extralife_pk')) || 0;
 
     function updateCoinUI() {
         document.getElementById('global-coin-count').innerText = myCoins;
-        localStorage.setItem('261_koin', myCoins);
+        localStorage.setItem('261_koin_secure', btoa(myCoins.toString()));
         localStorage.setItem('261_extralife', extraLifeBSBought);
+        localStorage.setItem('261_extralife_pk', extraLifePKBought);
         
         if(unlockedShips.includes('titan')) { let btn = document.getElementById('btn-buy-titan'); if(eqShip === 'titan') { btn.innerText = "DIPAKAI"; btn.style.background = "#0f0"; btn.style.color = "#000"; } else { btn.innerText = "PAKAI"; btn.style.background = "#aaa"; btn.style.color = "#000"; } }
         if(unlockedShips.includes('phantom')) { let btn = document.getElementById('btn-buy-phantom'); if(eqShip === 'phantom') { btn.innerText = "DIPAKAI"; btn.style.background = "#0f0"; btn.style.color = "#000"; } else { btn.innerText = "PAKAI"; btn.style.background = "#aaa"; btn.style.color = "#000"; } }
@@ -830,6 +913,10 @@
         if(unlockedPerks.includes('mesin_v8')) { let b = document.getElementById('btn-buy-v8'); b.innerText = "DIMILIKI"; b.style.background = "#0f0"; b.style.color = "#000"; b.disabled = true; }
         if(unlockedPerks.includes('aura_dewa')) { let b = document.getElementById('btn-buy-aura'); b.innerText = "DIMILIKI"; b.style.background = "#0f0"; b.style.color = "#000"; b.disabled = true; }
         if(unlockedPerks.includes('vip_261')) { let b = document.getElementById('btn-buy-vip'); b.innerText = "DIMILIKI"; b.style.background = "#0f0"; b.style.color = "#000"; b.disabled = true; }
+        
+        // Items Parkour
+        if(unlockedPerks.includes('sepatu_gravitasi')) { let b = document.getElementById('btn-buy-shoes'); if(b) { b.innerText = "DIMILIKI"; b.style.background = "#0f0"; b.style.color = "#000"; b.disabled = true; } }
+        if(unlockedPerks.includes('magnet_pk')) { let b = document.getElementById('btn-buy-magnetpk'); if(b) { b.innerText = "DIMILIKI"; b.style.background = "#0f0"; b.style.color = "#000"; b.disabled = true; } }
     }
 
     function addCoins(amt) { myCoins += amt; updateCoinUI(); }
@@ -838,7 +925,8 @@
     function buyItem(id, price) {
         if (myCoins >= price) {
             myCoins -= price; playSFX(sfxScore);
-            if (id === 'nyawa_bs') { extraLifeBSBought++; alert("Nyawa Cadangan berhasil dibeli! Kumpulin terus bang."); }
+            if (id === 'nyawa_bs') { extraLifeBSBought++; alert("Nyawa Cadangan BS berhasil dibeli!"); }
+            if (id === 'shield_pk') { extraLifePKBought++; alert("Shield Matrix Parkour berhasil dibeli!"); }
             updateCoinUI();
         } else { alert("Koin lu miskin bang! Cari lagi sana."); }
     }
@@ -938,22 +1026,18 @@
         document.getElementById('reaction-menu').style.display = 'none';
     };
 
-    // UPDATE: Voting system ala WhatsApp (Bisa ganti vote & batalin) FIX
     window.handleVote = function(postKey, targetOptKey) {
         let lsKey = 'poll_voted_' + postKey;
         let prevOptKey = localStorage.getItem(lsKey);
         
         if (prevOptKey === targetOptKey) {
-            // UNVOTE (Batalin Vote)
             database.ref(`forum_posts/${postKey}/poll/${prevOptKey}/votes`).transaction(v => Math.max(0, (v || 0) - 1));
             localStorage.removeItem(lsKey);
         } else if (prevOptKey) {
-            // CHANGE VOTE (Pindah Opsi)
             database.ref(`forum_posts/${postKey}/poll/${prevOptKey}/votes`).transaction(v => Math.max(0, (v || 0) - 1));
             database.ref(`forum_posts/${postKey}/poll/${targetOptKey}/votes`).transaction(v => (v || 0) + 1);
             localStorage.setItem(lsKey, targetOptKey);
         } else {
-            // NEW VOTE (Vote Baru)
             database.ref(`forum_posts/${postKey}/poll/${targetOptKey}/votes`).transaction(v => (v || 0) + 1);
             localStorage.setItem(lsKey, targetOptKey);
         }
@@ -1128,10 +1212,7 @@
             if(post.poll) {
                 let totalVotes = 0; let pollKeys = Object.keys(post.poll); pollKeys.forEach(k => totalVotes += (post.poll[k].votes || 0));
                 
-                // Gunakan prefix 'poll_voted_' agar terhindar dari bug versi lama
                 let votedOpt = localStorage.getItem('poll_voted_' + post.key);
-                
-                // Pastikan votedOpt yang kesimpen beneran ada di data Firebase
                 if(votedOpt && !post.poll[votedOpt]) votedOpt = null;
                 
                 pollHtml += `<div class="poll-wrapper"><div class="poll-header">📊 PILIH OPSI DI BAWAH: <span style="margin-left:auto; font-size:12px; color:#aaa; font-weight:normal;">${totalVotes} suara</span></div>`;
@@ -1237,57 +1318,44 @@
     function showScreen(id) { 
         document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active')); 
         if(id) document.getElementById(id).classList.add('active'); 
-        if (!isAudioEnabled) return;
-        if (id && id.includes('galaxy') || gameState === 'PLAYING_GALAXY') { bgMusic.pause(); bsBgm.pause(); if (gameBgm.paused) gameBgm.play().catch(e=>{}); } 
-        else if (id && id.includes('bs-') || gameState === 'PLAYING_BEATSTREET') { bgMusic.pause(); gameBgm.pause(); if (bsBgm.paused) bsBgm.play().catch(e=>{}); } 
-        else if (id === 'game-selection-menu' || id === 'shop-menu') { gameBgm.pause(); bsBgm.pause(); stopMotorSound(); if (bgMusic.paused) bgMusic.play().catch(e=>{}); }
-    }
-
-    // SIMULASI BACKGROUND KOTA 261 PREVIEW
-    const pCanvas = document.getElementById('previewCanvas');
-    const pCtx = pCanvas ? pCanvas.getContext('2d') : null;
-    let pw, ph;
-    let pBgBuildings = [];
-    function resizeP() { 
-        if(!pCanvas) return;
-        pw = pCanvas.width = window.innerWidth; 
-        ph = pCanvas.height = window.innerHeight; 
-    }
-    window.addEventListener('resize', resizeP); resizeP();
-    
-    function loopPreview() {
-        if(pCanvas && document.getElementById('preview-kota-menu').classList.contains('active')) {
-            pCtx.clearRect(0,0,pw,ph);
-            // Langit Cyber
-            let grad = pCtx.createLinearGradient(0, 0, 0, ph);
-            grad.addColorStop(0, "#010105"); grad.addColorStop(1, "#120520");
-            pCtx.fillStyle = grad; pCtx.fillRect(0, 0, pw, ph);
-            
-            // Animasi Gedung Latar
-            for(let i=0; i<pBgBuildings.length; i++) {
-                let b = pBgBuildings[i];
-                b.x -= 1.5;
-                pCtx.fillStyle = '#07070a'; pCtx.fillRect(b.x, b.y, b.w, ph-b.y);
-                pCtx.strokeStyle = '#00d2ff'; pCtx.lineWidth=1; pCtx.strokeRect(b.x, b.y, b.w, ph-b.y);
-                if(b.x + b.w < 0) { pBgBuildings.splice(i,1); i--; }
-            }
-            if(pBgBuildings.length === 0 || pBgBuildings[pBgBuildings.length-1].x < pw - 120) {
-                pBgBuildings.push({x: pw, w: 100+Math.random()*150, y: ph*0.4 + Math.random()*200});
-            }
+        
+        // Handle Parkour Preview
+        if(id === 'main-menu-parkour') {
+            initParkourPreview();
+        } else if (activeGame === 'PARKOUR' && id !== 'main-menu-parkour' && gameState === 'MENU_PARKOUR') {
+            activeGame = 'MENU'; // cancel preview if going back
         }
-        requestAnimationFrame(loopPreview);
-    }
-    loopPreview();
 
-    const canvas = document.getElementById('gameCanvas'); const ctx = canvas.getContext('2d'); let w, h; let stars = []; 
-    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; stars = []; for(let i=0; i<200; i++) { stars.push({ x: Math.random() * 5000, y: Math.random() * 5000, size: Math.random() * 2 + 0.5, speed: Math.random() * 0.8 + 0.2, color: (Math.random() > 0.5 ? '#ffffff' : '#e0f0ff') }); } }
+        if (!isAudioEnabled) return;
+        if (id && id.includes('galaxy') || gameState === 'PLAYING_GALAXY' || id === 'main-menu-parkour' || gameState === 'PLAYING_PARKOUR') { 
+            bgMusic.pause(); bsBgm.pause(); if (gameBgm.paused) gameBgm.play().catch(e=>{}); 
+        } 
+        else if (id && id.includes('bs-') || gameState === 'PLAYING_BEATSTREET') { 
+            bgMusic.pause(); gameBgm.pause(); if (bsBgm.paused) bsBgm.play().catch(e=>{}); 
+        } 
+        else if (id === 'game-selection-menu' || id === 'shop-menu') { 
+            gameBgm.pause(); bsBgm.pause(); stopMotorSound(); if (bgMusic.paused) bgMusic.play().catch(e=>{}); 
+        }
+    }
+
+    const canvas = document.getElementById('gameCanvas'); const ctx = canvas.getContext('2d'); let w, h; let stars = []; let pkStars = [];
+    function resize() { 
+        w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; 
+        stars = []; for(let i=0; i<200; i++) { stars.push({ x: Math.random() * 5000, y: Math.random() * 5000, size: Math.random() * 2 + 0.5, speed: Math.random() * 0.8 + 0.2, color: (Math.random() > 0.5 ? '#ffffff' : '#e0f0ff') }); } 
+        pkStars = []; for(let i=0; i<80; i++) { pkStars.push({ x: Math.random()*w, y: Math.random()*(h*0.7), size: Math.random()*1.5 }); }
+    }
     window.addEventListener('resize', resize); resize();
 
-    const leaderboardGalRef = database.ref('leaderboard_v3'); const leaderboardBSRef = database.ref('leaderboard_bs'); let lbDataGalaxy = [], lbDataBS = [];
+    const leaderboardGalRef = database.ref('leaderboard_v3'); const leaderboardBSRef = database.ref('leaderboard_bs'); const leaderboardPKRef = database.ref('leaderboard_pk');
+    let lbDataGalaxy = [], lbDataBS = [], lbDataPK = [];
+    
     leaderboardGalRef.child('NANDO').once('value').then((snap) => { if (!snap.exists()) leaderboardGalRef.child('NANDO').set({ name: "NANDO", score: 1000000, level: 99 }); });
     leaderboardBSRef.child('NANDO').once('value').then((snap) => { if (!snap.exists()) leaderboardBSRef.child('NANDO').set({ name: "NANDO", score: 999999 }); });
+    leaderboardPKRef.child('NANDO').once('value').then((snap) => { if (!snap.exists()) leaderboardPKRef.child('NANDO').set({ name: "NANDO", score: 999999 }); });
+    
     leaderboardGalRef.orderByChild('score').limitToLast(5).on('value', (snap) => { let data = []; snap.forEach(c => { data.push({ id: c.key, ...c.val() }); }); lbDataGalaxy = data.reverse(); if(document.getElementById('leaderboard-menu-galaxy').classList.contains('active')) updateGalaxyLeaderboardUI(); });
     leaderboardBSRef.orderByChild('score').limitToLast(5).on('value', (snap) => { let data = []; snap.forEach(c => { data.push({ id: c.key, ...c.val() }); }); lbDataBS = data.reverse(); if(document.getElementById('bs-leaderboard-menu').classList.contains('active')) updateBSLeaderboardUI(); });
+    leaderboardPKRef.orderByChild('score').limitToLast(5).on('value', (snap) => { let data = []; snap.forEach(c => { data.push({ id: c.key, ...c.val() }); }); lbDataPK = data.reverse(); if(document.getElementById('pk-leaderboard-menu').classList.contains('active')) updatePKLeaderboardUI(); });
 
     function getPlayerTitle(sc) { if(sc < 5000) return "KROCO"; if(sc < 15000) return "MEMBER"; if(sc < 30000) return "ELITE"; return "LEGEND"; }
 
@@ -1305,10 +1373,17 @@
         document.getElementById('lb-table-bs').innerHTML = html;
     }
 
+    function updatePKLeaderboardUI() {
+        let html = `<tr><th>RANK</th><th>NAMA</th><th style="text-align:right;">JARAK (M)</th></tr>`;
+        if (lbDataPK.length === 0) html += `<tr><td colspan="3" style="text-align:center;">Memuat data...</td></tr>`;
+        else lbDataPK.forEach((e, i) => { let medal = i===0?"🥇 ":i===1?"🥈 ":i===2?"🥉 ":""; html += `<tr><td>#${i + 1}</td><td>${medal}<b>${e.name}</b></td><td style="text-align:right;">${e.score}</td></tr>`; });
+        document.getElementById('lb-table-pk').innerHTML = html;
+    }
+
     let gameConfig = { crt: true, autoFire: false, showHitbox: false, dmgText: true };
     function updateSettings() { gameConfig.crt = document.getElementById('set-crt').checked; gameConfig.autoFire = document.getElementById('set-autofire').checked; gameConfig.showHitbox = document.getElementById('set-hitbox').checked; gameConfig.dmgText = document.getElementById('set-dmgtext').checked; isAudioEnabled = document.getElementById('set-audio').checked; applySettingsGlobal(); }
     function updateSettingsBS() { gameConfig.crt = document.getElementById('set-crt-bs').checked; isAudioEnabled = document.getElementById('set-audio-bs').checked; document.getElementById('set-crt').checked = gameConfig.crt; document.getElementById('set-audio').checked = isAudioEnabled; applySettingsGlobal(); }
-    function applySettingsGlobal() { if (!isAudioEnabled) { bgMusic.pause(); gameBgm.pause(); bsBgm.pause(); stopMotorSound(); } else { if(document.getElementById('game-page').style.display === 'block') { if(activeGame === 'GALAXY' || document.getElementById('main-menu-galaxy').classList.contains('active')) gameBgm.play().catch(e=>{}); else if(activeGame === 'BEATSTREET' || document.getElementById('bs-main-menu').classList.contains('active')) bsBgm.play().catch(e=>{}); } else { bgMusic.play().catch(e=>{}); } } if(gameConfig.crt) document.getElementById('game-page').classList.add('crt'); else document.getElementById('game-page').classList.remove('crt'); }
+    function applySettingsGlobal() { if (!isAudioEnabled) { bgMusic.pause(); gameBgm.pause(); bsBgm.pause(); stopMotorSound(); } else { if(document.getElementById('game-page').style.display === 'block') { if(activeGame === 'GALAXY' || activeGame === 'PARKOUR') gameBgm.play().catch(e=>{}); else if(activeGame === 'BEATSTREET') bsBgm.play().catch(e=>{}); } else { bgMusic.play().catch(e=>{}); } } if(gameConfig.crt) document.getElementById('game-page').classList.add('crt'); else document.getElementById('game-page').classList.remove('crt'); }
 
     function checkNameAuth(inputId) {
         let nameInput = document.getElementById(inputId).value.trim().toUpperCase();
@@ -1321,7 +1396,7 @@
     // ====== GALAXY SURVIVOR LOGIC ======
     let gameDifficulty = 'EASY'; function toggleDifficulty() { gameDifficulty = (gameDifficulty === 'EASY') ? 'HARD' : 'EASY'; document.getElementById('btn-difficulty-galaxy').innerText = 'MODE: ' + gameDifficulty; }
     let player, enemies, enemyBullets, bullets, particles, gems, texts, coinDrops; 
-    let playerDrone; // Penambahan Anak Buah (Drone)
+    let playerDrone; 
     let screenShake = 0, score = 0; let input = { x: 0, y: 0 }; let isShooting = false; let camX = 0, camY = 0; 
     let nextMilestoneIdx = 0; let lastBossSpawnedLvl = 0;
     const milestonesList = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
@@ -1363,11 +1438,10 @@
 
     function startGalaxyWithProgress(startLevel, startScore) {
         player = { x: 0, y: 0, r: 15, speed: 5, hp: 100, maxHp: 100, xp: 0, nextXp: 10, lvl: 1, fireRate: 8, lastFire: 0, dmg: 1, multi: 1, magnet: 100, angle: -Math.PI/2, hitFlash: 0, rainbow: false }; 
-        playerDrone = new PlayerDrone(); // Inisialisasi drone pembantu
+        playerDrone = new PlayerDrone(); 
         enemies = []; enemyBullets = []; bullets = []; particles = []; gems = []; texts = []; coinDrops = [];
         screenShake = 0; score = 0; input = {x:0, y:0}; isShooting = false; nextMilestoneIdx = 0; lastBossSpawnedLvl = 0;
         
-        // TERAPKAN STATS DARI PESAWAT & PERKS BLACK MARKET
         if(eqShip === 'titan') { player.maxHp = 250; player.hp = 250; player.dmg = 3; player.speed = 4; player.r = 20; }
         else if (eqShip === 'phantom') { player.maxHp = 80; player.hp = 80; player.dmg = 1.5; player.speed = 8; player.fireRate = 5; player.multi = 2; }
 
@@ -1464,7 +1538,7 @@
         
         ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h); ctx.translate(-camX, -camY); drawGalBackground();
         
-        if (playerDrone) playerDrone.update(); // Update pergerakan & tembakan anak buah
+        if (playerDrone) playerDrone.update(); 
 
         ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle + Math.PI/2);
         if(player.hitFlash > 0) { ctx.globalAlpha = (Math.sin(frame) + 1) / 2; player.hitFlash--; }
@@ -1478,21 +1552,76 @@
         if (effLvl > 0 && effLvl % 10 === 0 && effLvl !== lastBossSpawnedLvl) { enemies.push(new Enemy(true)); lastBossSpawnedLvl = effLvl; }
         let spawnRate = Math.max(gameDifficulty === 'HARD' ? 5 : 10, 80 - (effLvl * 2) - Math.floor(frame / (gameDifficulty === 'HARD' ? 300 : 600))); 
         if (frame % spawnRate === 0) enemies.push(new Enemy(false));
-        particles.forEach((p, i) => { p.update(); if(p.alpha <= 0) particles.splice(i, 1); }); texts.forEach((t, i) => { t.update(); if(t.life <= 0) texts.splice(i, 1); });
         
-        enemyBullets.forEach((eb, i) => { eb.update(); if (eb.life <= 0) enemyBullets.splice(i, 1); if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.r + 5) { player.hp -= eb.dmg; player.hitFlash = 10; screenShake = 5; if(navigator.vibrate) navigator.vibrate(50); if(isNandoAccount) player.hp = player.maxHp; document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; enemyBullets.splice(i, 1); if (player.hp <= 0) gameOverGalaxy(); } });
-        bullets.forEach((b, i) => { b.update(); if(b.life <= 0) bullets.splice(i, 1); let currentDmg = player.rainbow ? player.dmg * 50 : player.dmg; enemies.forEach((e, ei) => { if(Math.hypot(b.x - e.x, b.y - e.y) < e.r + 5) { e.hp -= currentDmg; bullets.splice(i, 1); if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, currentDmg)); for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y)); if(e.hp <= 0) { playSFX(sfxHit); if(e.isBoss) { player.xp += 1500; checkLevelUp(); if(navigator.vibrate) navigator.vibrate([100, 50, 100]); if(!isNandoAccount) { score += 5000 * scoreMult; checkMilestoneGal(); } coinDrops.push({x: e.x, y: e.y, val: 50}); } else { if(player.rainbow) { player.xp += 1000; checkLevelUp(); } else { gems.push({x: e.x, y: e.y}); } if(Math.random() < 0.1) coinDrops.push({x: e.x, y: e.y, val: 1}); } if(!isNandoAccount) { score += 15 * scoreMult; document.getElementById('score-val').innerText = score; checkMilestoneGal(); } for(let k=0; k<15; k++) particles.push(new Particle(e.x, e.y)); enemies.splice(ei, 1); screenShake = 3; } } }); });
+        for (let i = particles.length - 1; i >= 0; i--) { let p = particles[i]; p.update(); if(p.alpha <= 0) particles.splice(i, 1); }
+        for (let i = texts.length - 1; i >= 0; i--) { let t = texts[i]; t.update(); if(t.life <= 0) texts.splice(i, 1); }
         
-        gems.forEach((g, i) => { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(g.x, g.y - 4); ctx.lineTo(g.x + 4, g.y); ctx.lineTo(g.x, g.y + 4); ctx.lineTo(g.x - 4, g.y); ctx.fill(); let d = Math.hypot(player.x - g.x, player.y - g.y); if(d < player.magnet) { g.x += (player.x - g.x) * 0.1; g.y += (player.y - g.y) * 0.1; } if(d < player.r + 5) { gems.splice(i, 1); player.xp++; if(!isNandoAccount) { score += 5 * scoreMult; document.getElementById('score-val').innerText = score; checkMilestoneGal(); } checkLevelUp(); } });
+        for (let i = enemyBullets.length - 1; i >= 0; i--) { 
+            let eb = enemyBullets[i]; eb.update(); 
+            if (eb.life <= 0) { enemyBullets.splice(i, 1); continue; }
+            if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.r + 5) { 
+                player.hp -= eb.dmg; player.hitFlash = 10; screenShake = 5; if(navigator.vibrate) navigator.vibrate(50); 
+                if(isNandoAccount) player.hp = player.maxHp; 
+                document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; 
+                enemyBullets.splice(i, 1); 
+                if (player.hp <= 0) gameOverGalaxy(); 
+            } 
+        }
+
+        bullets.forEach((b, i) => { 
+            b.update(); 
+            if(b.life <= 0) { bullets.splice(i, 1); return; }
+            let currentDmg = player.rainbow ? player.dmg * 50 : player.dmg; 
+            for (let ei = enemies.length - 1; ei >= 0; ei--) {
+                let e = enemies[ei];
+                if(Math.hypot(b.x - e.x, b.y - e.y) < e.r + 5) { 
+                    e.hp -= currentDmg; bullets.splice(i, 1); 
+                    if(gameConfig.dmgText) texts.push(new FloatingText(e.x, e.y - 10, currentDmg)); 
+                    for(let k=0; k<3; k++) particles.push(new Particle(e.x, e.y)); 
+                    if(e.hp <= 0) { 
+                        playSFX(sfxHit); 
+                        if(e.isBoss) { 
+                            player.xp += 1500; checkLevelUp(); if(navigator.vibrate) navigator.vibrate([100, 50, 100]); 
+                            if(!isNandoAccount) { score += 5000 * scoreMult; checkMilestoneGal(); } 
+                            coinDrops.push({x: e.x, y: e.y, val: 50}); 
+                        } else { 
+                            if(player.rainbow) { player.xp += 1000; checkLevelUp(); } else { gems.push({x: e.x, y: e.y}); } 
+                            if(Math.random() < 0.1) coinDrops.push({x: e.x, y: e.y, val: 1}); 
+                        } 
+                        if(!isNandoAccount) { score += 15 * scoreMult; document.getElementById('score-val').innerText = score; checkMilestoneGal(); } 
+                        for(let k=0; k<15; k++) particles.push(new Particle(e.x, e.y)); 
+                        enemies.splice(ei, 1); screenShake = 3; 
+                    } 
+                    break;
+                } 
+            } 
+        });
         
-        coinDrops.forEach((c, i) => { 
+        for (let i = gems.length - 1; i >= 0; i--) { 
+            let g = gems[i]; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(g.x, g.y - 4); ctx.lineTo(g.x + 4, g.y); ctx.lineTo(g.x, g.y + 4); ctx.lineTo(g.x - 4, g.y); ctx.fill(); 
+            let d = Math.hypot(player.x - g.x, player.y - g.y); 
+            if(d < player.magnet) { g.x += (player.x - g.x) * 0.1; g.y += (player.y - g.y) * 0.1; } 
+            if(d < player.r + 5) { gems.splice(i, 1); player.xp++; if(!isNandoAccount) { score += 5 * scoreMult; document.getElementById('score-val').innerText = score; checkMilestoneGal(); } checkLevelUp(); } 
+        }
+        
+        for (let i = coinDrops.length - 1; i >= 0; i--) { 
+            let c = coinDrops[i];
             if(assets.koin.complete) ctx.drawImage(assets.koin, c.x-10, c.y-10, 20, 20); else { ctx.fillStyle = '#ffeb3b'; ctx.beginPath(); ctx.arc(c.x, c.y, 8, 0, Math.PI*2); ctx.fill(); }
             let d = Math.hypot(player.x - c.x, player.y - c.y); 
             if(d < player.magnet) { c.x += (player.x - c.x) * 0.15; c.y += (player.y - c.y) * 0.15; } 
             if(d < player.r + 8) { coinDrops.splice(i, 1); addCoins(c.val); playSFX(sfxFuel); texts.push(new FloatingText(c.x, c.y - 10, "+"+c.val+" KOIN", "#ffeb3b")); } 
-        });
+        }
 
-        enemies.forEach((e, i) => { e.update(); if(Math.hypot(e.x - player.x, e.y - player.y) > Math.max(w, h) * 1.5) enemies.splice(i, 1); if(Math.hypot(e.x - player.x, e.y - player.y) < e.r + player.r) { player.hp -= (e.isBoss ? 20 : 2); player.hitFlash = 10; screenShake = 5; if(navigator.vibrate) navigator.vibrate(50); if(isNandoAccount) player.hp = player.maxHp; document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; if(player.hp <= 0) gameOverGalaxy(); } });
+        for (let i = enemies.length - 1; i >= 0; i--) { 
+            let e = enemies[i]; e.update(); 
+            if(Math.hypot(e.x - player.x, e.y - player.y) > Math.max(w, h) * 1.5) { enemies.splice(i, 1); continue; }
+            if(Math.hypot(e.x - player.x, e.y - player.y) < e.r + player.r) { 
+                player.hp -= (e.isBoss ? 20 : 2); player.hitFlash = 10; screenShake = 5; if(navigator.vibrate) navigator.vibrate(50); 
+                if(isNandoAccount) player.hp = player.maxHp; 
+                document.getElementById('hp-bar').style.width = Math.max(0, (player.hp/player.maxHp * 100)) + '%'; 
+                if(player.hp <= 0) gameOverGalaxy(); 
+            } 
+        }
         ctx.restore(); 
     }
 
@@ -1537,12 +1666,10 @@
         bsObstacles = []; bsParticles = []; bsWind = []; bsScore = 0; bsSpeed = 8; bsBgY = 0; bsFuel = 100; bsIsWheelie = false; bsScreenShake = 0; bsSlipTimer = 0; bsFlash = 0;
         if(isNandoAccount) { bsSpeed = 15; bsScore = 999900; } 
         
-        // Cek Milestone
         bsNextMilestoneIdx = milestonesList.findIndex(m => m > bsScore); if (bsNextMilestoneIdx === -1) bsNextMilestoneIdx = milestonesList.length;
 
-        // Terapkan Nyawa Tambahan
         activeLivesBS = extraLifeBSBought + (unlockedPerks.includes('vip_261') ? 3 : 0);
-        extraLifeBSBought = 0; // Konsumsi item
+        extraLifeBSBought = 0; 
         updateCoinUI();
 
         document.getElementById('bs-ingame-name').innerText = globalPlayerName + " [" + getPlayerTitle(bsScore) + "]"; 
@@ -1592,7 +1719,7 @@
         let currentSpeed = bsSpeed + (bsIsWheelie ? 8 : 0);
         
         let baseDrain = bsIsWheelie ? 0.25 : 0.08;
-        if(unlockedPerks.includes('mesin_v8')) baseDrain *= 0.5; // Efek Mesin V8
+        if(unlockedPerks.includes('mesin_v8')) baseDrain *= 0.5; 
         bsFuel -= baseDrain; 
         if(isNandoAccount) bsFuel = 100;
         
@@ -1618,120 +1745,65 @@
         ctx.save();
         if (bsScreenShake > 0) { ctx.translate((Math.random() - 0.5) * bsScreenShake, (Math.random() - 0.5) * bsScreenShake); bsScreenShake *= 0.8; if(bsScreenShake < 0.5) bsScreenShake = 0; }
 
-        // --- BACKGROUND BEAT STREET (KOTA, TROTOAR, DAY/NIGHT RANDOM SCENERY) ---
-        // Kalkulasi Waktu (Day/Night Cycle)
-        let cycleSpeed = 0.0005; // Semakin kecil semakin lama gantinya
+        let cycleSpeed = 0.0005; 
         let cyclePhase = (frame * cycleSpeed) % (Math.PI * 2);
-        let isNightPhase = Math.sin(cyclePhase); // 1 = Siang bolong, -1 = Malam gelap
-        let nightAlpha = Math.max(0, -isNightPhase) * 0.8; // Transparansi kegelapan
+        let isNightPhase = Math.sin(cyclePhase); 
+        let nightAlpha = Math.max(0, -isNightPhase) * 0.8; 
 
-        let maxRoadW = 450; // JALAN DIPERKECIL
+        let maxRoadW = 450; 
         let rW = Math.min(w * 0.6, maxRoadW); 
         let rL = (w - rW) / 2;
         let rR = rL + rW;
-        let swW = Math.max(20, (w - rW) * 0.15); // Lebar trotoar
+        let swW = Math.max(20, (w - rW) * 0.15); 
 
-        // Tanah dasar (Luar trotoar/Rumah)
-        ctx.fillStyle = '#1b2614'; 
-        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#1b2614'; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#2c2c2c'; ctx.fillRect(rL, 0, rW, h);
+        ctx.fillStyle = '#888'; ctx.fillRect(rL - swW, 0, swW, h); ctx.fillRect(rR, 0, swW, h);
 
-        // Aspal Jalan
-        ctx.fillStyle = '#2c2c2c';
-        ctx.fillRect(rL, 0, rW, h);
-
-        // Trotoar
-        ctx.fillStyle = '#888';
-        ctx.fillRect(rL - swW, 0, swW, h);
-        ctx.fillRect(rR, 0, swW, h);
-
-        // Garis Trotoar (Scrolling)
         ctx.strokeStyle = '#555'; ctx.lineWidth = 2;
         for(let y = (bsBgY % 50) - 50; y < h; y += 50) {
             ctx.beginPath(); ctx.moveTo(rL - swW, y); ctx.lineTo(rL, y); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(rR, y); ctx.lineTo(rR + swW, y); ctx.stroke();
         }
 
-        // Garis Pinggir Jalan
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(rL, 0, 4, h);
-        ctx.fillRect(rR - 4, 0, 4, h);
+        ctx.fillStyle = '#fff'; ctx.fillRect(rL, 0, 4, h); ctx.fillRect(rR - 4, 0, 4, h);
+        for(let y = (bsBgY % 100) - 100; y < h; y += 100) { ctx.fillRect(w/2 - 4, y, 8, 50); }
 
-        // Garis Putus-putus Tengah Jalan
-        ctx.fillStyle = '#fff';
-        for(let y = (bsBgY % 100) - 100; y < h; y += 100) {
-            ctx.fillRect(w/2 - 4, y, 8, 50);
-        }
-
-        // SCENERY (RUMAH & POHON RANDOM)
         let bSpacing = 160;
         for(let y = (bsBgY % bSpacing) - bSpacing; y < h; y += bSpacing) {
-            // Menggunakan (y - bsBgY) untuk mendapatkan indeks statis dari blok yang sedang di-render agar tidak berkedip
             let blockId = Math.floor((y - bsBgY) / bSpacing);
-            let r1 = Math.abs(Math.sin(blockId * 11.11)); // Pseudo-random kiri
-            let r2 = Math.abs(Math.cos(blockId * 22.22)); // Pseudo-random kanan
+            let r1 = Math.abs(Math.sin(blockId * 11.11)); 
+            let r2 = Math.abs(Math.cos(blockId * 22.22)); 
             
             const drawHouse = (x, ypos, width, colorHue) => {
-                ctx.fillStyle = `hsl(${colorHue}, 20%, 30%)`; // Tembok
-                ctx.fillRect(x, ypos + 20, width, bSpacing - 40);
-                ctx.fillStyle = `hsl(${colorHue}, 15%, 20%)`; // Atap
-                ctx.beginPath(); ctx.moveTo(x - 5, ypos + 20); ctx.lineTo(x + width + 5, ypos + 20); ctx.lineTo(x + width/2, ypos); ctx.fill();
-                if (nightAlpha > 0.2 && r1 > 0.3) { // Lampu jendela menyala random saat malam
-                    ctx.fillStyle = `rgba(255, 235, 120, ${nightAlpha})`;
-                    ctx.fillRect(x + width/2 - 12, ypos + 45, 24, 30);
-                }
+                ctx.fillStyle = `hsl(${colorHue}, 20%, 30%)`; ctx.fillRect(x, ypos + 20, width, bSpacing - 40);
+                ctx.fillStyle = `hsl(${colorHue}, 15%, 20%)`; ctx.beginPath(); ctx.moveTo(x - 5, ypos + 20); ctx.lineTo(x + width + 5, ypos + 20); ctx.lineTo(x + width/2, ypos); ctx.fill();
+                if (nightAlpha > 0.2 && r1 > 0.3) { ctx.fillStyle = `rgba(255, 235, 120, ${nightAlpha})`; ctx.fillRect(x + width/2 - 12, ypos + 45, 24, 30); }
             };
 
             const drawTree = (x, ypos) => {
-                ctx.fillStyle = '#3d2314'; // Batang
-                ctx.fillRect(x - 6, ypos + 40, 12, 40);
-                ctx.fillStyle = '#1e5928'; // Daun
-                ctx.beginPath(); ctx.arc(x, ypos + 30, 25, 0, Math.PI*2); ctx.fill();
-                ctx.beginPath(); ctx.arc(x - 15, ypos + 45, 20, 0, Math.PI*2); ctx.fill();
-                ctx.beginPath(); ctx.arc(x + 15, ypos + 45, 20, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = 'rgba(255,255,255,0.05)'; // Highlight daun
-                ctx.beginPath(); ctx.arc(x, ypos + 25, 20, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#3d2314'; ctx.fillRect(x - 6, ypos + 40, 12, 40);
+                ctx.fillStyle = '#1e5928'; ctx.beginPath(); ctx.arc(x, ypos + 30, 25, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(x - 15, ypos + 45, 20, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(x + 15, ypos + 45, 20, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.beginPath(); ctx.arc(x, ypos + 25, 20, 0, Math.PI*2); ctx.fill();
             };
 
-            // Scenery Kiri
-            if(r1 > 0.4) drawHouse(0, y, rL - swW, 100 + r1*100);
-            else drawTree((rL - swW) / 2, y);
-
-            // Scenery Kanan
-            if(r2 > 0.4) drawHouse(rR + swW, y, w - (rR + swW), 200 + r2*100);
-            else drawTree(rR + swW + (w - (rR + swW))/2, y);
+            if(r1 > 0.4) drawHouse(0, y, rL - swW, 100 + r1*100); else drawTree((rL - swW) / 2, y);
+            if(r2 > 0.4) drawHouse(rR + swW, y, w - (rR + swW), 200 + r2*100); else drawTree(rR + swW + (w - (rR + swW))/2, y);
         }
 
-        // LAMPU JALAN
         let lightSpacing = 200;
         for(let y = (bsBgY % lightSpacing) - lightSpacing; y < h; y += lightSpacing) {
-            ctx.fillStyle = '#444'; // Tiang Lampu
-            ctx.fillRect(rL - swW + 5, y + 10, 4, 30);
-            ctx.fillRect(rR + swW - 9, y + 50, 4, 30); // Kanan dibikin selang-seling letaknya
-
-            ctx.fillStyle = '#111'; // Kepala Lampu
-            ctx.beginPath(); ctx.arc(rL - swW/2, y + 10, 6, 0, Math.PI*2); ctx.fill();
-            ctx.beginPath(); ctx.arc(rR + swW/2, y + 50, 6, 0, Math.PI*2); ctx.fill();
-            
-            // Cahaya lampu saat malam
+            ctx.fillStyle = '#444'; ctx.fillRect(rL - swW + 5, y + 10, 4, 30); ctx.fillRect(rR + swW - 9, y + 50, 4, 30); 
+            ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(rL - swW/2, y + 10, 6, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(rR + swW/2, y + 50, 6, 0, Math.PI*2); ctx.fill();
             if (nightAlpha > 0.1) {
-                let glowL = ctx.createRadialGradient(rL - swW/2, y+10, 5, rL - swW/2, y+10, 70);
-                glowL.addColorStop(0, `rgba(255, 255, 200, ${nightAlpha})`); glowL.addColorStop(1, 'rgba(255, 255, 200, 0)');
-                ctx.fillStyle = glowL; ctx.beginPath(); ctx.arc(rL - swW/2, y+10, 70, 0, Math.PI*2); ctx.fill();
-
-                let glowR = ctx.createRadialGradient(rR + swW/2, y+50, 5, rR + swW/2, y+50, 70);
-                glowR.addColorStop(0, `rgba(255, 255, 200, ${nightAlpha})`); glowR.addColorStop(1, 'rgba(255, 255, 200, 0)');
-                ctx.fillStyle = glowR; ctx.beginPath(); ctx.arc(rR + swW/2, y+50, 70, 0, Math.PI*2); ctx.fill();
+                let glowL = ctx.createRadialGradient(rL - swW/2, y+10, 5, rL - swW/2, y+10, 70); glowL.addColorStop(0, `rgba(255, 255, 200, ${nightAlpha})`); glowL.addColorStop(1, 'rgba(255, 255, 200, 0)'); ctx.fillStyle = glowL; ctx.beginPath(); ctx.arc(rL - swW/2, y+10, 70, 0, Math.PI*2); ctx.fill();
+                let glowR = ctx.createRadialGradient(rR + swW/2, y+50, 5, rR + swW/2, y+50, 70); glowR.addColorStop(0, `rgba(255, 255, 200, ${nightAlpha})`); glowR.addColorStop(1, 'rgba(255, 255, 200, 0)'); ctx.fillStyle = glowR; ctx.beginPath(); ctx.arc(rR + swW/2, y+50, 70, 0, Math.PI*2); ctx.fill();
             }
         }
 
-        // Filter Malam (Overlay Gelap pada Latar)
-        if (nightAlpha > 0) {
-            ctx.fillStyle = `rgba(5, 10, 25, ${nightAlpha * 0.85})`;
-            ctx.fillRect(0, 0, w, h);
-        }
+        if (nightAlpha > 0) { ctx.fillStyle = `rgba(5, 10, 25, ${nightAlpha * 0.85})`; ctx.fillRect(0, 0, w, h); }
         
         bsBgY += currentSpeed;
-        // --- END BACKGROUND ---
 
         if (frame % Math.max(30, 90 - Math.floor(bsSpeed)) === 0) {
             let rand = Math.random();
@@ -1827,7 +1899,6 @@
         }
 
         if(gameState === 'PLAYING_BEATSTREET' || gameState === 'GAMEOVER_ANIMATING') {
-            // Lampu Sorot Motor (Menyala di Malam Hari)
             if (nightAlpha > 0.2 && gameState === 'PLAYING_BEATSTREET') {
                 ctx.save();
                 let grad = ctx.createLinearGradient(bsPlayer.x + bsPlayer.w/2, bsPlayer.y, bsPlayer.x + bsPlayer.w/2, bsPlayer.y - 450);
@@ -1850,16 +1921,354 @@
                 } else { ctx.drawImage(mImg, bsPlayer.x, bsPlayer.y, bsPlayer.w, bsPlayer.h); }
             } else { ctx.fillStyle = getFallbackColor(bsPlayer.colorKey); ctx.shadowBlur = bsIsWheelie ? 20 : 10; ctx.shadowColor = ctx.fillStyle; ctx.fillRect(bsPlayer.x, bsPlayer.y, bsPlayer.w, bsPlayer.h); }
             
-            // Efek Shield Aura pas nyawa cadangan aktif
             if (activeLivesBS > 0) { ctx.save(); ctx.strokeStyle = 'rgba(0, 210, 255, 0.8)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(bsPlayer.x + bsPlayer.w/2, bsPlayer.y + bsPlayer.h/2, bsPlayer.w/1.5, bsPlayer.h/1.5, 0, 0, Math.PI*2); ctx.stroke(); ctx.restore(); }
         }
 
-        bsParticles.forEach((p, i) => { p.update(); if(p.life <= 0) bsParticles.splice(i, 1); });
+        for (let i = bsParticles.length - 1; i >= 0; i--) { let p = bsParticles[i]; p.update(); if(p.life <= 0) bsParticles.splice(i, 1); }
         if(bsFlash > 0) { ctx.fillStyle = `rgba(255, 255, 255, ${bsFlash})`; ctx.fillRect(0, 0, w, h); bsFlash -= 0.05; }
         ctx.restore();
     }
 
-    function masterLoop() { requestAnimationFrame(masterLoop); if (activeGame === 'GALAXY' && gameState === 'PLAYING_GALAXY') { frame++; loopGalaxy(); } else if (activeGame === 'BEATSTREET' && (gameState === 'PLAYING_BEATSTREET' || gameState === 'GAMEOVER_ANIMATING')) { frame++; loopBeatStreet(); } }
+
+    // ====== KOTA 261 PARKOUR LOGIC ======
+    let pkScore = 0; let pkSpeed = 7.5; let pkGravity = 0.58; 
+    let pkPlayer; let pkBuildings = []; let pkObstacles = []; let pkCoins = []; let pkParticles = []; let pkBgBuildings = []; let pkCameraShake = 0;
+    let pkNextMilestoneIdx = 0;
+    
+    class PkCoin {
+        constructor(x, y) {
+            this.x = x; this.y = y; this.baseY = y; this.w = 16; this.h = 16; this.angle = Math.random() * Math.PI * 2;
+        }
+        update() {
+            this.x -= pkSpeed; this.angle += 0.1; this.y = this.baseY + Math.sin(this.angle) * 8;
+            ctx.fillStyle = '#00d2ff'; ctx.beginPath(); ctx.moveTo(this.x + this.w/2, this.y); ctx.lineTo(this.x + this.w, this.y + this.h/2); ctx.lineTo(this.x + this.w/2, this.y + this.h); ctx.lineTo(this.x, this.y + this.h/2); ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(this.x + this.w/2, this.y + this.h/2, 3, 0, Math.PI*2); ctx.fill();
+            ctx.shadowBlur = 12; ctx.shadowColor = '#00d2ff'; ctx.strokeStyle = '#00d2ff'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(this.x + this.w/2, this.y - 3); ctx.lineTo(this.x + this.w + 3, this.y + this.h/2); ctx.lineTo(this.x + this.w/2, this.y + this.h + 3); ctx.lineTo(this.x - 3, this.y + this.h/2); ctx.closePath(); ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
+    }
+
+    class PkPlayer {
+        constructor() {
+            this.x = w * 0.15; this.y = h / 2; this.vy = 0; this.jumpForce = unlockedPerks.includes('sepatu_gravitasi') ? -14.0 : -13.0; this.jumps = 0; this.isGrounded = false;
+            this.w = 20; this.h = 45; this.state = 'RUN'; this.stateTimer = 0; this.rotation = 0; this.trail = []; this.neckParticles = [];
+        }
+        update() {
+            this.stateTimer++;
+            if (frame % 3 === 0 && (this.state === 'RUN' || this.state === 'FLIP' || this.state === 'ROLL')) { this.trail.push({x: this.x, y: this.y, state: this.state, t: this.stateTimer, rot: this.rotation, alpha: 0.3}); if (this.trail.length > 5) this.trail.shift(); }
+            this.vy += pkGravity; this.y += this.vy;
+            if (this.y > h) gameOverParkour();
+
+            this.isGrounded = false; let hitBuilding = false;
+            for (let i = 0; i < pkBuildings.length; i++) {
+                let b = pkBuildings[i];
+                if (this.x + this.w > b.x - 5 && this.x - 5 < b.x + b.w) { 
+                    if (this.y + this.h >= b.y && this.y + this.h - this.vy <= b.y + 20) {
+                        this.y = b.y - this.h; this.isGrounded = true; hitBuilding = true;
+                        if (this.vy > 10 || this.state === 'FLIP') { if(this.state !== 'ROLL') { this.state = 'ROLL'; this.stateTimer = 0; pkCameraShake = 4; createPkParticles(this.x, this.y+this.h, '#666', 10); } } 
+                        else if (this.state !== 'ROLL' && this.state !== 'RUN') { this.state = 'RUN'; this.stateTimer = 0; }
+                        this.vy = 0; this.jumps = 0; break;
+                    }
+                    if (this.y + this.h > b.y + 10 && this.x + this.w >= b.x && this.x < b.x + 15) { this.x -= pkSpeed; if (this.x < 0) gameOverParkour(); }
+                }
+            }
+
+            if (!this.isGrounded) {
+                if (this.state === 'RUN' || this.state === 'ROLL') { this.state = 'FALL'; this.stateTimer = 0; }
+                if (this.state === 'JUMP' && this.vy > 0) { this.state = 'FALL'; }
+            } else { if (this.state === 'ROLL' && this.stateTimer > 25) { this.state = 'RUN'; } }
+
+            if (!hitBuilding && this.x < w * 0.15) { this.x += 1; }
+
+            for (let i = pkObstacles.length - 1; i >= 0; i--) {
+                let o = pkObstacles[i]; let padX = 10; let padY = 10; 
+                if (!o.hit && !isNandoAccount && gameState === 'PLAYING_PARKOUR' && this.x + padX < o.x + o.w && this.x + this.w - padX > o.x && this.y + padY < o.y + o.h && this.y + this.h > o.y) {
+                    if (extraLifePKBought > 0) { extraLifePKBought--; o.hit = true; playSFX(sfxScore); createPkParticles(this.x + this.w/2, this.y + this.h/2, '#00d2ff', 20); updateCoinUI(); } 
+                    else { gameOverParkour(); }
+                }
+            }
+
+            for (let i = pkCoins.length - 1; i >= 0; i--) {
+                let c = pkCoins[i];
+                if (unlockedPerks.includes('magnet_pk')) {
+                    let d = Math.hypot(this.x - c.x, this.y - c.y);
+                    if (d < 150) { c.x += (this.x - c.x) * 0.15; c.y += (this.y - c.y) * 0.15; }
+                }
+                if (this.x < c.x + c.w && this.x + this.w > c.x && this.y < c.y + c.h && this.y + this.h > c.y) {
+                    addCoins(1); createPkParticles(c.x + c.w/2, c.y + c.h/2, '#00d2ff', 12); playSFX(sfxFuel); pkCoins.splice(i, 1);
+                }
+            }
+
+            this.draw();
+        }
+
+        drawNinja(ctx, cx, cy, state, t, alpha, isTrail) {
+            let size = 1.35; let hipX = cx; let hipY = cy - 5; 
+            let torsoLean = 0; let t1=0, k1=0, t2=0, k2=0; let a1=0, e1=0, a2=0, e2=0; let rot = 0;
+
+            if (state === 'RUN') {
+                let cycle = t * 0.45; let swing = Math.sin(cycle); hipY += Math.cos(cycle * 2) * 1.5; torsoLean = 0.85 + swing * 0.1; 
+                t1 = swing * 1.3; k1 = -0.2 + Math.abs(Math.sin(cycle - Math.PI/2)) * -1.5; t2 = -swing * 1.3; k2 = -0.2 + Math.abs(Math.sin(cycle)) * -1.5;
+                a1 = -1.2 + swing * 0.2; e1 = 0.3; a2 = -1.5 - swing * 0.2; e2 = 0.3;
+            } else if (state === 'JUMP') {
+                torsoLean = 0.4; t1 = -0.8; k1 = -1.4; t2 = -0.3; k2 = -1.0; a1 = -1.5; e1 = 0.6; a2 = -1.2; e2 = 0.4;
+            } else if (state === 'FALL') {
+                torsoLean = 0.5; t1 = 0.6; k1 = -0.3; t2 = 0.2; k2 = -0.5; a1 = 1.8; e1 = 0.6; a2 = 1.5; e2 = 0.6;
+            } else if (state === 'FLIP') {
+                rot = t * 0.38; torsoLean = 1.0; t1 = -1.5; k1 = -2.0; t2 = -1.5; k2 = -2.0; a1 = 0.5; e1 = 1.0; a2 = 0.5; e2 = 1.0;
+            } else if (state === 'ROLL') {
+                rot = t * 0.45; torsoLean = 1.2; t1 = -1.5; k1 = -2.2; t2 = -1.5; k2 = -2.2; a1 = 1.0; e1 = 1.5; a2 = 1.0; e2 = 1.5; hipY += 15; 
+            }
+
+            if (!isTrail) this.rotation = rot;
+            ctx.save(); ctx.translate(hipX, hipY); ctx.rotate(isTrail ? this.rotation : rot);
+
+            let redSilhouetteBack = isTrail ? `rgba(150, 0, 50, ${alpha})` : '#990033';
+            let redSilhouetteFront = isTrail ? `rgba(255, 0, 85, ${alpha})` : '#ff0055';
+            let hoodieColor = isTrail ? `rgba(20, 20, 20, ${alpha})` : '#111111';
+            
+            const drawSeg = (x, y, angle, length, thick, color) => { ctx.strokeStyle = color; ctx.lineWidth = thick; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x, y); let ex = x + Math.sin(angle) * length; let ey = y + Math.cos(angle) * length; ctx.lineTo(ex, ey); ctx.stroke(); return {x: ex, y: ey}; };
+
+            let shoulderX = Math.sin(torsoLean) * 16 * size; let shoulderY = -Math.cos(torsoLean) * 16 * size;
+            let knee2 = drawSeg(0, 0, t2, 12 * size, 7 * size, redSilhouetteBack); drawSeg(knee2.x, knee2.y, t2 + k2, 14 * size, 5 * size, redSilhouetteBack);
+            let elbow2 = drawSeg(shoulderX, shoulderY, a2, 11 * size, 5 * size, redSilhouetteBack); drawSeg(elbow2.x, elbow2.y, a2 + e2, 10 * size, 4 * size, redSilhouetteBack);
+
+            ctx.fillStyle = hoodieColor; ctx.beginPath(); ctx.moveTo(-7, 0); ctx.lineTo(7, 0); ctx.lineTo(shoulderX + 9, shoulderY); ctx.lineTo(shoulderX - 8, shoulderY - 5); ctx.fill();
+            if(!isTrail) { ctx.strokeStyle = redSilhouetteFront; ctx.lineWidth = 1; ctx.stroke(); }
+
+            let headX = shoulderX + Math.sin(torsoLean + 0.3) * 7 * size; let headY = shoulderY - Math.cos(torsoLean + 0.3) * 7 * size;
+            
+            if (!isTrail) {
+                ctx.strokeStyle = '#ff0055'; ctx.lineWidth = 4 * size; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(headX, headY + 5);
+                ctx.quadraticCurveTo(headX - 15, headY + 5 + Math.sin(frame * 0.3) * 8, headX - 25, headY + 5 + Math.cos(frame * 0.4) * 12); ctx.stroke();
+            }
+
+            ctx.fillStyle = hoodieColor; ctx.beginPath(); ctx.arc(headX, headY, 9 * size, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(headX, headY - 8); ctx.lineTo(headX + 10, headY); ctx.lineTo(headX, headY + 8); ctx.fill();
+
+            let knee1 = drawSeg(0, 0, t1, 12 * size, 7.5 * size, redSilhouetteFront); drawSeg(knee1.x, knee1.y, t1 + k1, 14 * size, 5.5 * size, redSilhouetteFront);
+            let elbow1 = drawSeg(shoulderX, shoulderY, a1, 11 * size, 5.5 * size, redSilhouetteFront); drawSeg(elbow1.x, elbow1.y, a1 + e1, 10 * size, 4.5 * size, redSilhouetteFront);
+
+            if (!isTrail) {
+                ctx.fillStyle = '#00d2ff'; ctx.shadowBlur = 15; ctx.shadowColor = '#00d2ff'; ctx.fillRect(headX + 4, headY - 2, 6, 3); ctx.shadowBlur = 0;
+                this.neckParticles.push({ x: hipX + shoulderX, y: hipY + shoulderY, life: 20 + Math.random()*10, size: 2 + Math.random()*2 });
+                ctx.fillStyle = '#00d2ff'; 
+                for (let i = this.neckParticles.length - 1; i >= 0; i--) {
+                    let p = this.neckParticles[i]; p.x -= pkSpeed * 1.1; p.y += (Math.random()-0.5)*2; p.life--;
+                    ctx.globalAlpha = Math.max(0, p.life / 30); ctx.fillRect(p.x, p.y, p.size, p.size);
+                    if (p.life <= 0) this.neckParticles.splice(i, 1);
+                }
+                ctx.globalAlpha = 1.0;
+            }
+            ctx.restore();
+            
+            if (!isTrail && extraLifePKBought > 0) {
+                ctx.save(); ctx.strokeStyle = 'rgba(0, 210, 255, 0.8)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(cx, cy, this.w, this.h, 0, 0, Math.PI*2); ctx.stroke(); ctx.restore();
+            }
+        }
+
+        draw() {
+            for (let t of this.trail) { this.drawNinja(ctx, t.x + this.w/2, t.y + this.h/2, t.state, t.t, t.alpha, true); t.x -= pkSpeed; t.alpha -= 0.08; }
+            this.drawNinja(ctx, this.x + this.w/2, this.y + this.h/2, this.state, this.stateTimer, 1.0, false);
+        }
+    }
+
+    class PkBuilding {
+        constructor(x, width, yPos) { this.x = x; this.w = width; this.y = yPos; }
+        update() {
+            this.x -= pkSpeed;
+            let grad = ctx.createLinearGradient(0, this.y, 0, h); grad.addColorStop(0, '#0a0a10'); grad.addColorStop(1, '#020205'); ctx.fillStyle = grad; ctx.fillRect(this.x, this.y, this.w, h - this.y);
+            ctx.fillStyle = 'rgba(255, 0, 85, 0.1)';
+            for(let wx = 15; wx < this.w - 15; wx += 45) {
+                for(let wy = this.y + 40; wy < h; wy += 55) {
+                    if((Math.floor(this.x + wx + wy) % 7) === 0) { ctx.shadowBlur = 10; ctx.shadowColor = '#ff0055'; ctx.fillRect(this.x + wx, wy, 15, 25); ctx.shadowBlur = 0; } 
+                    else { ctx.fillStyle = 'rgba(255, 255, 255, 0.02)'; ctx.fillRect(this.x + wx, wy, 15, 25); ctx.fillStyle = 'rgba(255, 0, 85, 0.1)'; }
+                }
+            }
+            ctx.strokeStyle = '#222'; ctx.lineWidth = 2; ctx.strokeRect(this.x, this.y, this.w, h - this.y);
+            ctx.fillStyle = '#ff0055'; ctx.globalAlpha = 0.2; ctx.fillRect(this.x, this.y, this.w, 4); ctx.globalAlpha = 1.0;
+            ctx.fillStyle = '#222'; ctx.fillRect(this.x, this.y+4, this.w, 4); ctx.fillStyle = '#111'; ctx.fillRect(this.x, this.y+8, this.w, 2);
+        }
+    }
+
+    class PkObstacle {
+        constructor(x, y, w, h, type) { this.x = x; this.y = y; this.w = w; this.h = h; this.type = type; this.baseY = y; this.hit = false; }
+        update() {
+            this.x -= pkSpeed;
+            if (this.type === 0) {
+                ctx.fillStyle = '#111'; ctx.fillRect(this.x, this.y, this.w, this.h); ctx.strokeStyle = '#555'; ctx.lineWidth = 2; ctx.strokeRect(this.x, this.y, this.w, this.h);
+                ctx.save(); ctx.translate(this.x + this.w/2, this.y + this.h/2); ctx.rotate(frame * 0.3); ctx.fillStyle = '#00d2ff'; ctx.fillRect(-12, -2, 24, 4); ctx.fillRect(-2, -12, 4, 24); ctx.restore();
+                ctx.fillStyle = '#222'; ctx.beginPath(); ctx.arc(this.x + this.w/2, this.y + this.h/2, 4, 0, Math.PI*2); ctx.fill();
+                if(frame % 10 === 0) { ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fillRect(this.x + 5 + Math.random()*10, this.y - 15, 8, 15); }
+            } else if (this.type === 1) {
+                ctx.fillStyle = '#111'; ctx.fillRect(this.x, this.y, this.w, this.h); ctx.fillStyle = '#0a0a0a'; ctx.fillRect(this.x + 5, this.y, this.w - 10, this.h); ctx.fillStyle = '#222'; ctx.fillRect(this.x - 4, this.y, this.w + 8, 12);
+                if(frame % 4 === 0) { ctx.fillStyle = 'rgba(0, 255, 100, 0.4)'; ctx.shadowBlur = 10; ctx.shadowColor = '#00ff66'; ctx.beginPath(); ctx.arc(this.x + this.w/2 + (Math.random()-0.5)*10, this.y - 10 - Math.random()*10, 5+Math.random()*5, 0, Math.PI*2); ctx.fill(); ctx.shadowBlur = 0; }
+            } else if (this.type === 2) {
+                ctx.fillStyle = '#111'; ctx.fillRect(this.x, this.y, 8, this.h); ctx.fillRect(this.x + this.w - 8, this.y, 8, this.h);
+                ctx.shadowBlur = 10; ctx.shadowColor = '#ff0055'; ctx.strokeStyle = '#ff0055'; ctx.lineWidth = 2;
+                ctx.beginPath(); for(let l = this.y + 8; l < this.y + this.h - 5; l += 15) { ctx.moveTo(this.x + 8, l); ctx.lineTo(this.x + this.w - 8, l); } ctx.stroke(); ctx.shadowBlur = 0;
+                if(Math.random() > 0.8) { ctx.fillStyle = '#fff'; ctx.fillRect(this.x + 10 + Math.random()*(this.w-20), this.y + 8 + Math.random()*(this.h-16), 2, 2); }
+            } else if (this.type === 3) {
+                this.y = this.baseY + Math.sin(frame * 0.15) * 20; 
+                ctx.fillStyle = '#222'; ctx.fillRect(this.x, this.y, this.w, this.h); ctx.fillStyle = '#444'; ctx.fillRect(this.x + 5, this.y + 2, this.w - 10, this.h - 4);
+                ctx.fillStyle = '#00d2ff'; ctx.fillRect(this.x - 5, this.y + 5, 5, 2); ctx.fillRect(this.x + this.w, this.y + 5, 5, 2);
+                ctx.fillStyle = '#ff0055'; ctx.shadowBlur = 15; ctx.shadowColor = '#ff0055'; ctx.beginPath(); ctx.arc(this.x + this.w/2, this.y + this.h/2 + 2, 4, 0, Math.PI*2); ctx.fill();
+                ctx.globalAlpha = 0.2; ctx.beginPath(); ctx.moveTo(this.x + this.w/2, this.y + this.h); ctx.lineTo(this.x - 10, this.y + this.h + 40); ctx.lineTo(this.x + this.w + 10, this.y + this.h + 40); ctx.fill(); ctx.globalAlpha = 1.0; ctx.shadowBlur = 0;
+            }
+        }
+    }
+
+    function createPkParticles(x, y, color, amount) { for (let i = 0; i < amount; i++) { pkParticles.push({ x: x, y: y, vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 6, life: 20 + Math.random()*15, color: color }); } }
+
+    function drawPkBackground() {
+        let grad = ctx.createLinearGradient(0, 0, 0, h); grad.addColorStop(0, "#010103"); grad.addColorStop(1, "#0a0315"); ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#fff'; pkStars.forEach(s => { ctx.globalAlpha = Math.random() > 0.9 ? 0.2 : 0.8; ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill(); }); ctx.globalAlpha = 1;
+        let moonX = w * 0.8; let moonY = h * 0.25; let moonRadius = 65;
+        ctx.fillStyle = '#ffeed0'; ctx.shadowBlur = 50; ctx.shadowColor = '#ffeed0'; ctx.beginPath(); ctx.arc(moonX, moonY, moonRadius, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+
+        for (let i = pkBgBuildings.length - 1; i >= 0; i--) {
+            let bg = pkBgBuildings[i]; bg.x -= pkSpeed * 0.15; 
+            ctx.fillStyle = '#06050b'; ctx.fillRect(bg.x, bg.y, bg.w, h - bg.y); ctx.strokeStyle = '#0a0a0f'; ctx.strokeRect(bg.x, bg.y, bg.w, h - bg.y);
+            if (bg.windows) { ctx.fillStyle = 'rgba(0, 210, 255, 0.1)'; for (let win of bg.windows) { ctx.fillRect(bg.x + win.x, bg.y + win.y, 5, 8); } }
+            if(bg.hasBillboard) {
+                let bbX = bg.x + bg.w/2 - 60; let bbY = bg.y - 80; let bbW = 120; let bbH = 70;
+                ctx.fillStyle = '#111'; ctx.fillRect(bbX + 20, bbY + bbH, 8, 80); ctx.fillRect(bbX + bbW - 28, bbY + bbH, 8, 80);
+                ctx.fillStyle = '#050505'; ctx.fillRect(bbX, bbY, bbW, bbH);
+                let bbColor = (frame % 60 < 3) ? '#00d2ff' : '#ff0055';
+                ctx.strokeStyle = bbColor; ctx.lineWidth = 3; ctx.shadowBlur = 15; ctx.shadowColor = bbColor; ctx.strokeRect(bbX, bbY, bbW, bbH);
+                ctx.textAlign = 'center'; ctx.font = 'italic bold 28px "Courier New"'; ctx.fillStyle = bbColor; ctx.fillText("261", bbX + bbW/2, bbY + 35);
+                ctx.font = 'italic bold 16px "Courier New"'; ctx.fillStyle = '#fff'; ctx.fillText("AREA", bbX + bbW/2, bbY + 55); ctx.shadowBlur = 0;
+            }
+            if (bg.x + bg.w < -200) pkBgBuildings.splice(i, 1);
+        }
+
+        if (pkBgBuildings.length === 0 || pkBgBuildings[pkBgBuildings.length - 1].x < w - 50) {
+            let bw = 100 + Math.random() * 150; let by = h * 0.15 + Math.random() * (h * 0.4); let windows = []; let hasBillboard = Math.random() > 0.6; 
+            if (Math.random() > 0.4) { for(let wx=10; wx<bw-10; wx+=15) { for(let wy=40; wy<h-by; wy+=25) { if(Math.random() > 0.8) windows.push({x: wx, y: wy}); } } }
+            pkBgBuildings.push({ x: w, w: bw, y: by, windows: windows, hasBillboard: hasBillboard });
+        }
+        let fogGrad = ctx.createLinearGradient(0, h * 0.6, 0, h); fogGrad.addColorStop(0, 'rgba(0, 0, 0, 0)'); fogGrad.addColorStop(1, 'rgba(0, 0, 0, 0.7)');
+        ctx.fillStyle = fogGrad; ctx.fillRect(0, h * 0.6, w, h * 0.4);
+    }
+
+    window.addEventListener('mousedown', (e) => { if (activeGame === 'PARKOUR' && gameState === 'PLAYING_PARKOUR' && e.target.tagName !== 'BUTTON') pkJump(); });
+    window.addEventListener('touchstart', (e) => { if (activeGame === 'PARKOUR' && gameState === 'PLAYING_PARKOUR' && e.target.tagName !== 'BUTTON') { e.preventDefault(); pkJump(); } }, {passive: false});
+
+    function pkJump() {
+        if (player.state === 'ROLL') { player.state = 'JUMP'; player.stateTimer = 0; }
+        if (player.jumps === 0 && player.isGrounded) { player.vy = player.jumpForce; player.jumps++; player.isGrounded = false; player.state = 'JUMP'; player.stateTimer = 0; createPkParticles(player.x, player.y + 10, '#555', 10); } 
+        else if (player.jumps === 1) { player.vy = player.jumpForce * 0.85; player.jumps++; player.state = 'FLIP'; player.stateTimer = 0; createPkParticles(player.x, player.y + 10, '#ff0055', 15); }
+    }
+
+    function initParkourPreview() {
+        activeGame = 'PARKOUR'; gameState = 'MENU_PARKOUR';
+        pkBuildings = [new PkBuilding(0, w * 1.5, h * 0.65)]; pkBgBuildings = [];
+        for(let i=0; i<w*1.5; i+= 120) { pkBgBuildings.push({ x: i, w: 100 + Math.random()*100, y: h * 0.2 + Math.random()*200, hasBillboard: (i%240 === 0) }); }
+    }
+
+    function checkAndStartParkour() {
+        let nName = checkNameAuth('pregame-name-pk'); if(!nName) return; globalPlayerName = nName;
+        document.getElementById('hint-text-pk').style.display = 'block';
+        player = new PkPlayer(); pkBuildings = [new PkBuilding(0, w * 1.5, h * 0.65)]; pkObstacles = []; pkCoins = []; pkParticles = [];
+        pkScore = 0; pkSpeed = 7.5; frame = 0; pkCameraShake = 0; gameState = 'PLAYING_PARKOUR'; pkGravity = unlockedPerks.includes('sepatu_gravitasi') ? 0.45 : 0.58;
+        if(isNandoAccount) { pkSpeed = 15; pkScore = 999900; }
+        
+        pkNextMilestoneIdx = milestonesList.findIndex(m => m > pkScore); if (pkNextMilestoneIdx === -1) pkNextMilestoneIdx = milestonesList.length;
+
+        document.getElementById('pk-ingame-name').innerText = globalPlayerName + " [" + getPlayerTitle(pkScore) + "]"; 
+        document.getElementById('pk-score').innerText = pkScore;
+        
+        showScreen(null); document.getElementById('pk-ui').style.display = 'block';
+        setTimeout(() => { document.getElementById('hint-text-pk').style.display = 'none'; }, 3500);
+    }
+
+    function pauseParkour() { gameState = 'PAUSED_PARKOUR'; document.getElementById('pk-ui').style.display = 'none'; showScreen('pk-pause-menu'); }
+    function resumeParkour() { gameState = 'PLAYING_PARKOUR'; showScreen(null); document.getElementById('pk-ui').style.display = 'block'; }
+    function quitParkour() { gameState = 'MENU'; activeGame = 'MENU'; document.getElementById('pk-ui').style.display = 'none'; ctx.clearRect(0,0,w,h); showScreen('main-menu-parkour'); updateCoinUI(); }
+
+    function checkMilestonePK() { 
+        if (pkNextMilestoneIdx < milestonesList.length && pkScore >= milestonesList[pkNextMilestoneIdx]) { 
+            let mBox = document.getElementById('milestone-msg-pk'); 
+            mBox.innerHTML = `JARAK ${milestonesList[pkNextMilestoneIdx]} M<br>${milestoneMsgs[Math.floor(Math.random() * milestoneMsgs.length)]}`; 
+            mBox.style.display = 'block'; playSFX(sfxScore); setTimeout(() => { mBox.style.display = 'none'; }, 3000); 
+            pkNextMilestoneIdx++; 
+            document.getElementById('pk-ingame-name').innerText = globalPlayerName + " [" + getPlayerTitle(pkScore) + "]"; 
+        } 
+    }
+
+    function savePKHighScore() {
+        if (isNandoAccount) return; 
+        let safeName = globalPlayerName.replace(/[.#$\[\]]/g, '_'); let pRef = leaderboardPKRef.child(safeName);
+        pRef.once('value').then((snap) => {
+            let ex = snap.val(); let isNew = false;
+            if (!ex) { pRef.set({ name: globalPlayerName, score: pkScore }); isNew = true; } else if (pkScore > ex.score) { pRef.update({ score: pkScore }); isNew = true; }
+            if (isNew) { document.getElementById('new-hs-msg-pk').style.display = 'block'; playSFX(sfxTopScore); }
+        });
+    }
+
+    function gameOverParkour() {
+        gameState = 'GAMEOVER_ANIMATING_PK'; pkCameraShake = 25; 
+        document.getElementById('pk-final-score').innerText = isNandoAccount ? "999999 (LOCKED)" : Math.floor(pkScore); document.getElementById('new-hs-msg-pk').style.display = 'none';
+        document.getElementById('pk-ui').style.display = 'none';
+        savePKHighScore(); updateCoinUI(); playSFX(sfxCrash);
+        createPkParticles(player.x + player.w/2, player.y + player.h/2, '#ff0055', 50);
+        setTimeout(() => { playSFX(sfxGameOver); showScreen('pk-game-over'); }, 800);
+    }
+
+    function loopParkourPreview() { pkSpeed = 4; drawPkBackground(); for (let i = pkBuildings.length - 1; i >= 0; i--) { pkBuildings[i].update(); if (pkBuildings[i].x + pkBuildings[i].w < -100) pkBuildings.splice(i, 1); } let lastB = pkBuildings[pkBuildings.length - 1]; if (lastB.x + lastB.w < w + 50) { pkBuildings.push(new PkBuilding(lastB.x + lastB.w + 100, 400 + Math.random()*500, h*0.5 + Math.random()*(h*0.35))); } }
+
+    function loopParkour() {
+        if(frame % 3 === 0) { pkScore += Math.floor(pkSpeed / 3); if(isNandoAccount) pkScore = 999999; document.getElementById('pk-score').innerText = pkScore; checkMilestonePK(); }
+        if(frame % 300 === 0 && !isNandoAccount && pkSpeed < 18) pkSpeed += 0.3;
+
+        ctx.save();
+        if (pkCameraShake > 0) { ctx.translate((Math.random() - 0.5) * pkCameraShake, (Math.random() - 0.5) * pkCameraShake); pkCameraShake *= 0.8; if(pkCameraShake < 0.5) pkCameraShake = 0; }
+
+        drawPkBackground();
+
+        let lastBuilding = pkBuildings[pkBuildings.length - 1];
+        if (lastBuilding.x + lastBuilding.w < w + 50) {
+            let gap = 100 + Math.random() * (Math.min(380, 150 + (pkSpeed * 4)));
+            let newY = h * 0.5 + Math.random() * (h * 0.35); let newW = 400 + Math.random() * 600; let newX = lastBuilding.x + lastBuilding.w + gap;
+            pkBuildings.push(new PkBuilding(newX, newW, newY));
+
+            let hasCoins = false; let coinEndX = 0;
+            if (Math.random() > 0.65) { 
+                hasCoins = true; let numCoins = 3 + Math.floor(Math.random() * 4); let startCoinX = newX + 80;
+                for(let c=0; c<numCoins; c++) { pkCoins.push(new PkCoin(startCoinX + (c * 45), newY - 40 - Math.sin((c/(numCoins-1)) * Math.PI) * 80)); }
+                coinEndX = startCoinX + (numCoins * 45);
+            }
+
+            if (Math.random() > 0.4 && pkSpeed > 8) { 
+                let t = Math.random(); let type = 0; let oW = 40, oH = 35, oY = oH;
+                if (t > 0.75 && newY < h * 0.75) { type = 1; oW = 25; oH = 80; oY = oH; } else if (t > 0.5) { type = 2; oW = 65; oH = 25; oY = oH; } else if (t > 0.25) { type = 3; oW = 40; oH = 20; oY = oH + 50 + Math.random() * 40; }
+                let minObsX = hasCoins ? coinEndX + 80 : newX + 150; let maxObsX = newX + newW - oW - 50;
+                if (minObsX < maxObsX) { pkObstacles.push(new PkObstacle(minObsX + Math.random() * (maxObsX - minObsX), newY - oY, oW, oH, type)); }
+            }
+        }
+
+        for (let i = pkBuildings.length - 1; i >= 0; i--) { pkBuildings[i].update(); if (pkBuildings[i].x + pkBuildings[i].w < -100) pkBuildings.splice(i, 1); }
+        for (let i = pkObstacles.length - 1; i >= 0; i--) { pkObstacles[i].update(); if (pkObstacles[i].x + pkObstacles[i].w < -50) pkObstacles.splice(i, 1); }
+        for (let i = pkCoins.length - 1; i >= 0; i--) { pkCoins[i].update(); if (pkCoins[i].x < -50) pkCoins.splice(i, 1); }
+
+        if(gameState === 'PLAYING_PARKOUR') player.update();
+        
+        for (let i = pkParticles.length - 1; i >= 0; i--) { let p = pkParticles[i]; p.x += p.vx; p.y += p.vy; p.life--; ctx.fillStyle = p.color; ctx.globalAlpha = Math.max(0, p.life / 25); ctx.fillRect(p.x, p.y, 4, 4); ctx.globalAlpha = 1; if (p.life <= 0) pkParticles.splice(i, 1); }
+        ctx.restore();
+    }
+
+
+    function masterLoop() { 
+        requestAnimationFrame(masterLoop); 
+        frame++;
+        if (activeGame === 'GALAXY' && gameState === 'PLAYING_GALAXY') { loopGalaxy(); } 
+        else if (activeGame === 'BEATSTREET' && (gameState === 'PLAYING_BEATSTREET' || gameState === 'GAMEOVER_ANIMATING')) { loopBeatStreet(); }
+        else if (activeGame === 'PARKOUR') {
+            if (gameState === 'MENU_PARKOUR') loopParkourPreview();
+            else if (gameState === 'PLAYING_PARKOUR' || gameState === 'GAMEOVER_ANIMATING_PK') loopParkour();
+        }
+    }
     masterLoop(); 
 
   </script>
