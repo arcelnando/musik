@@ -278,9 +278,9 @@
   
   <div id="web-container">
     <div class="flash-impact"></div>
-    <video autoplay muted loop playsinline class="bg-video">
-      <source src="latar_261.mp4" type="video/mp4">
-    </video>
+    <!-- Video diganti menjadi tag img -->
+    <img src="261.jpg" class="bg-video" alt="Latar Belakang">
+</div>
     
     <div class="bg-overlay"></div>
     <div class="vignette"></div>
@@ -393,7 +393,7 @@
     </main>
     <footer id="footer"></footer>
     
-    <audio id="bgmusic" loop><source src="bgmusic.mp3" type="audio/mp3"></audio>
+    <audio id="bgmusic" loop><source src="" type="audio/mp3"></audio>
     <audio id="game-bgm" loop><source src="gamebgm.mp3" type="audio/mp3"></audio>
     <audio id="bs-bgm" loop><source src="bs_bgm.mp3" type="audio/mp3"></audio>
 
@@ -456,7 +456,7 @@
 
     <!-- KOTA 261 PARKOUR MENU -->
     <div id="main-menu-parkour" class="game-screen">
-        <h1 class="game-h1" style="text-shadow: 0 0 15px #ff0055; font-size: 3rem;"><span>KOTA</span> 261</h1>
+        <h1 class="game-h1" style="text-shadow: 0 0 15px #ff0055; font-size: 3rem;"><span>261</span> ROOFTOP</h1>
         <p class="game-subtitle" style="margin-top:10px; color:#ff0055; font-weight:bold; letter-spacing:3px;">OPEN WORLD PARKOUR</p>
         
         <input type="text" id="pregame-name-pk" class="game-input-name" placeholder="BUAT NICKNAME" maxlength="12" style="border-color: #ff0055;">
@@ -770,7 +770,7 @@
 
     <div id="pk-game-over" class="game-screen">
         <div class="overlay-box" style="border-color: #ff0055; box-shadow: 0 0 20px rgba(255,0,85,0.3);">
-            <h1 class="game-h1" style="font-size:2.5rem; color: #ff0055; text-shadow: 0 0 15px #ff0055;">GOBLOK!</h1>
+            <h1 class="game-h1" style="font-size:2.5rem; color: #ff0055; text-shadow: 0 0 15px #ff0055;">WASTED!</h1>
             <p style="font-size: 16px; margin-top:15px; color:#fff;">Jarak Tempuh: <b id="pk-final-score" style="color: #ff0055;">0</b> M</p>
             <p id="new-hs-msg-pk" style="display: none; color: #0f0; font-weight: bold; border-top: 1px dashed #ff0055; padding-top:15px; margin-bottom: 10px;">REKOR JUMPER BARU!</p>
             <button class="game-btn" style="width: 100%; margin-top: 20px; border-color: #ff0055;" onclick="playSFX(sfxClick); checkAndStartParkour()">Coba Lagi</button>
