@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>261 AREA | ADMIN PANEL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>261 AREA | ADMIN PANEL PRO</title>
   
   <!-- SCRIPT FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -13,18 +13,13 @@
     /* =========================================
        CSS ADMIN PANEL - BLACK & WHITE CRT THEME
        ========================================= */
-    * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+    
+    * { box-sizing: border-box; font-family: 'Share Tech Mono', 'Courier New', Courier, monospace; }
     
     body {
-        background: #000;
-        color: #fff;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 40px 10px; 
-        min-height: 100vh;
-        overflow-x: hidden;
+        background: #000; color: #fff; margin: 0; display: flex; flex-direction: column;
+        align-items: center; padding: 50px 10px 40px 10px; min-height: 100vh; overflow-x: hidden;
     }
 
     body::before {
@@ -33,180 +28,187 @@
         z-index: 9999; background-size: 100% 3px; pointer-events: none;
     }
 
+    /* HAMBURGER & SIDEBAR */
+    .menu-btn {
+        position: fixed; top: 15px; left: 15px; z-index: 10001; font-size: 24px; color: #00d2ff;
+        background: transparent; border: none; cursor: pointer; text-shadow: 0 0 5px #00d2ff; display: none;
+    }
+    
+    #overlay {
+        display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(0,0,0,0.6); z-index: 9999; backdrop-filter: blur(2px);
+    }
+    #overlay.show { display: block; }
+
+    #sidebar {
+        position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
+        background: rgba(10, 10, 10, 0.95); border-right: 2px solid #00d2ff;
+        z-index: 10000; transition: left 0.3s ease; padding: 60px 20px 20px;
+        box-shadow: 5px 0 15px rgba(0,210,255,0.1); overflow-y: auto;
+    }
+    #sidebar.open { left: 0; }
+    
+    .profile-card { border: 1px dashed #444; padding: 15px; margin-bottom: 20px; background: #050505; }
+    .profile-card h3 { margin: 0 0 5px 0; color: #00d2ff; font-size: 16px; }
+    .profile-card p { margin: 2px 0; font-size: 12px; color: #aaa; }
+    .sidebar-stat { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; border-bottom: 1px dotted #333; padding-bottom: 5px; }
+
     .box {
-        background: #000;
-        border: 2px solid #333;
-        padding: 30px 20px;
-        width: 100%;
-        max-width: 500px;
-        z-index: 10;
-        position: relative;
-        margin-bottom: 20px;
-        border-radius: 8px;
+        background: #000; border: 2px solid #333; padding: 30px 20px; width: 100%;
+        max-width: 500px; z-index: 10; position: relative; margin-bottom: 20px; border-radius: 8px;
     }
 
     h2 {
-        text-align: center;
-        margin-top: 0;
-        letter-spacing: 4px;
-        font-size: 20px;
-        text-transform: uppercase;
-        border-bottom: 1px dashed #444;
-        padding-bottom: 15px;
-        margin-bottom: 30px;
-        color: #00d2ff;
+        text-align: center; margin-top: 0; letter-spacing: 4px; font-size: 18px;
+        text-transform: uppercase; border-bottom: 1px dashed #444; padding-bottom: 15px;
+        margin-bottom: 20px; color: #00d2ff; text-shadow: 0 0 3px #00d2ff;
     }
 
-    .input-group { margin-bottom: 20px; text-align: left; }
-    .input-group label {
-        display: block;
-        font-size: 12px;
-        margin-bottom: 8px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        color: #ccc;
-        text-transform: uppercase;
-    }
-
+    .input-group { margin-bottom: 15px; text-align: left; }
+    .input-group label { display: block; font-size: 12px; margin-bottom: 8px; font-weight: bold; color: #ccc; }
     input[type="text"], input[type="password"], textarea {
-        width: 100%;
-        padding: 12px;
-        background: #0a0a0a;
-        border: 1px solid #333;
-        color: #fff;
-        outline: none;
-        font-size: 14px;
-        letter-spacing: 1px;
-        transition: border 0.3s;
-        border-radius: 4px;
+        width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333;
+        color: #fff; outline: none; font-size: 14px; border-radius: 4px;
     }
+    input:focus, textarea:focus { border-color: #00d2ff; box-shadow: 0 0 5px rgba(0,210,255,0.3); }
+    textarea { resize: vertical; min-height: 100px; }
+    input[type="file"] { width: 100%; padding: 10px; background: #0a0a0a; border: 1px dashed #444; color: #ccc; font-size: 12px; cursor: pointer; }
     
-    input[type="text"]:focus, input[type="password"]:focus, textarea:focus { border-color: #00d2ff; }
-
-    textarea { resize: vertical; min-height: 120px; }
-
-    input[type="file"] {
-        width: 100%;
-        padding: 10px;
-        background: #0a0a0a;
-        border: 1px dashed #444;
-        color: #ccc;
-        font-size: 12px;
-        cursor: pointer;
-        transition: border 0.3s;
-        border-radius: 4px;
-    }
-    input[type="file"]:hover { border-color: #00d2ff; }
-
-    .checkbox-group { display: flex; align-items: center; margin-bottom: 25px; }
-    .checkbox-group input { width: auto; margin-right: 10px; cursor: pointer; transform: scale(1.2); }
-    .checkbox-group label { font-size: 12px; color: #ccc; letter-spacing: 1px; cursor: pointer; font-weight: bold; }
-
     button {
-        width: 100%; padding: 15px; background: transparent; color: #00d2ff; border: 1px solid #00d2ff;
+        width: 100%; padding: 12px; background: transparent; color: #00d2ff; border: 1px solid #00d2ff;
         font-weight: bold; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
         cursor: pointer; transition: all 0.2s ease; margin-top: 10px; border-radius: 4px;
     }
     button:hover { background: #00d2ff; color: #000; }
-    button:active { transform: scale(0.98); }
-
+    
     .btn-danger { border-color: #ff4444; color: #ff4444; }
     .btn-danger:hover { background: #ff4444; color: #000; }
+    .btn-warning { border-color: #ffeb3b; color: #ffeb3b; }
+    .btn-warning:hover { background: #ffeb3b; color: #000; }
 
-    .footer-text { text-align: center; font-size: 10px; color: #555; margin-top: 25px; letter-spacing: 1px; text-transform: uppercase; }
+    .action-row { display: flex; gap: 10px; margin-top: 15px; }
+
+    .footer-text { text-align: center; font-size: 10px; color: #555; margin-top: 25px; letter-spacing: 1px; }
 
     #admin-screen { display: none; }
 
-    /* PERBAIKAN POST CARD BIAR GAK TUMPANG TINDIH */
-    .admin-post-card { border: 1px solid #333; padding: 20px; margin-top: 20px; background: #0a0a0a; border-radius: 8px; word-wrap: break-word; overflow: hidden;}
-    .admin-post-card .date { font-size: 11px; color: #00d2ff; margin-bottom: 15px; font-family: 'Share Tech Mono', monospace; border-bottom: 1px dashed #333; padding-bottom: 10px;}
-    .admin-post-card .text { font-size: 14px; color: #eee; margin-bottom: 15px; white-space: pre-wrap; line-height: 1.5; font-family: sans-serif; word-break: break-word;}
-    .post-preview-img { width: 100%; height: auto; max-height: 300px; object-fit: contain; border: 1px solid #333; margin-bottom: 10px; border-radius: 4px; background: #000;}
+    /* POST CARD */
+    .admin-post-card { border: 1px solid #333; padding: 20px; margin-top: 20px; background: #0a0a0a; border-radius: 8px; position: relative; overflow: hidden; word-wrap: break-word;}
+    .admin-post-card.deleted { border-color: #ff4444; opacity: 0.8; }
+    .admin-post-card .badge-deleted { position: absolute; top: 10px; right: 10px; background: #ff4444; color: #000; padding: 2px 8px; font-size: 10px; font-weight: bold; }
+    .date { font-size: 11px; color: #00d2ff; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;}
+    .text { font-size: 14px; color: #eee; margin-bottom: 15px; white-space: pre-wrap; line-height: 1.5; font-family: sans-serif; word-break: break-word; }
+    .post-preview-img { width: 100%; height: auto; max-height: 300px; object-fit: contain; border: 1px solid #333; margin-bottom: 10px; background: #000; border-radius: 4px;}
     
-    .delete-btn { width: 100%; background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 12px; font-size: 14px; margin-top: 5px; font-family: 'Share Tech Mono', monospace; font-weight: bold;}
-    .delete-btn:hover { background: #ff4444; color: #000; }
+    /* DEVICE MONITOR */
+    .device-row { border: 1px solid #333; background: #050505; padding: 10px; margin-bottom: 10px; border-radius: 4px; font-size: 11px; position: relative; }
+    .device-row .badge { position: absolute; right: 10px; top: 10px; color: #0f0; }
+    .device-kick { border: 1px solid #ff4444; color: #ff4444; background: transparent; padding: 5px; font-size: 10px; width: auto; margin-top: 5px; }
     
-    #poll-container input { margin-bottom: 8px; border-style: dashed; }
+    /* TABS */
+    .tabs { display: flex; border-bottom: 1px solid #333; margin-bottom: 15px; }
+    .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: #666; font-size: 12px; font-weight: bold; }
+    .tab.active { color: #00d2ff; border-bottom: 2px solid #00d2ff; }
 
     /* CSS MONITOR POLLING */
+    #poll-container input { margin-bottom: 8px; border-style: dashed; }
     .admin-poll-container { margin-bottom: 15px; background: rgba(0,0,0,0.6); border: 1px solid #222; border-radius: 8px; padding: 15px; }
     .admin-poll-header { color: #00d2ff; font-weight: bold; font-size: 12px; margin-bottom: 12px; border-bottom: 1px dashed #333; padding-bottom: 8px; display: flex; justify-content: space-between; }
     .admin-poll-row { position: relative; padding: 10px 12px; margin-bottom: 8px; background: rgba(255,255,255,0.05); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; overflow: hidden; border: 1px solid #111;}
     .admin-poll-bg { position: absolute; left: 0; top: 0; height: 100%; background: rgba(0, 210, 255, 0.2); z-index: 1; transition: width 0.5s ease; }
     .admin-poll-text { z-index: 2; font-size: 13px; color: #fff; font-family: sans-serif; max-width: 60%; word-break: break-word;}
-    .admin-poll-stats { z-index: 2; font-size: 12px; color: #00d2ff; font-weight: bold; font-family: 'Courier New', Courier, monospace;}
+    .admin-poll-stats { z-index: 2; font-size: 12px; color: #00d2ff; font-weight: bold;}
 
-    /* CSS KOMENTAR DI ADMIN PANEL */
+    /* CSS KOMENTAR */
     .admin-comments-section { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #333; }
     .admin-comment-box { background: transparent; margin-top: 10px; padding: 10px 0; position: relative; border-bottom: 1px solid #111; word-wrap: break-word;}
     .admin-comment-box.reply { margin-left: 20px; border-left: 2px solid #333; padding-left: 15px; border-bottom: none; }
     .admin-comment-author { font-size: 12px; font-weight: bold; color: #0f0; }
     .admin-comment-time { font-size: 10px; color: #666; margin-left: 5px; }
-    .admin-comment-text { font-size: 13px; color: #ccc; margin-top: 5px; white-space: pre-wrap; word-break: break-word; font-family: sans-serif; padding-right: 50px;} /* Kasih ruang buat tombol delete */
-    .admin-btn-delete-comment { background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 5px 10px; font-size: 10px; cursor: pointer; position: absolute; right: 0; top: 5px; border-radius: 4px; font-family: inherit; font-weight: bold;}
+    .admin-comment-text { font-size: 13px; color: #ccc; margin-top: 5px; white-space: pre-wrap; word-break: break-word; font-family: sans-serif; padding-right: 50px;}
+    .admin-btn-delete-comment { background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 5px 10px; font-size: 10px; cursor: pointer; position: absolute; right: 0; top: 5px; border-radius: 4px; font-family: inherit; font-weight: bold; width: auto;}
     .admin-btn-delete-comment:hover { background: #ff4444; color: #000; }
+
   </style>
 </head>
 <body>
 
+  <!-- Overlay nutup tap -->
+  <div id="overlay" onclick="closeMenu()"></div>
+
+  <!-- Tombol Menu (Muncul pas login) -->
+  <button class="menu-btn" id="menuBtn" onclick="openMenu()">☰</button>
+
+  <!-- SIDEBAR (Hamburger Menu) -->
+  <div id="sidebar">
+      <div class="profile-card">
+          <h3>NANDO</h3>
+          <p>DEV: @antidogma14</p>
+          <p>ROLE: ADMIN</p>
+      </div>
+      
+      <div style="margin-bottom: 20px;">
+          <div class="sidebar-stat"><span>TOTAL POST:</span> <span id="stat-post" style="color:#00d2ff;">0</span></div>
+          <div class="sidebar-stat"><span>DELETED POST:</span> <span id="stat-del" style="color:#ff4444;">0</span></div>
+          <div class="sidebar-stat"><span>ADMIN AKTIF:</span> <span style="color:#0f0;">1</span></div>
+      </div>
+      
+      <div class="box" style="padding: 15px; border-color: #444; margin-bottom: 20px;">
+          <h2 style="font-size:12px; margin-bottom: 10px;">[ GANTI KREDENSIAL ]</h2>
+          <div class="input-group"><input type="text" id="new-user" placeholder="Username Baru"></div>
+          <div class="input-group"><input type="password" id="new-pass" placeholder="Password Baru"></div>
+          <button onclick="updateCredentials()" style="padding: 8px; font-size: 11px;">UPDATE AKSES</button>
+      </div>
+      
+      <div class="footer-text" style="color: #444;">261 AREA EST. 24 FEB 2026<br>SYSTEM V2.0</div>
+  </div>
+
   <!-- LAYAR LOGIN -->
   <div class="box" id="login-screen">
     <h2>SYSTEM LOGIN</h2>
-    
-    <div class="input-group">
-        <label>USERNAME</label>
-        <input type="text" id="user" placeholder="username" autocomplete="off">
-    </div>
-    
-    <div class="input-group">
-        <label>PASSWORD</label>
-        <input type="password" id="pass" placeholder="password">
-    </div>
-
-    <div class="checkbox-group">
-        <input type="checkbox" id="remember-me">
-        <label for="remember-me">SIMPAN SESI LOGIN</label>
-    </div>
-    
+    <div class="input-group"><label>USERNAME</label><input type="text" id="user" autocomplete="off"></div>
+    <div class="input-group"><label>PASSWORD</label><input type="password" id="pass"></div>
     <button onclick="login()">MASUK</button>
-    <div class="footer-text">261area ADMIN PROTOCOL</div>
+    <div class="footer-text">261area PROTOCOL</div>
   </div>
 
   <!-- LAYAR ADMIN UTAMA -->
   <div id="admin-screen" style="width: 100%; display: none; flex-direction: column; align-items: center;">
+      
+      <!-- INPUT AREA -->
       <div class="box">
-        <h2>UPDATE DATA BARU</h2>
-        
+        <h2>TRANSMISI DATA</h2>
+        <input type="hidden" id="edit-id" value="">
         <div class="input-group">
             <label>ISI INFORMASI TERTULIS</label>
             <textarea id="post-content" placeholder="KETIK PESAN DISINI..."></textarea>
         </div>
-
         <div class="input-group">
             <label>UPLOAD GAMBAR (OPSIONAL)</label>
             <input type="file" id="img-input" accept="image/*">
         </div>
-
+        
         <!-- SISTEM POLLING -->
-        <div class="input-group" style="border: 1px dashed #333; padding: 15px; border-radius: 8px;">
+        <div class="input-group" id="poll-section" style="border: 1px dashed #333; padding: 15px; border-radius: 8px;">
             <label style="color:#0f0;">📊 TAMBAH POLLING (OPSIONAL)</label>
             <div id="poll-container"></div>
             <button type="button" onclick="addPollOption()" style="padding: 10px; font-size: 12px; border: 1px dashed #0f0; color: #0f0; margin-top: 5px; background: transparent;">+ TAMBAH OPSI</button>
         </div>
 
         <button id="submit-btn" onclick="kirimPost()">KIRIM DATA</button>
-        <div class="footer-text">CREATED : NANDO</div>
+        <button id="cancel-edit-btn" class="btn-warning" style="display:none;" onclick="cancelEdit()">BATAL EDIT</button>
       </div>
 
-      <div class="box" style="margin-top: 10px; padding: 15px;">
-        <h2>POST & KOMENTAR</h2>
-        
-        <div id="admin-post-list">
-            <div class="footer-text">LOADING DATA DARI SERVER...</div>
+      <!-- FEED DATA -->
+      <div class="box" style="padding: 15px;">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('active')" id="tab-active">LIVE POST</div>
+            <div class="tab" onclick="switchTab('trash')" id="tab-trash">RECYCLE BIN</div>
         </div>
+        <div id="admin-post-list"><div class="footer-text">LOADING SERVER...</div></div>
       </div>
 
-      <button class="btn-danger" style="max-width: 500px; margin-bottom: 40px;" onclick="logout()">LOGOUT SYSTEM</button>
+      <button class="btn-danger" style="max-width: 500px; margin-bottom: 40px;" onclick="logout()">LOGOUT SESSION</button>
   </div>
 
   <script>
@@ -216,48 +218,128 @@
       authDomain: "clx---14.firebaseapp.com",
       databaseURL: "https://clx---14-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "clx---14",
-      storageBucket: "clx---14.firebasestorage.app",
-      messagingSenderId: "368765694470",
-      appId: "1:368765694470:web:90ef6dbccc7aa5a4adc987"
+      storageBucket: "clx---14.firebasestorage.app"
     };
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
+    
+    let currentSessionId = localStorage.getItem('admin261_session_v2');
+    let viewMode = 'active'; 
 
+    // ===================================
+    // SYSTEM LOGIN & SESSION MANAGER
+    // ===================================
     window.onload = function() {
-        // Ganti nama key session untuk log-out otomatis user lama
-        if(localStorage.getItem('admin261_session_v2') === 'true') {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('admin-screen').style.display = 'flex';
-            loadAdminPosts(); 
-        }
+        if(currentSessionId) checkSession(currentSessionId);
+        else initDefaultCreds();
     };
+
+    function initDefaultCreds() {
+        database.ref('admin_settings/credentials').once('value').then(snap => {
+            if(!snap.exists()) {
+                database.ref('admin_settings/credentials').set({ user: 'nandoacces', pass: btoa('nandoacces261') });
+            }
+        });
+    }
 
     function login() {
-      let u = document.getElementById('user').value;
-      let p = document.getElementById('pass').value;
-      let remember = document.getElementById('remember-me').checked;
-
-      // Username: nandoacces
-      // Password: "nandoacces261" telah di-encode jadi "bmFuZG9hY2NlczI2MQ==" pake metode btoa
-      if(u === 'nandoacces' && btoa(p) === 'bmFuZG9hY2NlczI2MQ==') {
-        if(remember) localStorage.setItem('admin261_session_v2', 'true');
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('admin-screen').style.display = 'flex';
-        loadAdminPosts(); 
-      } else {
-        alert('ACCESS DENIED: Kredensial tidak valid!');
-      }
+        let u = document.getElementById('user').value;
+        let p = document.getElementById('pass').value;
+        
+        database.ref('admin_settings/credentials').once('value').then(snap => {
+            let creds = snap.val();
+            if(creds && u === creds.user && btoa(p) === creds.pass) {
+                let sessionId = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+                let deviceInfo = navigator.userAgent;
+                
+                database.ref('admin_sessions/' + sessionId).set({
+                    device: deviceInfo,
+                    login_time: Date.now()
+                }).then(() => {
+                    localStorage.setItem('admin261_session_v2', sessionId);
+                    currentSessionId = sessionId;
+                    showAdminPanel();
+                });
+            } else {
+                alert('ACCESS DENIED: Kredensial tidak valid!');
+            }
+        });
     }
 
-    function logout() {
-        if(confirm("Yakin mau logout cuy?")) {
+    function checkSession(sid) {
+        database.ref('admin_sessions/' + sid).once('value').then(snap => {
+            if(snap.exists()) showAdminPanel(); 
+            else logout(true); 
+        });
+    }
+
+    function showAdminPanel() {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-screen').style.display = 'flex';
+        document.getElementById('menuBtn').style.display = 'block';
+        
+        database.ref('admin_sessions/' + currentSessionId).on('value', snap => {
+            if(!snap.exists() && document.getElementById('admin-screen').style.display === 'flex') {
+                alert("FORCE LOGOUT: Sesi lu dimatikan dari pusat!");
+                logout(true);
+            }
+        });
+
+        loadAdminPosts();
+        loadDevices();
+    }
+
+    function logout(forced = false) {
+        if(forced || confirm("Cabut dari server?")) {
+            if(currentSessionId) database.ref('admin_sessions/' + currentSessionId).remove();
             localStorage.removeItem('admin261_session_v2');
-            document.getElementById('admin-screen').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'block';
+            location.reload();
         }
     }
 
-    // Sistem Tambah Opsi Polling
+    function updateCredentials() {
+        let u = document.getElementById('new-user').value;
+        let p = document.getElementById('new-pass').value;
+        if(u && p) {
+            database.ref('admin_settings/credentials').set({ user: u, pass: btoa(p) }).then(() => {
+                alert("Kredensial berhasil diupdate!");
+                document.getElementById('new-user').value = '';
+                document.getElementById('new-pass').value = '';
+            });
+        } else {
+            alert("Isi username & password baru cuy!");
+        }
+    }
+
+    function loadDevices() {
+        database.ref('admin_sessions').on('value', snap => {
+            let html = '';
+            snap.forEach(child => {
+                let s = child.val();
+                let isMe = child.key === currentSessionId;
+                let dateStr = new Date(s.login_time).toLocaleString('id-ID');
+                html += `
+                <div class="device-row">
+                    ${isMe ? '<span class="badge">[THIS DEVICE]</span>' : ''}
+                    <div><b>ID:</b> ${child.key.substring(0,8)}...</div>
+                    <div><b>INFO:</b> ${s.device.substring(0,40)}...</div>
+                    <div><b>LOG:</b> ${dateStr}</div>
+                    ${!isMe ? `<button class="device-kick" onclick="kickDevice('${child.key}')">KICK / LOGOUT DEVICE INI</button>` : ''}
+                </div>`;
+            });
+            document.getElementById('device-list').innerHTML = html || 'TIDAK ADA SESI';
+        });
+    }
+
+    window.kickDevice = function(sid) {
+        if(confirm("Yakin tendang device ini?")) {
+            database.ref('admin_sessions/' + sid).remove();
+        }
+    }
+
+    // ===================================
+    // SYSTEM POLLING
+    // ===================================
     let pollCount = 0;
     function addPollOption() {
         let div = document.createElement('div');
@@ -266,19 +348,60 @@
         pollCount++;
     }
 
+    // ===================================
+    // SYSTEM POST, EDIT, SOFT DELETE
+    // ===================================
+    let imageBase64 = "";
+    document.getElementById('img-input').addEventListener('change', function(e) {
+      let file = e.target.files[0];
+      if(!file) return;
+      let reader = new FileReader();
+      reader.onload = function(event) {
+        let img = new Image();
+        img.onload = function() {
+          let canvas = document.createElement('canvas');
+          let MAX_WIDTH = 600; 
+          let scaleSize = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH; canvas.height = img.height * scaleSize;
+          let ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          imageBase64 = canvas.toDataURL('image/jpeg', 0.6); 
+        }
+        img.src = event.target.result;
+      }
+      reader.readAsDataURL(file);
+    });
+
+    function switchTab(mode) {
+        viewMode = mode;
+        document.getElementById('tab-active').classList.toggle('active', mode === 'active');
+        document.getElementById('tab-trash').classList.toggle('active', mode === 'trash');
+        loadAdminPosts();
+    }
+
     function loadAdminPosts() {
         database.ref('forum_posts').on('value', (snapshot) => {
             let html = '';
             let postsArray = [];
+            let activeCount = 0; let delCount = 0;
             
-            snapshot.forEach(child => { postsArray.push({ key: child.key, ...child.val() }); });
+            snapshot.forEach(child => { 
+                let p = { key: child.key, ...child.val() };
+                if(p.status === 'deleted') delCount++; else activeCount++;
+                
+                if(viewMode === 'active' && p.status !== 'deleted') postsArray.push(p);
+                if(viewMode === 'trash' && p.status === 'deleted') postsArray.push(p);
+            });
+            
+            document.getElementById('stat-post').innerText = activeCount;
+            document.getElementById('stat-del').innerText = delCount;
+
             postsArray.sort((a, b) => b.timestamp - a.timestamp);
 
             postsArray.forEach(post => {
-                let dateObj = new Date(post.timestamp);
-                let dateStr = dateObj.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) + ' - ' + dateObj.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+                let dateStr = new Date(post.timestamp).toLocaleString('id-ID', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit'});
                 
-                // SISTEM MONITOR POLLING (BARU)
+                // SISTEM MONITOR POLLING
                 let pollMonitorHtml = '';
                 if(post.poll) {
                     let totalVotes = 0;
@@ -304,11 +427,10 @@
                             <div class="admin-poll-stats">${votes} VOTE (${pct}%)</div>
                         </div>`;
                     });
-                    
                     pollMonitorHtml += `</div>`;
                 }
-                
-                // SISTEM RENDER KOMENTAR
+
+                // SISTEM KOMENTAR
                 let commentsHtml = '';
                 if(post.comments) {
                     commentsHtml += `<div class="admin-comments-section"><div style="font-size:12px; color:#00d2ff; margin-bottom:10px; font-weight:bold;">KOMENTAR MASUK:</div>`;
@@ -329,109 +451,155 @@
                     });
                     commentsHtml += `</div>`;
                 }
-
+                
                 html += `
-                <div class="admin-post-card">
+                <div class="admin-post-card ${post.status === 'deleted' ? 'deleted' : ''}">
+                    ${post.status === 'deleted' ? '<span class="badge-deleted">DELETED</span>' : ''}
                     <div class="date">[ ID: ${post.key} ]<br>[ ${dateStr} WIB ]</div>
                     ${post.image ? `<img src="${post.image}" class="post-preview-img">` : ''}
-                    
-                    <div class="text">${post.content ? post.content : '(Tanpa Teks / Hanya Gambar atau Poll)'}</div>
+                    <div class="text" id="text-${post.key}">${post.content ? post.content : '(Tanpa Teks)'}</div>
                     
                     ${pollMonitorHtml}
                     ${commentsHtml}
 
-                    <button class="delete-btn" style="margin-top:20px;" onclick="hapusPost('${post.key}')">HAPUS POSTINGAN INI</button>
+                    <div class="action-row">
+                        ${post.status !== 'deleted' ? `
+                            <button class="btn-warning" onclick="siapEdit('${post.key}')">EDIT TEKS</button>
+                            <button class="btn-danger" onclick="hapusPost('${post.key}', true)">HAPUS KE TONG SAMPAH</button>
+                        ` : `
+                            <button style="border-color:#0f0; color:#0f0;" onclick="hapusPost('${post.key}', false)">KEMBALIKAN (RESTORE)</button>
+                            <button class="btn-danger" onclick="hapusPermanen('${post.key}')">HAPUS PERMANEN</button>
+                        `}
+                    </div>
                 </div>`;
             });
 
-            if(html === '') html = '<div class="footer-text">BELUM ADA DATA DI SERVER</div>';
+            if(html === '') html = `<div class="footer-text">${viewMode === 'trash' ? 'TONG SAMPAH KOSONG' : 'BELUM ADA DATA DI SERVER'}</div>`;
             document.getElementById('admin-post-list').innerHTML = html;
         });
     }
 
-    window.hapusPost = function(key) {
-        if(confirm("WARNING: Yakin mau hapus POSTINGAN INI beserta seluruh komentar & pollingnya dari server?")) {
-            database.ref('forum_posts/' + key).remove()
-            .then(() => alert("SUCCESS: Data terhapus permanen!"))
-            .catch(e => alert("FAILED: " + e));
+    function kirimPost() {
+        let content = document.getElementById('post-content').value;
+        let editId = document.getElementById('edit-id').value;
+        
+        // Kumpulin Data Polling
+        let pollData = null;
+        if(pollCount > 0 && !editId) {
+            let hasValidOption = false;
+            pollData = {};
+            for(let i=0; i<pollCount; i++) {
+                let el = document.getElementById(`poll-opt-${i}`);
+                if(el && el.value.trim() !== "") {
+                    pollData[`opt_${i}`] = { text: el.value.trim(), votes: 0 };
+                    hasValidOption = true;
+                }
+            }
+            if(!hasValidOption) pollData = null;
+        }
+
+        if(!content && !imageBase64 && !pollData) return alert('ERROR: Masukin pesan, gambar, atau opsi polling dulu cuy!');
+
+        let btn = document.getElementById('submit-btn');
+        btn.innerText = "TRANSMITTING..."; btn.disabled = true;
+
+        if(editId) {
+            // Update Teks/Gambar aja (biar poll/komen gak ilang)
+            let updateData = { content: content };
+            if(imageBase64) updateData.image = imageBase64;
+            
+            database.ref('forum_posts/' + editId).update(updateData).then(() => {
+                alert('Berhasil di-Update!'); resetForm();
+            });
+        } else {
+            // Posting Baru
+            let payload = { content: content, timestamp: Date.now(), status: 'active' };
+            if(imageBase64) payload.image = imageBase64;
+            if(pollData) payload.poll = pollData;
+
+            database.ref('forum_posts').push(payload).then(() => {
+                alert('SUCCESS: Data terkirim ke server 261 Area!'); resetForm();
+            }).catch(e => {
+                alert('FAILED: ' + e);
+                btn.innerText = "KIRIM DATA"; btn.disabled = false;
+            });
         }
     }
 
-    // Fungsi Hapus Komentar Individual
+    window.siapEdit = function(key) {
+        let textNode = document.getElementById('text-' + key);
+        let text = textNode.innerText === '(Tanpa Teks)' ? '' : textNode.innerText;
+        document.getElementById('post-content').value = text;
+        document.getElementById('edit-id').value = key;
+        document.getElementById('submit-btn').innerText = "UPDATE POSTINGAN";
+        document.getElementById('cancel-edit-btn').style.display = "block";
+        document.getElementById('poll-section').style.display = "none"; // Sembunyiin poll pas edit
+        window.scrollTo(0, 0); 
+    }
+
+    window.cancelEdit = function() { resetForm(); }
+
+    function resetForm() {
+        document.getElementById('post-content').value = '';
+        document.getElementById('edit-id').value = '';
+        document.getElementById('img-input').value = '';
+        document.getElementById('poll-container').innerHTML = '';
+        document.getElementById('poll-section').style.display = "block";
+        pollCount = 0; imageBase64 = '';
+        
+        let btn = document.getElementById('submit-btn');
+        btn.innerText = "KIRIM DATA"; btn.disabled = false;
+        document.getElementById('cancel-edit-btn').style.display = "none";
+    }
+
+    window.hapusPost = function(key, isDelete) {
+        let msg = isDelete ? "Buang ke tong sampah?" : "Kembalikan postingan ini ke publik?";
+        if(confirm(msg)) {
+            database.ref('forum_posts/' + key).update({ status: isDelete ? 'deleted' : 'active' });
+        }
+    }
+
+    window.hapusPermanen = function(key) {
+        if(confirm("WARNING: Hapus PERMANEN beserta komentar & pollingnya? Data ga bisa balik lagi bos!")) {
+            database.ref('forum_posts/' + key).remove();
+        }
+    }
+
     window.deleteComment = function(postKey, commentId) {
-        if(confirm("Yakin mau hapus komentar anonim ini?")) {
-            database.ref(`forum_posts/${postKey}/comments/${commentId}`).remove()
-            .then(() => console.log("Komentar dihapus."))
-            .catch(e => alert("Error: " + e));
+        if(confirm("Yakin mau hapus komentar ini?")) {
+            database.ref(`forum_posts/${postKey}/comments/${commentId}`).remove();
         }
     };
 
-    let imageBase64 = "";
-    document.getElementById('img-input').addEventListener('change', function(e) {
-      let file = e.target.files[0];
-      if(!file) return;
-      let reader = new FileReader();
-      reader.onload = function(event) {
-        let img = new Image();
-        img.onload = function() {
-          let canvas = document.createElement('canvas');
-          let MAX_WIDTH = 600; 
-          let scaleSize = MAX_WIDTH / img.width;
-          canvas.width = MAX_WIDTH; canvas.height = img.height * scaleSize;
-          let ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          imageBase64 = canvas.toDataURL('image/jpeg', 0.6); 
+    // ===================================
+    // UI INTERACTIONS (SWIPE, MENU, OVERLAY)
+    // ===================================
+    function openMenu() {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('overlay').classList.add('show');
+        document.getElementById('menuBtn').style.display = 'none';
+    }
+    
+    function closeMenu() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+        
+        // Cuma munculin tombol menu kalo lagi di layar admin
+        if(document.getElementById('admin-screen').style.display === 'flex') {
+            document.getElementById('menuBtn').style.display = 'block';
         }
-        img.src = event.target.result;
-      }
-      reader.readAsDataURL(file);
-    });
-
-    function kirimPost() {
-      let content = document.getElementById('post-content').value;
-      
-      // Kumpulin Data Polling
-      let pollData = null;
-      if(pollCount > 0) {
-          let hasValidOption = false;
-          pollData = {};
-          for(let i=0; i<pollCount; i++) {
-              let el = document.getElementById(`poll-opt-${i}`);
-              if(el && el.value.trim() !== "") {
-                  pollData[`opt_${i}`] = { text: el.value.trim(), votes: 0 };
-                  hasValidOption = true;
-              }
-          }
-          if(!hasValidOption) pollData = null;
-      }
-
-      if(!content && !imageBase64 && !pollData) return alert('ERROR: Masukin pesan, gambar, atau opsi polling dulu cuy!');
-
-      let btn = document.getElementById('submit-btn');
-      btn.innerText = "TRANSMITTING..."; btn.disabled = true;
-
-      database.ref('forum_posts').push({
-        content: content,
-        image: imageBase64,
-        poll: pollData,
-        timestamp: Date.now() 
-      }).then(() => {
-        alert('SUCCESS: Data terkirim ke server 261 Area!');
-        document.getElementById('post-content').value = '';
-        document.getElementById('img-input').value = '';
-        document.getElementById('poll-container').innerHTML = ''; // Reset Polling
-        pollCount = 0;
-        imageBase64 = '';
-        btn.innerText = "KIRIM DATA"; btn.disabled = false;
-      }).catch(e => {
-        alert('FAILED: ' + e);
-        btn.innerText = "KIRIM DATA"; btn.disabled = false;
-      });
     }
 
-    document.getElementById('pass').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') login();
+    let touchstartX = 0; let touchendX = 0;
+    document.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX);
+    document.addEventListener('touchend', e => {
+        if(document.getElementById('admin-screen').style.display !== 'flex') return;
+        touchendX = e.changedTouches[0].screenX;
+        if(touchendX - touchstartX > 70) openMenu(); // Swipe Kanan
+        if(touchstartX - touchendX > 70) closeMenu(); // Swipe Kiri
     });
+
+    document.getElementById('pass').addEventListener('keypress', function (e) { if (e.key === 'Enter') login(); });
   </script>
 </body>
 </html>
