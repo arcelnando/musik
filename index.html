@@ -278,9 +278,9 @@
   
   <div id="web-container">
     <div class="flash-impact"></div>
-    <!-- Video diganti menjadi tag img -->
-    <img src="261.jpg" class="bg-video" alt="Latar Belakang">
-</div>
+    <video autoplay muted loop playsinline class="bg-video">
+      <source src="latar_261.mp4" type="video/mp4">
+    </video>
     
     <div class="bg-overlay"></div>
     <div class="vignette"></div>
@@ -348,8 +348,6 @@
               <div class="leader-item"><img src="home2.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
               <div class="leader-item"><img src="home3.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
             </div>
-            <div class="leader-row">
-              <div class="leader-item"><img src="home4.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
               <div class="leader-item"><img src="home5.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
             </div>
           </div>
@@ -393,7 +391,7 @@
     </main>
     <footer id="footer"></footer>
     
-    <audio id="bgmusic" loop><source src="" type="audio/mp3"></audio>
+    <audio id="bgmusic" loop><source src="bgmusic.mp3" type="audio/mp3"></audio>
     <audio id="game-bgm" loop><source src="gamebgm.mp3" type="audio/mp3"></audio>
     <audio id="bs-bgm" loop><source src="bs_bgm.mp3" type="audio/mp3"></audio>
 
