@@ -15,20 +15,18 @@
   
   <style>
     /* ==========================================================================
-       GLOBAL STYLES & FONTS (NO GLOW)
+       GLOBAL STYLES & FONTS
        ========================================================================== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body, html { width: 100%; height: 100%; background: #0a0a0a; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; font-family: 'Orbitron', sans-serif; }
     
     #game-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #0a0a0a; color: #ffffff; z-index: 20000; overflow: hidden; }
     
-    /* CRT Effect tanpa blur */
     .crt::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); z-index: 999; background-size: 100% 3px; pointer-events: none; }
     
     .game-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 200; background: rgba(10, 10, 10, 0.95); }
     .game-screen.active { display: flex !important; }
     
-    /* Judul padat tanpa glow */
     .game-h1 { font-size: 2.5rem; text-align: center; margin-bottom: 0; letter-spacing: 2px; color: #fff; text-transform: uppercase; text-shadow: 4px 4px 0px rgba(0,0,0,1); }
     .game-subtitle { font-family: 'Teko', sans-serif; font-size: 20px; color: #fff; margin-top: 5px; margin-bottom: 25px; text-align: center; letter-spacing: 1px;}
     
@@ -40,7 +38,6 @@
     
     .overlay-box { background: #1a1a1a; border: 2px solid #fff; padding: 20px; text-align: center; width: 90%; max-width: 400px; border-radius: 12px; box-shadow: 8px 8px 0px rgba(0,0,0,0.8); max-height: 90vh; overflow-y: auto;}
     
-    /* MENU GRID */
     .game-cards-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 15px; padding-bottom: 15px; max-width: 600px; align-items: flex-start;}
     .game-card { background: #1a1a1a; border: 2px solid #fff; width: 140px; padding: 20px 10px; text-align: center; cursor: pointer; border-radius: 8px; transition: 0.2s; box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2); height: max-content;}
     .game-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(255, 255, 255, 0.2); }
@@ -61,38 +58,64 @@
     .ludo-dice-btn:disabled { background: #57606f; color: #333; cursor: not-allowed; box-shadow: 4px 4px 0px #222; }
 
     .board-wrapper-outer { width: 100%; max-width: 450px; position: relative; font-family: 'Teko', sans-serif;}
-    .board-container { width: 100%; padding-top: 100%; position: relative; background-color: #f1f2f6; border: 4px solid #fff; border-radius: 8px; box-shadow: 8px 8px 0px rgba(0,0,0,0.8); overflow: hidden; transition: background-image 0.3s; }
+    
+    /* BACKGROUND PAPAN.PNG DARI USER */
+    .board-container { width: 100%; padding-top: 100%; position: relative; background-color: #f1f2f6; background-image: url('papan.png'); background-size: cover; background-position: center; border: 4px solid #fff; border-radius: 8px; box-shadow: 8px 8px 0px rgba(0,0,0,0.8); overflow: hidden; transition: background-image 0.3s; }
+    
     .grid-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(15, 1fr); grid-template-rows: repeat(15, 1fr); }
     .cell { border: 1px solid rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center; }
     
-    .path-skull { background-color: #747d8c; } .path-tech { background-color: #2ed573; }
-    .path-red { background-color: #ff4757; } .path-japan { background-color: #1e90ff; }
+    /* Warna area rumah transparan buat tembus gambar */
+    .path-skull { background-color: rgba(116, 125, 140, 0.6); } .path-tech { background-color: rgba(46, 213, 115, 0.6); }
+    .path-red { background-color: rgba(255, 71, 87, 0.6); } .path-japan { background-color: rgba(30, 144, 255, 0.6); }
     
-    .star-icon { font-size: clamp(14px, 4vw, 20px); color: #fff; font-family: sans-serif; }
-
     .base { grid-column: span 6; grid-row: span 6; display: flex; flex-direction: column; padding: 5%; border: 3px solid #111; position: relative; }
-    .base-skull { background-color: #2f3542; }
-    .base-tech { background-color: #27ae60; }
-    .base-red { background-color: #c0392b; }
-    .base-japan { background-color: #3742fa; }
+    .base-skull { background-color: rgba(47, 53, 66, 0.85); }
+    .base-tech { background-color: rgba(39, 174, 96, 0.85); }
+    .base-red { background-color: rgba(192, 57, 43, 0.85); }
+    .base-japan { background-color: rgba(55, 66, 250, 0.85); }
     .base-title { text-align: center; font-size: 20px; letter-spacing: 1px; color: white; margin: auto 0; font-family: 'Orbitron', sans-serif;}
     .text-dark { color: #fff; }
     .inner-box { background: rgba(0,0,0,0.3); border-radius: 8px; width: 100%; height: 100%; padding: 10%; display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10%; border: 2px solid #111;}
     .slot { background: rgba(0,0,0,0.6); border-radius: 50%; border: 2px solid #111; display: flex; justify-content: center; align-items: center; position: relative; }
 
-    .center-arena { grid-area: 7 / 7 / 10 / 10; background-color: #111; border: 3px solid #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; text-align: center; color: white; font-size: 16px; font-weight: bold; overflow: hidden; position: relative; line-height: 1.1; font-family: 'Orbitron', sans-serif;}
+    .center-arena { grid-area: 7 / 7 / 10 / 10; background-color: rgba(17, 17, 17, 0.9); border: 3px solid #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; text-align: center; color: white; font-size: 16px; font-weight: bold; overflow: hidden; position: relative; line-height: 1.1; font-family: 'Orbitron', sans-serif;}
 
     .token-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-    .token { position: absolute; border-radius: 8px; transition: all 0.25s ease-out; pointer-events: auto; cursor: pointer; z-index: 10; border: 2px solid #000; box-shadow: 2px 2px 0px rgba(0,0,0,0.8); transform-origin: center bottom; }
     
-    .token.red { background-color: #ff4757; } 
-    .token.blue { background-color: #1e90ff; }
-    .token.green { background-color: #2ed573; }
-    .token.skull { background-color: #ffffff; }
+    /* ==========================================================================
+       PION BERDASARKAN ASSET PNG USER
+       ========================================================================== */
+    .token { 
+        position: absolute; 
+        transition: all 0.25s linear; 
+        pointer-events: auto; 
+        cursor: pointer; 
+        z-index: 10; 
+        transform-origin: center bottom; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-size: 18px; 
+        background-color: transparent; /* Ilangin warna dasar */
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    
+    /* Gunakan PNG dari user, jika tidak dimuat fallback transparan */
+    .token.red { background-image: url('merah.png'); } 
+    .token.blue { background-image: url('biru.png'); }
+    .token.green { background-image: url('hijau.png'); }
+    .token.skull { background-image: url('abu.png'); }
 
-    /* Solid Highlight/Active Indicator (No Glow) */
-    .token.token-active { animation: bounceSolid 0.6s infinite alternate; z-index: 20; border: 2px solid #fff; }
-    @keyframes bounceSolid { 0% { transform: scale(1) translateY(0); box-shadow: 2px 2px 0px rgba(255,255,255,0.8); } 100% { transform: scale(1.1) translateY(-4px); box-shadow: 4px 6px 0px rgba(255,255,255,0.8); } }
+    /* Cahaya Highlight pion active paken drop-shadow biar bentuk PNG nya nyala */
+    .token.token-active { 
+        animation: bounceSolid 0.6s infinite alternate; 
+        z-index: 20; 
+        filter: drop-shadow(0px 0px 8px #ffeb3b) drop-shadow(0px 0px 4px #ffeb3b); 
+    }
+    @keyframes bounceSolid { 0% { transform: scale(1) translateY(0); } 100% { transform: scale(1.15) translateY(-8px); } }
     
     .anim-spawn { animation: spawnVFX 0.5s ease-out forwards; z-index: 30; }
     @keyframes spawnVFX { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.4); } 100% { transform: scale(1); opacity: 1; } }
@@ -103,6 +126,24 @@
     .anim-finish { animation: finishVFX 1s ease-in-out forwards; z-index: 30; }
     @keyframes finishVFX { 0% { transform: scale(1) translateY(0); } 50% { transform: scale(1.5) translateY(-15px) rotateY(180deg); } 100% { transform: scale(0.8) translateY(0) rotateY(360deg); } }
 
+    /* ==========================================================================
+       TAUNT & EMOTE STYLES (GRID LAYOUT ANTI-SCROLL)
+       ========================================================================== */
+    .emote-bar { display: flex; gap: 10px; justify-content: center; margin-top: 15px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 8px; border: 1px solid #444; width: 100%; max-width: 450px;}
+    .emote-btn { font-size: 24px; background: none; border: none; cursor: pointer; transition: 0.1s; filter: drop-shadow(2px 2px 0px rgba(0,0,0,1)); outline: none;}
+    .emote-btn:active { transform: scale(0.8); }
+    
+    .floating-emote { position: fixed; bottom: 20%; left: 50%; transform: translateX(-50%); font-size: 80px; z-index: 9999; animation: floatUp 2s ease-out forwards; pointer-events: none; filter: drop-shadow(4px 4px 0px rgba(0,0,0,1));}
+    @keyframes floatUp { 0% { opacity: 0; transform: translate(-50%, 50px) scale(0.5); } 20% { opacity: 1; transform: translate(-50%, 0px) scale(1.2); } 80% { opacity: 1; transform: translate(-50%, -100px) scale(1); } 100% { opacity: 0; transform: translate(-50%, -150px) scale(0.8); } }
+
+    /* Menggunakan Grid biar rapi dan gak bocor/scroll */
+    .taunt-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; border: 1px solid #444; width: 100%; max-width: 450px; box-sizing: border-box;}
+    .taunt-item { background: #222; border: 1px solid #fff; color: white; padding: 8px 4px; font-size: 10px; border-radius: 4px; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.1s; letter-spacing: 0.5px; text-align: center; display: flex; align-items: center; justify-content: center; height: 100%;}
+    .taunt-item:active { background: #ff4757; transform: scale(0.95); }
+    
+    .taunt-bubble { position: fixed; top: 20%; left: 50%; transform: translateX(-50%); background: #fff; color: #111; padding: 12px 25px; border-radius: 20px; font-weight: 900; font-family: 'Orbitron', sans-serif; font-size: 16px; z-index: 9999; animation: popInBubble 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; text-align: center; border: 4px solid #ff4757; filter: drop-shadow(6px 6px 0px rgba(0,0,0,0.9)); text-transform: uppercase; max-width: 90%; word-wrap: break-word;}
+    @keyframes popInBubble { 0% { transform: translate(-50%, 30px) scale(0); opacity: 0;} 100% { transform: translate(-50%, 0) scale(1); opacity: 1;} }
+
     .lobby-player-list { text-align: left; background: #111; padding: 10px; border-radius: 8px; border: 2px solid #444; width: 100%; margin-bottom: 15px; font-family: 'Teko', sans-serif; font-size: 18px;}
     .lobby-player-item { padding: 5px 0; border-bottom: 1px solid #333; display: flex; justify-content: space-between; letter-spacing: 1px;}
     .col-red { color: #ff4757; } .col-blue { color: #1e90ff; } .col-green { color: #2ed573; } .col-skull { color: #a4b0be; }
@@ -110,7 +151,7 @@
     .ludo-dropdown { width: 100%; max-width: 300px; padding: 10px; margin: 0 auto 10px auto; display: block; border-radius: 4px; font-size: 14px; font-weight: bold; background: #111; color: white; border: 2px solid #555; outline: none; font-family: 'Orbitron', sans-serif;}
 
     /* ==========================================================================
-       TIC TAC TOE STYLES (FLAT, NO GLOW)
+       TIC TAC TOE STYLES
        ========================================================================== */
     .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: 300px; height: 300px; margin: 20px auto; }
     .ttt-cell { background: #1a1a1a; border: 3px solid #444; font-size: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 900; border-radius: 8px; transition: 0.1s; box-shadow: 4px 4px 0px rgba(0,0,0,0.8); width: 100%; height: 100%; box-sizing: border-box;}
@@ -124,7 +165,6 @@
     
     .ttt-score { display: flex; justify-content: space-between; width: 300px; margin: 0 auto 20px; font-size: 20px; font-weight: bold; color: #aaa; font-family: 'Teko', sans-serif; letter-spacing: 1px;}
     
-    /* Global Animations Solid */
     .win-burst { animation: winBurstAnim 0.5s ease-out forwards; }
     @keyframes winBurstAnim { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
 
@@ -152,7 +192,7 @@
     </div>
 
     <!-- ==============================================
-         LUDO MENUS (HUB, OFFLINE & ONLINE)
+         LUDO MENUS
          ============================================== -->
     
     <div id="ludo-hub-menu" class="game-screen">
@@ -245,7 +285,22 @@
             </div>
         </div>
         
-        <div style="margin-top: 20px; display:flex; gap:10px; justify-content: center; width:100%; max-width:450px;">
+        <!-- TAUNT & EMOTE PANEL -->
+        <button class="game-btn" style="font-size: 12px; padding: 10px; margin-top:15px; border-color:#ff4757; width: 100%; max-width: 450px;" onclick="toggleTauntMenu('ludo')">EJEKAN KACUNG</button>
+        
+        <div class="taunt-bar" id="ludo-taunt-list" style="display:none;">
+            <!-- Generated via JS Grid -->
+        </div>
+
+        <div class="emote-bar">
+            <button class="emote-btn" onclick="sendEmote('🤣', 'ludo')">🤣</button>
+            <button class="emote-btn" onclick="sendEmote('🤬', 'ludo')">🤬</button>
+            <button class="emote-btn" onclick="sendEmote('🔥', 'ludo')">🔥</button>
+            <button class="emote-btn" onclick="sendEmote('💀', 'ludo')">💀</button>
+            <button class="emote-btn" onclick="sendEmote('🤡', 'ludo')">🤡</button>
+        </div>
+
+        <div style="margin-top: 10px; display:flex; gap:10px; justify-content: center; width:100%; max-width:450px;">
             <button class="game-btn" style="font-size:12px; padding: 10px 15px; margin: 0; border-color:#555; color:#888; width:auto;" onclick="quitLudo()">KABUR</button>
             <div id="my-color-badge" style="background:#1a1a1a; border:2px solid #fff; border-radius:8px; padding:10px 15px; font-weight:bold; font-size:12px; display:flex; align-items:center; flex-grow:1; justify-content:center;">MODE OFFLINE</div>
         </div>
@@ -262,7 +317,7 @@
 
 
     <!-- ==============================================
-         TIC TAC TOE MENUS (HUB, OFFLINE & ONLINE)
+         TIC TAC TOE MENUS
          ============================================== -->
     
     <div id="ttt-hub-menu" class="game-screen">
@@ -329,7 +384,20 @@
                 <!-- 9 cells generated by JS -->
             </div>
             
-            <div style="margin-top: 20px; display:flex; gap:10px; justify-content: center;">
+            <!-- TAUNT & EMOTE PANEL -->
+            <button class="game-btn" style="font-size: 12px; padding: 10px; margin-top:15px; border-color:#00d2ff; width: 100%; max-width: 300px;" onclick="toggleTauntMenu('ttt')">EJEK KACUNG</button>
+            
+            <div class="taunt-bar" id="ttt-taunt-list" style="display:none; max-width: 300px; margin: 10px auto;">
+                <!-- Generated via JS -->
+            </div>
+
+            <div class="emote-bar" style="max-width: 300px; margin: 15px auto;">
+                <button class="emote-btn" onclick="sendEmote('🤣', 'ttt')">🤣</button>
+                <button class="emote-btn" onclick="sendEmote('🤬', 'ttt')">🤬</button>
+                <button class="emote-btn" onclick="sendEmote('🤡', 'ttt')">🤡</button>
+            </div>
+
+            <div style="margin-top: 10px; display:flex; gap:10px; justify-content: center;">
                 <button class="game-btn" style="font-size:12px; padding: 10px 15px; margin: 0; border-color:#555; color:#888; width:auto;" onclick="quitTTT()">KABUR</button>
                 <div id="ttt-my-badge" style="background:#111; border:2px solid #555; border-radius:8px; padding:10px 15px; font-weight:bold; font-size:12px; color:#aaa; display:flex; align-items:center; flex-grow:1; justify-content:center;">MODE OFFLINE</div>
             </div>
@@ -365,7 +433,6 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
-    // Global Functions
     function showScreen(id) { 
         document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active')); 
         if(id) document.getElementById(id).classList.add('active'); 
@@ -377,13 +444,94 @@
         return nameInput;
     }
     
-    // Fungsi Generate Room Code yang sebelumnya kurang
     function generateRoomCode() {
         return Math.random().toString(36).substring(2, 8).toUpperCase();
     }
 
     // ==========================================================================
-    // TIC TAC TOE (OFFLINE & ONLINE)
+    // TAUNT & EMOTE SYSTEM
+    // ==========================================================================
+    let lastEmoteTime = 0;
+    let lastTauntTime = 0;
+    
+    const tauntList = [
+        "CUPU LU!", "BELAJAR LAGI DEK!", "BISA MAEN GA?", 
+        "CAILAHH EZZ!", "PFTTT NOOB BET DAH!", "WOY GERAK DONG!", 
+        "GAK LEVEL LU!", "TANGAN LU KAKU!", "HOKI DOANG LU!", 
+        "YAELAH KALAH!", "MENDING TURU!", "EZ WIN GESS!"
+    ];
+
+    function toggleTauntMenu(game) {
+        let bar = document.getElementById(game + '-taunt-list');
+        if(bar.style.display === 'none') {
+            bar.style.display = 'grid'; // Pake GRID biar ga scroll
+            bar.innerHTML = '';
+            tauntList.forEach(t => {
+                let btn = document.createElement('div');
+                btn.className = 'taunt-item';
+                btn.innerText = t;
+                btn.onclick = () => sendTextTaunt(t, game);
+                bar.appendChild(btn);
+            });
+        } else {
+            bar.style.display = 'none';
+        }
+    }
+
+    function sendTextTaunt(text, game) {
+        let now = Date.now();
+        if(now - lastTauntTime < 5000) { 
+            triggerFloatingEmote("⏳ SABAR! COOLDOWN 5 DETIK."); 
+            return; 
+        }
+        
+        lastTauntTime = now;
+        let pName = myLudoName || "GUEST";
+        let fullText = pName + ": " + text;
+        
+        triggerTauntBubble(fullText);
+        
+        if(game === 'ludo' && isLudoOnline && currentRoomCode) {
+            database.ref(`ludo_rooms/${currentRoomCode}/taunt`).set({ txt: fullText, t: now });
+        } else if(game === 'ttt' && tttIsOnline && tttRoomCode) {
+            database.ref(`ttt_rooms/${tttRoomCode}/taunt`).set({ txt: fullText, t: now });
+        }
+        
+        document.getElementById(game + '-taunt-list').style.display = 'none';
+    }
+
+    function triggerTauntBubble(text) {
+        let el = document.createElement('div');
+        el.className = 'taunt-bubble';
+        el.innerText = text;
+        document.body.appendChild(el);
+        setTimeout(() => {
+            el.style.opacity = '0';
+            el.style.transition = '0.5s';
+            setTimeout(() => el.remove(), 500);
+        }, 2500);
+    }
+
+    function sendEmote(emoji, game) {
+        triggerFloatingEmote(emoji);
+        if(game === 'ludo' && isLudoOnline && currentRoomCode) {
+            database.ref(`ludo_rooms/${currentRoomCode}/emote`).set({ e: emoji, t: Date.now() });
+        } else if(game === 'ttt' && tttIsOnline && tttRoomCode) {
+            database.ref(`ttt_rooms/${tttRoomCode}/emote`).set({ e: emoji, t: Date.now() });
+        }
+    }
+
+    function triggerFloatingEmote(emoji) {
+        let el = document.createElement('div');
+        el.className = 'floating-emote';
+        if (emoji.length > 5) el.style.fontSize = '24px'; // Kalo text cooldown, kecilin font
+        el.innerText = emoji;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 2000);
+    }
+
+    // ==========================================================================
+    // TIC TAC TOE (FIX PLAYER VS PLAYER BUG)
     // ==========================================================================
     let tttBoard = ['', '', '', '', '', '', '', '', ''];
     let tttTurn = 'X';
@@ -456,8 +604,9 @@
             database.ref(`ttt_rooms/${tttRoomCode}/turn`).set(myTTTMarker === 'X' ? 'O' : 'X');
         } else {
             tttBoard[index] = tttTurn;
-            checkTTTWin();
-            if(document.getElementById('ttt-game-screen').classList.contains('active')) {
+            let isGameOver = checkTTTWin();
+            
+            if (!isGameOver && document.getElementById('ttt-game-screen').classList.contains('active')) {
                 tttTurn = tttTurn === 'X' ? 'O' : 'X';
                 updateTTTUI();
                 renderTTTGrid();
@@ -478,8 +627,8 @@
                 tttBoard[testIdx] = 'X'; if(checkWinSilent('X')) move = testIdx; tttBoard[testIdx] = '';
             }
             tttBoard[move] = 'O';
-            checkTTTWin();
-            if(document.getElementById('ttt-game-screen').classList.contains('active')) {
+            let isGameOver = checkTTTWin();
+            if(!isGameOver && document.getElementById('ttt-game-screen').classList.contains('active')) {
                 tttTurn = 'X'; updateTTTUI(); renderTTTGrid();
             }
         }
@@ -508,7 +657,9 @@
             } else {
                 handleTTTWinLocal(winner);
             }
+            return true;
         }
+        return false;
     }
 
     function handleTTTWinLocal(winner) {
@@ -521,6 +672,7 @@
         else { title.innerText = "DRAW!"; title.style.color = '#aaa'; overlayBox.style.borderColor = '#aaa';}
         
         document.getElementById('btn-ttt-rematch').style.display = 'block';
+        renderTTTGrid(); 
         showScreen('ttt-win-screen');
     }
 
@@ -584,6 +736,14 @@
             
             document.getElementById('ttt-p-x').innerText = data.players.X || 'Menunggu...';
             document.getElementById('ttt-p-o').innerText = data.players.O || 'Menunggu...';
+            
+            if(data.emote && data.emote.t > lastEmoteTime) { triggerFloatingEmote(data.emote.e); lastEmoteTime = data.emote.t; }
+            
+            // Sync Text Taunt di TTT
+            if(data.taunt && data.taunt.t > lastTauntTime) { 
+                triggerTauntBubble(data.taunt.txt); 
+                lastTauntTime = data.taunt.t; 
+            }
 
             if(data.status === 'playing') {
                 tttBoard = data.board || ['', '', '', '', '', '', '', '', ''];
@@ -617,7 +777,7 @@
     }
 
     // ==========================================================================
-    // LUDO MULTIPLAYER ENGINE (OFFLINE & ONLINE)
+    // LUDO MULTIPLAYER ENGINE
     // ==========================================================================
     
     const ludoBoardEl = document.getElementById('ludo-board');
@@ -635,7 +795,7 @@
     let ludoPlayerTypes = {}; 
 
     const colorOrder = ['red', 'blue', 'green', 'skull'];
-    const colorNames = { red: 'RED AREA', blue: 'BLUE AREA', green: 'GREEN AREA', skull: 'ABU AREA' };
+    const colorNames = { red: 'MERAH', blue: 'BIRU', green: 'HIJAU', skull: 'ABU' };
     const colorHex = { red: '#ff4757', blue: '#1e90ff', green: '#2ed573', skull: '#a4b0be' };
 
     const ludoPathCoords = [
@@ -748,6 +908,14 @@
             document.getElementById('lobby-p-blue').innerText = data.players.blue || 'Menunggu...';
             document.getElementById('lobby-p-green').innerText = data.players.green || 'Menunggu...';
             document.getElementById('lobby-p-skull').innerText = data.players.skull || 'Menunggu...';
+            
+            if(data.emote && data.emote.t > lastEmoteTime) { triggerFloatingEmote(data.emote.e); lastEmoteTime = data.emote.t; }
+            
+            // Sync Text Taunt di Ludo
+            if(data.taunt && data.taunt.t > lastTauntTime) { 
+                triggerTauntBubble(data.taunt.txt); 
+                lastTauntTime = data.taunt.t; 
+            }
 
             if(data.status === 'playing' && document.getElementById('ludo-lobby-screen').classList.contains('active')) {
                 initLudoBoardHTML();
@@ -759,8 +927,10 @@
             }
 
             if(data.status === 'playing' && document.getElementById('ludo-game-screen').classList.contains('active')) {
-                ludoGameState = data.state; ludoPlayers = data.board;
-                renderLudoTokens(); updateLudoUI();
+                ludoGameState = data.state;
+                ludoPlayers = data.board;
+                renderLudoTokens();
+                updateLudoUI();
                 if(data.winner) handleLudoWin(data.winner);
             }
         });
@@ -783,10 +953,10 @@
             }
         }
         gridHTML += `
-            <div class="base base-skull" style="grid-area: 1/1/7/7;"><div class="base-title">ABU AREA</div><div class="inner-box"><div class="slot" id="skull-slot-0"></div><div class="slot" id="skull-slot-1"></div><div class="slot" id="skull-slot-2"></div><div class="slot" id="skull-slot-3"></div></div></div>
-            <div class="base base-tech" style="grid-area: 1/10/7/16;"><div class="base-title text-dark">GREEN AREA</div><div class="inner-box"><div class="slot" id="green-slot-0"></div><div class="slot" id="green-slot-1"></div><div class="slot" id="green-slot-2"></div><div class="slot" id="green-slot-3"></div></div></div>
-            <div class="base base-red" style="grid-area: 10/1/16/7;"><div class="inner-box"><div class="slot" id="red-slot-0"></div><div class="slot" id="red-slot-1"></div><div class="slot" id="red-slot-2"></div><div class="slot" id="red-slot-3"></div></div><div class="base-title">RED AREA</div></div>
-            <div class="base base-japan" style="grid-area: 10/10/16/16;"><div class="inner-box"><div class="slot" id="blue-slot-0"></div><div class="slot" id="blue-slot-1"></div><div class="slot" id="blue-slot-2"></div><div class="slot" id="blue-slot-3"></div></div><div class="base-title">BLUE AREA</div></div>
+            <div class="base base-skull" style="grid-area: 1/1/7/7;"><div class="base-title"></div><div class="inner-box"><div class="slot" id="skull-slot-0"></div><div class="slot" id="skull-slot-1"></div><div class="slot" id="skull-slot-2"></div><div class="slot" id="skull-slot-3"></div></div></div>
+            <div class="base base-tech" style="grid-area: 1/10/7/16;"><div class="base-title text-dark"></div><div class="inner-box"><div class="slot" id="green-slot-0"></div><div class="slot" id="green-slot-1"></div><div class="slot" id="green-slot-2"></div><div class="slot" id="green-slot-3"></div></div></div>
+            <div class="base base-red" style="grid-area: 10/1/16/7;"><div class="inner-box"><div class="slot" id="red-slot-0"></div><div class="slot" id="red-slot-1"></div><div class="slot" id="red-slot-2"></div><div class="slot" id="red-slot-3"></div></div><div class="base-title"></div></div>
+            <div class="base base-japan" style="grid-area: 10/10/16/16;"><div class="inner-box"><div class="slot" id="blue-slot-0"></div><div class="slot" id="blue-slot-1"></div><div class="slot" id="blue-slot-2"></div><div class="slot" id="blue-slot-3"></div></div><div class="base-title"></div></div>
             <div class="center-arena"><span>261</span><span>AREA</span></div>
         `;
         ludoBoardEl.innerHTML = gridHTML;
@@ -835,7 +1005,7 @@
                 else if (ludoGameState.hasRolled && !ludoGameState.moving) { ludoDiceBtn.disabled = true; ludoLog.innerText = "Pilih pion."; highlightLudoTokens(tColor); }
                 else { ludoDiceBtn.disabled = true; }
             } else {
-                ludoDiceBtn.disabled = true; ludoLog.innerText = "AI sedang berpikir...";
+                ludoDiceBtn.disabled = true; ludoLog.innerText = "AI sedang mikir...";
             }
         }
     }
@@ -856,7 +1026,7 @@
             }
         });
 
-        if(!canMoveAny) { ludoLog.innerText = "Gak bisa gerak, ganti giliran!"; setTimeout(() => { passLudoTurn(); }, 1500); }
+        if(!canMoveAny) { ludoLog.innerText = "Gak bisa gerak, oper!"; setTimeout(() => { passLudoTurn(); }, 1500); }
         return movableList;
     }
 
@@ -868,14 +1038,23 @@
             ludoPlayers[col].tokens.forEach((t, i) => {
                 let el = document.getElementById(t.id); if(!el) return;
                 
+                // Tambahan Shadow Text di mahkota biar tetep kelihatan meski nemplok di gambar PNG
+                if(t.status === 'finish') { 
+                    el.innerHTML = '👑'; 
+                    el.style.fontSize = '24px'; 
+                    el.style.textShadow = '2px 2px 0px #000'; 
+                } else { 
+                    el.innerHTML = ''; 
+                }
+                
                 if (t.status === 'base') {
                     let slot = document.getElementById(`${col}-slot-${i}`);
                     if (el.parentElement !== slot) slot.appendChild(el);
-                    el.style.position = 'relative'; el.style.width = '70%'; el.style.height = '80%';
-                    el.style.left = '0'; el.style.top = '0'; el.style.transform = 'translate(0, -10%) scale(1)';
+                    el.style.position = 'relative'; el.style.width = '75%'; el.style.height = '75%';
+                    el.style.left = '0'; el.style.top = '0'; el.style.transform = 'translate(0, 0) scale(1)';
                 } else if (t.status === 'finish') {
                     if (el.parentElement !== ludoTokenLayer) ludoTokenLayer.appendChild(el);
-                    el.style.display = 'flex'; el.style.position = 'absolute'; el.style.width = '6.5%'; el.style.height = '8.5%';
+                    el.style.display = 'flex'; el.style.position = 'absolute'; el.style.width = '6.5%'; el.style.height = '6.5%';
                     let fIdx = finishedCounts[col]; finishedCounts[col]++;
                     
                     let baseX, baseY;
@@ -886,7 +1065,7 @@
                     if(!el.classList.contains('anim-finish')) el.style.transform = 'translate(15%, -10%) scale(0.75)';
                 } else {
                     if (el.parentElement !== ludoTokenLayer) ludoTokenLayer.appendChild(el);
-                    el.style.display = 'flex'; el.style.position = 'absolute'; el.style.width = '6.5%'; el.style.height = '8.5%';
+                    el.style.display = 'flex'; el.style.position = 'absolute'; el.style.width = '6.5%'; el.style.height = '6.5%';
                     let key = `${t.status}-${t.pos}`; if (!groups[key]) groups[key] = []; groups[key].push({ el: el, col: col, t: t });
                 }
             });
@@ -901,10 +1080,10 @@
 
                 item.el.style.left = `calc(${targetX} * (100% / 15))`; item.el.style.top = `calc(${targetY} * (100% / 15))`;
 
-                if (count === 1) { item.el.style.transform = 'translate(15%, -15%) scale(1.15)'; } 
-                else if (count === 2) { if (index === 0) item.el.style.transform = 'translate(-20%, -15%) scale(0.95)'; if (index === 1) item.el.style.transform = 'translate(50%, -15%) scale(0.95)'; } 
-                else if (count === 3) { if (index === 0) item.el.style.transform = 'translate(-25%, -35%) scale(0.8)'; if (index === 1) item.el.style.transform = 'translate(55%, -35%) scale(0.8)'; if (index === 2) item.el.style.transform = 'translate(15%, 15%) scale(0.8)'; } 
-                else { if (index === 0) item.el.style.transform = 'translate(-25%, -35%) scale(0.75)'; if (index === 1) item.el.style.transform = 'translate(55%, -35%) scale(0.75)'; if (index === 2) item.el.style.transform = 'translate(-25%, 25%) scale(0.75)'; if (index === 3) item.el.style.transform = 'translate(55%, 25%) scale(0.75)'; }
+                if (count === 1) { item.el.style.transform = 'translate(15%, 15%) scale(1.1)'; } 
+                else if (count === 2) { if (index === 0) item.el.style.transform = 'translate(-10%, 15%) scale(0.9)'; if (index === 1) item.el.style.transform = 'translate(40%, 15%) scale(0.9)'; } 
+                else if (count === 3) { if (index === 0) item.el.style.transform = 'translate(-20%, -5%) scale(0.8)'; if (index === 1) item.el.style.transform = 'translate(50%, -5%) scale(0.8)'; if (index === 2) item.el.style.transform = 'translate(15%, 35%) scale(0.8)'; } 
+                else { if (index === 0) item.el.style.transform = 'translate(-20%, -5%) scale(0.75)'; if (index === 1) item.el.style.transform = 'translate(50%, -5%) scale(0.75)'; if (index === 2) item.el.style.transform = 'translate(-20%, 35%) scale(0.75)'; if (index === 3) item.el.style.transform = 'translate(50%, 35%) scale(0.75)'; }
             });
         });
     }
@@ -954,7 +1133,9 @@
 
         if (t.status === 'base') {
             t.status = 'perimeter'; t.pos = ludoPlayers[color].startIdx;
-            el.classList.add('anim-spawn'); renderLudoTokens();
+            el.classList.add('anim-spawn'); 
+            renderLudoTokens();
+            if(isLudoOnline) database.ref(`ludo_rooms/${currentRoomCode}/board`).set(ludoPlayers);
             await new Promise(r => setTimeout(r, 500)); el.classList.remove('anim-spawn');
         } else {
             for (let i = 0; i < steps; i++) {
@@ -964,7 +1145,11 @@
                 } else if (t.status === 'home') {
                     t.pos++; if (t.pos === 5) t.status = 'finish';
                 }
-                renderLudoTokens(); await new Promise(r => setTimeout(r, 200));
+                
+                renderLudoTokens();
+                if(isLudoOnline) database.ref(`ludo_rooms/${currentRoomCode}/board`).set(ludoPlayers);
+                
+                await new Promise(r => setTimeout(r, 250)); 
                 if (t.status === 'finish') { isFinish = true; break; }
             }
         }
@@ -984,6 +1169,7 @@
             await new Promise(r => setTimeout(r, 600));
             killedTokens.forEach(enT => { enT.status = 'base'; enT.pos = -1; document.getElementById(enT.id).classList.remove('anim-die'); });
             renderLudoTokens();
+            if(isLudoOnline) database.ref(`ludo_rooms/${currentRoomCode}/board`).set(ludoPlayers);
         }
 
         if(isFinish) { el.classList.add('anim-finish'); await new Promise(r => setTimeout(r, 1000)); el.classList.remove('anim-finish'); }
