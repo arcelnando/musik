@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>261 ARCADE</title>
   
-  <!-- Font Keren: Orbitron & Teko -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Teko:wght@500;700&display=swap" rel="stylesheet">
@@ -14,9 +13,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
   
   <style>
-    /* ==========================================================================
-       GLOBAL STYLES & FONTS
-       ========================================================================== */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
     body, html { width: 100%; height: 100%; background: #0a0a0a; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; }
     
@@ -27,80 +23,93 @@
     .game-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 200; background: rgba(10, 10, 10, 0.95); }
     .game-screen.active { display: flex !important; }
     
-    .game-h1 { font-size: 2.5rem; text-align: center; margin-bottom: 0; letter-spacing: 2px; color: #fff; text-transform: uppercase; text-shadow: 4px 4px 0px rgba(0,0,0,1); font-weight: 900; }
-    .game-subtitle { font-family: 'Teko', sans-serif; font-size: 22px; color: #00d2ff; margin-top: 5px; margin-bottom: 25px; text-align: center; letter-spacing: 1px;}
+    .game-h1 { font-size: 2.5rem; text-align: center; margin-bottom: 0; letter-spacing: 2px; color: #fff; text-transform: uppercase; text-shadow: 0px 0px 10px rgba(255,255,255,0.5); font-weight: 900; }
+    .game-subtitle { font-family: 'Teko', sans-serif; font-size: 22px; color: #00d2ff; margin-top: 5px; margin-bottom: 25px; text-align: center; letter-spacing: 2px; text-shadow: 0 0 8px rgba(0,210,255,0.4);}
     
-    .game-btn { background: #111; color: #fff; border: 2px solid #fff; padding: 12px 25px; margin: 8px auto; font-size: 14px; font-weight: bold; font-family: 'Orbitron', sans-serif; cursor: pointer; width: 80%; max-width: 300px; text-transform: uppercase; border-radius: 8px; transition: 0.1s; display: block; text-align: center; box-shadow: 4px 4px 0px rgba(255,255,255,0.2);}
-    .game-btn:hover { background: #fff; color: #000; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(255,255,255,0.3); }
-    .game-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(255,255,255,0.2); }
+    .game-btn { background: #111; color: #fff; border: 2px solid #fff; padding: 12px 25px; margin: 8px auto; font-size: 14px; font-weight: bold; cursor: pointer; width: 80%; max-width: 300px; text-transform: uppercase; border-radius: 4px; transition: 0.2s; display: block; text-align: center; box-shadow: 0 0 5px rgba(255,255,255,0.2); position: relative; overflow: hidden;}
+    .game-btn:hover { background: #fff; color: #000; box-shadow: 0 0 15px rgba(255,255,255,0.6); transform: scale(1.02); }
+    .game-btn:active { transform: scale(0.95); }
     .game-btn:disabled { opacity: 0.5; cursor: not-allowed; border-color: #555; color: #555; box-shadow: none; background: #111; }
     
-    .game-input-name { background: #111; color: #fff; border: 2px solid #fff; padding: 12px; font-family: 'Orbitron', sans-serif; font-weight: bold; width: 80%; max-width: 300px; margin: 0 auto 20px auto; text-transform: uppercase; text-align: center; font-size: 16px; border-radius: 8px; outline: none; display: block; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8); }
+    .game-input-name { background: #111; color: #fff; border: 2px solid #fff; padding: 12px; font-weight: bold; width: 80%; max-width: 300px; margin: 0 auto 20px auto; text-transform: uppercase; text-align: center; font-size: 16px; border-radius: 4px; outline: none; display: block; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); transition: 0.2s; }
+    .game-input-name:focus { box-shadow: 0 0 10px rgba(255,255,255,0.3), inset 0 0 10px rgba(0,0,0,0.8); }
     
-    .overlay-box { background: #1a1a1a; border: 2px solid #fff; padding: 20px; text-align: center; width: 90%; max-width: 400px; border-radius: 12px; box-shadow: 8px 8px 0px rgba(0,0,0,0.8); max-height: 90vh; overflow-y: auto;}
+    .overlay-box { background: rgba(20,20,20,0.9); border: 2px solid #fff; padding: 20px; text-align: center; width: 90%; max-width: 400px; border-radius: 6px; box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,255,255,0.05); max-height: 90vh; overflow-y: auto; backdrop-filter: blur(5px);}
     
     .game-cards-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 15px; padding-bottom: 15px; max-width: 600px; align-items: flex-start;}
-    .game-card { background: #1a1a1a; border: 2px solid #fff; width: 140px; padding: 20px 10px; text-align: center; cursor: pointer; border-radius: 8px; transition: 0.2s; box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2); height: max-content;}
-    .game-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(255, 255, 255, 0.2); }
-    .game-icon-emoji { font-size: 40px; margin-bottom: 10px; display: block; }
-    .game-card-title { font-weight: bold; font-size: 12px; color: #fff; letter-spacing: 1px; font-family: 'Orbitron', sans-serif; }
+    .game-card { background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%); border: 2px solid #fff; width: 140px; padding: 20px 10px; text-align: center; cursor: pointer; border-radius: 6px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.5); height: max-content;}
+    .game-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(255,255,255,0.2); }
+    .game-card:active { transform: translateY(2px); }
+    .game-icon-emoji { font-size: 40px; margin-bottom: 10px; display: block; text-shadow: 0 0 10px currentColor; }
+    .game-card-title { font-weight: bold; font-size: 12px; color: #fff; letter-spacing: 1px; }
 
-    /* ==========================================================================
-       LUDO MULTIPLAYER STYLES
-       ========================================================================== */
-    #ludo-game-screen { background-color: #111; flex-direction: column; align-items: center; justify-content: flex-start; padding: 15px 10px; overflow-y: auto; overflow-x: hidden;}
-    .ludo-top-panel { width: 100%; max-width: 450px; background: #1a1a1a; padding: 15px 20px; border-radius: 8px; border: 2px solid #333; display: flex; justify-content: space-between; align-items: center; box-shadow: 6px 6px 0px rgba(0,0,0,0.8); z-index: 100; margin-bottom: 20px; margin-top: 50px; }
+    #ludo-game-screen { background-color: #0a0a0a; flex-direction: column; align-items: center; justify-content: flex-start; padding: 15px 10px; overflow-y: auto; overflow-x: hidden;}
+    .ludo-top-panel { width: 100%; max-width: 450px; background: #111; padding: 15px 20px; border-radius: 6px; border: 2px solid #444; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.8); z-index: 100; margin-bottom: 20px; margin-top: 50px; }
     .ludo-info-box { text-align: left; }
-    #ludo-turn-info { font-size: 20px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
-    #ludo-log-msg { font-family: 'Teko', sans-serif; font-size: 16px; color: #00d2ff; max-width: 190px; line-height: 1.2; letter-spacing: 1px;}
+    #ludo-turn-info { font-size: 20px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 8px currentColor;}
+    #ludo-log-msg { font-family: 'Teko', sans-serif; font-size: 16px; color: #ccc; max-width: 190px; line-height: 1.2; letter-spacing: 1px;}
     
-    .ludo-dice-btn { width: 65px; height: 65px; border-radius: 8px; border: 2px solid #000; background: #fff; color: #111; font-size: 32px; font-family: 'Orbitron', sans-serif; font-weight: bold; box-shadow: 4px 4px 0px #555; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.1s; margin: 0;}
-    .ludo-dice-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #555; }
-    .ludo-dice-btn:disabled { background: #57606f; color: #333; cursor: not-allowed; box-shadow: 4px 4px 0px #222; }
+    /* DESAIN DADU CYBER ABU-ABU HITAM PUTIH */
+    .ludo-dice-btn { 
+        width: 65px; height: 65px; 
+        border-radius: 6px; 
+        border: 2px solid #ddd; 
+        background: linear-gradient(135deg, #222 0%, #050505 100%); 
+        color: #fff; 
+        font-size: 32px; 
+        font-family: 'Orbitron', sans-serif; 
+        font-weight: 900; 
+        box-shadow: 0 0 10px rgba(255,255,255,0.2), inset 0 0 10px rgba(255,255,255,0.1); 
+        display: flex; justify-content: center; align-items: center; 
+        cursor: pointer; transition: all 0.2s ease; margin: 0;
+        text-shadow: 0 0 10px #fff, 0 0 20px #ccc;
+        position: relative;
+        overflow: hidden;
+    }
+    .ludo-dice-btn::after {
+        content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.05) 2px, rgba(255,255,255,0.05) 4px);
+        pointer-events: none;
+    }
+    .ludo-dice-btn:hover { border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.5), inset 0 0 15px rgba(255,255,255,0.2); transform: scale(1.05); }
+    .ludo-dice-btn:active { transform: scale(0.9); box-shadow: 0 0 5px rgba(255,255,255,0.3); }
+    .ludo-dice-btn:disabled { background: #111; color: #444; border-color: #333; cursor: not-allowed; box-shadow: inset 0 0 5px #000; text-shadow: none; transform: scale(1); }
+    .ludo-dice-btn:disabled::after { display: none; }
+    
+    .dice-rolling { animation: cyberRoll 0.3s infinite alternate; color: #aaa; text-shadow: 0 0 5px #fff, -2px 0 #ff0055, 2px 0 #00d2ff; }
+    @keyframes cyberRoll {
+        0% { transform: scale(1.1) rotate(-5deg); border-color: #aaa; }
+        100% { transform: scale(1) rotate(5deg); border-color: #fff; }
+    }
 
     .board-wrapper-outer { width: 100%; max-width: 450px; position: relative; font-family: 'Teko', sans-serif;}
     
-    .board-container { width: 100%; padding-top: 100%; position: relative; background-color: #111; background-image: url('papan.png'); background-size: cover; background-position: center; border: 4px solid #fff; border-radius: 8px; box-shadow: 8px 8px 0px rgba(0,0,0,0.8); overflow: hidden; transition: background-image 0.3s; }
+    .board-container { width: 100%; padding-top: 100%; position: relative; background-color: #0a0a0a; background-image: url('papan.png'); background-size: cover; background-position: center; border: 3px solid #555; border-radius: 6px; box-shadow: 0 0 20px rgba(255,255,255,0.1); overflow: hidden; transition: background-image 0.3s; }
     
     .grid-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(15, 1fr); grid-template-rows: repeat(15, 1fr); }
-    .cell { border: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; }
+    .cell { border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center; position: relative;}
     
-    /* BACKGROUND PATH & BASE DIBUAT TRANSPARAN BIAR PAPAN.PNG KELIHATAN JELAS */
+    .ludo-star { font-size: 18px; filter: brightness(0) invert(1) drop-shadow(0px 0px 4px rgba(255,255,255,0.9)); opacity: 0.95; }
+
     .path-skull { background-color: rgba(116, 125, 140, 0.15); } .path-tech { background-color: rgba(46, 213, 115, 0.15); }
     .path-red { background-color: rgba(255, 71, 87, 0.15); } .path-japan { background-color: rgba(30, 144, 255, 0.15); }
     
-    .base { grid-column: span 6; grid-row: span 6; display: flex; flex-direction: column; padding: 5%; border: 3px solid rgba(17,17,17,0.5); position: relative; }
-    .base-skull { background-color: rgba(47, 53, 66, 0.2); }
-    .base-tech { background-color: rgba(39, 174, 96, 0.2); }
-    .base-red { background-color: rgba(192, 57, 43, 0.2); }
-    .base-japan { background-color: rgba(55, 66, 250, 0.2); }
+    .base { grid-column: span 6; grid-row: span 6; display: flex; flex-direction: column; padding: 5%; border: 2px solid rgba(255,255,255,0.1); position: relative; }
+    .base-skull { background-color: rgba(47, 53, 66, 0.2); border-color: rgba(164, 176, 190, 0.3); }
+    .base-tech { background-color: rgba(39, 174, 96, 0.2); border-color: rgba(46, 213, 115, 0.3); }
+    .base-red { background-color: rgba(192, 57, 43, 0.2); border-color: rgba(255, 71, 87, 0.3); }
+    .base-japan { background-color: rgba(55, 66, 250, 0.2); border-color: rgba(30, 144, 255, 0.3); }
     .base-title { text-align: center; font-size: 20px; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin: auto 0; font-family: 'Orbitron', sans-serif;}
     .text-dark { color: rgba(255,255,255,0.7); }
-    .inner-box { background: rgba(0,0,0,0.1); border-radius: 8px; width: 100%; height: 100%; padding: 10%; display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10%; border: 2px solid rgba(17,17,17,0.3);}
-    .slot { background: rgba(0,0,0,0.3); border-radius: 50%; border: 2px solid rgba(17,17,17,0.5); display: flex; justify-content: center; align-items: center; position: relative; }
+    .inner-box { background: rgba(0,0,0,0.4); border-radius: 4px; width: 100%; height: 100%; padding: 10%; display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10%; border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 10px #000;}
+    .slot { background: rgba(0,0,0,0.6); border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; position: relative; }
 
-    .center-arena { grid-area: 7 / 7 / 10 / 10; background-color: rgba(17, 17, 17, 0.2); border: 3px solid rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; text-align: center; color: rgba(255,255,255,0.8); font-size: 16px; font-weight: bold; overflow: hidden; position: relative; line-height: 1.1; font-family: 'Orbitron', sans-serif;}
+    .center-arena { grid-area: 7 / 7 / 10 / 10; background-color: rgba(10, 10, 10, 0.8); border: 2px solid #555; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; text-align: center; color: #fff; font-size: 16px; font-weight: bold; overflow: hidden; position: relative; line-height: 1.1; font-family: 'Orbitron', sans-serif; box-shadow: inset 0 0 10px rgba(255,255,255,0.2);}
 
     .token-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
     
-    /* ==========================================================================
-       PION BERDASARKAN ASSET PNG USER
-       ========================================================================== */
     .token { 
-        position: absolute; 
-        transition: all 0.25s linear; 
-        pointer-events: auto; 
-        cursor: pointer; 
-        z-index: 10; 
-        transform-origin: center bottom; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        font-size: 18px; 
-        background-color: transparent;
-        background-size: 100% 100%;
-        background-position: center bottom;
-        background-repeat: no-repeat;
+        position: absolute; transition: all 0.22s cubic-bezier(0.25, 1, 0.5, 1); pointer-events: auto; cursor: pointer; z-index: 10; transform-origin: center bottom; display: flex; align-items: center; justify-content: center; font-size: 18px; background-color: transparent; background-size: contain; background-position: center bottom; background-repeat: no-repeat;
     }
     
     .token.red { background-image: url('merah.png'); } 
@@ -109,68 +118,55 @@
     .token.skull { background-image: url('abu.png'); }
 
     .token.token-active { 
-        animation: bounceSolid 0.6s infinite alternate; 
-        z-index: 20; 
-        filter: drop-shadow(0px 0px 8px #ffeb3b) drop-shadow(0px 0px 4px #ffeb3b); 
+        animation: bounceSolid 0.5s infinite alternate; z-index: 20; filter: drop-shadow(0px 0px 8px #fff) drop-shadow(0px 0px 4px #00d2ff); 
     }
-    @keyframes bounceSolid { 0% { transform: scale(1) translateY(0); } 100% { transform: scale(1.1) translateY(-8px); } }
+    @keyframes bounceSolid { 0% { transform: scale(1) translateY(0); } 100% { transform: scale(1.1) translateY(-6px); } }
     
     .anim-spawn { animation: spawnVFX 0.5s ease-out forwards; z-index: 30; }
-    @keyframes spawnVFX { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.4); } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes spawnVFX { 0% { transform: scale(0); opacity: 0; filter: brightness(2); } 50% { transform: scale(1.5); filter: brightness(1.5); } 100% { transform: scale(1); opacity: 1; filter: brightness(1); } }
     
     .anim-die { animation: dieVFX 0.6s ease-in forwards; z-index: 30; }
-    @keyframes dieVFX { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(-25deg) scale(1.2); } 100% { transform: rotate(25deg) scale(0); opacity: 0; } }
+    @keyframes dieVFX { 0% { transform: rotate(0deg) scale(1); filter: invert(0); } 50% { transform: rotate(-25deg) scale(1.2); filter: invert(1); } 100% { transform: rotate(25deg) scale(0); opacity: 0; } }
     
     .anim-finish { animation: finishVFX 1s ease-in-out forwards; z-index: 30; }
-    @keyframes finishVFX { 0% { transform: scale(1) translateY(0); } 50% { transform: scale(1.5) translateY(-15px) rotateY(180deg); } 100% { transform: scale(0.8) translateY(0) rotateY(360deg); } }
+    @keyframes finishVFX { 0% { transform: scale(1) translateY(0); } 50% { transform: scale(1.5) translateY(-20px) rotateY(180deg); filter: drop-shadow(0 0 10px gold); } 100% { transform: scale(0.8) translateY(0) rotateY(360deg); } }
 
-    /* ==========================================================================
-       TAUNT & EMOTE STYLES
-       ========================================================================== */
-    .emote-bar { display: flex; gap: 10px; justify-content: center; margin-top: 15px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 8px; border: 1px solid #444; width: 100%; max-width: 450px;}
-    .emote-btn { font-size: 24px; background: none; border: none; cursor: pointer; transition: 0.1s; filter: drop-shadow(2px 2px 0px rgba(0,0,0,1)); outline: none;}
-    .emote-btn:active { transform: scale(0.8); }
+    .chat-box-system { display: flex; gap: 8px; width: 100%; max-width: 450px; margin-top: 15px; background: rgba(10, 10, 10, 0.8); padding: 10px; border-radius: 4px; border: 1px solid #444; box-shadow: inset 0 0 10px #000; }
+    .chat-input-field { flex-grow: 1; background: #050505; border: 1px solid #333; color: #fff; padding: 10px; font-family: 'Orbitron', sans-serif; font-size: 12px; border-radius: 4px; outline: none; transition: 0.2s;}
+    .chat-input-field:focus { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.2); }
+    .chat-send-btn { background: #fff; color: #000; border: none; padding: 0 16px; font-weight: bold; font-size: 12px; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
+    .chat-send-btn:hover { background: #00d2ff; color: #000; box-shadow: 0 0 10px #00d2ff; }
+    .chat-send-btn:active { transform: scale(0.95); }
     
-    .floating-emote { position: fixed; bottom: 20%; left: 50%; transform: translateX(-50%); font-size: 80px; z-index: 9999; animation: floatUpEmote 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; pointer-events: none; filter: drop-shadow(4px 4px 0px rgba(0,0,0,1));}
-    @keyframes floatUpEmote { 0% { opacity: 0; transform: translate(-50%, 50px) scale(0.5) rotate(-10deg); } 15% { opacity: 1; transform: translate(-50%, 0px) scale(1.3) rotate(10deg); } 30% { opacity: 1; transform: translate(-50%, -20px) scale(1) rotate(0deg); } 80% { opacity: 1; transform: translate(-50%, -100px) scale(1) rotate(0deg); } 100% { opacity: 0; transform: translate(-50%, -150px) scale(0.8) rotate(10deg); } }
-
-    .taunt-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; border: 1px solid #444; width: 100%; max-width: 450px; box-sizing: border-box;}
-    .taunt-item { background: #222; border: 1px solid #fff; color: white; padding: 8px 4px; font-size: 10px; border-radius: 4px; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.1s; letter-spacing: 0.5px; text-align: center; display: flex; align-items: center; justify-content: center; height: 100%;}
-    .taunt-item:active { background: #ff4757; transform: scale(0.95); }
-    
-    .taunt-bubble { position: fixed; top: 20%; left: 50%; transform: translateX(-50%); background: #fff; color: #111; padding: 12px 25px; border-radius: 8px; font-weight: 900; font-family: 'Orbitron', sans-serif; font-size: 16px; z-index: 9999; animation: popInBubble 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; text-align: center; border: 3px solid #111; box-shadow: 6px 6px 0px #ff4757; text-transform: uppercase; max-width: 90%; word-wrap: break-word;}
+    .taunt-bubble { position: fixed; top: 25%; left: 50%; transform: translateX(-50%); background: #111; color: #fff; padding: 12px 25px; border-radius: 4px; font-weight: 900; font-family: 'Orbitron', sans-serif; font-size: 16px; z-index: 9999; animation: popInBubble 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; text-align: center; border: 2px solid #fff; box-shadow: 0 0 15px rgba(255,255,255,0.5); text-transform: uppercase; max-width: 90%; word-wrap: break-word;}
     @keyframes popInBubble { 0% { transform: translate(-50%, 30px) scale(0); opacity: 0;} 100% { transform: translate(-50%, 0) scale(1); opacity: 1;} }
 
-    .lobby-player-list { text-align: left; background: #111; padding: 10px; border-radius: 8px; border: 2px solid #444; width: 100%; margin-bottom: 15px; font-family: 'Teko', sans-serif; font-size: 18px;}
-    .lobby-player-item { padding: 5px 0; border-bottom: 1px solid #333; display: flex; justify-content: space-between; letter-spacing: 1px;}
-    .col-red { color: #ff4757; } .col-blue { color: #1e90ff; } .col-green { color: #2ed573; } .col-skull { color: #a4b0be; }
+    .lobby-player-list { text-align: left; background: #0a0a0a; padding: 10px; border-radius: 4px; border: 1px solid #444; width: 100%; margin-bottom: 15px; font-family: 'Teko', sans-serif; font-size: 18px; box-shadow: inset 0 0 10px #000;}
+    .lobby-player-item { padding: 5px 0; border-bottom: 1px solid #222; display: flex; justify-content: space-between; letter-spacing: 1px;}
+    .col-red { color: #ff4757; text-shadow: 0 0 5px rgba(255,71,87,0.5);} .col-blue { color: #1e90ff; text-shadow: 0 0 5px rgba(30,144,255,0.5);} .col-green { color: #2ed573; text-shadow: 0 0 5px rgba(46,213,115,0.5);} .col-skull { color: #a4b0be; text-shadow: 0 0 5px rgba(164,176,190,0.5);}
     
-    .ludo-dropdown { width: 100%; max-width: 300px; padding: 10px; margin: 0 auto 10px auto; display: block; border-radius: 4px; font-size: 14px; font-weight: bold; background: #111; color: white; border: 2px solid #555; outline: none; font-family: 'Orbitron', sans-serif;}
+    .ludo-dropdown { width: 100%; max-width: 300px; padding: 10px; margin: 0 auto 10px auto; display: block; border-radius: 4px; font-size: 14px; font-weight: bold; background: #0a0a0a; color: white; border: 1px solid #555; outline: none; font-family: 'Orbitron', sans-serif;}
+    .ludo-dropdown:focus { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.2); }
 
-    /* ==========================================================================
-       TIC TAC TOE STYLES
-       ========================================================================== */
     .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: 300px; height: 300px; margin: 20px auto; }
-    .ttt-cell { background: #1a1a1a; border: 3px solid #444; font-size: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 900; border-radius: 8px; transition: 0.1s; box-shadow: 4px 4px 0px rgba(0,0,0,0.8); width: 100%; height: 100%; box-sizing: border-box;}
-    .ttt-cell:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(0,0,0,0.8); }
-    .ttt-cell.x { color: #ff0055; border-color: #ff0055; }
-    .ttt-cell.o { color: #00d2ff; border-color: #00d2ff; }
+    .ttt-cell { background: #0a0a0a; border: 2px solid #444; font-size: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 900; border-radius: 4px; transition: 0.2s; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); width: 100%; height: 100%; box-sizing: border-box;}
+    .ttt-cell:hover { background: #111; border-color: #777; }
+    .ttt-cell:active { transform: scale(0.95); }
+    .ttt-cell.x { color: #ff0055; border-color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.6); box-shadow: inset 0 0 15px rgba(255,0,85,0.2), 0 0 5px rgba(255,0,85,0.4); }
+    .ttt-cell.o { color: #00d2ff; border-color: #00d2ff; text-shadow: 0 0 10px rgba(0,210,255,0.6); box-shadow: inset 0 0 15px rgba(0,210,255,0.2), 0 0 5px rgba(0,210,255,0.4); }
     
     .ttt-turn-box { font-size: 22px; font-weight: bold; margin-bottom: 10px; letter-spacing: 2px; }
-    .ttt-turn-x { color: #ff0055; }
-    .ttt-turn-o { color: #00d2ff; }
+    .ttt-turn-x { color: #ff0055; text-shadow: 0 0 8px currentColor;}
+    .ttt-turn-o { color: #00d2ff; text-shadow: 0 0 8px currentColor;}
     
     .ttt-score { display: flex; justify-content: space-between; width: 300px; margin: 0 auto 20px; font-size: 20px; font-weight: bold; color: #aaa; font-family: 'Teko', sans-serif; letter-spacing: 1px;}
     
     .win-burst { animation: winBurstAnim 0.5s ease-out forwards; }
-    @keyframes winBurstAnim { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
-
+    @keyframes winBurstAnim { 0% { transform: scale(0.8); opacity: 0; filter: blur(4px); } 50% { transform: scale(1.2); opacity: 1; filter: blur(0px); } 100% { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 <body>
-
   <div id="game-page" class="crt">
-
     <div id="main-hub-menu" class="game-screen active">
         <h1 class="game-h1" style="font-size: 3rem;">261 MABAR</h1>
         <p class="game-subtitle">MULTIPLAYER ARCADE ROOM</p>
@@ -186,22 +182,21 @@
             </div>
         </div>
         
-        <button class="game-btn" onclick="window.location.href='index.html'" style="margin-top: 30px; border-color: #ffeb3b; color: #ffeb3b; width: 100%; max-width: 320px;">⬅ KEMBALI KE BASE</button>
+        <button class="game-btn" onclick="window.location.href='index.html'" style="margin-top: 30px; border-color: #fff; color: #fff; width: 100%; max-width: 320px;">⬅ KEMBALI KE BASE</button>
     </div>
 
-    <!-- LUDO MENUS -->
     <div id="ludo-hub-menu" class="game-screen">
-        <div class="overlay-box" style="border-color: #ff4757;">
-            <h2 style="color: #ff4757; margin-top: 0; margin-bottom: 10px;">LUDO WARS</h2>
+        <div class="overlay-box" style="border-color: #ff4757; box-shadow: 0 0 15px rgba(255,71,87,0.3);">
+            <h2 style="color: #ff4757; margin-top: 0; margin-bottom: 10px; text-shadow: 0 0 8px currentColor;">LUDO WARS</h2>
             <p style="font-family: 'Teko'; font-size: 18px; color: #ccc; margin-bottom: 15px;">Main Lokal 1 HP atau Online Mabar.</p>
             
             <button class="game-btn" style="width: 100%;" onclick="showScreen('ludo-offline-setup')">MABAR LOKAL / AI</button>
             <hr style="border: 1px solid #333; margin: 20px 0;">
             
             <p style="font-size: 14px; color: #ff4757; font-weight: bold; margin-bottom: 10px;">MODE ONLINE</p>
-            <input type="text" id="ludo-nickname" class="game-input-name" placeholder="NICKNAME LU" style="width: 100%; border-color:#ff4757;">
+            <input type="text" id="ludo-nickname" class="game-input-name" placeholder="NICKNAME LU" maxlength="15" style="width: 100%; border-color:#ff4757;">
             <button class="game-btn" style="width: 100%; border-color:#ff4757; color:#ff4757;" onclick="createLudoRoom()">BUAT ROOM</button>
-            <input type="text" id="ludo-room-code" class="game-input-name" placeholder="KODE ROOM" style="width: 100%; margin-top:10px; margin-bottom:10px; letter-spacing:3px;">
+            <input type="text" id="ludo-room-code" class="game-input-name" placeholder="KODE ROOM" maxlength="10" style="width: 100%; margin-top:10px; margin-bottom:10px; letter-spacing:3px;">
             <button class="game-btn" style="width: 100%;" onclick="joinLudoRoom()">GABUNG ROOM</button>
             
             <button class="game-btn" onclick="showScreen('main-hub-menu')" style="margin-top: 25px; width: 100%; border-color: #555; color: #888;">KEMBALI</button>
@@ -210,7 +205,7 @@
 
     <div id="ludo-offline-setup" class="game-screen">
         <div class="overlay-box">
-            <h2 style="color: #ff4757; margin-top: 0; margin-bottom: 10px;">MABAR LOKAL</h2>
+            <h2 style="color: #ff4757; margin-top: 0; margin-bottom: 10px; text-shadow: 0 0 5px currentColor;">MABAR LOKAL</h2>
             
             <div style="text-align: left; font-size: 12px; color: #ff4757; font-weight: bold; margin-bottom: 5px;">RED AREA (P1)</div>
             <select id="ludo-off-red" class="ludo-dropdown">
@@ -232,7 +227,7 @@
                 <option value="none">Kosong (Skip)</option>
             </select>
 
-            <div style="text-align: left; font-size: 12px; color: #fff; font-weight: bold; margin-bottom: 5px;">ABU AREA (P4)</div>
+            <div style="text-align: left; font-size: 12px; color: #a4b0be; font-weight: bold; margin-bottom: 5px;">ABU AREA (P4)</div>
             <select id="ludo-off-skull" class="ludo-dropdown">
                 <option value="none">Kosong (Skip)</option>
                 <option value="ai">Bot AI</option>
@@ -246,8 +241,8 @@
 
     <div id="ludo-lobby-screen" class="game-screen">
         <div class="overlay-box">
-            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 5px;">ROOM LOBBY</h2>
-            <h1 id="lobby-code-display" style="color:#ffeb3b; letter-spacing:5px; margin-bottom: 20px;">------</h1>
+            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 5px; text-shadow: 0 0 5px currentColor;">ROOM LOBBY</h2>
+            <h1 id="lobby-code-display" style="color:#fff; letter-spacing:5px; margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,255,255,0.8);">------</h1>
             
             <div class="lobby-player-list" id="lobby-players">
                 <div class="lobby-player-item"><span class="col-red">RED (HOST)</span> <span id="lobby-p-red">Menunggu...</span></div>
@@ -258,12 +253,11 @@
 
             <p id="lobby-status-msg" style="font-family: 'Teko'; font-size:18px; color:#aaa; margin-bottom:15px;">Menunggu Host memulai game...</p>
             
-            <button id="btn-start-ludo" class="game-btn" style="width: 100%; border-color:#0f0; color:#0f0; display:none;" onclick="startLudoOnlineGame()">START GAME</button>
+            <button id="btn-start-ludo" class="game-btn" style="width: 100%; border-color:#0f0; color:#0f0; display:none; box-shadow: 0 0 10px rgba(0,255,0,0.3);" onclick="startLudoOnlineGame()">START GAME</button>
             <button class="game-btn" onclick="leaveLudoRoom()" style="margin-top: 15px; width: 100%; border-color: #ff4757; color: #ff4757;">KELUAR ROOM</button>
         </div>
     </div>
 
-    <!-- LUDO GAME UI -->
     <div id="ludo-game-screen" class="game-screen">
         <div class="ludo-top-panel">
             <div class="ludo-info-box">
@@ -280,45 +274,38 @@
             </div>
         </div>
         
-        <button class="game-btn" style="font-size: 12px; padding: 10px; margin-top:15px; border-color:#ff4757; width: 100%; max-width: 450px;" onclick="toggleTauntMenu('ludo')">EJEKAN KACUNG</button>
-        
-        <div class="taunt-bar" id="ludo-taunt-list" style="display:none;"></div>
-
-        <div class="emote-bar">
-            <button class="emote-btn" onclick="sendEmote('🤣', 'ludo')">🤣</button>
-            <button class="emote-btn" onclick="sendEmote('🤬', 'ludo')">🤬</button>
-            <button class="emote-btn" onclick="sendEmote('🔥', 'ludo')">🔥</button>
-            <button class="emote-btn" onclick="sendEmote('💀', 'ludo')">💀</button>
-            <button class="emote-btn" onclick="sendEmote('🤡', 'ludo')">🤡</button>
+        <div class="chat-box-system">
+            <!-- DIBATASI 50 KARAKTER -->
+            <input type="text" id="ludo-chat-input" class="chat-input-field" maxlength="50" placeholder="KETIK PANDIRAN (MAX 50 CH)..." onkeydown="if(event.key==='Enter') sendLiveChat('ludo')">
+            <button class="chat-send-btn" onclick="sendLiveChat('ludo')">KIRIM</button>
         </div>
 
-        <div style="margin-top: 10px; display:flex; gap:10px; justify-content: center; width:100%; max-width:450px;">
+        <div style="margin-top: 15px; display:flex; gap:10px; justify-content: center; width:100%; max-width:450px;">
             <button class="game-btn" style="font-size:12px; padding: 10px 15px; margin: 0; border-color:#555; color:#888; width:auto;" onclick="quitLudo()">KABUR</button>
-            <div id="my-color-badge" style="background:#1a1a1a; border:2px solid #fff; border-radius:8px; padding:10px 15px; font-weight:bold; font-size:12px; display:flex; align-items:center; flex-grow:1; justify-content:center;">MODE OFFLINE</div>
+            <div id="my-color-badge" style="background:#111; border:1px solid #444; border-radius:4px; padding:10px 15px; font-weight:bold; font-size:12px; display:flex; align-items:center; flex-grow:1; justify-content:center; box-shadow: inset 0 0 5px #000;">MODE OFFLINE</div>
         </div>
     </div>
 
     <div id="ludo-win-screen" class="game-screen" style="z-index: 3000;">
-        <div class="overlay-box" style="border-color: gold; border-width: 4px;">
-            <h1 id="ludo-win-title" class="game-h1" style="color: gold; font-size:2.5rem; margin-bottom:10px;">AREA WINS!</h1>
+        <div class="overlay-box" style="border-color: #fff; box-shadow: 0 0 30px rgba(255,255,255,0.4);">
+            <h1 id="ludo-win-title" class="game-h1" style="color: #fff; font-size:2.5rem; margin-bottom:10px; text-shadow: 0 0 15px currentColor;">AREA WINS!</h1>
             <p id="ludo-win-desc" style="color: #ccc; font-family: 'Teko'; font-size: 20px; margin-bottom: 20px;">Penguasa Baru 261 Area!</p>
-            <button class="game-btn" style="width: 100%; border-color: gold; color: gold;" onclick="quitLudo()">KEMBALI KE HUB</button>
+            <button class="game-btn" style="width: 100%; border-color: #fff; color: #fff;" onclick="quitLudo()">KEMBALI KE HUB</button>
         </div>
     </div>
 
-    <!-- TTT MENUS -->
     <div id="ttt-hub-menu" class="game-screen">
-        <div class="overlay-box" style="border-color: #00d2ff;">
-            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 10px;">TIC TAC TOE</h2>
+        <div class="overlay-box" style="border-color: #00d2ff; box-shadow: 0 0 15px rgba(0,210,255,0.3);">
+            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 10px; text-shadow: 0 0 8px currentColor;">TIC TAC TOE</h2>
             <p style="font-family: 'Teko'; font-size: 18px; color: #ccc; margin-bottom: 15px;">Main Lokal atau Mabar Online.</p>
             
             <button class="game-btn" style="width: 100%;" onclick="showScreen('ttt-offline-setup')">MABAR LOKAL / AI</button>
             <hr style="border: 1px solid #333; margin: 20px 0;">
             
             <p style="font-size: 14px; color: #00d2ff; font-weight: bold; margin-bottom: 10px;">MODE ONLINE</p>
-            <input type="text" id="ttt-nickname" class="game-input-name" placeholder="NICKNAME LU" style="width: 100%; border-color:#00d2ff;">
+            <input type="text" id="ttt-nickname" class="game-input-name" placeholder="NICKNAME LU" maxlength="15" style="width: 100%; border-color:#00d2ff;">
             <button class="game-btn" style="width: 100%; border-color:#00d2ff; color:#00d2ff;" onclick="createTTTRoom()">BUAT ROOM</button>
-            <input type="text" id="ttt-room-code" class="game-input-name" placeholder="KODE ROOM" style="width: 100%; margin-top:10px; margin-bottom:10px; letter-spacing:3px;">
+            <input type="text" id="ttt-room-code" class="game-input-name" placeholder="KODE ROOM" maxlength="10" style="width: 100%; margin-top:10px; margin-bottom:10px; letter-spacing:3px;">
             <button class="game-btn" style="width: 100%;" onclick="joinTTTRoom()">GABUNG ROOM</button>
             
             <button class="game-btn" onclick="showScreen('main-hub-menu')" style="margin-top: 25px; width: 100%; border-color: #555; color: #888;">KEMBALI</button>
@@ -327,7 +314,7 @@
 
     <div id="ttt-offline-setup" class="game-screen">
         <div class="overlay-box">
-            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 10px;">MABAR LOKAL</h2>
+            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 10px; text-shadow: 0 0 5px currentColor;">MABAR LOKAL</h2>
             
             <div style="text-align: left; font-size: 12px; color: #fff; font-weight: bold; margin-bottom: 5px;">MODE PERMAINAN</div>
             <select id="ttt-off-mode" class="ludo-dropdown">
@@ -342,8 +329,8 @@
 
     <div id="ttt-lobby-screen" class="game-screen">
         <div class="overlay-box">
-            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 5px;">LOBBY TTT</h2>
-            <h1 id="ttt-lobby-code" style="color:#ffeb3b; letter-spacing:5px; margin-bottom: 20px;">------</h1>
+            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 5px; text-shadow: 0 0 5px currentColor;">LOBBY TTT</h2>
+            <h1 id="ttt-lobby-code" style="color:#fff; letter-spacing:5px; margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,255,255,0.8);">------</h1>
             
             <div class="lobby-player-list">
                 <div class="lobby-player-item"><span class="col-red">PLAYER X (HOST)</span> <span id="ttt-p-x">Menunggu...</span></div>
@@ -352,7 +339,7 @@
 
             <p id="ttt-lobby-msg" style="font-family: 'Teko'; font-size:18px; color:#aaa; margin-bottom:15px;">Menunggu Host memulai game...</p>
             
-            <button id="btn-start-ttt" class="game-btn" style="width: 100%; border-color:#0f0; color:#0f0; display:none;" onclick="startTTTOnlineGame()">START GAME</button>
+            <button id="btn-start-ttt" class="game-btn" style="width: 100%; border-color:#0f0; color:#0f0; display:none; box-shadow: 0 0 10px rgba(0,255,0,0.3);" onclick="startTTTOnlineGame()">START GAME</button>
             <button class="game-btn" onclick="leaveTTTRoom()" style="margin-top: 15px; width: 100%; border-color: #ff4757; color: #ff4757;">KELUAR ROOM</button>
         </div>
     </div>
@@ -360,41 +347,36 @@
     <div id="ttt-game-screen" class="game-screen">
         <div class="overlay-box" style="width: 95%; max-width: 400px; padding: 20px;">
             <div class="ttt-score">
-                <span id="ttt-name-x" style="color:#ff0055;">P1 (X): 0</span>
-                <span id="ttt-name-o" style="color:#00d2ff;">P2 (O): 0</span>
+                <span id="ttt-name-x" style="color:#ff0055; text-shadow: 0 0 5px rgba(255,0,85,0.5);">P1 (X): 0</span>
+                <span id="ttt-name-o" style="color:#00d2ff; text-shadow: 0 0 5px rgba(0,210,255,0.5);">P2 (O): 0</span>
             </div>
             
             <div class="ttt-turn-box ttt-turn-x" id="ttt-turn-display">GILIRAN: X</div>
             
             <div class="ttt-grid" id="ttt-grid"></div>
             
-            <button class="game-btn" style="font-size: 12px; padding: 10px; margin-top:15px; border-color:#00d2ff; width: 100%; max-width: 300px;" onclick="toggleTauntMenu('ttt')">EJEK KACUNG</button>
-            
-            <div class="taunt-bar" id="ttt-taunt-list" style="display:none; max-width: 300px; margin: 10px auto;"></div>
-
-            <div class="emote-bar" style="max-width: 300px; margin: 15px auto;">
-                <button class="emote-btn" onclick="sendEmote('🤣', 'ttt')">🤣</button>
-                <button class="emote-btn" onclick="sendEmote('🤬', 'ttt')">🤬</button>
-                <button class="emote-btn" onclick="sendEmote('🤡', 'ttt')">🤡</button>
+            <div class="chat-box-system" style="max-width: 300px; margin: 0 auto;">
+                <!-- DIBATASI 50 KARAKTER -->
+                <input type="text" id="ttt-chat-input" class="chat-input-field" maxlength="50" placeholder="EJEK LAWAN (MAX 50 CH)..." onkeydown="if(event.key==='Enter') sendLiveChat('ttt')">
+                <button class="chat-send-btn" onclick="sendLiveChat('ttt')">KIRIM</button>
             </div>
 
-            <div style="margin-top: 10px; display:flex; gap:10px; justify-content: center;">
+            <div style="margin-top: 15px; display:flex; gap:10px; justify-content: center;">
                 <button class="game-btn" style="font-size:12px; padding: 10px 15px; margin: 0; border-color:#555; color:#888; width:auto;" onclick="quitTTT()">KABUR</button>
-                <div id="ttt-my-badge" style="background:#111; border:2px solid #555; border-radius:8px; padding:10px 15px; font-weight:bold; font-size:12px; color:#aaa; display:flex; align-items:center; flex-grow:1; justify-content:center;">MODE OFFLINE</div>
+                <div id="ttt-my-badge" style="background:#0a0a0a; border:1px solid #444; border-radius:4px; padding:10px 15px; font-weight:bold; font-size:12px; color:#aaa; display:flex; align-items:center; flex-grow:1; justify-content:center; box-shadow: inset 0 0 5px #000;">MODE OFFLINE</div>
             </div>
         </div>
     </div>
 
     <div id="ttt-win-screen" class="game-screen" style="z-index: 3000;">
-        <div class="overlay-box" style="border-width: 4px;">
+        <div class="overlay-box" style="border-width: 2px;">
             <h1 id="ttt-win-title" class="game-h1 win-burst" style="font-size:3rem; margin-bottom:10px;">X WINS!</h1>
             <p style="color: #ccc; font-family: 'Teko'; font-size: 20px; margin-bottom: 20px;">Pertandingan Selesai.</p>
             
-            <button id="btn-ttt-rematch" class="game-btn" style="width: 100%; border-color: #0f0; color: #0f0; display:none;" onclick="rematchTTT()">REMATCH</button>
+            <button id="btn-ttt-rematch" class="game-btn" style="width: 100%; border-color: #0f0; color: #0f0; display:none; box-shadow: 0 0 10px rgba(0,255,0,0.3);" onclick="rematchTTT()">REMATCH</button>
             <button class="game-btn" style="width: 100%; margin-top: 10px; border-color: #ff4757; color: #ff4757;" onclick="quitTTT()">KEMBALI KE HUB</button>
         </div>
     </div>
-
   </div>
 
   <script>
@@ -416,62 +398,39 @@
     }
 
     function checkNameAuth(inputId) {
-        let nameInput = document.getElementById(inputId).value.trim().toUpperCase();
+        let nameInput = document.getElementById(inputId).value.trim();
         if(!nameInput) { alert("Buat NICKNAME dulu!"); return null; }
-        return nameInput;
+        if (nameInput.toUpperCase() === "NANDO") return "[NN] NANDO";
+        return nameInput.toUpperCase();
     }
     
     function generateRoomCode() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
 
-    // ==========================================================================
-    // SYNC SYSTEM (EMOTES & TAUNT)
-    // ==========================================================================
-    let lastEmoteId = null;
     let lastTauntId = null;
-    let localTauntCooldown = 0;
-    
-    const tauntList = [
-        "CUPU LU!", "BELAJAR LAGI DEK!", "BISA MAEN GA?", 
-        "CAILAHH EZZ!", "PFTTT NOOB BET DAH!", "WOY GERAK DONG!", 
-        "GAK LEVEL LU!", "TANGAN LU KAKU!", "HOKI DOANG LU!", 
-        "YAELAH KALAH!", "MENDING TURU!", "EZ WIN GESS!"
-    ];
+    let chatCooldown = 0;
 
-    function toggleTauntMenu(game) {
-        let bar = document.getElementById(game + '-taunt-list');
-        if(bar.style.display === 'none') {
-            bar.style.display = 'grid';
-            bar.innerHTML = '';
-            tauntList.forEach(t => {
-                let btn = document.createElement('div');
-                btn.className = 'taunt-item';
-                btn.innerText = t;
-                btn.onclick = () => sendTextTaunt(t, game);
-                bar.appendChild(btn);
-            });
-        } else {
-            bar.style.display = 'none';
-        }
-    }
-
-    function sendTextTaunt(text, game) {
+    function sendLiveChat(game) {
         let now = Date.now();
-        if(now - localTauntCooldown < 5000) { triggerFloatingEmote("⏳ SABAR! COOLDOWN 5 DETIK."); return; }
+        if(now - chatCooldown < 1500) { return; }
         
-        localTauntCooldown = now;
-        let pName = myLudoName || "GUEST";
-        let fullText = pName + ": " + text;
-        let tId = Math.random().toString(36).substr(2, 9);
+        let inputEl = document.getElementById(game + '-chat-input');
+        let text = inputEl.value.trim();
+        if(!text) return;
+
+        chatCooldown = now;
+        let senderName = myLudoName || "GUEST";
+        let fullMessage = senderName + ": " + text;
+        let textId = Math.random().toString(36).substr(2, 9);
         
-        triggerTauntBubble(fullText);
-        lastTauntId = tId; 
+        triggerTauntBubble(fullMessage);
+        lastTauntId = textId; 
         
         if(game === 'ludo' && isLudoOnline && currentRoomCode) {
-            database.ref(`ludo_rooms/${currentRoomCode}`).update({ taunt: { txt: fullText, id: tId } });
+            database.ref(`ludo_rooms/${currentRoomCode}`).update({ taunt: { txt: fullMessage, id: textId } });
         } else if(game === 'ttt' && tttIsOnline && tttRoomCode) {
-            database.ref(`ttt_rooms/${tttRoomCode}`).update({ taunt: { txt: fullText, id: tId } });
+            database.ref(`ttt_rooms/${tttRoomCode}`).update({ taunt: { txt: fullMessage, id: textId } });
         }
-        document.getElementById(game + '-taunt-list').style.display = 'none';
+        inputEl.value = '';
     }
 
     function triggerTauntBubble(text) {
@@ -480,35 +439,11 @@
         el.innerText = text;
         document.body.appendChild(el);
         setTimeout(() => {
-            el.style.opacity = '0'; el.style.transition = '0.5s';
-            setTimeout(() => el.remove(), 500);
-        }, 2500);
+            el.style.opacity = '0'; el.style.transition = '0.4s';
+            setTimeout(() => el.remove(), 400);
+        }, 3000);
     }
 
-    function sendEmote(emoji, game) {
-        triggerFloatingEmote(emoji);
-        let eId = Math.random().toString(36).substr(2, 9);
-        lastEmoteId = eId;
-
-        if(game === 'ludo' && isLudoOnline && currentRoomCode) {
-            database.ref(`ludo_rooms/${currentRoomCode}`).update({ emote: { e: emoji, id: eId } });
-        } else if(game === 'ttt' && tttIsOnline && tttRoomCode) {
-            database.ref(`ttt_rooms/${tttRoomCode}`).update({ emote: { e: emoji, id: eId } });
-        }
-    }
-
-    function triggerFloatingEmote(emoji) {
-        let el = document.createElement('div');
-        el.className = 'floating-emote';
-        if (emoji.length > 5) el.style.fontSize = '24px'; 
-        el.innerText = emoji;
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 2500);
-    }
-
-    // ==========================================================================
-    // TIC TAC TOE MULTIPLAYER
-    // ==========================================================================
     let tttBoard = ['', '', '', '', '', '', '', '', ''];
     let tttTurn = 'X';
     let tttMode = 'offline'; 
@@ -519,11 +454,15 @@
     let tttRoomRef = null;
     let isHost = false;
     let myLudoName = null;
+    let tttPlayerXName = "P1";
+    let tttPlayerOName = "P2";
 
     function startTTTOffline() {
         let mode = document.getElementById('ttt-off-mode').value;
         tttMode = mode; tttIsOnline = false;
         tttScoreX = 0; tttScoreO = 0; myTTTMarker = 'X';
+        tttPlayerXName = "P1";
+        tttPlayerOName = (mode === 'ai') ? "AI (O)" : "P2";
         resetTTTBoard(); showScreen('ttt-game-screen'); updateTTTUI();
     }
 
@@ -546,11 +485,12 @@
     }
 
     function updateTTTUI() {
-        document.getElementById('ttt-name-x').innerText = `P1 (X): ${tttScoreX}`;
-        document.getElementById('ttt-name-o').innerText = (tttMode==='ai' && !tttIsOnline ? `AI (O): ` : `P2 (O): `) + tttScoreO;
+        document.getElementById('ttt-name-x').innerText = `${tttPlayerXName} (X): ${tttScoreX}`;
+        document.getElementById('ttt-name-o').innerText = `${tttPlayerOName} (O): ${tttScoreO}`;
         
         let turnBox = document.getElementById('ttt-turn-display');
-        turnBox.innerText = `GILIRAN: ${tttTurn}`;
+        let currentTurnName = (tttTurn === 'X') ? tttPlayerXName : tttPlayerOName;
+        turnBox.innerText = `GILIRAN: ${currentTurnName}`;
         turnBox.className = `ttt-turn-box ttt-turn-${tttTurn.toLowerCase()}`;
 
         let badge = document.getElementById('ttt-my-badge');
@@ -558,9 +498,11 @@
             badge.innerText = `WARNA LU: ${myTTTMarker}`;
             badge.style.color = myTTTMarker === 'X' ? '#ff0055' : '#00d2ff';
             badge.style.borderColor = myTTTMarker === 'X' ? '#ff0055' : '#00d2ff';
+            badge.style.boxShadow = myTTTMarker === 'X' ? 'inset 0 0 10px rgba(255,0,85,0.3)' : 'inset 0 0 10px rgba(0,210,255,0.3)';
         } else {
             badge.innerText = tttMode === 'ai' ? `MODE: VS AI` : `MODE: MABAR LOKAL`;
             badge.style.color = '#aaa'; badge.style.borderColor = '#555';
+            badge.style.boxShadow = 'inset 0 0 5px #000';
         }
     }
 
@@ -571,10 +513,9 @@
         if(tttIsOnline && tttTurn !== myTTTMarker) return;
         if(!tttIsOnline && tttMode === 'ai' && tttTurn === 'O') return; 
 
-        // Update lokal secara instan
         if(tttIsOnline) {
             tttBoard[index] = myTTTMarker;
-            renderTTTGrid(); // Render segera tanpa nunggu database
+            renderTTTGrid();
 
             let newBoard = [...tttBoard];
             database.ref(`ttt_rooms/${tttRoomCode}/board`).set(newBoard);
@@ -643,9 +584,9 @@
         title.classList.remove('win-burst'); void title.offsetWidth; title.classList.add('win-burst');
         let overlayBox = document.querySelector('#ttt-win-screen .overlay-box');
         
-        if(winner === 'X') { tttScoreX++; title.innerText = "X WINS!"; title.style.color = '#ff0055'; overlayBox.style.borderColor = '#ff0055';}
-        else if(winner === 'O') { tttScoreO++; title.innerText = "O WINS!"; title.style.color = '#00d2ff'; overlayBox.style.borderColor = '#00d2ff';}
-        else { title.innerText = "DRAW!"; title.style.color = '#aaa'; overlayBox.style.borderColor = '#aaa';}
+        if(winner === 'X') { tttScoreX++; title.innerText = `${tttPlayerXName} WINS!`; title.style.color = '#ff0055'; title.style.textShadow = '0 0 15px #ff0055'; overlayBox.style.borderColor = '#ff0055'; overlayBox.style.boxShadow = '0 0 20px rgba(255,0,85,0.4)';}
+        else if(winner === 'O') { tttScoreO++; title.innerText = `${tttPlayerOName} WINS!`; title.style.color = '#00d2ff'; title.style.textShadow = '0 0 15px #00d2ff'; overlayBox.style.borderColor = '#00d2ff'; overlayBox.style.boxShadow = '0 0 20px rgba(0,210,255,0.4)';}
+        else { title.innerText = "DRAW!"; title.style.color = '#aaa'; title.style.textShadow = '0 0 10px #aaa'; overlayBox.style.borderColor = '#aaa'; overlayBox.style.boxShadow = 'none';}
         
         document.getElementById('btn-ttt-rematch').style.display = 'block';
         document.getElementById('btn-ttt-rematch').innerText = "REMATCH";
@@ -657,9 +598,9 @@
         title.classList.remove('win-burst'); void title.offsetWidth; title.classList.add('win-burst');
         let overlayBox = document.querySelector('#ttt-win-screen .overlay-box');
         
-        if(winner === 'X') { title.innerText = "X WINS!"; title.style.color = '#ff0055'; overlayBox.style.borderColor = '#ff0055'; if(isHost) database.ref(`ttt_rooms/${tttRoomCode}/scores/X`).set(tttScoreX + 1);}
-        else if(winner === 'O') { title.innerText = "O WINS!"; title.style.color = '#00d2ff'; overlayBox.style.borderColor = '#00d2ff'; if(isHost) database.ref(`ttt_rooms/${tttRoomCode}/scores/O`).set(tttScoreO + 1);}
-        else { title.innerText = "DRAW!"; title.style.color = '#aaa'; overlayBox.style.borderColor = '#aaa';}
+        if(winner === 'X') { title.innerText = `${tttPlayerXName} WINS!`; title.style.color = '#ff0055'; title.style.textShadow = '0 0 15px #ff0055'; overlayBox.style.borderColor = '#ff0055'; overlayBox.style.boxShadow = '0 0 20px rgba(255,0,85,0.4)'; if(isHost) database.ref(`ttt_rooms/${tttRoomCode}/scores/X`).set(tttScoreX + 1);}
+        else if(winner === 'O') { title.innerText = `${tttPlayerOName} WINS!`; title.style.color = '#00d2ff'; title.style.textShadow = '0 0 15px #00d2ff'; overlayBox.style.borderColor = '#00d2ff'; overlayBox.style.boxShadow = '0 0 20px rgba(0,210,255,0.4)'; if(isHost) database.ref(`ttt_rooms/${tttRoomCode}/scores/O`).set(tttScoreO + 1);}
+        else { title.innerText = "DRAW!"; title.style.color = '#aaa'; title.style.textShadow = '0 0 10px #aaa'; overlayBox.style.borderColor = '#aaa'; overlayBox.style.boxShadow = 'none';}
         
         let rematchBtn = document.getElementById('btn-ttt-rematch');
         rematchBtn.style.display = 'block';
@@ -684,7 +625,6 @@
 
     function quitTTT() { if(tttIsOnline) leaveTTTRoom(); else showScreen('main-hub-menu'); }
 
-    // TTT ONLINE FIREBASE
     function createTTTRoom() {
         myLudoName = checkNameAuth('ttt-nickname'); if(!myLudoName) return;
         tttRoomCode = generateRoomCode(); myTTTMarker = 'X'; isHost = true; tttIsOnline = true;
@@ -729,13 +669,14 @@
             if(!snap.exists()) { alert("Room ditutup."); leaveTTTRoom(); return; }
             let data = snap.val();
             
-            document.getElementById('ttt-p-x').innerText = (data.players && data.players.X) ? data.players.X : 'Menunggu...';
-            document.getElementById('ttt-p-o').innerText = (data.players && data.players.O) ? data.players.O : 'Menunggu...';
+            tttPlayerXName = (data.players && data.players.X) ? data.players.X : 'Menunggu...';
+            tttPlayerOName = (data.players && data.players.O) ? data.players.O : 'Menunggu...';
+
+            document.getElementById('ttt-p-x').innerText = tttPlayerXName;
+            document.getElementById('ttt-p-o').innerText = tttPlayerOName;
             
-            if(data.emote && data.emote.id !== lastEmoteId) { triggerFloatingEmote(data.emote.e); lastEmoteId = data.emote.id; }
             if(data.taunt && data.taunt.id !== lastTauntId) { triggerTauntBubble(data.taunt.txt); lastTauntId = data.taunt.id; }
 
-            // Deteksi jika lawan kabur saat game berjalan
             if(data.status === 'playing' && tttIsOnline) {
                 if(!data.players || !data.players.X || !data.players.O) {
                     alert("Lawan telah keluar dari permainan!");
@@ -756,7 +697,6 @@
                     if(data.winner) {
                         handleTTTWinOnline(data.winner);
                     } else if (!data.winner && document.getElementById('ttt-win-screen').classList.contains('active')) {
-                        // Jika status DB di reset untuk rematch
                         showScreen('ttt-game-screen');
                         renderTTTGrid(); updateTTTUI();
                     }
@@ -767,10 +707,6 @@
 
     function startTTTOnlineGame() { if(isHost) database.ref('ttt_rooms/' + tttRoomCode + '/status').set('playing'); }
 
-
-    // ==========================================================================
-    // LUDO MULTIPLAYER ENGINE
-    // ==========================================================================
     const ludoBoardEl = document.getElementById('ludo-board');
     const ludoTokenLayer = document.getElementById('ludo-tokens');
     const ludoLog = document.getElementById('ludo-log-msg');
@@ -778,6 +714,7 @@
 
     let isLudoOnline = false; let currentRoomCode = null; let myLudoColor = null; let roomRef = null;
     let ludoGameState = {}; let ludoPlayers = {}; let ludoPlayerTypes = {}; 
+    let ludoColorRealNames = { red: 'RED', blue: 'BLUE', green: 'GREEN', skull: 'ABU' };
 
     const colorOrder = ['red', 'blue', 'green', 'skull'];
     const colorNames = { red: 'MERAH', blue: 'BIRU', green: 'HIJAU', skull: 'ABU' };
@@ -809,6 +746,7 @@
     function startLudoOffline() {
         isLudoOnline = false;
         ludoPlayerTypes = { red: document.getElementById('ludo-off-red').value, blue: document.getElementById('ludo-off-blue').value, green: document.getElementById('ludo-off-green').value, skull: document.getElementById('ludo-off-skull').value };
+        ludoColorRealNames = { red: 'RED', blue: 'BLUE', green: 'GREEN', skull: 'ABU' };
 
         let validPlayers = Object.values(ludoPlayerTypes).filter(v => v !== 'none').length;
         if(validPlayers < 2) { alert("Minimal harus ada 2 pemain (termasuk Bot)!"); return; }
@@ -817,7 +755,7 @@
         let startTurn = 'red'; for(let c of colorOrder) { if(ludoPlayerTypes[c] !== 'none') { startTurn = c; break; } }
 
         ludoGameState = { turn: startTurn, dice: 0, hasRolled: false, moving: false };
-        let badge = document.getElementById('my-color-badge'); badge.innerText = "MODE LOKAL/OFFLINE"; badge.style.color = '#aaa'; badge.style.borderColor = '#555';
+        let badge = document.getElementById('my-color-badge'); badge.innerText = "MODE LOKAL/OFFLINE"; badge.style.color = '#aaa'; badge.style.borderColor = '#444';
 
         initLudoBoardHTML(); initTokensHTML(); showScreen('ludo-game-screen'); updateLudoUI();
         if(ludoPlayerTypes[ludoGameState.turn] === 'ai') setTimeout(rollLudoDice, 1000);
@@ -865,15 +803,18 @@
             if(!snap.exists()) { alert("Room ditutup."); leaveLudoRoom(); return; }
             let data = snap.val();
             
-            document.getElementById('lobby-p-red').innerText = (data.players && data.players.red) ? data.players.red : 'Menunggu...'; 
-            document.getElementById('lobby-p-blue').innerText = (data.players && data.players.blue) ? data.players.blue : 'Menunggu...';
-            document.getElementById('lobby-p-green').innerText = (data.players && data.players.green) ? data.players.green : 'Menunggu...'; 
-            document.getElementById('lobby-p-skull').innerText = (data.players && data.players.skull) ? data.players.skull : 'Menunggu...';
+            ludoColorRealNames.red = (data.players && data.players.red) ? data.players.red : 'Menunggu...'; 
+            ludoColorRealNames.blue = (data.players && data.players.blue) ? data.players.blue : 'Menunggu...';
+            ludoColorRealNames.green = (data.players && data.players.green) ? data.players.green : 'Menunggu...'; 
+            ludoColorRealNames.skull = (data.players && data.players.skull) ? data.players.skull : 'Menunggu...';
+
+            document.getElementById('lobby-p-red').innerText = ludoColorRealNames.red; 
+            document.getElementById('lobby-p-blue').innerText = ludoColorRealNames.blue;
+            document.getElementById('lobby-p-green').innerText = ludoColorRealNames.green; 
+            document.getElementById('lobby-p-skull').innerText = ludoColorRealNames.skull;
             
-            if(data.emote && data.emote.id !== lastEmoteId) { triggerFloatingEmote(data.emote.e); lastEmoteId = data.emote.id; }
             if(data.taunt && data.taunt.id !== lastTauntId) { triggerTauntBubble(data.taunt.txt); lastTauntId = data.taunt.id; }
 
-            // Cek kalau ada player yang keluar saat sedang bermain
             if (data.status === 'playing' && isLudoOnline) {
                 let currentPlayers = Object.keys(data.players || {});
                 let requiredPlayers = Object.keys(ludoPlayerTypes).filter(c => ludoPlayerTypes[c] === 'human');
@@ -895,7 +836,6 @@
             }
 
             if(data.status === 'playing' && document.getElementById('ludo-game-screen').classList.contains('active')) {
-                // FIX GERAK 1 KOTAK: Jangan overide papan saat animasi gerak lokal berlangsung
                 if (!(ludoGameState.turn === myLudoColor && ludoGameState.moving)) {
                     ludoPlayers = data.board; 
                     renderLudoTokens(); 
@@ -922,8 +862,7 @@
                 
                 if (!inSkull && !inTech && !inRed && !inJapan && !inCenter) { 
                     let isSafeZone = ludoSafeZones.some(idx => ludoPathCoords[idx].x === x && ludoPathCoords[idx].y === y);
-                    let starHTML = isSafeZone ? `<span style="font-size: 18px; opacity: 0.85; filter: drop-shadow(1px 1px 0px #000);">⭐</span>` : '';
-                    
+                    let starHTML = isSafeZone ? `<span class="ludo-star">⭐</span>` : '';
                     gridHTML += `<div class="${classes}" style="${style}">${starHTML}</div>`; 
                 }
             }
@@ -940,6 +879,7 @@
         if (isLudoOnline) {
             let badge = document.getElementById('my-color-badge');
             badge.innerText = "WARNA LU: " + myLudoColor.toUpperCase(); badge.style.color = colorHex[myLudoColor]; badge.style.borderColor = colorHex[myLudoColor];
+            badge.style.boxShadow = `inset 0 0 10px ${colorHex[myLudoColor]}40`;
         }
     }
 
@@ -959,7 +899,9 @@
 
     function updateLudoUI() {
         let tColor = ludoGameState.turn; let info = document.getElementById('ludo-turn-info');
-        info.innerText = colorNames[tColor]; info.style.color = colorHex[tColor];
+        let currentActiveName = isLudoOnline ? (ludoColorRealNames[tColor] || colorNames[tColor]) : colorNames[tColor];
+        
+        info.innerText = currentActiveName; info.style.color = colorHex[tColor];
         ludoDiceBtn.innerText = ludoGameState.dice > 0 ? ludoGameState.dice : '🎲';
 
         if (isLudoOnline) {
@@ -968,7 +910,7 @@
                 else if (ludoGameState.hasRolled && !ludoGameState.moving) { ludoDiceBtn.disabled = true; ludoLog.innerText = "Pilih pion buat jalan."; highlightLudoTokens(tColor); } 
                 else { ludoDiceBtn.disabled = true; }
             } else {
-                ludoDiceBtn.disabled = true; ludoLog.innerText = `Nunggu ${colorNames[tColor]}...`;
+                ludoDiceBtn.disabled = true; ludoLog.innerText = `Nunggu ${currentActiveName}...`;
                 document.querySelectorAll('.token-active').forEach(e => e.classList.remove('token-active'));
             }
         } else {
@@ -1005,7 +947,7 @@
             ludoPlayers[col].tokens.forEach((t, i) => {
                 let el = document.getElementById(t.id); if(!el) return;
                 
-                if(t.status === 'finish') { el.innerHTML = '👑'; el.style.fontSize = '24px'; el.style.textShadow = '2px 2px 0px #000'; } else { el.innerHTML = ''; }
+                if(t.status === 'finish') { el.innerHTML = '👑'; el.style.fontSize = '20px'; el.style.textShadow = '0px 0px 5px gold, 2px 2px 0px #000'; } else { el.innerHTML = ''; }
                 
                 if (t.status === 'base') {
                     let slot = document.getElementById(`${col}-slot-${i}`);
@@ -1013,14 +955,14 @@
                     el.style.position = 'relative'; el.style.width = '75%'; el.style.height = '75%'; el.style.left = '0'; el.style.top = '0'; el.style.transform = 'translate(0, 0) scale(1)';
                 } else if (t.status === 'finish') {
                     if (el.parentElement !== ludoTokenLayer) ludoTokenLayer.appendChild(el);
-                    el.style.display = 'flex'; el.style.position = 'absolute'; el.style.width = '6.5%'; el.style.height = '6.5%';
+                    el.style.display = 'flex'; el.style.position = 'absolute'; el.style.width = '6.6%'; el.style.height = '6.6%';
                     let fIdx = finishedCounts[col]; finishedCounts[col]++;
                     let baseX, baseY; if (col === 'red') { baseX = 6.7; baseY = 7.7; } if (col === 'blue') { baseX = 7.7; baseY = 6.7; } if (col === 'green') { baseX = 6.7; baseY = 5.7; } if (col === 'skull') { baseX = 5.7; baseY = 6.7; }
                     el.style.left = `calc(${baseX + (fIdx % 2)*0.4} * (100% / 15))`; el.style.top = `calc(${baseY + Math.floor(fIdx / 2)*0.4} * (100% / 15))`;
                     if(!el.classList.contains('anim-finish')) el.style.transform = 'translate(0%, 0%) scale(0.75)';
                 } else {
                     if (el.parentElement !== ludoTokenLayer) ludoTokenLayer.appendChild(el);
-                    el.style.display = 'flex'; el.style.position = 'absolute'; el.style.width = '6.5%'; el.style.height = '6.5%';
+                    el.style.display = 'flex'; el.style.position = 'absolute'; el.style.width = '6.6%'; el.style.height = '6.6%';
                     let key = `${t.status}-${t.pos}`; if (!groups[key]) groups[key] = []; groups[key].push({ el: el, col: col, t: t });
                 }
             });
@@ -1031,21 +973,23 @@
             items.forEach((item, index) => {
                 let targetX, targetY;
                 if (item.t.status === 'perimeter') { targetX = ludoPathCoords[item.t.pos].x; targetY = ludoPathCoords[item.t.pos].y; } else { targetX = ludoHomePaths[item.col][item.t.pos].x; targetY = ludoHomePaths[item.col][item.t.pos].y; }
-                item.el.style.left = `calc(${targetX} * (100% / 15))`; item.el.style.top = `calc(${targetY} * (100% / 15))`;
+                
+                item.el.style.left = `calc(${targetX} * (100% / 15))`; 
+                item.el.style.top = `calc(${targetY} * (100% / 15))`;
                 
                 if (count === 1) { item.el.style.transform = 'translate(0%, 0%) scale(1)'; } 
                 else if (count === 2) { 
-                    if (index === 0) item.el.style.transform = 'translate(-20%, 0%) scale(0.85)'; 
-                    if (index === 1) item.el.style.transform = 'translate(20%, 0%) scale(0.85)'; 
+                    if (index === 0) item.el.style.transform = 'translate(-22%, 0%) scale(0.85)'; 
+                    if (index === 1) item.el.style.transform = 'translate(22%, 0%) scale(0.85)'; 
                 } else if (count === 3) { 
-                    if (index === 0) item.el.style.transform = 'translate(-20%, -15%) scale(0.7)'; 
-                    if (index === 1) item.el.style.transform = 'translate(20%, -15%) scale(0.7)'; 
-                    if (index === 2) item.el.style.transform = 'translate(0%, 15%) scale(0.7)'; 
+                    if (index === 0) item.el.style.transform = 'translate(-22%, -15%) scale(0.72)'; 
+                    if (index === 1) item.el.style.transform = 'translate(22%, -15%) scale(0.72)'; 
+                    if (index === 2) item.el.style.transform = 'translate(0%, 15%) scale(0.72)'; 
                 } else { 
-                    if (index === 0) item.el.style.transform = 'translate(-20%, -20%) scale(0.6)'; 
-                    if (index === 1) item.el.style.transform = 'translate(20%, -20%) scale(0.6)'; 
-                    if (index === 2) item.el.style.transform = 'translate(-20%, 20%) scale(0.6)'; 
-                    if (index === 3) item.el.style.transform = 'translate(20%, 20%) scale(0.6)'; 
+                    if (index === 0) item.el.style.transform = 'translate(-22%, -22%) scale(0.62)'; 
+                    if (index === 1) item.el.style.transform = 'translate(22%, -22%) scale(0.62)'; 
+                    if (index === 2) item.el.style.transform = 'translate(-22%, 22%) scale(0.62)'; 
+                    if (index === 3) item.el.style.transform = 'translate(22%, 22%) scale(0.62)'; 
                 }
             });
         });
@@ -1056,13 +1000,17 @@
         if(isLudoOnline && ludoGameState.turn !== myLudoColor) return;
         
         ludoDiceBtn.disabled = true; let rng = Math.floor(Math.random() * 6) + 1;
+        ludoDiceBtn.classList.add('dice-rolling');
 
         if(isLudoOnline) {
-            database.ref(`ludo_rooms/${currentRoomCode}/state`).update({ dice: rng, hasRolled: true });
+            setTimeout(() => {
+                ludoDiceBtn.classList.remove('dice-rolling');
+                database.ref(`ludo_rooms/${currentRoomCode}/state`).update({ dice: rng, hasRolled: true });
+            }, 600);
         } else {
             let c = 0; let anim = setInterval(() => {
                 ludoDiceBtn.innerText = Math.floor(Math.random() * 6) + 1; c++;
-                if (c > 8) { clearInterval(anim); ludoGameState.dice = rng; ludoGameState.hasRolled = true; updateLudoUI(); if(ludoPlayerTypes[ludoGameState.turn] === 'ai') setTimeout(runLudoAI, 800); }
+                if (c > 12) { clearInterval(anim); ludoDiceBtn.classList.remove('dice-rolling'); ludoGameState.dice = rng; ludoGameState.hasRolled = true; updateLudoUI(); if(ludoPlayerTypes[ludoGameState.turn] === 'ai') setTimeout(runLudoAI, 800); }
             }, 50);
         }
     }
@@ -1139,10 +1087,10 @@
     }
 
     function handleLudoWin(winnerColor) {
-        let title = document.getElementById('ludo-win-title'); title.innerText = `${colorNames[winnerColor]} WINS!`; title.style.color = colorHex[winnerColor]; document.querySelector('#ludo-win-screen .overlay-box').style.borderColor = colorHex[winnerColor];
+        let winnerRealName = isLudoOnline ? (ludoColorRealNames[winnerColor] || colorNames[winnerColor]) : colorNames[winnerColor];
+        let title = document.getElementById('ludo-win-title'); title.innerText = `${winnerRealName} WINS!`; title.style.color = colorHex[winnerColor]; title.style.textShadow = `0 0 15px ${colorHex[winnerColor]}`; document.querySelector('#ludo-win-screen .overlay-box').style.borderColor = colorHex[winnerColor]; document.querySelector('#ludo-win-screen .overlay-box').style.boxShadow = `0 0 30px ${colorHex[winnerColor]}60`;
         title.classList.remove('win-burst'); void title.offsetWidth; title.classList.add('win-burst'); showScreen('ludo-win-screen');
     }
-
   </script>
 </body>
 </html>
