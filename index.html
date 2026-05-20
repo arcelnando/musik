@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   
-  <meta property="og:title" content="261 AREA | OFFICIAL COMMUNICATION" />
-  <meta property="og:description" content="KAMI DATANG UNTUK MEMBANGUN SOLIDARITAS BERSAMA! Selamat datang di markas digital 261 Area." />
+  <meta property="og:title" content="$𝟐𝟔𝟏 | 𝐎𝐅𝐅𝐈𝐂𝐈𝐀𝐋 𝐂𝐎𝐌𝐌𝐔𝐍𝐈𝐂𝐀𝐓𝐈𝐎𝐍" />
+  <meta property="og:description" content="𝐖𝐞𝐥𝐜𝐨𝐦𝐞 𝐓𝐎 $𝟐𝟔𝟏" />
   <meta property="og:image" content="https://area261.vercel.app/cabang1.jpg" />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#000000">
 
-  <title>261 AREA</title>
+  <title>𝟐𝟔𝟏</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Eater&display=swap" rel="stylesheet">
   
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -329,10 +329,10 @@
     </div>
 
     <div id="intro">
-      <h1>261 AREA</h1>
+      <h1>𝟐𝟔𝟏</h1>
     </div>
 
-    <nav id="navbar">
+        <nav id="navbar">
       <div class="nav-inner">
         <a onclick="switchPage('home')" id="n-home" class="active">HOME</a>
         <a onclick="switchPage('about')" id="n-about">ABOUT</a>
@@ -341,12 +341,13 @@
       </div>
     </nav>
 
-    <main id="main-content">
+            <main id="main-content">
       <div class="page-container">
-        <!-- PAGE HOME / ABOUT / CABANG TETAP SAMA -->
+        
+        <!-- PAGE HOME -->
         <div id="home" class="page active-page">
           <div class="leaders-grid">
-            <h2 style="width: 100%; text-align: center; border: none; padding: 0; margin-bottom: 25px;">KASTA TERTINGGI 261</h2>
+            <h2 style="width: 100%; text-align: center; border: none; padding: 0; margin-bottom: 25px;">𝐓𝐄𝐑𝐓𝐈𝐍𝐆𝐆𝐈 $𝟐𝟔𝟏</h2>
             <div class="leader-row">
               <div class="leader-item"><img src="home1.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
               <div class="leader-item"><img src="home2.jpg" alt="261" onclick="handlePhotoClick(this.src)"></div>
@@ -356,34 +357,30 @@
           </div>
         </div> 
         
-        <div id="about" class="page">
-          <div class="content-block">
-            <h2>INFO 261 AREA</h2>
-            <p class="about-text">KAMI DATANG UNTUK MEMBANGUN SOLIDARITAS BERSAMA!</p>
-            <p class="about-secondary">Selamat datang di AREA 261. Fokus kami cuma satu: <span class="about-highlight">Menciptakan ruang bernaung yang solid dan jauh dari drama.</span></p>
-            <p class="about-secondary">Di sini kita semua setara. Mari saling menghargai, menjaga pertemanan, dan menikmati waktu kita di dunia virtual dengan energi yang positif dan saling suport satu sama lain. Salam damai dari 261.</p>
-          </div>
-        </div>
-
+        <!-- PAGE CABANG -->
         <div id="allcabang" class="page">
           <div class="leaders-grid">
-            <h2 style="width: 100%; text-align: center; border: none; padding: 0; margin-bottom: 25px;">SEMUA CABANG 261</h2>
+            <h2 style="width: 100%; text-align: center; border: none; padding: 0; margin-bottom: 25px;">𝐂𝐀𝐁𝐀𝐍𝐆 $𝟐𝟔𝟏</h2>
             <div class="leader-row">
-              <div class="leader-item" onmousedown="startPress('BASE 261 PRIVAT', 'Nando', '<strong>ADMIN:</strong><br>Andi, Alip, Senzi, Araa, Rama, Enjul, Yura, Yara')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('BASE 261 PRIVAT', 'Nando', '<strong>ADMIN:</strong><br>Andi, Alip, Senzi, Araa, Rama, Enjul, Yura, Yara')" ontouchend="cancelPress()"><img src="cabang1.jpg" alt="cabang1" onclick="handlePhotoClick(this.src)"></div>
-              <div class="leader-item" onmousedown="startPress('GODSTARS', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>FOUNDERR LEADIS:</strong> Enjoel<br><strong>OWNER LDS:</strong> Araa<br><strong>PENGURUS:</strong> Tata')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('GODSTARS', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>FOUNDER LEADIS:</strong> Enjoel<br><strong>OWNER LDS:</strong> Araa<br><strong>PENGURUS:</strong> Tata')" ontouchend="cancelPress()"><img src="cabang2.jpg" alt="cabang2" onclick="handlePhotoClick(this.src)"></div>
-              <div class="leader-item" onmousedown="startPress('TOKYO', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>OWNER LDS:</strong> Araa')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('TOKYO', 'Nando', '<strong>FOUNDER:</strong> Andi / Alif<br><strong>OWNER LDS:</strong> Araa')" ontouchend="cancelPress()"><img src="cabang3.jpg" alt="cabang3" onclick="handlePhotoClick(this.src)"></div>
-            </div>
-            <div class="leader-row">
-              <div class="leader-item" onmousedown="startPress('EMERLD', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Morado<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS LDS:</strong> Nara Cece<br><strong>ALL ADMIN:</strong> Senzi')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('EMERLD', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Morado<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS LDS:</strong> Nara Cece<br><strong>ALL ADMIN:</strong> Senzi')" ontouchend="cancelPress()"><img src="cabang4.jpg" alt="cabang4" onclick="handlePhotoClick(this.src)"></div>
-              <div class="leader-item" onmousedown="startPress('FORCE', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Andi<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS BOY:</strong> Rapz / Senzi<br><strong>PENGURUS LDS:</strong> Cece Nara')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('FORCE', 'Nando', '<strong>FOUNDER:</strong> Alif<br><strong>FOUNDER LDS:</strong> Araa<br><strong>OWNER BOY:</strong> Andi<br><strong>OWNER LDS:</strong> Enjoel<br><strong>PENGURUS BOY:</strong> Rapz / Senzi<br><strong>PENGURUS LDS:</strong> Cece Nara')" ontouchend="cancelPress()"><img src="cabang5.jpg" alt="cabang5" onclick="handlePhotoClick(this.src)"></div>
-              <div class="leader-item" onmousedown="startPress('INTI 261', 'Nando', '<strong>ADMIN MIX:</strong><br>Alif, Morado, Andi, Rama, Senzi, Jun, Araa, Enjoel')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress('INTI 261', 'Nando', '<strong>ADMIN MIX:</strong><br>Alif, Morado, Andi, Rama, Senzi, Jun, Araa, Enjoel')" ontouchend="cancelPress()"><img src="cabang6.jpg" alt="cabang6" onclick="handlePhotoClick(this.src)"></div>
+              <div class="leader-item"><img src="cabang1.jpg" alt="Cabang 1" onclick="handlePhotoClick(this.src)"></div>
+              <div class="leader-item"><img src="cabang2.jpg" alt="Cabang 2" onclick="handlePhotoClick(this.src)"></div>
+              <div class="leader-item"><img src="cabang3.jpg" alt="Cabang 3" onclick="handlePhotoClick(this.src)"></div>
             </div>
           </div>
         </div>
-
+        
+        ​<div id="about" class="page">
+<div class="content-block">
+<h2>𝐈𝐍𝐅𝐎𝐑𝐌𝐀𝐓𝐈𝐎𝐍</h2>
+<p class="about-text">WE ARE THE AUTHORITY; THE REST ARE JUST BACKGROUND NOISE.</p>
+<p class="about-secondary">Welcome to AREA 261. Understand this: <span class="about-highlight">We don't coexist with the filth of common social structures; we rise above them.</span></p>
+<p class="about-secondary">Your "castes" and hierarchies are laughable failures. While you waste your time drowning in petty, low-tier drama, we remain untouchable. Do not mistake our presence for equality; we are the elite, and you are merely visitors in our realm. Stay silent, observe the superior standard, and know your place. 261 reigns supreme.</p>
+</div>
+</div>
+                                  
         <div id="forums" class="page">
           <div class="content-block">
-            <h2>FORUMS UPDATE</h2>
+            <h2>𝐅𝐎𝐑𝐔𝐌𝐒 𝐔𝐏𝐃𝐀𝐓𝐄</h2>
             <div id="forum-container">
               <p style="text-align:center; color:#aaa; font-size: 14px;">Memuat transmisi dari server...</p>
             </div>
@@ -398,7 +395,7 @@
     <audio id="game-bgm" loop><source src="gamebgm.mp3" type="audio/mp3"></audio>
     <audio id="bs-bgm" loop><source src="bs_bgm.mp3" type="audio/mp3"></audio>
 
-    <button id="main-btn-game" class="floating-game-btn" onclick="playSFX(sfxClick); openGameContainer()">🕹️ MAIN GAME</button>
+    <button id="main-btn-game" class="floating-game-btn" onclick="playSFX(sfxClick); openGameContainer()">𝐍𝐆𝐄𝐆𝐀𝐌𝐄</button>
     
     <div id="reaction-menu">
         <span onclick="submitReaction('👍')">👍</span>
@@ -423,7 +420,7 @@
 
         <!-- MENU 261 ARCADE -->
     <div id="game-selection-menu" class="game-screen active">
-        <h1 class="game-h1">261 ARCADE</h1>
+        <h1 class="game-h1">𝟐𝟔𝟏 𝐀𝐑𝐂𝐀𝐃𝐄</h1>
         
         <!-- Tab Swiper Buttons -->
         <div style="display: flex; gap: 10px; margin-top: 10px; margin-bottom: 5px; z-index: 210;">
@@ -1032,7 +1029,7 @@
         
         let shareText = '';
         if(post.poll) {
-            shareText += `📊 *VOTING 261 AREA*\n\n${post.content ? post.content + '\n\n' : ''}Pilih opsi di bawah:\n`;
+            shareText += `📊 *𝐕𝐎𝐓𝐈𝐍𝐆 𝟐𝟔𝟏*\n\n${post.content ? post.content + '\n\n' : ''}Pilih opsi di bawah:\n`;
             let num = 1;
             for(let k in post.poll) {
                 shareText += `${num}️⃣ ${post.poll[k].text}\n`;
@@ -1041,11 +1038,11 @@
             shareText += `\nVote langsung di markas:\n`;
         } else {
             let shortContent = post.content ? (post.content.length > 60 ? post.content.substring(0, 60) + "..." : post.content) : "Info penting!";
-            shareText += `[Info 261 AREA] ${shortContent}\n\nCek selengkapnya di markas:\n`;
+            shareText += `[𝐈𝐍𝐅𝐎𝐑𝐌𝐀𝐓𝐈𝐎𝐍 𝟐𝟔𝟏] ${shortContent}\n\nCek selengkapnya di markas:\n`;
         }
         
         let shareUrl = window.location.href.split('?')[0] + "?post=" + postKey;
-        let shareData = { title: '261 AREA UPDATE', text: shareText, url: shareUrl };
+        let shareData = { title: '𝟐𝟔𝟏 𝐔𝐏𝐃𝐀𝐓𝐄', text: shareText, url: shareUrl };
         
         if (navigator.share) { navigator.share(shareData).catch(console.error); } 
         else { navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`); alert("Link & Detail disalin ke clipboard!"); }
@@ -1300,7 +1297,7 @@
             <div class="post-card" onmousedown="startPostPress('${post.key}', event)" onmouseup="cancelPostPress()" onmouseleave="cancelPostPress()" ontouchstart="startPostPress('${post.key}', event)" ontouchend="cancelPostPress()" ontouchmove="cancelPostPress()">
                 <div style="display:flex; align-items:center; margin-bottom: 12px;">
                     <div style="width: 36px; height: 36px; border-radius: 50%; margin-right: 12px; display:flex; justify-content:center; align-items:center; background:#111; border: 1px solid #fff; color:#fff; font-family:'Share Tech Mono', monospace; font-weight:bold; font-size:12px;">261</div>
-                    <div><div style="font-size: 14px; font-weight: bold; color: #fff; font-family: 'Share Tech Mono', monospace;">Petinggi 261 <span style="color: #0f0; font-size: 13px;">✔</span></div><div style="font-size: 10px; color: #888; font-family: 'Share Tech Mono', monospace; margin-top:2px;">${fullDateStr}</div></div>
+                    <div><div style="font-size: 14px; font-weight: bold; color: #fff; font-family: 'Share Tech Mono', monospace;">$𝟐𝟔𝟏 <span style="color: #0f0; font-size: 13px;">✔</span></div><div style="font-size: 10px; color: #888; font-family: 'Share Tech Mono', monospace; margin-top:2px;">${fullDateStr}</div></div>
                 </div>
                 ${post.image ? `<img src="${post.image}" class="post-img">` : ''}
                 
@@ -2320,4 +2317,4 @@
 
   </script>
 </body>
-</html>
+            </html>
