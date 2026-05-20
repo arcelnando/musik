@@ -60,25 +60,26 @@
 
     .board-wrapper-outer { width: 100%; max-width: 450px; position: relative; font-family: 'Teko', sans-serif;}
     
-    .board-container { width: 100%; padding-top: 100%; position: relative; background-color: #f1f2f6; background-image: url('papan.png'); background-size: cover; background-position: center; border: 4px solid #fff; border-radius: 8px; box-shadow: 8px 8px 0px rgba(0,0,0,0.8); overflow: hidden; transition: background-image 0.3s; }
+    .board-container { width: 100%; padding-top: 100%; position: relative; background-color: #111; background-image: url('papan.png'); background-size: cover; background-position: center; border: 4px solid #fff; border-radius: 8px; box-shadow: 8px 8px 0px rgba(0,0,0,0.8); overflow: hidden; transition: background-image 0.3s; }
     
     .grid-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(15, 1fr); grid-template-rows: repeat(15, 1fr); }
-    .cell { border: 1px solid rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center; }
+    .cell { border: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; }
     
-    .path-skull { background-color: rgba(116, 125, 140, 0.6); } .path-tech { background-color: rgba(46, 213, 115, 0.6); }
-    .path-red { background-color: rgba(255, 71, 87, 0.6); } .path-japan { background-color: rgba(30, 144, 255, 0.6); }
+    /* BACKGROUND PATH & BASE DIBUAT TRANSPARAN BIAR PAPAN.PNG KELIHATAN JELAS */
+    .path-skull { background-color: rgba(116, 125, 140, 0.15); } .path-tech { background-color: rgba(46, 213, 115, 0.15); }
+    .path-red { background-color: rgba(255, 71, 87, 0.15); } .path-japan { background-color: rgba(30, 144, 255, 0.15); }
     
-    .base { grid-column: span 6; grid-row: span 6; display: flex; flex-direction: column; padding: 5%; border: 3px solid #111; position: relative; }
-    .base-skull { background-color: rgba(47, 53, 66, 0.85); }
-    .base-tech { background-color: rgba(39, 174, 96, 0.85); }
-    .base-red { background-color: rgba(192, 57, 43, 0.85); }
-    .base-japan { background-color: rgba(55, 66, 250, 0.85); }
-    .base-title { text-align: center; font-size: 20px; letter-spacing: 1px; color: white; margin: auto 0; font-family: 'Orbitron', sans-serif;}
-    .text-dark { color: #fff; }
-    .inner-box { background: rgba(0,0,0,0.3); border-radius: 8px; width: 100%; height: 100%; padding: 10%; display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10%; border: 2px solid #111;}
-    .slot { background: rgba(0,0,0,0.6); border-radius: 50%; border: 2px solid #111; display: flex; justify-content: center; align-items: center; position: relative; }
+    .base { grid-column: span 6; grid-row: span 6; display: flex; flex-direction: column; padding: 5%; border: 3px solid rgba(17,17,17,0.5); position: relative; }
+    .base-skull { background-color: rgba(47, 53, 66, 0.2); }
+    .base-tech { background-color: rgba(39, 174, 96, 0.2); }
+    .base-red { background-color: rgba(192, 57, 43, 0.2); }
+    .base-japan { background-color: rgba(55, 66, 250, 0.2); }
+    .base-title { text-align: center; font-size: 20px; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin: auto 0; font-family: 'Orbitron', sans-serif;}
+    .text-dark { color: rgba(255,255,255,0.7); }
+    .inner-box { background: rgba(0,0,0,0.1); border-radius: 8px; width: 100%; height: 100%; padding: 10%; display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10%; border: 2px solid rgba(17,17,17,0.3);}
+    .slot { background: rgba(0,0,0,0.3); border-radius: 50%; border: 2px solid rgba(17,17,17,0.5); display: flex; justify-content: center; align-items: center; position: relative; }
 
-    .center-arena { grid-area: 7 / 7 / 10 / 10; background-color: rgba(17, 17, 17, 0.9); border: 3px solid #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; text-align: center; color: white; font-size: 16px; font-weight: bold; overflow: hidden; position: relative; line-height: 1.1; font-family: 'Orbitron', sans-serif;}
+    .center-arena { grid-area: 7 / 7 / 10 / 10; background-color: rgba(17, 17, 17, 0.2); border: 3px solid rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; text-align: center; color: rgba(255,255,255,0.8); font-size: 16px; font-weight: bold; overflow: hidden; position: relative; line-height: 1.1; font-family: 'Orbitron', sans-serif;}
 
     .token-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
     
@@ -98,7 +99,7 @@
         font-size: 18px; 
         background-color: transparent;
         background-size: 100% 100%;
-        background-position: center bottom; /* Pion Nginjek Papan */
+        background-position: center bottom;
         background-repeat: no-repeat;
     }
     
@@ -124,7 +125,7 @@
     @keyframes finishVFX { 0% { transform: scale(1) translateY(0); } 50% { transform: scale(1.5) translateY(-15px) rotateY(180deg); } 100% { transform: scale(0.8) translateY(0) rotateY(360deg); } }
 
     /* ==========================================================================
-       TAUNT & EMOTE STYLES (NO GLOW, ANIMASI BAGUS)
+       TAUNT & EMOTE STYLES
        ========================================================================== */
     .emote-bar { display: flex; gap: 10px; justify-content: center; margin-top: 15px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 8px; border: 1px solid #444; width: 100%; max-width: 450px;}
     .emote-btn { font-size: 24px; background: none; border: none; cursor: pointer; transition: 0.1s; filter: drop-shadow(2px 2px 0px rgba(0,0,0,1)); outline: none;}
@@ -423,7 +424,7 @@
     function generateRoomCode() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
 
     // ==========================================================================
-    // SYNC SYSTEM (ANTI CLOCK-DESYNC)
+    // SYNC SYSTEM (EMOTES & TAUNT)
     // ==========================================================================
     let lastEmoteId = null;
     let lastTauntId = null;
@@ -466,11 +467,10 @@
         lastTauntId = tId; 
         
         if(game === 'ludo' && isLudoOnline && currentRoomCode) {
-            database.ref(`ludo_rooms/${currentRoomCode}/taunt`).set({ txt: fullText, id: tId });
+            database.ref(`ludo_rooms/${currentRoomCode}`).update({ taunt: { txt: fullText, id: tId } });
         } else if(game === 'ttt' && tttIsOnline && tttRoomCode) {
-            database.ref(`ttt_rooms/${tttRoomCode}/taunt`).set({ txt: fullText, id: tId });
+            database.ref(`ttt_rooms/${tttRoomCode}`).update({ taunt: { txt: fullText, id: tId } });
         }
-        
         document.getElementById(game + '-taunt-list').style.display = 'none';
     }
 
@@ -491,9 +491,9 @@
         lastEmoteId = eId;
 
         if(game === 'ludo' && isLudoOnline && currentRoomCode) {
-            database.ref(`ludo_rooms/${currentRoomCode}/emote`).set({ e: emoji, id: eId });
+            database.ref(`ludo_rooms/${currentRoomCode}`).update({ emote: { e: emoji, id: eId } });
         } else if(game === 'ttt' && tttIsOnline && tttRoomCode) {
-            database.ref(`ttt_rooms/${tttRoomCode}/emote`).set({ e: emoji, id: eId });
+            database.ref(`ttt_rooms/${tttRoomCode}`).update({ emote: { e: emoji, id: eId } });
         }
     }
 
@@ -571,9 +571,12 @@
         if(tttIsOnline && tttTurn !== myTTTMarker) return;
         if(!tttIsOnline && tttMode === 'ai' && tttTurn === 'O') return; 
 
+        // Update lokal secara instan
         if(tttIsOnline) {
+            tttBoard[index] = myTTTMarker;
+            renderTTTGrid(); // Render segera tanpa nunggu database
+
             let newBoard = [...tttBoard];
-            newBoard[index] = myTTTMarker;
             database.ref(`ttt_rooms/${tttRoomCode}/board`).set(newBoard);
             
             let winner = null;
@@ -645,6 +648,7 @@
         else { title.innerText = "DRAW!"; title.style.color = '#aaa'; overlayBox.style.borderColor = '#aaa';}
         
         document.getElementById('btn-ttt-rematch').style.display = 'block';
+        document.getElementById('btn-ttt-rematch').innerText = "REMATCH";
         renderTTTGrid(); showScreen('ttt-win-screen');
     }
 
@@ -657,7 +661,16 @@
         else if(winner === 'O') { title.innerText = "O WINS!"; title.style.color = '#00d2ff'; overlayBox.style.borderColor = '#00d2ff'; if(isHost) database.ref(`ttt_rooms/${tttRoomCode}/scores/O`).set(tttScoreO + 1);}
         else { title.innerText = "DRAW!"; title.style.color = '#aaa'; overlayBox.style.borderColor = '#aaa';}
         
-        document.getElementById('btn-ttt-rematch').style.display = 'block';
+        let rematchBtn = document.getElementById('btn-ttt-rematch');
+        rematchBtn.style.display = 'block';
+        if (isHost) {
+            rematchBtn.innerText = "REMATCH";
+            rematchBtn.disabled = false;
+        } else {
+            rematchBtn.innerText = "MENUNGGU HOST...";
+            rematchBtn.disabled = true;
+        }
+
         showScreen('ttt-win-screen');
     }
 
@@ -716,22 +729,38 @@
             if(!snap.exists()) { alert("Room ditutup."); leaveTTTRoom(); return; }
             let data = snap.val();
             
-            document.getElementById('ttt-p-x').innerText = data.players.X || 'Menunggu...';
-            document.getElementById('ttt-p-o').innerText = data.players.O || 'Menunggu...';
+            document.getElementById('ttt-p-x').innerText = (data.players && data.players.X) ? data.players.X : 'Menunggu...';
+            document.getElementById('ttt-p-o').innerText = (data.players && data.players.O) ? data.players.O : 'Menunggu...';
             
             if(data.emote && data.emote.id !== lastEmoteId) { triggerFloatingEmote(data.emote.e); lastEmoteId = data.emote.id; }
             if(data.taunt && data.taunt.id !== lastTauntId) { triggerTauntBubble(data.taunt.txt); lastTauntId = data.taunt.id; }
+
+            // Deteksi jika lawan kabur saat game berjalan
+            if(data.status === 'playing' && tttIsOnline) {
+                if(!data.players || !data.players.X || !data.players.O) {
+                    alert("Lawan telah keluar dari permainan!");
+                    leaveTTTRoom();
+                    return;
+                }
+            }
 
             if(data.status === 'playing') {
                 tttBoard = data.board || ['', '', '', '', '', '', '', '', ''];
                 tttTurn = data.turn; tttScoreX = data.scores ? data.scores.X : 0; tttScoreO = data.scores ? data.scores.O : 0;
 
                 if(document.getElementById('ttt-lobby-screen').classList.contains('active')) showScreen('ttt-game-screen');
-                if(document.getElementById('ttt-game-screen').classList.contains('active')) {
+                
+                if(document.getElementById('ttt-game-screen').classList.contains('active') || document.getElementById('ttt-win-screen').classList.contains('active')) {
                     renderTTTGrid(); updateTTTUI();
-                    if(data.winner) handleTTTWinOnline(data.winner);
+                    
+                    if(data.winner) {
+                        handleTTTWinOnline(data.winner);
+                    } else if (!data.winner && document.getElementById('ttt-win-screen').classList.contains('active')) {
+                        // Jika status DB di reset untuk rematch
+                        showScreen('ttt-game-screen');
+                        renderTTTGrid(); updateTTTUI();
+                    }
                 }
-                if(data.winner === null && document.getElementById('ttt-win-screen').classList.contains('active')) showScreen('ttt-game-screen');
             }
         });
     }
@@ -836,11 +865,27 @@
             if(!snap.exists()) { alert("Room ditutup."); leaveLudoRoom(); return; }
             let data = snap.val();
             
-            document.getElementById('lobby-p-red').innerText = data.players.red || 'Menunggu...'; document.getElementById('lobby-p-blue').innerText = data.players.blue || 'Menunggu...';
-            document.getElementById('lobby-p-green').innerText = data.players.green || 'Menunggu...'; document.getElementById('lobby-p-skull').innerText = data.players.skull || 'Menunggu...';
+            document.getElementById('lobby-p-red').innerText = (data.players && data.players.red) ? data.players.red : 'Menunggu...'; 
+            document.getElementById('lobby-p-blue').innerText = (data.players && data.players.blue) ? data.players.blue : 'Menunggu...';
+            document.getElementById('lobby-p-green').innerText = (data.players && data.players.green) ? data.players.green : 'Menunggu...'; 
+            document.getElementById('lobby-p-skull').innerText = (data.players && data.players.skull) ? data.players.skull : 'Menunggu...';
             
             if(data.emote && data.emote.id !== lastEmoteId) { triggerFloatingEmote(data.emote.e); lastEmoteId = data.emote.id; }
             if(data.taunt && data.taunt.id !== lastTauntId) { triggerTauntBubble(data.taunt.txt); lastTauntId = data.taunt.id; }
+
+            // Cek kalau ada player yang keluar saat sedang bermain
+            if (data.status === 'playing' && isLudoOnline) {
+                let currentPlayers = Object.keys(data.players || {});
+                let requiredPlayers = Object.keys(ludoPlayerTypes).filter(c => ludoPlayerTypes[c] === 'human');
+                if (requiredPlayers.length > 0) {
+                    let allHere = requiredPlayers.every(c => currentPlayers.includes(c));
+                    if (!allHere) {
+                        alert("Lawan telah keluar dari permainan!");
+                        leaveLudoRoom();
+                        return;
+                    }
+                }
+            }
 
             if(data.status === 'playing' && document.getElementById('ludo-lobby-screen').classList.contains('active')) {
                 initLudoBoardHTML(); ludoPlayers = data.board; ludoGameState = data.state;
@@ -850,7 +895,12 @@
             }
 
             if(data.status === 'playing' && document.getElementById('ludo-game-screen').classList.contains('active')) {
-                ludoGameState = data.state; ludoPlayers = data.board; renderLudoTokens(); updateLudoUI();
+                // FIX GERAK 1 KOTAK: Jangan overide papan saat animasi gerak lokal berlangsung
+                if (!(ludoGameState.turn === myLudoColor && ludoGameState.moving)) {
+                    ludoPlayers = data.board; 
+                    renderLudoTokens(); 
+                }
+                ludoGameState = data.state; updateLudoUI();
                 if(data.winner) handleLudoWin(data.winner);
             }
         });
@@ -947,7 +997,6 @@
         return movableList;
     }
 
-    // UPDATE LUDO RENDER OFFSET - FIXED PION NGINJEK PAPAN
     function renderLudoTokens() {
         let groups = {}; let finishedCounts = { red: 0, blue: 0, green: 0, skull: 0 };
         
@@ -984,7 +1033,6 @@
                 if (item.t.status === 'perimeter') { targetX = ludoPathCoords[item.t.pos].x; targetY = ludoPathCoords[item.t.pos].y; } else { targetX = ludoHomePaths[item.col][item.t.pos].x; targetY = ludoHomePaths[item.col][item.t.pos].y; }
                 item.el.style.left = `calc(${targetX} * (100% / 15))`; item.el.style.top = `calc(${targetY} * (100% / 15))`;
                 
-                // Menyesuaikan transform pion supaya tetap memijak kotak
                 if (count === 1) { item.el.style.transform = 'translate(0%, 0%) scale(1)'; } 
                 else if (count === 2) { 
                     if (index === 0) item.el.style.transform = 'translate(-20%, 0%) scale(0.85)'; 
@@ -1035,14 +1083,13 @@
 
         if (t.status === 'base') {
             t.status = 'perimeter'; t.pos = ludoPlayers[color].startIdx; el.classList.add('anim-spawn'); renderLudoTokens();
-            if(isLudoOnline) database.ref(`ludo_rooms/${currentRoomCode}/board`).set(ludoPlayers);
             await new Promise(r => setTimeout(r, 500)); el.classList.remove('anim-spawn');
         } else {
             for (let i = 0; i < steps; i++) {
                 if (t.status === 'perimeter') { if (t.pos === ludoPlayers[color].endIdx) { t.status = 'home'; t.pos = 0; } else { t.pos = (t.pos + 1) % 52; } } 
                 else if (t.status === 'home') { t.pos++; if (t.pos === 5) t.status = 'finish'; }
                 
-                renderLudoTokens(); if(isLudoOnline) database.ref(`ludo_rooms/${currentRoomCode}/board`).set(ludoPlayers);
+                renderLudoTokens(); 
                 await new Promise(r => setTimeout(r, 250)); if (t.status === 'finish') { isFinish = true; break; }
             }
         }
@@ -1057,7 +1104,6 @@
         if (killedTokens.length > 0) {
             gotKill = true; killedTokens.forEach(enT => document.getElementById(enT.id).classList.add('anim-die')); await new Promise(r => setTimeout(r, 600));
             killedTokens.forEach(enT => { enT.status = 'base'; enT.pos = -1; document.getElementById(enT.id).classList.remove('anim-die'); }); renderLudoTokens();
-            if(isLudoOnline) database.ref(`ludo_rooms/${currentRoomCode}/board`).set(ludoPlayers);
         }
 
         if(isFinish) { el.classList.add('anim-finish'); await new Promise(r => setTimeout(r, 1000)); el.classList.remove('anim-finish'); }
