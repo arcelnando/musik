@@ -23,90 +23,83 @@
     .game-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 200; background: rgba(10, 10, 10, 0.95); }
     .game-screen.active { display: flex !important; }
     
-    .game-h1 { font-size: 2.5rem; text-align: center; margin-bottom: 0; letter-spacing: 2px; color: #fff; text-transform: uppercase; text-shadow: 0px 0px 10px rgba(255,255,255,0.5); font-weight: 900; }
-    .game-subtitle { font-family: 'Teko', sans-serif; font-size: 22px; color: #00d2ff; margin-top: 5px; margin-bottom: 25px; text-align: center; letter-spacing: 2px; text-shadow: 0 0 8px rgba(0,210,255,0.4);}
+    /* Visual UI Diperhalus (Softened) */
+    .game-h1 { font-size: 2.5rem; text-align: center; margin-bottom: 0; letter-spacing: 2px; color: #eee; text-transform: uppercase; text-shadow: 0px 0px 4px rgba(255,255,255,0.2); font-weight: 900; }
+    .game-subtitle { font-family: 'Teko', sans-serif; font-size: 22px; color: #88c0d0; margin-top: 5px; margin-bottom: 25px; text-align: center; letter-spacing: 2px; text-shadow: none;}
     
-    .game-btn { background: #111; color: #fff; border: 2px solid #fff; padding: 12px 25px; margin: 8px auto; font-size: 14px; font-weight: bold; cursor: pointer; width: 80%; max-width: 300px; text-transform: uppercase; border-radius: 4px; transition: 0.2s; display: block; text-align: center; box-shadow: 0 0 5px rgba(255,255,255,0.2); position: relative; overflow: hidden;}
-    .game-btn:hover { background: #fff; color: #000; box-shadow: 0 0 15px rgba(255,255,255,0.6); transform: scale(1.02); }
+    .game-btn { background: rgba(20, 20, 20, 0.8); color: #ddd; border: 1px solid rgba(255,255,255,0.1); padding: 12px 25px; margin: 8px auto; font-size: 14px; font-weight: bold; cursor: pointer; width: 80%; max-width: 300px; text-transform: uppercase; border-radius: 4px; transition: 0.2s; display: block; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.5); position: relative; overflow: hidden;}
+    .game-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: scale(1.02); }
     .game-btn:active { transform: scale(0.95); }
-    .game-btn:disabled { opacity: 0.5; cursor: not-allowed; border-color: #555; color: #555; box-shadow: none; background: #111; }
+    .game-btn:disabled { opacity: 0.5; cursor: not-allowed; border-color: transparent; color: #555; box-shadow: none; background: #111; }
     
-    .game-input-name { background: #111; color: #fff; border: 2px solid #fff; padding: 12px; font-weight: bold; width: 80%; max-width: 300px; margin: 0 auto 10px auto; text-transform: uppercase; text-align: center; font-size: 16px; border-radius: 4px; outline: none; display: block; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); transition: 0.2s; }
-    .game-input-name:focus { box-shadow: 0 0 10px rgba(255,255,255,0.3), inset 0 0 10px rgba(0,0,0,0.8); }
+    .game-input-name { background: rgba(15,15,15,0.9); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 12px; font-weight: bold; width: 80%; max-width: 300px; margin: 0 auto 10px auto; text-transform: uppercase; text-align: center; font-size: 16px; border-radius: 4px; outline: none; display: block; transition: 0.2s; }
+    .game-input-name:focus { border-color: rgba(255,255,255,0.5); background: rgba(25,25,25,1); }
     
-    .overlay-box { background: rgba(20,20,20,0.9); border: 2px solid #fff; padding: 20px; text-align: center; width: 90%; max-width: 400px; border-radius: 6px; box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,255,255,0.05); max-height: 90vh; overflow-y: auto; backdrop-filter: blur(5px);}
+    .overlay-box { background: rgba(20,20,20,0.9); border: 1px solid rgba(255,255,255,0.1); padding: 20px; text-align: center; width: 90%; max-width: 400px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-height: 90vh; overflow-y: auto; backdrop-filter: blur(8px);}
     
     .game-cards-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 15px; padding-bottom: 15px; max-width: 600px; align-items: flex-start;}
-    .game-card { background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%); border: 2px solid #fff; width: 140px; padding: 20px 10px; text-align: center; cursor: pointer; border-radius: 6px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.5); height: max-content;}
-    .game-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(255,255,255,0.2); }
+    .game-card { background: linear-gradient(180deg, rgba(30,30,30,0.9) 0%, rgba(15,15,15,0.9) 100%); border: 1px solid rgba(255,255,255,0.1); width: 140px; padding: 20px 10px; text-align: center; cursor: pointer; border-radius: 8px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.6); height: max-content;}
+    .game-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.3); }
     .game-card:active { transform: translateY(2px); }
-    .game-icon-emoji { font-size: 40px; margin-bottom: 10px; display: block; text-shadow: 0 0 10px currentColor; }
-    .game-card-title { font-weight: bold; font-size: 12px; color: #fff; letter-spacing: 1px; }
+    .game-icon-emoji { font-size: 40px; margin-bottom: 10px; display: block; text-shadow: none; opacity: 0.9;}
+    .game-card-title { font-weight: bold; font-size: 12px; color: #ccc; letter-spacing: 1px; }
 
     #ludo-game-screen { background-color: #0a0a0a; flex-direction: column; align-items: center; justify-content: flex-start; padding: 5px 10px; overflow-y: auto; overflow-x: hidden;}
-    .ludo-top-panel { width: 100%; max-width: 450px; background: #111; padding: 10px 15px; border-radius: 6px; border: 2px solid #444; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.8); z-index: 100; margin-bottom: 10px; margin-top: 5px; }
+    .ludo-top-panel { width: 100%; max-width: 450px; background: rgba(20,20,20,0.8); padding: 10px 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.6); z-index: 100; margin-bottom: 10px; margin-top: 5px; }
     .ludo-info-box { text-align: left; }
-    #ludo-turn-info { font-size: 18px; font-weight: 900; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 8px currentColor;}
-    #ludo-log-msg { font-family: 'Teko', sans-serif; font-size: 15px; color: #ccc; max-width: 190px; line-height: 1.2; letter-spacing: 1px;}
+    #ludo-turn-info { font-size: 18px; font-weight: 900; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 2px; text-shadow: none; opacity: 0.9;}
+    #ludo-log-msg { font-family: 'Teko', sans-serif; font-size: 15px; color: #999; max-width: 190px; line-height: 1.2; letter-spacing: 1px;}
     
     .ludo-dice-btn { 
         width: 55px; height: 55px; 
         border-radius: 6px; 
-        border: 2px solid #ddd; 
-        background: linear-gradient(135deg, #222 0%, #050505 100%); 
-        color: #fff; 
+        border: 1px solid rgba(255,255,255,0.2); 
+        background: linear-gradient(135deg, #1f1f1f 0%, #0a0a0a 100%); 
+        color: #eee; 
         font-size: 28px; 
         font-family: 'Orbitron', sans-serif; 
         font-weight: 900; 
-        box-shadow: 0 0 10px rgba(255,255,255,0.2), inset 0 0 10px rgba(255,255,255,0.1); 
         display: flex; justify-content: center; align-items: center; 
         cursor: pointer; transition: all 0.2s ease; margin: 0;
-        text-shadow: 0 0 10px #fff, 0 0 20px #ccc;
         position: relative;
         overflow: hidden;
     }
-    .ludo-dice-btn::after {
-        content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.05) 2px, rgba(255,255,255,0.05) 4px);
-        pointer-events: none;
-    }
-    .ludo-dice-btn:hover { border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.5), inset 0 0 15px rgba(255,255,255,0.2); transform: scale(1.05); }
-    .ludo-dice-btn:active { transform: scale(0.9); box-shadow: 0 0 5px rgba(255,255,255,0.3); }
-    .ludo-dice-btn:disabled { background: #111; color: #444; border-color: #333; cursor: not-allowed; box-shadow: inset 0 0 5px #000; text-shadow: none; transform: scale(1); }
+    .ludo-dice-btn:hover { border-color: rgba(255,255,255,0.5); transform: scale(1.05); }
+    .ludo-dice-btn:active { transform: scale(0.9); }
+    .ludo-dice-btn:disabled { background: #111; color: #444; border-color: transparent; cursor: not-allowed; transform: scale(1); }
     
-    .dice-rolling { animation: cyberRoll 0.3s infinite alternate; color: #aaa; text-shadow: 0 0 5px #fff, -2px 0 #ff0055, 2px 0 #00d2ff; }
+    .dice-rolling { animation: cyberRoll 0.3s infinite alternate; color: #888; }
     @keyframes cyberRoll {
-        0% { transform: scale(1.1) rotate(-5deg); border-color: #aaa; }
-        100% { transform: scale(1) rotate(5deg); border-color: #fff; }
+        0% { transform: scale(1.1) rotate(-5deg); border-color: #666; }
+        100% { transform: scale(1) rotate(5deg); border-color: #999; }
     }
 
     .board-wrapper-outer { width: 100%; max-width: 450px; position: relative; font-family: 'Teko', sans-serif;}
     
-    /* PENURUNAN VISUAL PAPAN AGAR LEBIH JELAS (OPASITAS PNG DITURUNKAN / BACKGROUND DIBUAT JELAS) */
-    .board-container { width: 100%; padding-top: 100%; position: relative; background-color: #111; background-image: linear-gradient(rgba(10,10,10,0.4), rgba(10,10,10,0.4)), url('papan.png'); background-size: cover; background-position: center; border: 3px solid #555; border-radius: 6px; box-shadow: 0 0 20px rgba(255,255,255,0.1); overflow: hidden; transition: background-image 0.3s; }
+    /* Papan utama tajam dan menonjol */
+    .board-container { width: 100%; padding-top: 100%; position: relative; background-color: #111; background-image: url('papan.png'); background-size: cover; background-position: center; border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.9); overflow: hidden; transition: background-image 0.3s; }
     
     .grid-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(15, 1fr); grid-template-rows: repeat(15, 1fr); }
-    .cell { border: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: center; align-items: center; position: relative;}
+    .cell { border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center; position: relative;}
     
-    .ludo-star { font-size: 18px; filter: brightness(0) invert(1) drop-shadow(0px 0px 4px rgba(255,255,255,0.9)); opacity: 0.95; }
+    .ludo-star { font-size: 18px; filter: brightness(0) invert(1) drop-shadow(0px 0px 2px rgba(255,255,255,0.5)); opacity: 0.8; }
 
-    /* PENINGKATAN VISUAL JALUR 100% */
-    .path-skull { background-color: rgba(164, 176, 190, 0.6); border: 1px solid rgba(255,255,255,0.4); } 
-    .path-tech { background-color: rgba(46, 213, 115, 0.6); border: 1px solid rgba(255,255,255,0.4); }
-    .path-red { background-color: rgba(255, 71, 87, 0.6); border: 1px solid rgba(255,255,255,0.4); } 
-    .path-japan { background-color: rgba(30, 144, 255, 0.6); border: 1px solid rgba(255,255,255,0.4); }
+    .path-skull { background-color: rgba(164, 176, 190, 0.1); border: 1px solid rgba(255,255,255,0.1); } 
+    .path-tech { background-color: rgba(46, 213, 115, 0.1); border: 1px solid rgba(255,255,255,0.1); }
+    .path-red { background-color: rgba(255, 71, 87, 0.1); border: 1px solid rgba(255,255,255,0.1); } 
+    .path-japan { background-color: rgba(30, 144, 255, 0.1); border: 1px solid rgba(255,255,255,0.1); }
     
-    .base { grid-column: span 6; grid-row: span 6; display: flex; flex-direction: column; padding: 5%; border: 2px solid rgba(255,255,255,0.3); position: relative; }
-    .base-skull { background-color: rgba(47, 53, 66, 0.7); }
-    .base-tech { background-color: rgba(39, 174, 96, 0.7); }
-    .base-red { background-color: rgba(192, 57, 43, 0.7); }
-    .base-japan { background-color: rgba(55, 66, 250, 0.7); }
-    .base-title { text-align: center; font-size: 20px; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin: auto 0; font-family: 'Orbitron', sans-serif;}
-    .text-dark { color: rgba(255,255,255,0.7); }
-    .inner-box { background: rgba(0,0,0,0.6); border-radius: 4px; width: 100%; height: 100%; padding: 10%; display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10%; border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 0 10px #000;}
-    .slot { background: rgba(0,0,0,0.8); border-radius: 50%; border: 2px solid rgba(255,255,255,0.4); display: flex; justify-content: center; align-items: center; position: relative; }
+    .base { grid-column: span 6; grid-row: span 6; display: flex; flex-direction: column; padding: 5%; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+    .base-skull { background-color: rgba(47, 53, 66, 0.15); }
+    .base-tech { background-color: rgba(39, 174, 96, 0.15); }
+    .base-red { background-color: rgba(192, 57, 43, 0.15); }
+    .base-japan { background-color: rgba(55, 66, 250, 0.15); }
+    .base-title { text-align: center; font-size: 20px; letter-spacing: 1px; color: rgba(255,255,255,0.5); margin: auto 0; font-family: 'Orbitron', sans-serif;}
+    .text-dark { color: rgba(255,255,255,0.5); }
+    .inner-box { background: rgba(0,0,0,0.3); border-radius: 4px; width: 100%; height: 100%; padding: 10%; display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10%; border: 1px solid rgba(255,255,255,0.05); }
+    .slot { background: rgba(0,0,0,0.5); border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; position: relative; }
 
-    .center-arena { grid-area: 7 / 7 / 10 / 10; background-color: rgba(10, 10, 10, 0.9); border: 2px solid #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; text-align: center; color: #fff; font-size: 16px; font-weight: bold; overflow: hidden; position: relative; line-height: 1.1; font-family: 'Orbitron', sans-serif; box-shadow: inset 0 0 10px rgba(255,255,255,0.5);}
+    .center-arena { grid-area: 7 / 7 / 10 / 10; background-color: rgba(10, 10, 10, 0.5); border: 1px solid rgba(255,255,255,0.2); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; text-align: center; color: #ccc; font-size: 16px; font-weight: bold; overflow: hidden; position: relative; line-height: 1.1; font-family: 'Orbitron', sans-serif; }
 
     .token-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
     
@@ -114,75 +107,82 @@
         position: absolute; transition: all 0.22s cubic-bezier(0.25, 1, 0.5, 1); pointer-events: auto; cursor: pointer; z-index: 10; transform-origin: center bottom; display: flex; align-items: center; justify-content: center; font-size: 18px; background-color: transparent; background-size: contain; background-position: center bottom; background-repeat: no-repeat;
     }
     
-    .token.red { background-image: url('merah.png'); background-color: #ff4757; border-radius: 50%; border: 1px solid #fff; width: 22px; height: 22px;} 
-    .token.blue { background-image: url('biru.png'); background-color: #1e90ff; border-radius: 50%; border: 1px solid #fff; width: 22px; height: 22px;}
-    .token.green { background-image: url('hijau.png'); background-color: #2ed573; border-radius: 50%; border: 1px solid #fff; width: 22px; height: 22px;}
-    .token.skull { background-image: url('abu.png'); background-color: #a4b0be; border-radius: 50%; border: 1px solid #fff; width: 22px; height: 22px;}
+    .token.red { background-image: url('merah.png'); background-color: #d63031; border-radius: 50%; border: 1px solid rgba(255,255,255,0.5); width: 22px; height: 22px;} 
+    .token.blue { background-image: url('biru.png'); background-color: #0984e3; border-radius: 50%; border: 1px solid rgba(255,255,255,0.5); width: 22px; height: 22px;}
+    .token.green { background-image: url('hijau.png'); background-color: #00b894; border-radius: 50%; border: 1px solid rgba(255,255,255,0.5); width: 22px; height: 22px;}
+    .token.skull { background-image: url('abu.png'); background-color: #636e72; border-radius: 50%; border: 1px solid rgba(255,255,255,0.5); width: 22px; height: 22px;}
 
     .token.token-active { 
-        animation: bounceSolid 0.5s infinite alternate; z-index: 20; filter: drop-shadow(0px 0px 8px #fff) drop-shadow(0px 0px 4px #00d2ff); 
+        animation: bounceSolid 0.5s infinite alternate; z-index: 20; filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.6)); 
     }
     @keyframes bounceSolid { 0% { transform: scale(1) translateY(0); } 100% { transform: scale(1.1) translateY(-6px); } }
     
     .anim-spawn { animation: spawnVFX 0.5s ease-out forwards; z-index: 30; }
-    @keyframes spawnVFX { 0% { transform: scale(0); opacity: 0; filter: brightness(2); } 50% { transform: scale(1.5); filter: brightness(1.5); } 100% { transform: scale(1); opacity: 1; filter: brightness(1); } }
+    @keyframes spawnVFX { 0% { transform: scale(0); opacity: 0; filter: brightness(2); } 50% { transform: scale(1.3); filter: brightness(1.2); } 100% { transform: scale(1); opacity: 1; filter: brightness(1); } }
     
     .anim-die { animation: dieVFX 0.6s ease-in forwards; z-index: 30; }
-    @keyframes dieVFX { 0% { transform: rotate(0deg) scale(1); filter: invert(0); } 50% { transform: rotate(-25deg) scale(1.2); filter: invert(1); } 100% { transform: rotate(25deg) scale(0); opacity: 0; } }
+    @keyframes dieVFX { 0% { transform: rotate(0deg) scale(1); filter: invert(0); } 50% { transform: rotate(-25deg) scale(1.2); filter: invert(0.8); } 100% { transform: rotate(25deg) scale(0); opacity: 0; } }
     
     .anim-finish { animation: finishVFX 1s ease-in-out forwards; z-index: 30; }
-    @keyframes finishVFX { 0% { transform: scale(1) translateY(0); } 50% { transform: scale(1.5) translateY(-20px) rotateY(180deg); filter: drop-shadow(0 0 10px gold); } 100% { transform: scale(0.8) translateY(0) rotateY(360deg); } }
+    @keyframes finishVFX { 0% { transform: scale(1) translateY(0); } 50% { transform: scale(1.5) translateY(-20px) rotateY(180deg); } 100% { transform: scale(0.8) translateY(0) rotateY(360deg); } }
 
-    .chat-box-system { display: flex; flex-direction: column; gap: 5px; width: 100%; max-width: 450px; margin-top: 10px; background: rgba(10, 10, 10, 0.8); padding: 8px; border-radius: 4px; border: 1px solid #444; box-shadow: inset 0 0 10px #000; }
+    .chat-box-system { display: flex; flex-direction: column; gap: 5px; width: 100%; max-width: 450px; margin-top: 10px; background: rgba(15, 15, 15, 0.8); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
     .chat-controls { display: flex; gap: 5px; width: 100%; }
-    .chat-target-select { background: #111; color: #00d2ff; border: 1px solid #333; padding: 5px; border-radius: 4px; font-family: 'Orbitron'; font-size: 11px; outline: none; font-weight: bold; width: 110px;}
-    .chat-input-field { flex-grow: 1; background: #050505; border: 1px solid #333; color: #fff; padding: 8px; font-family: 'Orbitron', sans-serif; font-size: 12px; border-radius: 4px; outline: none; transition: 0.2s;}
-    .chat-input-field:focus { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.2); }
-    .chat-send-btn { background: #fff; color: #000; border: none; padding: 0 12px; font-weight: bold; font-size: 11px; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
-    .chat-send-btn:hover { background: #00d2ff; color: #000; box-shadow: 0 0 10px #00d2ff; }
+    .chat-target-select { background: #111; color: #88c0d0; border: 1px solid rgba(255,255,255,0.1); padding: 5px; border-radius: 4px; font-family: 'Orbitron'; font-size: 11px; outline: none; font-weight: bold; width: 110px;}
     
-    /* TEKS RAKSASA 5 DETIK TANPA BUBBLE */
-    .giant-marquee-container { position: fixed; top: 40%; left: 0; width: 100%; pointer-events: none; z-index: 99999; display: flex; flex-direction: column; align-items: center; gap: 10px;}
-    .giant-msg-text { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 2.2rem; background: rgba(0, 0, 0, 0.85); color: #fff; text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055; width: 100%; text-align: center; padding: 15px 0; border-top: 3px solid #ff0055; border-bottom: 3px solid #ff0055; text-transform: uppercase; letter-spacing: 3px; animation: giantFadeInOut 5s linear forwards; }
-    @keyframes giantFadeInOut {
-        0% { transform: scale(0.3); opacity: 0; filter: blur(10px); }
-        8% { transform: scale(1); opacity: 1; filter: blur(0); }
-        90% { transform: scale(1); opacity: 1; }
-        100% { transform: scale(1.2); opacity: 0; filter: blur(5px); }
+    .emoji-select-field { flex-grow: 1; background: #111; border: 1px solid rgba(255,255,255,0.1); color: #ccc; padding: 8px; font-family: 'Orbitron', sans-serif; font-size: 14px; border-radius: 4px; outline: none; cursor: pointer; }
+    .chat-send-btn { background: rgba(255,255,255,0.1); color: #ccc; border: 1px solid rgba(255,255,255,0.1); padding: 0 15px; font-weight: bold; font-size: 11px; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
+    .chat-send-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+    
+    .giant-marquee-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999; display: flex; justify-content: center; align-items: center; }
+    
+    /* ANIMASI BURST EMOJI - Hanya Emoji Murni Tanpa Kotak */
+    .cyber-emoji-wrapper {
+        text-align: center;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        animation: cyberEmojiBurst 3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    .cyber-emoji-display { font-size: 8rem; display: block; line-height: 1; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); }
+
+    @keyframes cyberEmojiBurst {
+        0% { transform: scale(0) rotate(-45deg); opacity: 0; filter: blur(10px); }
+        10% { transform: scale(1.3) rotate(10deg); opacity: 1; filter: blur(0); }
+        15% { transform: scale(1) rotate(0deg); }
+        30% { transform: scale(1.1) translateY(-10px); }
+        50% { transform: scale(1) translateY(0) rotate(5deg); }
+        70% { transform: scale(1.1) rotate(-5deg); }
+        85% { transform: scale(1) opacity: 1; }
+        100% { transform: scale(0.5) translateY(150px); opacity: 0; filter: blur(5px); }
     }
 
-    .lobby-player-list { text-align: left; background: #0a0a0a; padding: 10px; border-radius: 4px; border: 1px solid #444; width: 100%; margin-bottom: 15px; font-family: 'Teko', sans-serif; font-size: 18px; box-shadow: inset 0 0 10px #000;}
-    .lobby-player-item { padding: 5px 0; border-bottom: 1px solid #222; display: flex; justify-content: space-between; letter-spacing: 1px;}
-    .col-red { color: #ff4757; text-shadow: 0 0 5px rgba(255,71,87,0.5);} .col-blue { color: #1e90ff; text-shadow: 0 0 5px rgba(30,144,255,0.5);} .col-green { color: #2ed573; text-shadow: 0 0 5px rgba(46,213,115,0.5);} .col-skull { color: #a4b0be; text-shadow: 0 0 5px rgba(164,176,190,0.5);}
+    .lobby-player-list { text-align: left; background: rgba(15,15,15,0.8); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); width: 100%; margin-bottom: 15px; font-family: 'Teko', sans-serif; font-size: 18px;}
+    .lobby-player-item { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; letter-spacing: 1px;}
+    .col-red { color: #d63031; } .col-blue { color: #0984e3; } .col-green { color: #00b894; } .col-skull { color: #636e72; }
     
-    .ludo-dropdown { width: 100%; max-width: 300px; padding: 10px; margin: 0 auto 10px auto; display: block; border-radius: 4px; font-size: 14px; font-weight: bold; background: #0a0a0a; color: white; border: 1px solid #555; outline: none; font-family: 'Orbitron', sans-serif;}
+    .ludo-dropdown { width: 100%; max-width: 300px; padding: 10px; margin: 0 auto 10px auto; display: block; border-radius: 4px; font-size: 14px; font-weight: bold; background: #111; color: #ccc; border: 1px solid rgba(255,255,255,0.1); outline: none; font-family: 'Orbitron', sans-serif;}
 
-    .live-in-game-players { width: 100%; max-width: 450px; background: rgba(20,20,20,0.8); border: 1px solid #444; padding: 6px 12px; border-radius: 4px; display: flex; gap: 10px; justify-content: space-around; font-size: 11px; margin-bottom: 5px; text-transform: uppercase;}
-
-    /* SERING MAIN CHIPS */
-    .frequent-users-label { font-size: 11px; color: #888; text-align: left; margin-bottom: 5px; width: 100%; max-width: 300px; margin: 5px auto; font-weight: bold;}
-    .frequent-container { display: flex; gap: 5px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; width: 100%; max-width: 300px; margin: 0 auto 15px auto;}
-    .frequent-chip { background: #222; border: 1px solid #555; padding: 4px 10px; font-size: 11px; border-radius: 20px; color: #fff; cursor: pointer; transition: 0.2s;}
-    .frequent-chip:hover { background: #00d2ff; color: #000; border-color: #00d2ff;}
+    .live-in-game-players { width: 100%; max-width: 450px; background: rgba(20,20,20,0.8); border: 1px solid rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 6px; display: flex; gap: 10px; justify-content: space-around; font-size: 11px; margin-bottom: 5px; text-transform: uppercase;}
 
     .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: 260px; height: 260px; margin: 10px auto; }
-    .ttt-cell { background: #0a0a0a; border: 2px solid #444; font-size: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 900; border-radius: 4px; transition: 0.2s; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); width: 100%; height: 100%; box-sizing: border-box;}
-    .ttt-cell.x { color: #ff0055; border-color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.6); }
-    .ttt-cell.o { color: #00d2ff; border-color: #00d2ff; text-shadow: 0 0 10px rgba(0,210,255,0.6); }
+    .ttt-cell { background: rgba(20,20,20,0.9); border: 1px solid rgba(255,255,255,0.1); font-size: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #eee; font-family: 'Orbitron', sans-serif; font-weight: 900; border-radius: 6px; transition: 0.2s; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); width: 100%; height: 100%; box-sizing: border-box;}
+    .ttt-cell.x { color: #ff4757; }
+    .ttt-cell.o { color: #1e90ff; }
     
-    .ttt-turn-box { font-size: 18px; font-weight: bold; margin-bottom: 5px; letter-spacing: 2px; }
-    .ttt-score { display: flex; justify-content: space-between; width: 100%; font-size: 18px; font-weight: bold; color: #aaa; font-family: 'Teko', sans-serif; letter-spacing: 1px; margin-bottom: 5px;}
+    .ttt-turn-box { font-size: 18px; font-weight: bold; margin-bottom: 5px; letter-spacing: 2px; color: #ddd; }
+    .ttt-score { display: flex; justify-content: space-between; width: 100%; font-size: 18px; font-weight: bold; color: #888; font-family: 'Teko', sans-serif; letter-spacing: 1px; margin-bottom: 5px;}
     
     .win-burst { animation: winBurstAnim 0.5s ease-out forwards; }
     @keyframes winBurstAnim { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
 
-    /* PODIUM LEADERBOARD AKHIR */
-    .leaderboard-list { text-align: left; margin: 15px 0; background: #050505; border: 1px solid #444; padding: 10px; border-radius: 4px; font-family: 'Orbitron'; }
-    .leaderboard-row { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #222; font-size: 14px; font-weight: bold;}
-    .rank-1 { color: gold; text-shadow: 0 0 8px gold; }
-    .rank-2 { color: #cbd5e1; text-shadow: 0 0 8px #cbd5e1; }
-    .rank-3 { color: #b45309; text-shadow: 0 0 8px #b45309; }
-    .rank-4 { color: #ff4757; opacity: 0.7; }
+    .leaderboard-list { text-align: left; margin: 15px 0; background: rgba(15,15,15,0.8); border: 1px solid rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; font-family: 'Orbitron'; }
+    .leaderboard-row { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; font-weight: bold;}
+    .rank-1 { color: #e1b12c; }
+    .rank-2 { color: #95a5a6; }
+    .rank-3 { color: #d35400; }
+    .rank-4 { color: #c23616; opacity: 0.7; }
   </style>
 </head>
 <body>
@@ -194,81 +194,78 @@
         <p class="game-subtitle">MULTIPLAYER ARCADE ROOM</p>
         
         <div class="game-cards-container">
-            <div class="game-card" onclick="showScreen('ludo-hub-menu')" style="border-color: #ff4757; color: #ff4757;">
+            <div class="game-card" onclick="showScreen('ludo-hub-menu')">
                 <span class="game-icon-emoji" style="font-size:50px; margin-bottom:5px;">🎲</span>
                 <div class="game-card-title">LUDO WARS</div>
             </div>
-            <div class="game-card" onclick="showScreen('ttt-hub-menu')" style="border-color: #00d2ff; color: #00d2ff;">
+            <div class="game-card" onclick="showScreen('ttt-hub-menu')">
                 <span class="game-icon-emoji" style="font-size:50px; margin-bottom:5px;">❌⭕</span>
                 <div class="game-card-title">TIC TAC TOE</div>
             </div>
         </div>
         
-        <button class="game-btn" onclick="window.location.href='index.html'" style="margin-top: 30px; border-color: #fff; color: #fff; width: 100%; max-width: 320px;">⬅ KEMBALI KE BASE</button>
+        <button class="game-btn" onclick="window.location.href='index.html'" style="margin-top: 30px; width: 100%; max-width: 320px;">⬅ KEMBALI KE BASE</button>
     </div>
 
     <div id="ludo-hub-menu" class="game-screen">
-        <div class="overlay-box" style="border-color: #ff4757; box-shadow: 0 0 15px rgba(255,71,87,0.3);">
-            <h2 style="color: #ff4757; margin-top: 0; margin-bottom: 10px; text-shadow: 0 0 8px currentColor;">LUDO WARS</h2>
-            <p style="font-family: 'Teko'; font-size: 18px; color: #ccc; margin-bottom: 15px;">Main Lokal 1 HP atau Online Mabar.</p>
+        <div class="overlay-box">
+            <h2 style="color: #d63031; margin-top: 0; margin-bottom: 10px;">LUDO WARS</h2>
+            <p style="font-family: 'Teko'; font-size: 18px; color: #888; margin-bottom: 15px;">Main Lokal 1 HP atau Online Mabar.</p>
             
             <button class="game-btn" style="width: 100%;" onclick="showScreen('ludo-offline-setup')">MABAR LOKAL / AI</button>
-            <hr style="border: 1px solid #333; margin: 15px 0;">
+            <hr style="border: 1px solid rgba(255,255,255,0.05); margin: 15px 0;">
             
-            <p style="font-size: 14px; color: #ff4757; font-weight: bold; margin-bottom: 5px;">MODE ONLINE</p>
-            <input type="text" id="ludo-nickname" class="game-input-name" placeholder="NICKNAME LU" maxlength="15" style="width: 100%; border-color:#ff4757;">
-            
-            <div class="frequent-users-label">SERING MAIN:</div>
-            <div class="frequent-container" id="ludo-frequent-chips"></div>
+            <p style="font-size: 14px; color: #ccc; font-weight: bold; margin-bottom: 5px;">MODE ONLINE</p>
+            <input type="text" id="ludo-nickname" class="game-input-name" placeholder="NICKNAME LU" maxlength="15" style="width: 100%;">
 
-            <button class="game-btn" style="width: 100%; border-color:#ff4757; color:#ff4757;" onclick="createLudoRoom()">BUAT ROOM</button>
+            <button class="game-btn" style="width: 100%;" onclick="createLudoRoom()">BUAT ROOM</button>
             <input type="text" id="ludo-room-code" class="game-input-name" placeholder="KODE ROOM" maxlength="10" style="width: 100%; margin-top:10px; margin-bottom:10px; letter-spacing:3px;">
             <button class="game-btn" style="width: 100%;" onclick="joinLudoRoom()">GABUNG ROOM</button>
             
-            <button class="game-btn" onclick="showScreen('main-hub-menu')" style="margin-top: 25px; width: 100%; border-color: #555; color: #888;">KEMBALI</button>
+            <button class="game-btn" onclick="showScreen('main-hub-menu')" style="margin-top: 25px; width: 100%; color: #888;">KEMBALI</button>
         </div>
     </div>
 
     <div id="ludo-offline-setup" class="game-screen">
         <div class="overlay-box">
-            <h2 style="color: #ff4757; margin-top: 0; margin-bottom: 10px; text-shadow: 0 0 5px currentColor;">MABAR LOKAL</h2>
+            <h2 style="color: #ccc; margin-top: 0; margin-bottom: 10px;">MABAR LOKAL</h2>
             
-            <div style="text-align: left; font-size: 12px; color: #ff4757; font-weight: bold; margin-bottom: 5px;">RED AREA (P1)</div>
+            <div style="text-align: left; font-size: 12px; color: #d63031; font-weight: bold; margin-bottom: 5px;">RED AREA (P1)</div>
             <select id="ludo-off-red" class="ludo-dropdown">
                 <option value="human">Pemain (Human)</option>
                 <option value="ai">Bot AI</option>
             </select>
 
-            <div style="text-align: left; font-size: 12px; color: #1e90ff; font-weight: bold; margin-bottom: 5px;">BLUE AREA (P2)</div>
+            <div style="text-align: left; font-size: 12px; color: #0984e3; font-weight: bold; margin-bottom: 5px;">BLUE AREA (P2)</div>
             <select id="ludo-off-blue" class="ludo-dropdown">
                 <option value="human">Pemain (Human)</option>
                 <option value="ai">Bot AI</option>
                 <option value="none">Kosong (Skip)</option>
             </select>
 
-            <div style="text-align: left; font-size: 12px; color: #2ed573; font-weight: bold; margin-bottom: 5px;">GREEN AREA (P3)</div>
+            <div style="text-align: left; font-size: 12px; color: #00b894; font-weight: bold; margin-bottom: 5px;">GREEN AREA (P3)</div>
             <select id="ludo-off-green" class="ludo-dropdown">
                 <option value="ai">Bot AI</option>
                 <option value="human">Pemain (Human)</option>
                 <option value="none">Kosong (Skip)</option>
             </select>
 
-            <div style="text-align: left; font-size: 12px; color: #a4b0be; font-weight: bold; margin-bottom: 5px;">ABU AREA (P4)</div>
+            <div style="text-align: left; font-size: 12px; color: #636e72; font-weight: bold; margin-bottom: 5px;">ABU AREA (P4)</div>
             <select id="ludo-off-skull" class="ludo-dropdown">
                 <option value="none">Kosong (Skip)</option>
                 <option value="ai">Bot AI</option>
                 <option value="human">Pemain (Human)</option>
             </select>
 
-            <button class="game-btn" style="width: 100%; border-color:#ff4757; color:#ff4757; margin-top:15px;" onclick="startLudoOffline()">MULAI GAME</button>
-            <button class="game-btn" onclick="showScreen('ludo-hub-menu')" style="width: 100%; border-color: #555; color: #888;">KEMBALI</button>
+            <button class="game-btn" style="width: 100%; margin-top:15px;" onclick="startLudoOffline()">MULAI GAME</button>
+            <button class="game-btn" onclick="showScreen('ludo-hub-menu')" style="width: 100%; color: #888;">KEMBALI</button>
         </div>
     </div>
 
     <div id="ludo-lobby-screen" class="game-screen">
         <div class="overlay-box">
-            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 5px; text-shadow: 0 0 5px currentColor;">ROOM LOBBY</h2>
-            <h1 id="lobby-code-display" style="color:#fff; letter-spacing:5px; margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,255,255,0.8);">------</h1>
+            <h2 style="color: #ccc; margin-top: 0; margin-bottom: 5px;">ROOM LOBBY</h2>
+            <h1 id="lobby-code-display" style="color:#eee; letter-spacing:5px; margin-bottom: 20px;">------</h1>
             
             <div class="lobby-player-list" id="lobby-players">
                 <div class="lobby-player-item"><span class="col-red">RED (HOST)</span> <span id="lobby-p-red">Menunggu...</span></div>
@@ -277,20 +274,19 @@
                 <div class="lobby-player-item"><span class="col-skull">ABU AREA</span> <span id="lobby-p-skull">Menunggu...</span></div>
             </div>
 
-            <p id="lobby-status-msg" style="font-family: 'Teko'; font-size:18px; color:#aaa; margin-bottom:15px;">Menunggu Host memulai game...</p>
+            <p id="lobby-status-msg" style="font-family: 'Teko'; font-size:18px; color:#888; margin-bottom:15px;">Menunggu Host memulai game...</p>
             
-            <button id="btn-start-ludo" class="game-btn" style="width: 100%; border-color:#0f0; color:#0f0; display:none; box-shadow: 0 0 10px rgba(0,255,0,0.3);" onclick="startLudoOnlineGame()">START GAME</button>
-            <button class="game-btn" onclick="leaveLudoRoom()" style="margin-top: 15px; width: 100%; border-color: #ff4757; color: #ff4757;">KELUAR ROOM</button>
+            <button id="btn-start-ludo" class="game-btn" style="width: 100%; display:none;" onclick="startLudoOnlineGame()">START GAME</button>
+            <button class="game-btn" onclick="leaveLudoRoom()" style="margin-top: 15px; width: 100%; color: #d63031;">KELUAR ROOM</button>
         </div>
     </div>
 
     <div id="ludo-game-screen" class="game-screen">
-        <!-- LIVE DAFTAR PEMAIN LUDO -->
         <div class="live-in-game-players" id="ludo-live-list"></div>
 
         <div class="ludo-top-panel">
             <div class="ludo-info-box">
-                <div id="ludo-turn-info" style="color: #ff4757;">RED AREA</div>
+                <div id="ludo-turn-info" style="color: #d63031;">RED AREA</div>
                 <div id="ludo-log-msg">Bersiap...</div>
             </div>
             <button class="ludo-dice-btn" id="ludo-dice" onclick="rollLudoDice()">🎲</button>
@@ -305,95 +301,95 @@
         
         <div class="chat-box-system">
             <div class="chat-controls">
-                <!-- DROPDOWN TARGET CHAT -->
-                <select id="ludo-chat-target" class="chat-target-select">
-                    <option value="global">🌍 GLOBAL</option>
+                <select id="ludo-chat-target" class="chat-target-select" style="display: none;"><option value="global">🌍 GLOBAL</option></select>
+                <!-- DROPDOWN SELECTION EMOJI (Hanya valuenya yang dikirim) -->
+                <select id="ludo-emoji-input" class="emoji-select-field">
+                    <option value="😹">😹 KACUNG</option>
+                    <option value="🤫">🤫 HUST</option>
+                    <option value="🥱">🥱 EZZ BET WOK</option>
+                    <option value="🤡">🤡 BADUT TOLOL</option>
+                    <option value="👎">👎 BISA MAEN?</option>
+                    <option value="🤣">🤣 CAILAHH</option>
                 </select>
-                <input type="text" id="ludo-chat-input" class="chat-input-field" maxlength="50" placeholder="KETIK PANDIRAN (MAX 50 CH)..." onkeydown="if(event.key==='Enter') sendLiveChat('ludo')">
-                <button class="chat-send-btn" onclick="sendLiveChat('ludo')">KIRIM</button>
+                <button class="chat-send-btn" onclick="sendLiveEmoji('ludo')">KIRIM</button>
             </div>
         </div>
 
         <div style="margin-top: 8px; display:flex; gap:10px; justify-content: center; width:100%; max-width:450px;">
-            <button class="game-btn" style="font-size:11px; padding: 8px 12px; margin: 0; border-color:#555; color:#888; width:auto;" onclick="quitLudo()">KABUR</button>
-            <div id="my-color-badge" style="background:#111; border:1px solid #444; border-radius:4px; padding:8px 12px; font-weight:bold; font-size:11px; display:flex; align-items:center; flex-grow:1; justify-content:center; box-shadow: inset 0 0 5px #000;">MODE OFFLINE</div>
+            <button class="game-btn" style="font-size:11px; padding: 8px 12px; margin: 0; color:#888; width:auto;" onclick="quitLudo()">KABUR</button>
+            <div id="my-color-badge" style="background:rgba(20,20,20,0.8); border:1px solid rgba(255,255,255,0.05); border-radius:4px; padding:8px 12px; font-weight:bold; font-size:11px; display:flex; align-items:center; flex-grow:1; justify-content:center; color:#aaa;">MODE OFFLINE</div>
         </div>
     </div>
 
-    <!-- WINDOW SELESAI GAME / FINAL STANDING PODIUM LUDO -->
     <div id="ludo-win-screen" class="game-screen" style="z-index: 3000;">
-        <div class="overlay-box" style="border-color: #fff; box-shadow: 0 0 30px rgba(255,255,255,0.4);">
-            <h1 class="game-h1" style="color: #fff; font-size:2.2rem; margin-bottom:5px; text-shadow: 0 0 15px gold;">PERTANDINGAN SELESAI</h1>
-            <p style="color: #ccc; font-family: 'Teko'; font-size: 20px; margin-bottom: 10px;">Hasil Final Standing Area 261:</p>
+        <div class="overlay-box">
+            <h1 class="game-h1" style="color: #eee; font-size:2.2rem; margin-bottom:5px;">PERTANDINGAN SELESAI</h1>
+            <p style="color: #888; font-family: 'Teko'; font-size: 20px; margin-bottom: 10px;">Hasil Final Standing Area 261:</p>
             
             <div class="leaderboard-list" id="ludo-podium-list"></div>
 
-            <button class="game-btn" style="width: 100%; border-color: #fff; color: #fff;" onclick="quitLudo()">KEMBALI KE HUB</button>
+            <button class="game-btn" style="width: 100%;" onclick="quitLudo()">KEMBALI KE HUB</button>
         </div>
     </div>
 
     <div id="ttt-hub-menu" class="game-screen">
-        <div class="overlay-box" style="border-color: #00d2ff; box-shadow: 0 0 15px rgba(0,210,255,0.3);">
-            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 10px; text-shadow: 0 0 8px currentColor;">TIC TAC TOE</h2>
-            <p style="font-family: 'Teko'; font-size: 18px; color: #ccc; margin-bottom: 15px;">Main Lokal atau Mabar Online.</p>
+        <div class="overlay-box">
+            <h2 style="color: #ccc; margin-top: 0; margin-bottom: 10px;">TIC TAC TOE</h2>
+            <p style="font-family: 'Teko'; font-size: 18px; color: #888; margin-bottom: 15px;">Main Lokal atau Mabar Online.</p>
             
             <button class="game-btn" style="width: 100%;" onclick="showScreen('ttt-offline-setup')">MABAR LOKAL / AI</button>
-            <hr style="border: 1px solid #333; margin: 15px 0;">
+            <hr style="border: 1px solid rgba(255,255,255,0.05); margin: 15px 0;">
             
-            <p style="font-size: 14px; color: #00d2ff; font-weight: bold; margin-bottom: 5px;">MODE ONLINE</p>
-            <input type="text" id="ttt-nickname" class="game-input-name" placeholder="NICKNAME LU" maxlength="15" style="width: 100%; border-color:#00d2ff;">
-            
-            <div class="frequent-users-label">SERING MAIN:</div>
-            <div class="frequent-container" id="ttt-frequent-chips"></div>
+            <p style="font-size: 14px; color: #ccc; font-weight: bold; margin-bottom: 5px;">MODE ONLINE</p>
+            <input type="text" id="ttt-nickname" class="game-input-name" placeholder="NICKNAME LU" maxlength="15" style="width: 100%;">
 
-            <button class="game-btn" style="width: 100%; border-color:#00d2ff; color:#00d2ff;" onclick="createTTTRoom()">BUAT ROOM</button>
+            <button class="game-btn" style="width: 100%;" onclick="createTTTRoom()">BUAT ROOM</button>
             <input type="text" id="ttt-room-code" class="game-input-name" placeholder="KODE ROOM" maxlength="10" style="width: 100%; margin-top:10px; margin-bottom:10px; letter-spacing:3px;">
             <button class="game-btn" style="width: 100%;" onclick="joinTTTRoom()">GABUNG ROOM</button>
             
-            <button class="game-btn" onclick="showScreen('main-hub-menu')" style="margin-top: 25px; width: 100%; border-color: #555; color: #888;">KEMBALI</button>
+            <button class="game-btn" onclick="showScreen('main-hub-menu')" style="margin-top: 25px; width: 100%; color: #888;">KEMBALI</button>
         </div>
     </div>
 
     <div id="ttt-offline-setup" class="game-screen">
         <div class="overlay-box">
-            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 10px; text-shadow: 0 0 5px currentColor;">MABAR LOKAL</h2>
+            <h2 style="color: #ccc; margin-top: 0; margin-bottom: 10px;">MABAR LOKAL</h2>
             
-            <div style="text-align: left; font-size: 12px; color: #fff; font-weight: bold; margin-bottom: 5px;">MODE PERMAINAN</div>
+            <div style="text-align: left; font-size: 12px; color: #ccc; font-weight: bold; margin-bottom: 5px;">MODE PERMAINAN</div>
             <select id="ttt-off-mode" class="ludo-dropdown">
                 <option value="ai">Single Player (Lawan AI)</option>
                 <option value="local">Multiplayer Local (1 HP)</option>
             </select>
 
-            <button class="game-btn" style="width: 100%; border-color:#00d2ff; color:#00d2ff; margin-top:15px;" onclick="startTTTOffline()">MULAI GAME</button>
-            <button class="game-btn" onclick="showScreen('ttt-hub-menu')" style="width: 100%; border-color: #555; color: #888;">KEMBALI</button>
+            <button class="game-btn" style="width: 100%; margin-top:15px;" onclick="startTTTOffline()">MULAI GAME</button>
+            <button class="game-btn" onclick="showScreen('ttt-hub-menu')" style="width: 100%; color: #888;">KEMBALI</button>
         </div>
     </div>
 
     <div id="ttt-lobby-screen" class="game-screen">
         <div class="overlay-box">
-            <h2 style="color: #00d2ff; margin-top: 0; margin-bottom: 5px; text-shadow: 0 0 5px currentColor;">LOBBY TTT</h2>
-            <h1 id="ttt-lobby-code" style="color:#fff; letter-spacing:5px; margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,255,255,0.8);">------</h1>
+            <h2 style="color: #ccc; margin-top: 0; margin-bottom: 5px;">LOBBY TTT</h2>
+            <h1 id="ttt-lobby-code" style="color:#eee; letter-spacing:5px; margin-bottom: 20px;">------</h1>
             
             <div class="lobby-player-list">
                 <div class="lobby-player-item"><span class="col-red">PLAYER X (HOST)</span> <span id="ttt-p-x">Menunggu...</span></div>
                 <div class="lobby-player-item"><span class="col-blue">PLAYER O</span> <span id="ttt-p-o">Menunggu...</span></div>
             </div>
 
-            <p id="ttt-lobby-msg" style="font-family: 'Teko'; font-size:18px; color:#aaa; margin-bottom:15px;">Menunggu Host memulai game...</p>
+            <p id="ttt-lobby-msg" style="font-family: 'Teko'; font-size:18px; color:#888; margin-bottom:15px;">Menunggu Host memulai game...</p>
             
-            <button id="btn-start-ttt" class="game-btn" style="width: 100%; border-color:#0f0; color:#0f0; display:none; box-shadow: 0 0 10px rgba(0,255,0,0.3);" onclick="startTTTOnlineGame()">START GAME</button>
-            <button class="game-btn" onclick="leaveTTTRoom()" style="margin-top: 15px; width: 100%; border-color: #ff4757; color: #ff4757;">KELUAR ROOM</button>
+            <button id="btn-start-ttt" class="game-btn" style="width: 100%; display:none;" onclick="startTTTOnlineGame()">START GAME</button>
+            <button class="game-btn" onclick="leaveTTTRoom()" style="margin-top: 15px; width: 100%; color: #d63031;">KELUAR ROOM</button>
         </div>
     </div>
 
     <div id="ttt-game-screen" class="game-screen">
         <div class="overlay-box" style="width: 95%; max-width: 400px; padding: 15px;">
-            <!-- LIVE DAFTAR PEMAIN TIC TAC TOE -->
             <div class="live-in-game-players" id="ttt-live-list" style="margin-bottom:10px;"></div>
 
             <div class="ttt-score">
-                <span id="ttt-name-x" style="color:#ff0055; text-shadow: 0 0 5px rgba(255,0,85,0.5);">P1 (X): 0</span>
-                <span id="ttt-name-o" style="color:#00d2ff; text-shadow: 0 0 5px rgba(0,210,255,0.5);">P2 (O): 0</span>
+                <span id="ttt-name-x" style="color:#ff4757;">P1 (X): 0</span>
+                <span id="ttt-name-o" style="color:#1e90ff;">P2 (O): 0</span>
             </div>
             
             <div class="ttt-turn-box ttt-turn-x" id="ttt-turn-display">GILIRAN: X</div>
@@ -402,29 +398,34 @@
             
             <div class="chat-box-system" style="max-width: 320px; margin: 0 auto;">
                 <div class="chat-controls">
-                    <!-- DROPDOWN TARGET CHAT TTT -->
-                    <select id="ttt-chat-target" class="chat-target-select" style="width:90px;">
-                        <option value="global">🌍 GLOBAL</option>
-                    </select>
-                    <input type="text" id="ttt-chat-input" class="chat-input-field" maxlength="50" placeholder="EJEK LAWAN (MAX 50 CH)..." onkeydown="if(event.key==='Enter') sendLiveChat('ttt')">
-                    <button class="chat-send-btn" onclick="sendLiveChat('ttt')">KIRIM</button>
+                    <select id="ttt-chat-target" class="chat-target-select" style="display: none;"><option value="global">🌍 GLOBAL</option></select>
+                    <!-- DROPDOWN SELECTION EMOJI -->
+                    <select id="ludo-emoji-input" class="emoji-select-field">
+                    <option value="😹">😹 KACUNG</option>
+                    <option value="🤫">🤫 HUST</option>
+                    <option value="🥱">🥱 EZZ BET WOK</option>
+                    <option value="🤡">🤡 BADUT TOLOL</option>
+                    <option value="👎">👎 BISA MAEN?</option>
+                    <option value="🤣">🤣 CAILAHH</option>
+                </select>
+                    <button class="chat-send-btn" onclick="sendLiveEmoji('ttt')">KIRIM</button>
                 </div>
             </div>
 
             <div style="margin-top: 10px; display:flex; gap:10px; justify-content: center;">
-                <button class="game-btn" style="font-size:11px; padding: 8px 12px; margin: 0; border-color:#555; color:#888; width:auto;" onclick="quitTTT()">KABUR</button>
-                <div id="ttt-my-badge" style="background:#0a0a0a; border:1px solid #444; border-radius:4px; padding:8px 12px; font-weight:bold; font-size:11px; color:#aaa; display:flex; align-items:center; flex-grow:1; justify-content:center; box-shadow: inset 0 0 5px #000;">MODE OFFLINE</div>
+                <button class="game-btn" style="font-size:11px; padding: 8px 12px; margin: 0; color:#888; width:auto;" onclick="quitTTT()">KABUR</button>
+                <div id="ttt-my-badge" style="background:rgba(20,20,20,0.8); border:1px solid rgba(255,255,255,0.05); border-radius:4px; padding:8px 12px; font-weight:bold; font-size:11px; color:#aaa; display:flex; align-items:center; flex-grow:1; justify-content:center;">MODE OFFLINE</div>
             </div>
         </div>
     </div>
 
     <div id="ttt-win-screen" class="game-screen" style="z-index: 3000;">
-        <div class="overlay-box" style="border-width: 2px;">
+        <div class="overlay-box">
             <h1 id="ttt-win-title" class="game-h1 win-burst" style="font-size:3rem; margin-bottom:10px;">X WINS!</h1>
-            <p style="color: #ccc; font-family: 'Teko'; font-size: 20px; margin-bottom: 20px;">Pertandingan Selesai.</p>
+            <p style="color: #888; font-family: 'Teko'; font-size: 20px; margin-bottom: 20px;">Pertandingan Selesai.</p>
             
-            <button id="btn-ttt-rematch" class="game-btn" style="width: 100%; border-color: #0f0; color: #0f0; display:none; box-shadow: 0 0 10px rgba(0,255,0,0.3);" onclick="rematchTTT()">REMATCH</button>
-            <button class="game-btn" style="width: 100%; margin-top: 10px; border-color: #ff4757; color: #ff4757;" onclick="quitTTT()">KEMBALI KE HUB</button>
+            <button id="btn-ttt-rematch" class="game-btn" style="width: 100%; display:none;" onclick="rematchTTT()">REMATCH</button>
+            <button class="game-btn" style="width: 100%; margin-top: 10px; color: #d63031;" onclick="quitTTT()">KEMBALI KE HUB</button>
         </div>
     </div>
   </div>
@@ -442,26 +443,23 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
-    // DATA USER YANG SERING MAIN
-    const frequentUsers = ["ARCELZ", "NANDO", "CLX", "GUEST_261", "X_CYBER"];
-
-    function initFrequentChips() {
-        ['ludo', 'ttt'].forEach(game => {
-            let container = document.getElementById(`${game}-frequent-chips`);
-            if(!container) return;
-            container.innerHTML = '';
-            frequentUsers.forEach(user => {
-                let chip = document.createElement('div');
-                chip.className = 'frequent-chip';
-                chip.innerText = user;
-                chip.onclick = () => {
-                    document.getElementById(`${game}-nickname`).value = user;
-                };
-                container.appendChild(chip);
-            });
-        });
+    // Objek Audio untuk dimainkan saat pion jalan
+    const moveSound = new Audio('click.mp3');
+    function playMoveSound() {
+        moveSound.currentTime = 0;
+        moveSound.play().catch(e => console.log("Browser mungkin memblokir autoplay audio", e));
     }
-    window.addEventListener('DOMContentLoaded', initFrequentChips);
+
+    // Load Nickname tersimpan dari LocalStorage
+    window.addEventListener('DOMContentLoaded', () => {
+        let savedName = localStorage.getItem('arcade_saved_nickname');
+        if (savedName) {
+            let ludoInput = document.getElementById('ludo-nickname');
+            let tttInput = document.getElementById('ttt-nickname');
+            if (ludoInput) ludoInput.value = savedName;
+            if (tttInput) tttInput.value = savedName;
+        }
+    });
 
     function showScreen(id) { 
         document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active')); 
@@ -471,6 +469,10 @@
     function checkNameAuth(inputId) {
         let nameInput = document.getElementById(inputId).value.trim();
         if(!nameInput) { alert("Buat NICKNAME dulu!"); return null; }
+        
+        // Simpan nickname secara lokal agar otomatis terisi next time
+        localStorage.setItem('arcade_saved_nickname', nameInput);
+        
         if (nameInput.toUpperCase() === "NANDO") return "[NN] NANDO";
         return nameInput.toUpperCase();
     }
@@ -478,34 +480,37 @@
     function generateRoomCode() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
 
     let lastTauntId = null;
-    let chatCooldown = 0;
 
-    // FITUR CHAT TARGET GLOBAL DAN BISIK-BISIK 5 DETIK TANPA BUBBLE
-    function sendLiveChat(game) {
+    // FITUR UTAMA: LIVE GLOBAL EMOJI BURST
+    function sendLiveEmoji(game) {
         let now = Date.now();
-        if(now - chatCooldown < 1500) { return; }
+        let lastSent = localStorage.getItem('emoji_cooldown_' + game) || 0;
+        let diff = now - lastSent;
         
-        let inputEl = document.getElementById(game + '-chat-input');
-        let targetEl = document.getElementById(game + '-chat-target');
-        let text = inputEl.value.trim();
-        if(!text) return;
-
-        chatCooldown = now;
+        if (diff < 300000) {
+            let sisaDetik = Math.ceil((300000 - diff) / 1000);
+            let sisaMenit = Math.floor(sisaDetik / 60);
+            let detikSisa = sisaDetik % 60;
+            alert(`SABAR! Cooldown Emojimu aktif. Tunggu ${sisaMenit}m ${detikSisa}s lagi.`);
+            return;
+        }
+        
+        let selectEl = document.getElementById(game + '-emoji-input');
+        let chosenEmoji = selectEl.value;
         let senderName = myLudoName || "GUEST";
-        let targetMode = targetEl.value; 
         
         let chatPayload = {
             sender: senderName,
-            txt: text,
-            target: targetMode, // 'global' atau nama pemain spesifik
+            txt: chosenEmoji,
+            target: 'global',
             id: Math.random().toString(36).substr(2, 9)
         };
         
         lastTauntId = chatPayload.id; 
+        localStorage.setItem('emoji_cooldown_' + game, now); 
         
-        // Render lokal instan jika offline
         if((game === 'ludo' && !isLudoOnline) || (game === 'ttt' && !tttIsOnline)) {
-            triggerGiantMarquee(chatPayload.sender, chatPayload.txt, chatPayload.target);
+            triggerCyberEmojiBurst(chatPayload.sender, chatPayload.txt);
         } else {
             if(game === 'ludo' && currentRoomCode) {
                 database.ref(`ludo_rooms/${currentRoomCode}/taunt`).set(chatPayload);
@@ -513,48 +518,39 @@
                 database.ref(`ttt_rooms/${tttRoomCode}/taunt`).set(chatPayload);
             }
         }
-        inputEl.value = '';
     }
 
-    function triggerGiantMarquee(sender, text, target) {
+    // ANIMASI BURST POP-UP (HANYA EMOJI MURNI)
+    function triggerCyberEmojiBurst(sender, emoji) {
         let container = document.getElementById('giant-marquee');
-        let el = document.createElement('div');
-        el.className = 'giant-msg-text';
+        let wrapper = document.createElement('div');
+        wrapper.className = 'cyber-emoji-wrapper';
         
-        if (target !== 'global') {
-            el.innerHTML = `<span style="color:#00d2ff;">[BISIK ➡️ ${target}]</span> <br> ${sender}: "${text}"`;
-            el.style.borderTopColor = '#00d2ff';
-            el.style.borderBottomColor = '#00d2ff';
-            el.style.textShadow = '0 0 15px #00d2ff';
-        } else {
-            el.innerHTML = `<span style="color:#ff4757;">[GLOBAL]</span> ${sender}: "${text}"`;
-        }
+        // Hanya nampilin Emoji tanpa kotak / text sender
+        wrapper.innerHTML = `<span class="cyber-emoji-display">${emoji}</span>`;
         
-        container.appendChild(el);
-        setTimeout(() => { el.remove(); }, 5000);
+        container.appendChild(wrapper);
+        setTimeout(() => { wrapper.remove(); }, 3000);
     }
 
-    // UPDATE OPTIONS TARGET DROPDOWN CHAT & LIST DAFTAR PEMAIN DI LAYAR GAME
     function updateChatTargetsAndLiveList(game, playerMap) {
         let selectEl = document.getElementById(`${game}-chat-target`);
         let listEl = document.getElementById(`${game}-live-list`);
         if(!selectEl || !listEl) return;
 
         let savedValue = selectEl.value;
-        selectEl.innerHTML = '<option value="global">🌍 GLOBAL</option>';
+        selectEl.innerHTML = '<option value="global">GLOBAL</option>';
         listEl.innerHTML = '';
 
         Object.keys(playerMap).forEach(key => {
             let pName = playerMap[key];
             if(pName && pName !== 'Menunggu...' && pName !== 'Kosong (Skip)' && pName !== 'none') {
-                // Tambah target dropdown chat jika bukan diri sendiri
                 if(pName !== (myLudoName || "GUEST")) {
                     let opt = document.createElement('option');
                     opt.value = pName;
-                    opt.innerText = `🔒 ${pName}`;
+                    opt.innerText = ` ${pName}`;
                     selectEl.appendChild(opt);
                 }
-                // Tambah ke list visual daftar pemain aktif berjalan
                 let badge = document.createElement('span');
                 badge.innerText = `• ${pName} (${key.toUpperCase()})`;
                 badge.className = `col-${key === 'x'||key==='o' ? (key==='x'?'red':'blue') : key}`;
@@ -618,11 +614,10 @@
         let badge = document.getElementById('ttt-my-badge');
         if (tttIsOnline) {
             badge.innerText = `WARNA LU: ${myTTTMarker}`;
-            badge.style.color = myTTTMarker === 'X' ? '#ff0055' : '#00d2ff';
-            badge.style.borderColor = myTTTMarker === 'X' ? '#ff0055' : '#00d2ff';
+            badge.style.color = myTTTMarker === 'X' ? '#ff4757' : '#1e90ff';
         } else {
             badge.innerText = tttMode === 'ai' ? `MODE: VS AI` : `MODE: MABAR LOKAL`;
-            badge.style.color = '#aaa'; badge.style.borderColor = '#555';
+            badge.style.color = '#aaa';
         }
     }
 
@@ -703,8 +698,8 @@
         let title = document.getElementById('ttt-win-title');
         title.classList.remove('win-burst'); void title.offsetWidth; title.classList.add('win-burst');
         
-        if(winner === 'X') { tttScoreX++; title.innerText = `${tttPlayerXName} WINS!`; title.style.color = '#ff0055';}
-        else if(winner === 'O') { tttScoreO++; title.innerText = `${tttPlayerOName} WINS!`; title.style.color = '#00d2ff';}
+        if(winner === 'X') { tttScoreX++; title.innerText = `${tttPlayerXName} WINS!`; title.style.color = '#ff4757';}
+        else if(winner === 'O') { tttScoreO++; title.innerText = `${tttPlayerOName} WINS!`; title.style.color = '#1e90ff';}
         else { title.innerText = "DRAW!"; title.style.color = '#aaa';}
         
         document.getElementById('btn-ttt-rematch').style.display = 'block';
@@ -715,8 +710,8 @@
         let title = document.getElementById('ttt-win-title');
         title.classList.remove('win-burst'); void title.offsetWidth; title.classList.add('win-burst');
         
-        if(winner === 'X') { title.innerText = `${tttPlayerXName} WINS!`; title.style.color = '#ff0055'; if(isHost) database.ref(`ttt_rooms/${tttRoomCode}/scores/X`).set(tttScoreX + 1);}
-        else if(winner === 'O') { title.innerText = `${tttPlayerOName} WINS!`; title.style.color = '#00d2ff'; if(isHost) database.ref(`ttt_rooms/${tttRoomCode}/scores/O`).set(tttScoreO + 1);}
+        if(winner === 'X') { title.innerText = `${tttPlayerXName} WINS!`; title.style.color = '#ff4757'; if(isHost) database.ref(`ttt_rooms/${tttRoomCode}/scores/X`).set(tttScoreX + 1);}
+        else if(winner === 'O') { title.innerText = `${tttPlayerOName} WINS!`; title.style.color = '#1e90ff'; if(isHost) database.ref(`ttt_rooms/${tttRoomCode}/scores/O`).set(tttScoreO + 1);}
         else { title.innerText = "DRAW!"; title.style.color = '#aaa';}
         
         let rematchBtn = document.getElementById('btn-ttt-rematch');
@@ -786,10 +781,7 @@
             document.getElementById('ttt-p-o').innerText = tttPlayerOName;
             
             if(data.taunt && data.taunt.id !== lastTauntId) { 
-                let isMeTarget = data.taunt.target === 'global' || data.taunt.target === myLudoName || data.taunt.sender === myLudoName;
-                if(isMeTarget) {
-                    triggerGiantMarquee(data.taunt.sender, data.taunt.txt, data.taunt.target);
-                }
+                triggerCyberEmojiBurst(data.taunt.sender, data.taunt.txt);
                 lastTauntId = data.taunt.id; 
             }
 
@@ -827,12 +819,11 @@
     let ludoGameState = {}; let ludoPlayers = {}; let ludoPlayerTypes = {}; 
     let ludoColorRealNames = { red: 'RED', blue: 'BLUE', green: 'GREEN', skull: 'ABU' };
 
-    // Array Penyimpan Urutan Juara Pemenang Ludo
     let ludoWinnersPodium = [];
 
     const colorOrder = ['red', 'blue', 'green', 'skull'];
     const colorNames = { red: 'MERAH', blue: 'BIRU', green: 'HIJAU', skull: 'ABU' };
-    const colorHex = { red: '#ff4757', blue: '#1e90ff', green: '#2ed573', skull: '#a4b0be' };
+    const colorHex = { red: '#d63031', blue: '#0984e3', green: '#00b894', skull: '#636e72' };
 
     const ludoPathCoords = [
         {x:6,y:13},{x:6,y:12},{x:6,y:11},{x:6,y:10},{x:6,y:9}, {x:5,y:8},{x:4,y:8},{x:3,y:8},{x:2,y:8},{x:1,y:8},{x:0,y:8}, {x:0,y:7},{x:0,y:6}, 
@@ -935,10 +926,7 @@
             document.getElementById('lobby-p-skull').innerText = ludoColorRealNames.skull;
             
             if(data.taunt && data.taunt.id !== lastTauntId) { 
-                let isMeTarget = data.taunt.target === 'global' || data.taunt.target === myLudoName || data.taunt.sender === myLudoName;
-                if(isMeTarget) {
-                    triggerGiantMarquee(data.taunt.sender, data.taunt.txt, data.taunt.target);
-                }
+                triggerCyberEmojiBurst(data.taunt.sender, data.taunt.txt);
                 lastTauntId = data.taunt.id; 
             }
 
@@ -950,9 +938,7 @@
                 }
             }
 
-            if(data.podium) {
-                ludoWinnersPodium = JSON.parse(data.podium);
-            }
+            if(data.podium) { ludoWinnersPodium = JSON.parse(data.podium); }
 
             if(data.status === 'playing' && document.getElementById('ludo-lobby-screen').classList.contains('active')) {
                 initLudoBoardHTML(); ludoPlayers = data.board; ludoGameState = data.state;
@@ -1132,7 +1118,6 @@
         executeLudoMove(color, id);
     }
 
-    // GAMEPLAY BERLANJUT HINGGA MELEWATI JUARA 1, 2, 3, DAN LOSE KELUAR
     async function executeLudoMove(color, id) {
         ludoGameState.moving = true; document.querySelectorAll('.token-active').forEach(e => e.classList.remove('token-active'));
         if(isLudoOnline) database.ref(`ludo_rooms/${currentRoomCode}/state`).update({ moving: true });
@@ -1141,11 +1126,13 @@
 
         if (t.status === 'base') {
             t.status = 'perimeter'; t.pos = ludoPlayers[color].startIdx; el.classList.add('anim-spawn'); renderLudoTokens();
+            playMoveSound();
             await new Promise(r => setTimeout(r, 400)); el.classList.remove('anim-spawn');
         } else {
             for (let i = 0; i < steps; i++) {
                 if (t.status === 'perimeter') { if (t.pos === ludoPlayers[color].endIdx) { t.status = 'home'; t.pos = 0; } else { t.pos = (t.pos + 1) % 52; } } 
                 else if (t.status === 'home') { t.pos++; if (t.pos === 5) t.status = 'finish'; }
+                playMoveSound(); 
                 renderLudoTokens(); 
                 await new Promise(r => setTimeout(r, 200)); if (t.status === 'finish') { isFinish = true; break; }
             }
@@ -1167,21 +1154,13 @@
 
         let finishedCount = ludoPlayers[color].tokens.filter(tk => tk.status === 'finish').length; 
         
-        // Cek jika warna ini baru saja menyelesaikan seluruh pionnya
-        if (finishedCount === 4 && !ludoWinnersPodium.includes(color)) {
-            ludoWinnersPodium.push(color);
-        }
+        if (finishedCount === 4 && !ludoWinnersPodium.includes(color)) { ludoWinnersPodium.push(color); }
 
-        // Hitung total pemain aktif saat ini (bukan none)
         let totalActivePlayers = Object.keys(ludoPlayerTypes).filter(c => ludoPlayerTypes[c] !== 'none');
         
-        // Evaluasi penyelesaian game ludo
         let gameIsFullyOver = false;
         if(ludoWinnersPodium.length >= totalActivePlayers.length - 1) {
-            // Masukkan sisa sisa pemain yang belum finish ke podium terbawah sebagai Lose
-            totalActivePlayers.forEach(c => {
-                if(!ludoWinnersPodium.includes(c)) ludoWinnersPodium.push(c);
-            });
+            totalActivePlayers.forEach(c => { if(!ludoWinnersPodium.includes(c)) ludoWinnersPodium.push(c); });
             gameIsFullyOver = true;
         }
 
@@ -1192,7 +1171,7 @@
             
             let nextTurn = color; 
             if (gameIsFullyOver) {
-                updates[`ludo_rooms/${currentRoomCode}/winner`] = ludoWinnersPodium[0]; // Juara 1 default
+                updates[`ludo_rooms/${currentRoomCode}/winner`] = ludoWinnersPodium[0];
             } else {
                 nextTurn = getNextValidLudoTurn(color);
                 updates[`ludo_rooms/${currentRoomCode}/state/turn`] = nextTurn;
@@ -1206,7 +1185,6 @@
             ludoGameState.moving = false;
             if (isFinish || gotKill || steps === 6) { 
                 ludoGameState.hasRolled = false; 
-                // Jika player barusan sudah finish 4 pion, turn langsung oper ke berikutnya
                 if(finishedCount === 4) ludoGameState.turn = getNextValidLudoTurn(color);
                 updateLudoUI(); 
                 if(ludoPlayerTypes[ludoGameState.turn] === 'ai') setTimeout(rollLudoDice, 600); 
@@ -1220,7 +1198,6 @@
         let idx = colorOrder.indexOf(currentColor); 
         for(let i=1; i<=4; i++) { 
             let next = colorOrder[(idx + i) % 4]; 
-            // Valid jika bukan 'none' DAN belum menyelesaikan game (pion finish < 4)
             if(ludoPlayerTypes[next] !== 'none' && !ludoWinnersPodium.includes(next)) return next; 
         } 
         return currentColor;
@@ -1238,7 +1215,6 @@
         if(movable.length > 0) { let baseToken = movable.find(id => ludoPlayers[ludoGameState.turn].tokens.find(t => t.id === id).status === 'base'); let chosen = baseToken || movable[Math.floor(Math.random() * movable.length)]; setTimeout(() => executeLudoMove(ludoGameState.turn, chosen), 400); }
     }
 
-    // PEMBUATAN DAFTAR URUTAN KLASEMEN JUARA AKHIR (FINAL STANDING)
     function buildAndShowPodiumWindow() {
         let podiumContainer = document.getElementById('ludo-podium-list');
         podiumContainer.innerHTML = '';
