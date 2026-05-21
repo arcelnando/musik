@@ -86,7 +86,8 @@
     .snl-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); z-index: 2;}
     .snl-cell { display: flex; justify-content: flex-start; align-items: flex-start; padding: 2px; font-size: 10px; font-weight: bold; color: transparent; box-sizing: border-box;}
     #snl-svg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
-    .snl-pawn { position: absolute; width: 6%; height: 6%; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.8); z-index: 10; transition: left 0.3s linear, top 0.3s linear, transform 0.3s ease-in-out; display: none; }
+    #snl-token-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+    .snl-pawn { position: absolute; width: 6%; height: 6%; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.8); transition: left 0.3s linear, top 0.3s linear, transform 0.3s ease-in-out; display: none; }
     
     /* TTT STYLES */
     .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: 300px; height: 300px; margin: 20px auto; }
@@ -197,7 +198,6 @@
             <select id="snl-off-blue" class="ludo-dropdown"><option value="human">P2 (BIRU) - Pemain</option><option value="ai">P2 - Bot AI</option><option value="none">Kosong</option></select>
             <select id="snl-off-green" class="ludo-dropdown"><option value="ai">P3 (HIJAU) - Bot AI</option><option value="human">P3 - Pemain</option><option value="none">Kosong</option></select>
             <select id="snl-off-yellow" class="ludo-dropdown"><option value="none">P4 (KUNING) - Kosong</option><option value="ai">P4 - Bot AI</option><option value="human">P4 - Pemain</option></select>
-            <!-- Nambah P5 Warna Ungu -->
             <select id="snl-off-purple" class="ludo-dropdown"><option value="none">P5 (UNGU) - Kosong</option><option value="ai">P5 - Bot AI</option><option value="human">P5 - Pemain</option></select>
             
             <button class="game-btn" style="width: 100%; border-color:#2ed573; color:#2ed573; margin-top:15px;" onclick="startSnLOffline()">MULAI GAME</button>
@@ -214,6 +214,7 @@
             <div class="snl-board-container" id="snl-main-container">
                 <div class="snl-grid" id="snl-board"></div>
                 <svg id="snl-svg-layer"></svg>
+                <div id="snl-token-layer"></div>
             </div>
         </div>
         <div style="margin-top: 10px; display:flex; gap:10px; justify-content: center; width:100%; max-width:450px;">
@@ -270,10 +271,9 @@
     // ==========================================================================
     // UNIVERSAL SERVER / MATCHMAKING LOGIC
     // ==========================================================================
-    let activeGame = null; // 'ludo', 'snl', 'ttt'
+    let activeGame = null; 
     let isOnline = false; let roomCode = null; let myColor = null; let isHost = false; let roomRef = null;
 
-    // MAX SNL JADI 5 & NAMBAH WARNA UNGU
     const gameConfigs = {
         ludo: { title: "LUDO WARS", color: "#ff4757", max: 4, colors: ['red','blue','green','skull'], colorNames: {red:'MERAH', blue:'BIRU', green:'HIJAU', skull:'ABU'}, hex: {red:'#ff4757', blue:'#1e90ff', green:'#2ed573', skull:'#a4b0be'} },
         snl: { title: "ULAR TANGGA", color: "#2ed573", max: 5, colors: ['red','blue','green','yellow','purple'], colorNames: {red:'MERAH', blue:'BIRU', green:'HIJAU', yellow:'KUNING', purple:'UNGU'}, hex: {red:'#ff6b6b', blue:'#4facfe', green:'#55efc4', yellow:'#fdcb6e', purple:'#9b59b6'} },
@@ -288,7 +288,7 @@
         document.getElementById('hub-title').style.color = cnf.color;
         document.getElementById('hub-box').style.borderColor = cnf.color;
         
-        let extraDesc = (game === 'snl') ? "<br>Wajib dapet dadu 1 buat masuk start!" : "";
+        let extraDesc = (game === 'snl') ? "<br>" : "";
         document.getElementById('hub-desc').innerHTML = `Max ${cnf.max} Pemain. Min 2 buat mulai.${extraDesc}`;
         showScreen('universal-hub');
     }
@@ -402,7 +402,7 @@
     }
 
     // ==========================================================================
-    // ULAR TANGGA ENGINE (10 Layouts + Start Pos 0 Rule)
+    // ULAR TANGGA ENGINE
     // ==========================================================================
     const snlLayouts = [
         { 4:14, 9:31, 20:38, 28:84, 40:59, 51:67, 63:81, 71:91, 17:7, 54:34, 62:19, 64:60, 87:24, 93:73, 95:75, 99:78 },
@@ -437,7 +437,6 @@
     function drawVisualSnL() {
         const svg = document.getElementById('snl-svg-layer'); 
         
-        // Taring dihapus, warna naga/viper lebih gelap, mata tajam bersinar merah
         svg.innerHTML = `
         <defs>
             <filter id="snlShadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -468,7 +467,6 @@
             let isLadder = eNum > sNum;
 
             if (isLadder) {
-                // TANGGA SILVER METALIK 3D
                 let dx = ex - sx; let dy = ey - sy; let len = Math.sqrt(dx*dx + dy*dy);
                 let nx = (-dy/len) * (cw*0.12); let ny = (dx/len) * (cw*0.12); 
                 
@@ -486,7 +484,6 @@
                     svg.innerHTML += `<line x1="${rx+nx}" y1="${ry+ny}" x2="${rx-nx}" y2="${ry-ny}" stroke="url(#silverGrad)" stroke-width="4" />`;
                 }
             } else {
-                // ULAR VIPER SEREM BADASS (Tanpa Taring)
                 let hx = sx, hy = sy, tx = ex, ty = ey; 
                 let mx = (hx+tx)/2; let my = (hy+ty)/2;
                 let dx = tx - hx; let dy = ty - hy;
@@ -501,7 +498,6 @@
 
                 let angle = Math.atan2(hy - (my+ny), hx - (mx+nx)) * (180 / Math.PI);
                 
-                // Kepala diubah runcing ala naga/viper, mata tajam
                 let headPath = `<path d="M 0 -30 L 12 -10 L 6 8 L 0 12 L -6 8 L -12 -10 Z" fill="url(#snakeGrad)" stroke="#ff0033" stroke-width="1" filter="url(#snlShadow)"/>`;
                 let eye1 = `<path d="M -8 -12 L -3 -16 L -5 -6 Z" fill="#ff0000" filter="url(#eyeGlow)"/>`;
                 let eye2 = `<path d="M 8 -12 L 3 -16 L 5 -6 Z" fill="#ff0000" filter="url(#eyeGlow)"/>`;
@@ -515,34 +511,35 @@
 
     window.addEventListener('resize', () => { if(document.getElementById('snl-game-screen').classList.contains('active')) drawVisualSnL(); });
 
-    // FUNGSI RENDER PION (NAMPILIN PION KETAHAN & MEMBESAR)
+    // FUNGSI RENDER PION (FIX KOORDINAT BIAR PAS!)
     function renderSnLPawns() {
-        const container = document.getElementById('snl-main-container');
-        document.querySelectorAll('.snl-pawn').forEach(e => e.remove());
+        const container = document.getElementById('snl-token-layer');
+        if(!container) return;
+        container.innerHTML = ''; 
         
         gameConfigs.snl.colors.forEach((col, i) => {
             if(snlTypes[col] !== 'none' && snlPlayers[col]) {
                 let p = document.createElement('div'); p.className = `snl-pawn snl-p-${col}`; p.id = `snl-pawn-${col}`;
-                p.style.backgroundColor = gameConfigs.snl.hex[col]; // Tambah base color biar jelas
+                p.style.backgroundColor = gameConfigs.snl.hex[col]; 
+                
+                // Set offset spesifik biar pion gak saling nindih persis
+                const offsetsX = [-8, 8, -8, 8, 0];
+                const offsetsY = [-8, -8, 8, 8, 0];
+                let oX = offsetsX[i] || 0;
+                let oY = offsetsY[i] || 0;
                 
                 if(snlPlayers[col].pos === 0) {
-                    // PION KETAHAN / NGUMPUL DI LUAR START (Kecil, transparan)
-                    let offsetX = (i - 2) * 12; let offsetY = (i - 2) * 6;
-                    p.style.left = `calc(5% + ${offsetX}px)`; 
-                    p.style.top = `calc(95% + ${offsetY}px)`;
-                    p.style.transform = 'translate(-50%, -50%) scale(0.6)';
-                    p.style.opacity = '0.4';
-                    p.style.zIndex = 5;
+                    p.style.left = `calc(8% + ${oX * 1.5}px)`; 
+                    p.style.top = `calc(92% + ${oY * 1.5}px)`;
+                    p.style.transform = 'translate(-50%, -50%) scale(0.7)';
+                    p.style.opacity = '0.5';
                     p.style.display = 'block'; 
                 } else {
-                    // PION AKTIF / MEMBESAR (Scale 1.2, Solid)
                     let coords = getSnLCellCoords(snlPlayers[col].pos);
-                    let offsetX = (i - 2) * 5; let offsetY = (i - 2) * 5;
-                    p.style.left = `calc(${coords.c * 10 + 5}% + ${offsetX}px)`; 
-                    p.style.top = `calc(${coords.r * 10 + 5}% + ${offsetY}px)`;
-                    p.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                    p.style.left = `calc(${coords.c * 10 + 5}% + ${oX}px)`; 
+                    p.style.top = `calc(${coords.r * 10 + 5}% + ${oY}px)`;
+                    p.style.transform = 'translate(-50%, -50%) scale(1.15)';
                     p.style.opacity = '1';
-                    p.style.zIndex = 15;
                     p.style.display = 'block'; 
                 }
                 container.appendChild(p);
@@ -628,23 +625,25 @@
         let curPos = snlPlayers[color].pos; 
         let tgtPos;
 
-        // RULE: Pos 0 ketahan, dapet 1 buat buka gembok dan membesar!
         if (curPos === 0) {
             if (dice === 1) {
                 document.getElementById('snl-log-msg').innerText = "BANGKIT! Ready jalan!";
                 tgtPos = 1;
-                // Move visually to pos 1 and end turn automatically (di lemparan berikutnya baru jalan)
                 snlPlayers[color].pos = 1; renderSnLPawns();
                 new Audio('click.mp3').play().catch(e => {});
-                await new Promise(r => setTimeout(r, 600)); // Jedah bentar buat liatin animasinya
+                await new Promise(r => setTimeout(r, 600)); 
+                
+                // FIX ONLINE SYNC YANG BIKIN PION RESET KE POS 0 DI SINI!
+                if(isOnline && myColor === color) {
+                    database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]: snlPlayers[color]});
+                }
                 
                 passSnLNextTurn(color);
                 return;
             } else {
                 document.getElementById('snl-log-msg').innerText = "Gagal! Harus angka 1!";
-                // PION SHAKE (Bergetar karena ketahan)
                 let p = document.getElementById(`snl-pawn-${color}`);
-                if(p) p.animate([{transform: 'translate(-50%, -50%) scale(0.6) translateX(-10px)'}, {transform: 'translate(-50%, -50%) scale(0.6) translateX(10px)'}, {transform: 'translate(-50%, -50%) scale(0.6) translateX(0)'}], {duration: 150, iterations: 2});
+                if(p) p.animate([{transform: 'translate(-50%, -50%) scale(0.7) translateX(-10px)'}, {transform: 'translate(-50%, -50%) scale(0.7) translateX(10px)'}, {transform: 'translate(-50%, -50%) scale(0.7) translateX(0)'}], {duration: 150, iterations: 2});
                 
                 setTimeout(() => { passSnLNextTurn(color); }, 1000);
                 return;
@@ -676,7 +675,6 @@
         }
 
         if (dice === 6 || isWin) { 
-            // Dapet 6 = Lempar lagi
             if (isOnline) {
                 if(myColor === color) database.ref().update({ [`snl_rooms/${roomCode}/board/${color}`]: snlPlayers[color], [`snl_rooms/${roomCode}/state/winners`]: snlGameState.winners, [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false });
             } else {
@@ -707,7 +705,7 @@
     }
 
     // ==========================================================================
-    // LUDO ENGINE & TTT ENGINE (Tidak Berubah - Skip for brevity)
+    // LUDO ENGINE
     // ==========================================================================
     let ludoGameState = {}; let ludoPlayers = {}; let ludoTypes = {}; let ludoNames = {};
     const ludoPathCoords = [ {x:6,y:13},{x:6,y:12},{x:6,y:11},{x:6,y:10},{x:6,y:9}, {x:5,y:8},{x:4,y:8},{x:3,y:8},{x:2,y:8},{x:1,y:8},{x:0,y:8}, {x:0,y:7},{x:0,y:6}, {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6}, {x:6,y:5},{x:6,y:4},{x:6,y:3},{x:6,y:2},{x:6,y:1},{x:6,y:0}, {x:7,y:0},{x:8,y:0}, {x:8,y:1},{x:8,y:2},{x:8,y:3},{x:8,y:4},{x:8,y:5}, {x:9,y:6},{x:10,y:6},{x:11,y:6},{x:12,y:6},{x:13,y:6},{x:14,y:6}, {x:14,y:7},{x:14,y:8}, {x:13,y:8},{x:12,y:8},{x:11,y:8},{x:10,y:8},{x:9,y:8}, {x:8,y:9},{x:8,y:10},{x:8,y:11},{x:8,y:12},{x:8,y:13},{x:8,y:14}, {x:7,y:14},{x:6,y:14} ];
@@ -882,6 +880,9 @@
         }
     }
 
+    // ==========================================================================
+    // TTT ENGINE
+    // ==========================================================================
     let tttBoard = ['','','','','','','','','']; let tttTurn = 'X'; let tttMode = 'local'; let tttScores = {X:0, O:0};
     const tttPatterns = [[0,1,2],[3,4,5],[6,7,8], [0,3,6],[1,4,7],[2,5,8], [0,4,8],[2,4,6]];
 
