@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>261 AREA - ARCADE SERVER</title>
+  <title>261 ARCADE</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,6 +69,7 @@
     .token.blue { background-image: url('biru.png'); background-color: #1e90ff; border-radius: 50%; border: 2px solid #fff;}
     .token.green { background-image: url('hijau.png'); background-color: #2ed573; border-radius: 50%; border: 2px solid #fff;}
     .token.skull { background-image: url('abu.png'); background-color: #a4b0be; border-radius: 50%; border: 2px solid #fff;}
+    .token.yellow { background-image: url('kuning.png'); background-color: #fdcb6e; border-radius: 50%; border: 2px solid #fff;}
     .token.token-active { animation: bounceSolid 0.6s infinite alternate; z-index: 20; filter: drop-shadow(0px 0px 8px #ffeb3b); }
     @keyframes bounceSolid { 0% { transform: scale(1) translateY(0); } 100% { transform: scale(1.1) translateY(-8px); } }
 
@@ -284,7 +285,9 @@
         document.getElementById('hub-title').innerText = cnf.title;
         document.getElementById('hub-title').style.color = cnf.color;
         document.getElementById('hub-box').style.borderColor = cnf.color;
-        document.getElementById('hub-desc').innerText = `Max ${cnf.max} Pemain. Min 2 buat mulai.`;
+        
+        let extraDesc = (game === 'snl') ? "<br>Wajib dapet dadu 1 buat keluar base!" : "";
+        document.getElementById('hub-desc').innerHTML = `Max ${cnf.max} Pemain. Min 2 buat mulai.${extraDesc}`;
         showScreen('universal-hub');
     }
 
@@ -317,7 +320,7 @@
         let initialData = { status: 'waiting', type: roomType, host: myGlobalName, players: { [myColor]: myGlobalName } };
         
         if(activeGame === 'ludo') { initialData.state = { turn: 'red', dice: 0, hasRolled: false, moving: false, winners: [] }; initialData.board = getLudoDefault(); }
-        if(activeGame === 'snl') { initialData.state = { turn: 'red', dice: 0, hasRolled: false, moving: false, winners: [] }; initialData.board = { red: {pos: 1} }; initialData.layoutIdx = Math.floor(Math.random() * snlLayouts.length); }
+        if(activeGame === 'snl') { initialData.state = { turn: 'red', dice: 0, hasRolled: false, moving: false, winners: [] }; initialData.board = { red: {pos: 0} }; initialData.layoutIdx = Math.floor(Math.random() * snlLayouts.length); }
         if(activeGame === 'ttt') { initialData.board = ['','','','','','','','','']; initialData.turn = 'X'; initialData.scores = {X:0, O:0}; }
 
         database.ref(`${activeGame}_rooms/${roomCode}`).set(initialData).then(() => { enterLobbyUI(); });
@@ -334,7 +337,7 @@
 
             roomCode = code; isHost = false; isOnline = true;
             let updates = {}; updates[`${activeGame}_rooms/${roomCode}/players/${myColor}`] = myGlobalName;
-            if(activeGame === 'snl') updates[`${activeGame}_rooms/${roomCode}/board/${myColor}`] = {pos: 1};
+            if(activeGame === 'snl') updates[`${activeGame}_rooms/${roomCode}/board/${myColor}`] = {pos: 0};
             database.ref().update(updates).then(() => { enterLobbyUI(); });
         });
     }
@@ -397,14 +400,19 @@
     }
 
     // ==========================================================================
-    // ULAR TANGGA ENGINE (Opsi 2: 5 PNG Berbeda + Visual Scary/Silver SVG)
+    // ULAR TANGGA ENGINE (10 Layouts + Start Pos 0 Rule)
     // ==========================================================================
     const snlLayouts = [
         { 4:14, 9:31, 20:38, 28:84, 40:59, 51:67, 63:81, 71:91, 17:7, 54:34, 62:19, 64:60, 87:24, 93:73, 95:75, 99:78 },
         { 2:23, 8:34, 20:77, 32:68, 41:79, 74:88, 82:98, 29:9, 38:15, 47:26, 53:33, 62:37, 86:54, 92:70, 97:25 },
         { 5:25, 10:29, 22:41, 28:55, 44:95, 70:89, 31:14, 37:17, 73:53, 89:50, 92:35, 95:24, 98:7, 99:12 },
         { 3:22, 11:26, 20:29, 36:55, 56:77, 68:89, 75:96, 80:99, 19:5, 47:15, 62:38, 74:53, 91:52 },
-        { 6:16, 14:32, 27:56, 41:85, 69:91, 77:96, 39:3, 51:10, 55:26, 82:43, 93:73, 98:24 }
+        { 6:16, 14:32, 27:56, 41:85, 69:91, 77:96, 39:3, 51:10, 55:26, 82:43, 93:73, 98:24 },
+        { 3:19, 7:25, 12:48, 22:58, 33:69, 44:83, 56:94, 28:11, 49:21, 62:35, 74:51, 88:65, 96:72 },
+        { 5:26, 14:38, 21:55, 34:67, 48:86, 61:95, 39:15, 52:29, 68:45, 84:59, 93:71, 98:64 },
+        { 8:31, 18:42, 27:54, 40:73, 58:85, 75:97, 24:6, 45:22, 65:36, 78:51, 89:63, 94:68 },
+        { 2:20, 11:34, 25:57, 36:62, 50:88, 67:92, 32:9, 46:16, 59:33, 76:52, 85:60, 97:79 },
+        { 4:24, 15:45, 23:59, 35:71, 55:82, 66:96, 29:10, 41:18, 64:43, 79:53, 91:69, 95:74 }
     ];
     let snlGameState = {}; let snlPlayers = {}; let snlTypes = {}; let snlNames = {}; let snlActiveLayout = {};
     
@@ -424,7 +432,7 @@
         }
     }
 
-    // FUNGSI UTAMA MENGGAMBAR TANGGA SILVER & ULAR SEREM
+    // FUNGSI UTAMA MENGGAMBAR TANGGA SILVER & ULAR SEREM (Viper Style)
     function drawVisualSnL() {
         const svg = document.getElementById('snl-svg-layer'); 
         
@@ -434,7 +442,7 @@
                 <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000" flood-opacity="0.85"/>
             </filter>
             <filter id="eyeGlow">
-                <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#ff0000" flood-opacity="1"/>
+                <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#ff0000" flood-opacity="1"/>
             </filter>
             <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#fdfbfb" />
@@ -442,9 +450,9 @@
                 <stop offset="100%" stop-color="#606c88" />
             </linearGradient>
             <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#4a0e0e" />
-                <stop offset="50%" stop-color="#2a0808" />
-                <stop offset="100%" stop-color="#0a0202" />
+                <stop offset="0%" stop-color="#5a0000" />
+                <stop offset="50%" stop-color="#2a0000" />
+                <stop offset="100%" stop-color="#0a0000" />
             </linearGradient>
         </defs>`;
         
@@ -460,53 +468,55 @@
             if (isLadder) {
                 // TANGGA SILVER METALIK 3D
                 let dx = ex - sx; let dy = ey - sy; let len = Math.sqrt(dx*dx + dy*dy);
-                let nx = (-dy/len) * (cw*0.12); let ny = (dx/len) * (cw*0.12); // Lebar tangga
+                let nx = (-dy/len) * (cw*0.12); let ny = (dx/len) * (cw*0.12); 
                 
-                // Base shadow rail (gelap)
-                let r1B = `<line x1="${sx+nx}" y1="${sy+ny}" x2="${ex+nx}" y2="${ey+ny}" stroke="#2c3e50" stroke-width="6" stroke-linecap="round" filter="url(#snlShadow)"/>`;
-                let r2B = `<line x1="${sx-nx}" y1="${sy-ny}" x2="${ex-nx}" y2="${ey-ny}" stroke="#2c3e50" stroke-width="6" stroke-linecap="round" filter="url(#snlShadow)"/>`;
-                // Top silver rail (terang metalik)
-                let r1T = `<line x1="${sx+nx}" y1="${sy+ny}" x2="${ex+nx}" y2="${ey+ny}" stroke="url(#silverGrad)" stroke-width="4" stroke-linecap="round" />`;
-                let r2T = `<line x1="${sx-nx}" y1="${sy-ny}" x2="${ex-nx}" y2="${ey-ny}" stroke="url(#silverGrad)" stroke-width="4" stroke-linecap="round" />`;
+                let r1B = `<line x1="${sx+nx}" y1="${sy+ny}" x2="${ex+nx}" y2="${ey+ny}" stroke="#2c3e50" stroke-width="8" stroke-linecap="round" filter="url(#snlShadow)"/>`;
+                let r2B = `<line x1="${sx-nx}" y1="${sy-ny}" x2="${ex-nx}" y2="${ey-ny}" stroke="#2c3e50" stroke-width="8" stroke-linecap="round" filter="url(#snlShadow)"/>`;
+                let r1T = `<line x1="${sx+nx}" y1="${sy+ny}" x2="${ex+nx}" y2="${ey+ny}" stroke="url(#silverGrad)" stroke-width="5" stroke-linecap="round" />`;
+                let r2T = `<line x1="${sx-nx}" y1="${sy-ny}" x2="${ex-nx}" y2="${ey-ny}" stroke="url(#silverGrad)" stroke-width="5" stroke-linecap="round" />`;
                 
                 svg.innerHTML += r1B + r2B + r1T + r2T;
 
                 let numRungs = Math.max(3, Math.floor(len / (ch*0.4)));
                 for(let i=1; i<=numRungs; i++) {
                     let rx = sx + dx*(i/(numRungs+1)); let ry = sy + dy*(i/(numRungs+1));
-                    svg.innerHTML += `<line x1="${rx+nx}" y1="${ry+ny}" x2="${rx-nx}" y2="${ry-ny}" stroke="#2c3e50" stroke-width="5" filter="url(#snlShadow)"/>`;
-                    svg.innerHTML += `<line x1="${rx+nx}" y1="${ry+ny}" x2="${rx-nx}" y2="${ry-ny}" stroke="url(#silverGrad)" stroke-width="3" />`;
+                    svg.innerHTML += `<line x1="${rx+nx}" y1="${ry+ny}" x2="${rx-nx}" y2="${ry-ny}" stroke="#2c3e50" stroke-width="6" filter="url(#snlShadow)"/>`;
+                    svg.innerHTML += `<line x1="${rx+nx}" y1="${ry+ny}" x2="${rx-nx}" y2="${ry-ny}" stroke="url(#silverGrad)" stroke-width="4" />`;
                 }
             } else {
-                // ULAR SEREM (Kepala Polygon SVG & Badan bertekstur)
-                let hx = sx, hy = sy, tx = ex, ty = ey; // Kepala di START (turun)
+                // ULAR VIPER SEREM 3D
+                let hx = sx, hy = sy, tx = ex, ty = ey; 
                 let mx = (hx+tx)/2; let my = (hy+ty)/2;
                 let dx = tx - hx; let dy = ty - hy;
-                let nx = -dy * 0.25; let ny = dx * 0.25; 
+                let nx = -dy * 0.3; let ny = dx * 0.3; // Curve meliuk tajam
                 
-                // Badan (Base bayangan tebal)
-                let bodyBase = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#111" stroke-width="12" fill="none" stroke-linecap="round" filter="url(#snlShadow)"/>`;
-                // Badan (Warna merah gelap gradiasi)
-                let bodyColor = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="url(#snakeGrad)" stroke-width="8" fill="none" stroke-linecap="round" />`;
-                // Sisik (Garis putus-putus merah menyala)
-                let scales = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#e74c3c" stroke-width="2" fill="none" stroke-dasharray="4,6" stroke-linecap="round" />`;
+                // Layer 1: Shadow tebal luar
+                let bodyShadow = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#000" stroke-width="16" fill="none" stroke-linecap="round" filter="url(#snlShadow)"/>`;
+                // Layer 2: Warna dasar ular
+                let bodyColor = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="url(#snakeGrad)" stroke-width="12" fill="none" stroke-linecap="round" />`;
+                // Layer 3: Tekstur sisik 1 (Gelap)
+                let scales1 = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#1a0000" stroke-width="10" fill="none" stroke-dasharray="2,6" stroke-linecap="round" />`;
+                // Layer 4: Tekstur sisik 2 (Merah nyala putus-putus)
+                let scales2 = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#cc0000" stroke-width="4" fill="none" stroke-dasharray="4,12" stroke-linecap="round" opacity="0.8"/>`;
                 
-                svg.innerHTML += bodyBase + bodyColor + scales;
+                svg.innerHTML += bodyShadow + bodyColor + scales1 + scales2;
 
-                // Kepala Ular Serem (Dirotasi supaya searah body)
+                // Kepala Viper
                 let angle = Math.atan2(hy - (my+ny), hx - (mx+nx)) * (180 / Math.PI);
-                let headPath = `<path d="M -8 6 L 0 -10 L 8 6 Z" fill="#1a0505" stroke="#4a0e0e" stroke-width="2" filter="url(#snlShadow)"/>`;
-                let eye1 = `<circle cx="-3" cy="0" r="2" fill="#ff0000" filter="url(#eyeGlow)"/>`;
-                let eye2 = `<circle cx="3" cy="0" r="2" fill="#ff0000" filter="url(#eyeGlow)"/>`;
-                let tongue = `<path d="M 0 -10 L -2 -16 M 0 -10 L 2 -16" stroke="#ff0000" stroke-width="1" fill="none" />`;
                 
-                let headGroup = `<g transform="translate(${hx}, ${hy}) rotate(${angle + 90})">${headPath}${eye1}${eye2}${tongue}</g>`;
+                // M 0 -22 ... is drawn pointing UP, then rotated to match body
+                let headPath = `<path d="M 0 -24 L 8 -10 L 10 2 L 6 10 L -6 10 L -10 2 L -8 -10 Z" fill="url(#snakeGrad)" stroke="#000" stroke-width="2" filter="url(#snlShadow)"/>`;
+                let fangs = `<path d="M -5 -24 L -4 -32 L -2 -24 M 5 -24 L 4 -32 L 2 -24" fill="#fff" stroke="#fff" stroke-width="1" />`;
+                let eye1 = `<ellipse cx="-4" cy="-8" rx="2" ry="4" fill="#ff0000" filter="url(#eyeGlow)"/><line x1="-4" y1="-11" x2="-4" y2="-5" stroke="#000" stroke-width="1.5"/>`;
+                let eye2 = `<ellipse cx="4" cy="-8" rx="2" ry="4" fill="#ff0000" filter="url(#eyeGlow)"/><line x1="4" y1="-11" x2="4" y2="-5" stroke="#000" stroke-width="1.5"/>`;
+                let tongue = `<path d="M 0 -24 L 0 -34 L -3 -38 M 0 -34 L 3 -38" stroke="#ff0000" stroke-width="1.5" fill="none" />`;
+                
+                let headGroup = `<g transform="translate(${hx}, ${hy}) rotate(${angle + 90})">${headPath}${fangs}${eye1}${eye2}${tongue}</g>`;
                 svg.innerHTML += headGroup;
             }
         }
     }
 
-    // Auto redraw kalo resize layar biar visual tetep presisi di atas PNG
     window.addEventListener('resize', () => { if(document.getElementById('snl-game-screen').classList.contains('active')) drawVisualSnL(); });
 
     function renderSnLPawns() {
@@ -515,10 +525,17 @@
         gameConfigs.snl.colors.forEach((col, i) => {
             if(snlTypes[col] !== 'none' && snlPlayers[col]) {
                 let p = document.createElement('div'); p.className = `snl-pawn snl-p-${col}`; p.id = `snl-pawn-${col}`;
-                let coords = getSnLCellCoords(snlPlayers[col].pos);
-                let offsetX = (i - 1) * 4; let offsetY = (i - 1) * 4;
-                p.style.left = `calc(${coords.c * 10 + 5}% + ${offsetX}px)`; p.style.top = `calc(${coords.r * 10 + 5}% + ${offsetY}px)`;
-                p.style.display = 'block'; container.appendChild(p);
+                
+                // Hide pawn if position is 0 (Belum keluar base)
+                if(snlPlayers[col].pos === 0) {
+                    p.style.display = 'none';
+                } else {
+                    let coords = getSnLCellCoords(snlPlayers[col].pos);
+                    let offsetX = (i - 1) * 4; let offsetY = (i - 1) * 4;
+                    p.style.left = `calc(${coords.c * 10 + 5}% + ${offsetX}px)`; p.style.top = `calc(${coords.r * 10 + 5}% + ${offsetY}px)`;
+                    p.style.display = 'block'; 
+                }
+                container.appendChild(p);
             }
         });
     }
@@ -539,12 +556,13 @@
         snlNames = { red: snlTypes.red==='ai'?"BOT MERAH":"PLAYER 1", blue: snlTypes.blue==='ai'?"BOT BIRU":"PLAYER 2", green: snlTypes.green==='ai'?"BOT HIJAU":"PLAYER 3", yellow: snlTypes.yellow==='ai'?"BOT KUNING":"PLAYER 4" };
         if(Object.values(snlTypes).filter(v => v !== 'none').length < 2) { alert("Minimal 2 pemain!"); return; }
         
-        snlPlayers = {}; gameConfigs.snl.colors.forEach(c => { if(snlTypes[c] !== 'none') snlPlayers[c] = { pos: 1 }; });
+        // Start Posisi = 0
+        snlPlayers = {}; gameConfigs.snl.colors.forEach(c => { if(snlTypes[c] !== 'none') snlPlayers[c] = { pos: 0 }; });
         let startTurn = 'red'; for(let c of gameConfigs.snl.colors) { if(snlTypes[c] !== 'none') { startTurn = c; break; } }
         
         let randIdx = Math.floor(Math.random() * snlLayouts.length);
         snlActiveLayout = snlLayouts[randIdx];
-        document.getElementById('snl-main-container').style.backgroundImage = `url('papan_ular.png')`;
+        document.getElementById('snl-main-container').style.backgroundImage = `url('papan_ular_${randIdx + 1}.png')`;
         
         snlGameState = { turn: startTurn, dice: 0, hasRolled: false, moving: false, winners: [] };
         document.getElementById('snl-badge').innerText = "MODE LOKAL/OFFLINE"; document.getElementById('snl-badge').style.color = '#aaa'; document.getElementById('snl-badge').style.borderColor = '#555';
@@ -591,8 +609,30 @@
     }
 
     async function executeSnLMove(color, dice) {
-        let curPos = snlPlayers[color].pos; let tgtPos = curPos + dice;
-        if (tgtPos > 100) tgtPos = 100 - (tgtPos - 100);
+        let curPos = snlPlayers[color].pos; 
+        let tgtPos;
+
+        // RULE: Wajib dapat 1 buat keluar base (Pos 0)
+        if (curPos === 0) {
+            if (dice === 1) {
+                tgtPos = 1;
+            } else {
+                document.getElementById('snl-log-msg').innerText = "Butuh angka 1 buat keluar!";
+                if (isOnline) {
+                    if (myColor === color) {
+                        let nextTurn = getNextValidSnLTurn(color);
+                        setTimeout(() => { database.ref().update({ [`snl_rooms/${roomCode}/state/turn`]: nextTurn, [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false }); }, 1500);
+                    }
+                } else {
+                    snlGameState.moving = false;
+                    setTimeout(() => { passSnLTurn(); }, 1500);
+                }
+                return;
+            }
+        } else {
+            tgtPos = curPos + dice;
+            if (tgtPos > 100) tgtPos = 100 - (tgtPos - 100);
+        }
 
         let dir = tgtPos > curPos ? 1 : -1;
         while(curPos !== tgtPos) {
