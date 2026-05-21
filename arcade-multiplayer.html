@@ -56,7 +56,7 @@
 
     .board-wrapper-outer { width: 100%; max-width: 450px; position: relative;}
     
-    /* LEADERBOARD ELEGAN (Perubahan Sesuai Request) */
+    /* LEADERBOARD ELEGAN */
     #leaderboard-screen { background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(15px); z-index: 3000; }
     .lb-elegant-box { background: radial-gradient(circle at top, #1e1e1e, #0a0a0a); padding: 40px 20px; text-align: center; width: 90%; max-width: 450px; border-radius: 20px; margin: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.1); border: none; }
     .lb-title { font-size: 2.2rem; margin-bottom: 5px; color: #fff; text-transform: uppercase; font-weight: 900; letter-spacing: 3px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
@@ -409,7 +409,11 @@
         if(activeGame === 'ttt') { initialData.board = ['','','','','','','','','']; initialData.turn = 'X'; initialData.scores = {X:0, O:0}; }
         if(activeGame === 'chess') { initialData.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"; initialData.turn = 'w'; initialData.theme = document.getElementById('chess-theme-board') ? document.getElementById('chess-theme-board').value : 'c-theme-bw'; }
 
-        database.ref(`${activeGame}_rooms/${roomCode}`).set(initialData).then(() => { enterLobbyUI(); });
+        database.ref(`${activeGame}_rooms/${roomCode}`).set(initialData).then(() => { 
+            // FIXED: Hapus room otomatis kalau host hilang koneksi (Ghost Host Fix)
+            database.ref(`${activeGame}_rooms/${roomCode}`).onDisconnect().remove();
+            enterLobbyUI(); 
+        });
     }
 
     function joinRoomLogic(code, isAuto) {
@@ -417,6 +421,12 @@
             if(!snap.exists()) { alert("Room ngga ada!"); showScreen('universal-hub'); return; }
             let r = snap.val(); if(r.status !== 'waiting' || !r.players) { alert("Game udah mulai / penuh!"); showScreen('universal-hub'); return; }
             
+            // FIXED: Penanganan Nama Sama (Tambahkan angka agar tidak tabrakan)
+            let currentNames = Object.values(r.players);
+            if(currentNames.includes(myGlobalName)) {
+                myGlobalName = myGlobalName + "_" + Math.floor(Math.random() * 100);
+            }
+
             let pCols = Object.keys(r.players); myColor = null;
             for(let c of gameConfigs[activeGame].colors) { if(!pCols.includes(c)) { myColor = c; break; } }
             if(!myColor) { alert("Room Penuh!"); showScreen('universal-hub'); return; }
@@ -424,7 +434,12 @@
             roomCode = code; isHost = false; isOnline = true;
             let updates = {}; updates[`${activeGame}_rooms/${roomCode}/players/${myColor}`] = myGlobalName;
             if(activeGame === 'snl') updates[`${activeGame}_rooms/${roomCode}/board/${myColor}`] = {pos: 0};
-            database.ref().update(updates).then(() => { enterLobbyUI(); });
+            
+            database.ref().update(updates).then(() => { 
+                // FIXED: Hapus player dari room kalau dia hilang koneksi tiba-tiba
+                database.ref(`${activeGame}_rooms/${roomCode}/players/${myColor}`).onDisconnect().remove();
+                enterLobbyUI(); 
+            });
         });
     }
 
@@ -481,12 +496,19 @@
     function leaveRoom() {
         if(isOnline && roomCode && myColor) {
             let pRef = database.ref(`${activeGame}_rooms/${roomCode}/players/${myColor}`);
+            pRef.onDisconnect().cancel(); // FIXED: Batalkan onDisconnect jika keluar manual
             pRef.remove().then(() => {
                 database.ref(`${activeGame}_rooms/${roomCode}/players`).once('value', s => {
-                    if(!s.exists() || Object.keys(s.val() || {}).length === 0) { database.ref(`${activeGame}_rooms/${roomCode}`).remove(); } // Clean Ghost Room
+                    if(!s.exists() || Object.keys(s.val() || {}).length === 0) { 
+                        database.ref(`${activeGame}_rooms/${roomCode}`).remove(); 
+                    } // Clean Ghost Room
                 });
             });
-            if(isHost) database.ref(`${activeGame}_rooms/${roomCode}/status`).set('finished');
+            
+            if(isHost) {
+                database.ref(`${activeGame}_rooms/${roomCode}`).onDisconnect().cancel();
+                database.ref(`${activeGame}_rooms/${roomCode}`).remove(); // FIXED: Jika host kabur, hancurkan room
+            }
         }
         leaveRoomLokal(null);
     }
@@ -997,7 +1019,7 @@
     let chessSelectedSquare = null;
     let chessPossibleMoves = [];
     
-    // Fallback unicode untuk piece jika lu ga input asset image. Kalo lu masukin url('wp.png') di CSS ini ketimpa.
+    // Fallback unicode untuk piece
     const chessPieceUni = { 'p': '♟', 'n': '♞', 'b': '♝', 'r': '♜', 'q': '♛', 'k': '♚', 'P': '♙', 'N': '♘', 'B': '♗', 'R': '♖', 'Q': '♕', 'K': '♔' };
 
     function startChessOffline() {
@@ -1046,7 +1068,6 @@
                 if (piece) {
                     let pChar = piece.color === 'w' ? piece.type.toUpperCase() : piece.type;
                     let pEl = document.createElement('div');
-                    // Ganti di css file: .piece-wp { background-image: url('wp.png'); color: transparent; }
                     pEl.className = `chess-piece piece-${piece.color}${piece.type}`; 
                     pEl.innerText = chessPieceUni[pChar]; // Fallback text
                     pEl.style.color = piece.color === 'w' ? '#fff' : '#000';
