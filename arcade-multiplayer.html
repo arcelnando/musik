@@ -562,7 +562,7 @@
         
         let randIdx = Math.floor(Math.random() * snlLayouts.length);
         snlActiveLayout = snlLayouts[randIdx];
-        document.getElementById('snl-main-container').style.backgroundImage = `url('papan_ular_${randIdx + 1}.png')`;
+        document.getElementById('snl-main-container').style.backgroundImage = `url('papan_ular.png')`;
         
         snlGameState = { turn: startTurn, dice: 0, hasRolled: false, moving: false, winners: [] };
         document.getElementById('snl-badge').innerText = "MODE LOKAL/OFFLINE"; document.getElementById('snl-badge').style.color = '#aaa'; document.getElementById('snl-badge').style.borderColor = '#555';
