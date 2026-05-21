@@ -86,7 +86,7 @@
     .snl-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); z-index: 2;}
     .snl-cell { display: flex; justify-content: flex-start; align-items: flex-start; padding: 2px; font-size: 10px; font-weight: bold; color: transparent; box-sizing: border-box;}
     #snl-svg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
-    .snl-pawn { position: absolute; width: 6%; height: 6%; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.8); z-index: 10; transition: left 0.3s linear, top 0.3s linear; transform: translate(-50%, -50%); display: none; }
+    .snl-pawn { position: absolute; width: 6%; height: 6%; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.8); z-index: 10; transition: left 0.3s linear, top 0.3s linear, transform 0.3s ease-in-out; display: none; }
     
     /* TTT STYLES */
     .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: 300px; height: 300px; margin: 20px auto; }
@@ -95,8 +95,6 @@
     .ttt-cell.x { color: #ff0055; border-color: #ff0055; } .ttt-cell.o { color: #00d2ff; border-color: #00d2ff; }
     .ttt-turn-box { font-size: 20px; font-weight: bold; margin-bottom: 10px; letter-spacing: 2px; }
     .ttt-score { display: flex; justify-content: space-between; width: 300px; margin: 0 auto 20px; font-size: 20px; font-weight: bold; color: #aaa; font-family: 'Teko', sans-serif;}
-    .win-burst { animation: winBurstAnim 0.5s ease-out forwards; }
-    @keyframes winBurstAnim { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 <body>
@@ -194,11 +192,14 @@
 
     <div id="snl-offline-setup" class="game-screen">
         <div class="overlay-box">
-            <h2 style="color: #2ed573; margin-top: 0; margin-bottom: 10px;">ULAR TANGGA LOKAL</h2>
+            <h2 style="color: #2ed573; margin-top: 0; margin-bottom: 10px;">ULAR TANGGA LOKAL (MAX 5)</h2>
             <select id="snl-off-red" class="ludo-dropdown"><option value="human">P1 (MERAH) - Pemain</option><option value="ai">P1 - Bot AI</option></select>
             <select id="snl-off-blue" class="ludo-dropdown"><option value="human">P2 (BIRU) - Pemain</option><option value="ai">P2 - Bot AI</option><option value="none">Kosong</option></select>
             <select id="snl-off-green" class="ludo-dropdown"><option value="ai">P3 (HIJAU) - Bot AI</option><option value="human">P3 - Pemain</option><option value="none">Kosong</option></select>
             <select id="snl-off-yellow" class="ludo-dropdown"><option value="none">P4 (KUNING) - Kosong</option><option value="ai">P4 - Bot AI</option><option value="human">P4 - Pemain</option></select>
+            <!-- Nambah P5 Warna Ungu -->
+            <select id="snl-off-purple" class="ludo-dropdown"><option value="none">P5 (UNGU) - Kosong</option><option value="ai">P5 - Bot AI</option><option value="human">P5 - Pemain</option></select>
+            
             <button class="game-btn" style="width: 100%; border-color:#2ed573; color:#2ed573; margin-top:15px;" onclick="startSnLOffline()">MULAI GAME</button>
             <button class="game-btn" onclick="showScreen('universal-hub')" style="width: 100%; border-color: #555; color: #888;">KEMBALI</button>
         </div>
@@ -272,9 +273,10 @@
     let activeGame = null; // 'ludo', 'snl', 'ttt'
     let isOnline = false; let roomCode = null; let myColor = null; let isHost = false; let roomRef = null;
 
+    // MAX SNL JADI 5 & NAMBAH WARNA UNGU
     const gameConfigs = {
         ludo: { title: "LUDO WARS", color: "#ff4757", max: 4, colors: ['red','blue','green','skull'], colorNames: {red:'MERAH', blue:'BIRU', green:'HIJAU', skull:'ABU'}, hex: {red:'#ff4757', blue:'#1e90ff', green:'#2ed573', skull:'#a4b0be'} },
-        snl: { title: "ULAR TANGGA", color: "#2ed573", max: 4, colors: ['red','blue','green','yellow'], colorNames: {red:'MERAH', blue:'BIRU', green:'HIJAU', yellow:'KUNING'}, hex: {red:'#ff6b6b', blue:'#4facfe', green:'#55efc4', yellow:'#fdcb6e'} },
+        snl: { title: "ULAR TANGGA", color: "#2ed573", max: 5, colors: ['red','blue','green','yellow','purple'], colorNames: {red:'MERAH', blue:'BIRU', green:'HIJAU', yellow:'KUNING', purple:'UNGU'}, hex: {red:'#ff6b6b', blue:'#4facfe', green:'#55efc4', yellow:'#fdcb6e', purple:'#9b59b6'} },
         ttt: { title: "TIC TAC TOE", color: "#00d2ff", max: 2, colors: ['X','O'], colorNames: {X:'PLAYER X', O:'PLAYER O'}, hex: {X:'#ff0055', O:'#00d2ff'} }
     };
 
@@ -286,7 +288,7 @@
         document.getElementById('hub-title').style.color = cnf.color;
         document.getElementById('hub-box').style.borderColor = cnf.color;
         
-        let extraDesc = (game === 'snl') ? "<br>Wajib dapet dadu 1 buat keluar base!" : "";
+        let extraDesc = (game === 'snl') ? "<br>Wajib dapet dadu 1 buat masuk start!" : "";
         document.getElementById('hub-desc').innerHTML = `Max ${cnf.max} Pemain. Min 2 buat mulai.${extraDesc}`;
         showScreen('universal-hub');
     }
@@ -432,17 +434,17 @@
         }
     }
 
-    // FUNGSI UTAMA MENGGAMBAR TANGGA SILVER & ULAR SEREM (Viper Style)
     function drawVisualSnL() {
         const svg = document.getElementById('snl-svg-layer'); 
         
+        // Taring dihapus, warna naga/viper lebih gelap, mata tajam bersinar merah
         svg.innerHTML = `
         <defs>
             <filter id="snlShadow" x="-20%" y="-20%" width="140%" height="140%">
                 <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000" flood-opacity="0.85"/>
             </filter>
             <filter id="eyeGlow">
-                <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#ff0000" flood-opacity="1"/>
+                <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#ff0000" flood-opacity="1"/>
             </filter>
             <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#fdfbfb" />
@@ -450,9 +452,9 @@
                 <stop offset="100%" stop-color="#606c88" />
             </linearGradient>
             <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#5a0000" />
-                <stop offset="50%" stop-color="#2a0000" />
-                <stop offset="100%" stop-color="#0a0000" />
+                <stop offset="0%" stop-color="#3a0000" />
+                <stop offset="50%" stop-color="#1a0000" />
+                <stop offset="100%" stop-color="#050000" />
             </linearGradient>
         </defs>`;
         
@@ -484,34 +486,28 @@
                     svg.innerHTML += `<line x1="${rx+nx}" y1="${ry+ny}" x2="${rx-nx}" y2="${ry-ny}" stroke="url(#silverGrad)" stroke-width="4" />`;
                 }
             } else {
-                // ULAR VIPER SEREM 3D
+                // ULAR VIPER SEREM BADASS (Tanpa Taring)
                 let hx = sx, hy = sy, tx = ex, ty = ey; 
                 let mx = (hx+tx)/2; let my = (hy+ty)/2;
                 let dx = tx - hx; let dy = ty - hy;
-                let nx = -dy * 0.3; let ny = dx * 0.3; // Curve meliuk tajam
+                let nx = -dy * 0.3; let ny = dx * 0.3; 
                 
-                // Layer 1: Shadow tebal luar
-                let bodyShadow = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#000" stroke-width="16" fill="none" stroke-linecap="round" filter="url(#snlShadow)"/>`;
-                // Layer 2: Warna dasar ular
-                let bodyColor = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="url(#snakeGrad)" stroke-width="12" fill="none" stroke-linecap="round" />`;
-                // Layer 3: Tekstur sisik 1 (Gelap)
-                let scales1 = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#1a0000" stroke-width="10" fill="none" stroke-dasharray="2,6" stroke-linecap="round" />`;
-                // Layer 4: Tekstur sisik 2 (Merah nyala putus-putus)
-                let scales2 = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#cc0000" stroke-width="4" fill="none" stroke-dasharray="4,12" stroke-linecap="round" opacity="0.8"/>`;
+                let bodyShadow = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#000" stroke-width="18" fill="none" stroke-linecap="round" filter="url(#snlShadow)"/>`;
+                let bodyColor = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="url(#snakeGrad)" stroke-width="14" fill="none" stroke-linecap="round" />`;
+                let scales1 = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#000000" stroke-width="12" fill="none" stroke-dasharray="2,8" stroke-linecap="round" />`;
+                let scales2 = `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="#ff0033" stroke-width="4" fill="none" stroke-dasharray="4,16" stroke-linecap="round" opacity="0.9"/>`;
                 
                 svg.innerHTML += bodyShadow + bodyColor + scales1 + scales2;
 
-                // Kepala Viper
                 let angle = Math.atan2(hy - (my+ny), hx - (mx+nx)) * (180 / Math.PI);
                 
-                // M 0 -22 ... is drawn pointing UP, then rotated to match body
-                let headPath = `<path d="M 0 -24 L 8 -10 L 10 2 L 6 10 L -6 10 L -10 2 L -8 -10 Z" fill="url(#snakeGrad)" stroke="#000" stroke-width="2" filter="url(#snlShadow)"/>`;
-                let fangs = `<path d="M -5 -24 L -4 -32 L -2 -24 M 5 -24 L 4 -32 L 2 -24" fill="#fff" stroke="#fff" stroke-width="1" />`;
-                let eye1 = `<ellipse cx="-4" cy="-8" rx="2" ry="4" fill="#ff0000" filter="url(#eyeGlow)"/><line x1="-4" y1="-11" x2="-4" y2="-5" stroke="#000" stroke-width="1.5"/>`;
-                let eye2 = `<ellipse cx="4" cy="-8" rx="2" ry="4" fill="#ff0000" filter="url(#eyeGlow)"/><line x1="4" y1="-11" x2="4" y2="-5" stroke="#000" stroke-width="1.5"/>`;
-                let tongue = `<path d="M 0 -24 L 0 -34 L -3 -38 M 0 -34 L 3 -38" stroke="#ff0000" stroke-width="1.5" fill="none" />`;
+                // Kepala diubah runcing ala naga/viper, mata tajam
+                let headPath = `<path d="M 0 -30 L 12 -10 L 6 8 L 0 12 L -6 8 L -12 -10 Z" fill="url(#snakeGrad)" stroke="#ff0033" stroke-width="1" filter="url(#snlShadow)"/>`;
+                let eye1 = `<path d="M -8 -12 L -3 -16 L -5 -6 Z" fill="#ff0000" filter="url(#eyeGlow)"/>`;
+                let eye2 = `<path d="M 8 -12 L 3 -16 L 5 -6 Z" fill="#ff0000" filter="url(#eyeGlow)"/>`;
+                let tongue = `<path d="M 0 -30 L 0 -42 M 0 -42 L -3 -48 M 0 -42 L 3 -48" stroke="#ff0033" stroke-width="1.5" fill="none" filter="url(#eyeGlow)"/>`;
                 
-                let headGroup = `<g transform="translate(${hx}, ${hy}) rotate(${angle + 90})">${headPath}${fangs}${eye1}${eye2}${tongue}</g>`;
+                let headGroup = `<g transform="translate(${hx}, ${hy}) rotate(${angle + 90})">${headPath}${eye1}${eye2}${tongue}</g>`;
                 svg.innerHTML += headGroup;
             }
         }
@@ -519,20 +515,34 @@
 
     window.addEventListener('resize', () => { if(document.getElementById('snl-game-screen').classList.contains('active')) drawVisualSnL(); });
 
+    // FUNGSI RENDER PION (NAMPILIN PION KETAHAN & MEMBESAR)
     function renderSnLPawns() {
         const container = document.getElementById('snl-main-container');
         document.querySelectorAll('.snl-pawn').forEach(e => e.remove());
+        
         gameConfigs.snl.colors.forEach((col, i) => {
             if(snlTypes[col] !== 'none' && snlPlayers[col]) {
                 let p = document.createElement('div'); p.className = `snl-pawn snl-p-${col}`; p.id = `snl-pawn-${col}`;
+                p.style.backgroundColor = gameConfigs.snl.hex[col]; // Tambah base color biar jelas
                 
-                // Hide pawn if position is 0 (Belum keluar base)
                 if(snlPlayers[col].pos === 0) {
-                    p.style.display = 'none';
+                    // PION KETAHAN / NGUMPUL DI LUAR START (Kecil, transparan)
+                    let offsetX = (i - 2) * 12; let offsetY = (i - 2) * 6;
+                    p.style.left = `calc(5% + ${offsetX}px)`; 
+                    p.style.top = `calc(95% + ${offsetY}px)`;
+                    p.style.transform = 'translate(-50%, -50%) scale(0.6)';
+                    p.style.opacity = '0.4';
+                    p.style.zIndex = 5;
+                    p.style.display = 'block'; 
                 } else {
+                    // PION AKTIF / MEMBESAR (Scale 1.2, Solid)
                     let coords = getSnLCellCoords(snlPlayers[col].pos);
-                    let offsetX = (i - 1) * 4; let offsetY = (i - 1) * 4;
-                    p.style.left = `calc(${coords.c * 10 + 5}% + ${offsetX}px)`; p.style.top = `calc(${coords.r * 10 + 5}% + ${offsetY}px)`;
+                    let offsetX = (i - 2) * 5; let offsetY = (i - 2) * 5;
+                    p.style.left = `calc(${coords.c * 10 + 5}% + ${offsetX}px)`; 
+                    p.style.top = `calc(${coords.r * 10 + 5}% + ${offsetY}px)`;
+                    p.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                    p.style.opacity = '1';
+                    p.style.zIndex = 15;
                     p.style.display = 'block'; 
                 }
                 container.appendChild(p);
@@ -552,11 +562,16 @@
 
     function startSnLOffline() {
         isOnline = false; activeGame = 'snl';
-        snlTypes = { red: document.getElementById('snl-off-red').value, blue: document.getElementById('snl-off-blue').value, green: document.getElementById('snl-off-green').value, yellow: document.getElementById('snl-off-yellow').value };
-        snlNames = { red: snlTypes.red==='ai'?"BOT MERAH":"PLAYER 1", blue: snlTypes.blue==='ai'?"BOT BIRU":"PLAYER 2", green: snlTypes.green==='ai'?"BOT HIJAU":"PLAYER 3", yellow: snlTypes.yellow==='ai'?"BOT KUNING":"PLAYER 4" };
+        snlTypes = { 
+            red: document.getElementById('snl-off-red').value, 
+            blue: document.getElementById('snl-off-blue').value, 
+            green: document.getElementById('snl-off-green').value, 
+            yellow: document.getElementById('snl-off-yellow').value,
+            purple: document.getElementById('snl-off-purple').value 
+        };
+        snlNames = { red: snlTypes.red==='ai'?"BOT MERAH":"PLAYER 1", blue: snlTypes.blue==='ai'?"BOT BIRU":"PLAYER 2", green: snlTypes.green==='ai'?"BOT HIJAU":"PLAYER 3", yellow: snlTypes.yellow==='ai'?"BOT KUNING":"PLAYER 4", purple: snlTypes.purple==='ai'?"BOT UNGU":"PLAYER 5" };
         if(Object.values(snlTypes).filter(v => v !== 'none').length < 2) { alert("Minimal 2 pemain!"); return; }
         
-        // Start Posisi = 0
         snlPlayers = {}; gameConfigs.snl.colors.forEach(c => { if(snlTypes[c] !== 'none') snlPlayers[c] = { pos: 0 }; });
         let startTurn = 'red'; for(let c of gameConfigs.snl.colors) { if(snlTypes[c] !== 'none') { startTurn = c; break; } }
         
@@ -577,7 +592,8 @@
             document.getElementById('snl-main-container').style.backgroundImage = `url('papan_ular_${idx + 1}.png')`;
             
             snlPlayers = data.board; snlGameState = data.state;
-            snlTypes = {red:'none', blue:'none', green:'none', yellow:'none'}; Object.keys(data.players).forEach(c => snlTypes[c] = 'human'); snlNames = data.players;
+            snlTypes = {red:'none', blue:'none', green:'none', yellow:'none', purple:'none'}; 
+            Object.keys(data.players).forEach(c => snlTypes[c] = 'human'); snlNames = data.players;
             
             document.getElementById('snl-badge').innerText = "WARNA LU: " + myColor.toUpperCase(); document.getElementById('snl-badge').style.color = gameConfigs.snl.hex[myColor]; document.getElementById('snl-badge').style.borderColor = gameConfigs.snl.hex[myColor];
             initSnLBoardHTML(); setTimeout(() => { showScreen('snl-game-screen'); drawVisualSnL(); renderSnLPawns(); updateSnLUI(); }, 100);
@@ -612,21 +628,25 @@
         let curPos = snlPlayers[color].pos; 
         let tgtPos;
 
-        // RULE: Wajib dapat 1 buat keluar base (Pos 0)
+        // RULE: Pos 0 ketahan, dapet 1 buat buka gembok dan membesar!
         if (curPos === 0) {
             if (dice === 1) {
+                document.getElementById('snl-log-msg').innerText = "BANGKIT! Ready jalan!";
                 tgtPos = 1;
+                // Move visually to pos 1 and end turn automatically (di lemparan berikutnya baru jalan)
+                snlPlayers[color].pos = 1; renderSnLPawns();
+                new Audio('click.mp3').play().catch(e => {});
+                await new Promise(r => setTimeout(r, 600)); // Jedah bentar buat liatin animasinya
+                
+                passSnLNextTurn(color);
+                return;
             } else {
-                document.getElementById('snl-log-msg').innerText = "Butuh angka 1 buat keluar!";
-                if (isOnline) {
-                    if (myColor === color) {
-                        let nextTurn = getNextValidSnLTurn(color);
-                        setTimeout(() => { database.ref().update({ [`snl_rooms/${roomCode}/state/turn`]: nextTurn, [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false }); }, 1500);
-                    }
-                } else {
-                    snlGameState.moving = false;
-                    setTimeout(() => { passSnLTurn(); }, 1500);
-                }
+                document.getElementById('snl-log-msg').innerText = "Gagal! Harus angka 1!";
+                // PION SHAKE (Bergetar karena ketahan)
+                let p = document.getElementById(`snl-pawn-${color}`);
+                if(p) p.animate([{transform: 'translate(-50%, -50%) scale(0.6) translateX(-10px)'}, {transform: 'translate(-50%, -50%) scale(0.6) translateX(10px)'}, {transform: 'translate(-50%, -50%) scale(0.6) translateX(0)'}], {duration: 150, iterations: 2});
+                
+                setTimeout(() => { passSnLNextTurn(color); }, 1000);
                 return;
             }
         } else {
@@ -655,24 +675,39 @@
             else if (!isOnline) { showEndLeaderboard(snlGameState.winners, snlNames, gameConfigs.snl); } return;
         }
 
-        if (isOnline) {
-            if(myColor === color) {
-                let nextTurn = color; if(dice !== 6 && !isWin) { let idx = gameConfigs.snl.colors.indexOf(color); for(let i=1;i<=4;i++) { let n = gameConfigs.snl.colors[(idx+i)%4]; if(snlTypes[n]!=='none' && !snlGameState.winners.includes(n)) { nextTurn=n; break; } } }
-                database.ref().update({ [`snl_rooms/${roomCode}/board/${color}`]: snlPlayers[color], [`snl_rooms/${roomCode}/state/winners`]: snlGameState.winners, [`snl_rooms/${roomCode}/state/turn`]: nextTurn, [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false });
+        if (dice === 6 || isWin) { 
+            // Dapet 6 = Lempar lagi
+            if (isOnline) {
+                if(myColor === color) database.ref().update({ [`snl_rooms/${roomCode}/board/${color}`]: snlPlayers[color], [`snl_rooms/${roomCode}/state/winners`]: snlGameState.winners, [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false });
+            } else {
+                snlGameState.moving = false; snlGameState.hasRolled = false; updateSnLUI(); if(snlTypes[color] === 'ai') setTimeout(rollSnLDice, 800);
             }
         } else {
-            snlGameState.moving = false;
-            if (dice === 6 || isWin) { snlGameState.hasRolled = false; updateSnLUI(); if(snlTypes[color] === 'ai') setTimeout(rollSnLDice, 800); } 
-            else { 
-                let idx = gameConfigs.snl.colors.indexOf(color); let nextTurn=color; for(let i=1;i<=4;i++) { let n = gameConfigs.snl.colors[(idx+i)%4]; if(snlTypes[n]!=='none' && !snlGameState.winners.includes(n)) { nextTurn=n; break; } }
-                snlGameState.turn = nextTurn; snlGameState.dice = 0; snlGameState.hasRolled = false; updateSnLUI(); if(snlTypes[nextTurn] === 'ai') setTimeout(rollSnLDice, 1000); 
-            }
+            if(isOnline && myColor === color) database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]: snlPlayers[color], [`snl_rooms/${roomCode}/state/winners`]: snlGameState.winners});
+            passSnLNextTurn(color);
         }
     }
 
+    function passSnLNextTurn(color) {
+        let maxC = gameConfigs.snl.colors.length;
+        let idx = gameConfigs.snl.colors.indexOf(color); let nextTurn=color; 
+        for(let i=1;i<=maxC;i++) { 
+            let n = gameConfigs.snl.colors[(idx+i)%maxC]; 
+            if(snlTypes[n]!=='none' && !snlGameState.winners.includes(n)) { nextTurn=n; break; } 
+        }
+
+        if (isOnline) {
+            if (myColor === color) {
+                database.ref().update({ [`snl_rooms/${roomCode}/state/turn`]: nextTurn, [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false });
+            }
+        } else {
+            snlGameState.moving = false; snlGameState.turn = nextTurn; snlGameState.dice = 0; snlGameState.hasRolled = false; updateSnLUI(); 
+            if(snlTypes[nextTurn] === 'ai') setTimeout(rollSnLDice, 1000); 
+        }
+    }
 
     // ==========================================================================
-    // LUDO ENGINE (Max 4)
+    // LUDO ENGINE & TTT ENGINE (Tidak Berubah - Skip for brevity)
     // ==========================================================================
     let ludoGameState = {}; let ludoPlayers = {}; let ludoTypes = {}; let ludoNames = {};
     const ludoPathCoords = [ {x:6,y:13},{x:6,y:12},{x:6,y:11},{x:6,y:10},{x:6,y:9}, {x:5,y:8},{x:4,y:8},{x:3,y:8},{x:2,y:8},{x:1,y:8},{x:0,y:8}, {x:0,y:7},{x:0,y:6}, {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6}, {x:6,y:5},{x:6,y:4},{x:6,y:3},{x:6,y:2},{x:6,y:1},{x:6,y:0}, {x:7,y:0},{x:8,y:0}, {x:8,y:1},{x:8,y:2},{x:8,y:3},{x:8,y:4},{x:8,y:5}, {x:9,y:6},{x:10,y:6},{x:11,y:6},{x:12,y:6},{x:13,y:6},{x:14,y:6}, {x:14,y:7},{x:14,y:8}, {x:13,y:8},{x:12,y:8},{x:11,y:8},{x:10,y:8},{x:9,y:8}, {x:8,y:9},{x:8,y:10},{x:8,y:11},{x:8,y:12},{x:8,y:13},{x:8,y:14}, {x:7,y:14},{x:6,y:14} ];
@@ -847,10 +882,6 @@
         }
     }
 
-
-    // ==========================================================================
-    // TIC TAC TOE ENGINE (Max 2)
-    // ==========================================================================
     let tttBoard = ['','','','','','','','','']; let tttTurn = 'X'; let tttMode = 'local'; let tttScores = {X:0, O:0};
     const tttPatterns = [[0,1,2],[3,4,5],[6,7,8], [0,3,6],[1,4,7],[2,5,8], [0,4,8],[2,4,6]];
 
