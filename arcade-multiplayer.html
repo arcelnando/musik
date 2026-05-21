@@ -87,7 +87,15 @@
     .snl-cell { display: flex; justify-content: flex-start; align-items: flex-start; padding: 2px; font-size: 10px; font-weight: bold; color: transparent; box-sizing: border-box;}
     #snl-svg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
     #snl-token-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
-    .snl-pawn { position: absolute; width: 6%; height: 6%; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.8); transition: left 0.3s linear, top 0.3s linear, transform 0.3s ease-in-out; display: none; }
+    
+    /* FIX: Dibuat napak ke papan dan transisinya smooth */
+    .snl-pawn { 
+        position: absolute; width: 6%; height: 6%; border-radius: 50%; 
+        border: 2px solid #fff; 
+        box-shadow: 1px 2px 3px rgba(0,0,0,0.8); 
+        transition: left 0.25s linear, top 0.25s linear, transform 0.2s ease-in-out; 
+        display: none; 
+    }
     
     /* TTT STYLES */
     .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: 300px; height: 300px; margin: 20px auto; }
@@ -183,8 +191,9 @@
         </div>
     </div>
 
+    <!-- FIX: Hapus bingkai emas saat menampilkan leaderboard layar akhir -->
     <div id="leaderboard-screen" class="game-screen" style="z-index: 3000;">
-        <div class="overlay-box" style="border-color: gold; border-width: 4px;">
+        <div class="overlay-box">
             <h1 class="game-h1" style="color: gold; font-size:2.5rem; margin-bottom:10px;">MATCH OVER</h1>
             <div class="leaderboard-list" id="leaderboard-list"></div>
             <button class="game-btn" style="width: 100%; margin-top: 20px; border-color: #ff4757; color: #ff4757;" onclick="leaveRoom()">KEMBALI KE HUB</button>
@@ -511,7 +520,6 @@
 
     window.addEventListener('resize', () => { if(document.getElementById('snl-game-screen').classList.contains('active')) drawVisualSnL(); });
 
-    // FUNGSI RENDER PION (FIX KOORDINAT BIAR PAS!)
     function renderSnLPawns() {
         const container = document.getElementById('snl-token-layer');
         if(!container) return;
@@ -522,7 +530,6 @@
                 let p = document.createElement('div'); p.className = `snl-pawn snl-p-${col}`; p.id = `snl-pawn-${col}`;
                 p.style.backgroundColor = gameConfigs.snl.hex[col]; 
                 
-                // Set offset spesifik biar pion gak saling nindih persis
                 const offsetsX = [-8, 8, -8, 8, 0];
                 const offsetsY = [-8, -8, 8, 8, 0];
                 let oX = offsetsX[i] || 0;
@@ -633,11 +640,9 @@
                 new Audio('click.mp3').play().catch(e => {});
                 await new Promise(r => setTimeout(r, 600)); 
                 
-                // FIX ONLINE SYNC YANG BIKIN PION RESET KE POS 0 DI SINI!
                 if(isOnline && myColor === color) {
                     database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]: snlPlayers[color]});
                 }
-                
                 passSnLNextTurn(color);
                 return;
             } else {
@@ -650,19 +655,37 @@
             }
         } else {
             tgtPos = curPos + dice;
-            if (tgtPos > 100) tgtPos = 100 - (tgtPos - 100);
+            // FIX: Aturan dadu harus pas untuk menuju 100.
+            if (tgtPos > 100) {
+                document.getElementById('snl-log-msg').innerText = `Kelebihan! Butuh ${100 - curPos}`;
+                let p = document.getElementById(`snl-pawn-${color}`);
+                if(p) p.animate([{transform: 'translate(-50%, -50%) scale(1.15) translateY(-5px)'}, {transform: 'translate(-50%, -50%) scale(1.15) translateY(0)'}], {duration: 200, iterations: 2});
+                
+                await new Promise(r => setTimeout(r, 1000));
+                passSnLNextTurn(color);
+                return;
+            }
         }
 
         let dir = tgtPos > curPos ? 1 : -1;
         while(curPos !== tgtPos) {
             curPos += dir; snlPlayers[color].pos = curPos; renderSnLPawns();
-            new Audio('click.mp3').play().catch(e => {}); await new Promise(r => setTimeout(r, 200));
+            new Audio('click.mp3').play().catch(e => {}); 
+            // FIX: Disamakan delay dengan kecepatan CSS Transition agar tidak kagok (stuttering)
+            await new Promise(r => setTimeout(r, 250)); 
         }
 
+        // FIX: Animasi dan deteksi Ular Tangga lebih solid biar benar-benar turun/naik
         if (snlActiveLayout[curPos]) {
-            await new Promise(r => setTimeout(r, 300));
-            curPos = snlActiveLayout[curPos]; snlPlayers[color].pos = curPos; renderSnLPawns();
-            new Audio('click.mp3').play().catch(e => {}); await new Promise(r => setTimeout(r, 300));
+            let isSnake = snlActiveLayout[curPos] < curPos;
+            document.getElementById('snl-log-msg').innerText = isSnake ? "Ops! Kena Ular 🐍 Turun!" : "Yess! Naik Tangga 🪜!";
+            await new Promise(r => setTimeout(r, 600));
+            
+            curPos = snlActiveLayout[curPos]; 
+            snlPlayers[color].pos = curPos; 
+            renderSnLPawns();
+            new Audio('click.mp3').play().catch(e => {}); 
+            await new Promise(r => setTimeout(r, 500));
         }
 
         let isWin = curPos === 100;
