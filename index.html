@@ -337,7 +337,8 @@
         <a onclick="switchPage('home')" id="n-home" class="active">HOME</a>
         <a onclick="switchPage('about')" id="n-about">ABOUT</a>
         <a onclick="switchPage('allcabang')" id="n-allcabang">CABANG</a>
-        <a onclick="switchPage('forums')" id="n-forums">FORUMS</a> 
+        <a onclick="switchPage('forums')" id="n-forums">FORUMS</a>
+        <a onclick="switchPage('member')" id="n-member">MEMBER</a>
       </div>
     </nav>
 
@@ -379,6 +380,37 @@
 <p class="about-secondary">Your "castes" and hierarchies are laughable failures. While you waste your time drowning in petty, low-tier drama, we remain untouchable. Do not mistake our presence for equality; we are the elite, and you are merely visitors in our realm. Stay silent, observe the superior standard, and know your place. 261 reigns supreme.</p>
 </div>
 </div>
+
+<!-- PAGE MEMBER -->
+<div id="member" class="page">
+  <div style="padding: 20px;">
+    <h2 style="width: 100%; text-align: center; margin-bottom: 25px;">𝐌𝐄𝐌𝐁𝐄𝐑 $𝟐𝟔𝟏</h2>
+    
+    <!-- SECTION BOYS -->
+    <div class="member-section">
+      <h3 style="color: #fff; margin-bottom: 15px;">𝐁𝐎𝐘𝐒</h3>
+      <!-- ID 'boys-list' ini yang nanti akan diatur via JS dari Panel Admin -->
+      <ul id="boys-list" style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
+        <li>$𝟐𝟔𝟏𝐍𝐚𝐧𝐝𝐨</li>
+        <li>$𝟐𝟔𝟏𝐁𝐨𝐲𝐫𝐢𝐬</li>
+        <li>$𝟐𝟔𝟏𝐀𝐧𝐝𝐢</li>
+        <li>$𝟐𝟔𝟏𝐌𝐨𝐫𝐚𝐝𝐨</li>
+        <li>$𝟐𝟔𝟏𝐉𝐮𝐧𝐚𝐥𝐟𝐚𝐫𝐨</li>
+        <li>$𝟐𝟔𝟏𝐑𝐚𝐟𝐥𝐲</li>
+      </ul>
+    </div>
+
+    <!-- SECTION LADIES -->
+    <div class="member-section" style="margin-top: 35px;">
+      <h3 style="color: #fff; margin-bottom: 15px;">𝐋𝐀𝐃𝐈𝐄𝐒</h3>
+      <!-- ID 'ladies-list' ini juga untuk target JS dari Panel Admin -->
+      <ul id="ladies-list" style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
+        <li style="color:#aaa; font-style:italic;">Data belum ditambahkan...</li>
+      </ul>
+    </div>
+    
+  </div>
+</div>
                                   
         <div id="forums" class="page">
           <div class="content-block">
@@ -407,7 +439,6 @@
         <span onclick="submitReaction('💀')">💀</span>
     </div>
   </div>
-
 
   <!-- GAME UI -->
   <div id="game-page" class="crt">
@@ -869,6 +900,27 @@
             btnSingle.style.background = '#000'; btnSingle.style.color = '#fff'; btnSingle.style.borderColor = '#555';
         }
     }
+    
+    // Script untuk menangkap update dari Admin Panel
+database.ref('members').on('value', snap => {
+    if(snap.exists()) {
+        let data = snap.val();
+        
+        // Render Boys
+        if(data.boys && data.boys.length > 0) {
+            document.getElementById('boys-list').innerHTML = data.boys.map(n => `<li>${n}</li>`).join('');
+        } else {
+            document.getElementById('boys-list').innerHTML = '<li style="color:#aaa; font-style:italic;">Data belum ditambahkan...</li>';
+        }
+
+        // Render Ladies
+        if(data.ladies && data.ladies.length > 0) {
+            document.getElementById('ladies-list').innerHTML = data.ladies.map(n => `<li>${n}</li>`).join('');
+        } else {
+            document.getElementById('ladies-list').innerHTML = '<li style="color:#aaa; font-style:italic;">Data belum ditambahkan...</li>';
+        }
+    }
+});
 
     function spawnSkull() {
       const skull = document.createElement('div'); skull.innerHTML = '%D%0'; skull.className = 'skull';
@@ -2319,4 +2371,4 @@
 
   </script>
 </body>
-                          </html>
+  </html>
