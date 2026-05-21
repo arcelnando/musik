@@ -219,6 +219,52 @@
     .data-table th { border-bottom: 1px solid #fff; padding-bottom: 5px; }
     .data-table td { padding: 5px 0; font-size: 14px;}
     .setting-row { display: flex; justify-content: space-between; margin-top: 15px; font-size: 14px; align-items: center; text-align: left; }
+      
+  /* CSS untuk efek swipe (carousel) menyamping */
+  .swipe-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Sembunyikan scrollbar di Firefox */
+    -ms-overflow-style: none; /* Sembunyikan scrollbar di IE/Edge */
+    scroll-behavior: smooth;
+  }
+  .swipe-wrapper::-webkit-scrollbar {
+    display: none; /* Sembunyikan scrollbar di Chrome/Safari */
+  }
+  .swipe-slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+    scroll-snap-align: start;
+    box-sizing: border-box;
+  }
+  
+  /* CSS untuk Layout Partner & Foto (Persiapan untuk inject JS) */
+  .partner-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+  }
+  .partner-item {
+    text-align: center;
+    width: 70px; 
+  }
+  .partner-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 8px;
+    border: none;
+    background-color: #111; 
+  }
+  .partner-name {
+    font-size: 11px;
+    color: #fff;
+    word-wrap: break-word;
+    line-height: 1.2;
+  }
 
     .game-cards-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
     .game-card { background: rgba(15, 15, 15, 0.9); border: 2px solid #fff; width: 140px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1); border-radius: 16px;}
@@ -337,8 +383,8 @@
         <a onclick="switchPage('home')" id="n-home" class="active">HOME</a>
         <a onclick="switchPage('about')" id="n-about">ABOUT</a>
         <a onclick="switchPage('allcabang')" id="n-allcabang">CABANG</a>
-        <a onclick="switchPage('forums')" id="n-forums">FORUMS</a>
         <a onclick="switchPage('member')" id="n-member">MEMBER</a>
+        <a onclick="switchPage('forums')" id="n-forums">FORUMS</a>
       </div>
     </nav>
 
@@ -384,25 +430,41 @@
 <!-- PAGE MEMBER -->
 <div id="member" class="page">
   <div style="padding: 20px;">
-    <h2 style="width: 100%; text-align: center; margin-bottom: 25px;">𝐌𝐄𝐌𝐁𝐄𝐑 $𝟐𝟔𝟏</h2>
-    
-    <!-- SECTION BOYS -->
-    <div class="member-section">
-      <h3 style="color: #fff; margin-bottom: 15px;">𝐁𝐎𝐘𝐒</h3>
-      <!-- ID 'boys-list' ini yang nanti akan diatur via JS dari Panel Admin -->
-      <ul id="boys-list" style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
-        <li style="color:#aaa; font-style:italic;">Memuat data...</li>
-      </ul>
-    </div>
+    <h2 style="width: 100%; text-align: center; margin-bottom: 5px;">𝐌𝐄𝐌𝐁𝐄𝐑 $𝟐𝟔𝟏</h2>
 
-    <!-- SECTION LADIES -->
-    <div class="member-section" style="margin-top: 35px;">
-      <h3 style="color: #fff; margin-bottom: 15px;">𝐋𝐀𝐃𝐈𝐄𝐒</h3>
-      <!-- ID 'ladies-list' ini juga untuk target JS dari Panel Admin -->
-      <ul id="ladies-list" style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
-        <li style="color:#aaa; font-style:italic;">Memuat data...</li>
-      </ul>
-    </div>
+    <!-- CONTAINER SWIPE UTAMA -->
+    <div class="swipe-wrapper">
+      
+      <!-- SLIDE 1: BOYS & LADIES GABUNG -->
+      <div class="swipe-slide">
+        
+        <!-- SECTION BOYS -->
+        <div class="member-section">
+          <h3 style="color: #fff; margin-bottom: 15px;">𝐁𝐎𝐘𝐒</h3>
+          <ul id="boys-list" style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
+            <li style="color:#aaa; font-style:italic;">Memuat data...</li>
+          </ul>
+        </div>
+
+        <!-- SECTION LADIES -->
+        <div class="member-section" style="margin-top: 35px;">
+          <h3 style="color: #fff; margin-bottom: 15px;">𝐋𝐀𝐃𝐈𝐄𝐒</h3>
+          <ul id="ladies-list" style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
+            <li style="color:#aaa; font-style:italic;">Memuat data...</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- SLIDE 2: PARTNER / SUPPORT -->
+      <div class="swipe-slide">
+        <h3 style="color: #fff; margin-bottom: 15px;">𝐏𝐀𝐑𝐓𝐍𝐄𝐑 / 𝐒𝐔𝐏𝐏𝐎𝐑𝐓</h3>
+        
+        <!-- ID 'partner-list' ini kosong, nunggu diisi otomatis oleh JS dari Admin Panel -->
+        <div id="partner-list" class="partner-grid"></div>
+      </div>
+
+    </div> <!-- Akhir dari swipe-wrapper -->
     
   </div>
 </div>
@@ -411,7 +473,7 @@
           <div class="content-block">
             <h2>𝐅𝐎𝐑𝐔𝐌𝐒 𝐔𝐏𝐃𝐀𝐓𝐄</h2>
             <div id="forum-container">
-              <p style="text-align:center; color:#aaa; font-size: 14px;">Memuat transmisi dari server...</p>
+              <p style="text-align:center; color:#aaa; font-size: 14px;">Memuat data...</p>
             </div>
           </div>
         </div>
@@ -896,25 +958,29 @@
         }
     }
     
-    // Script untuk menangkap update dari Admin Panel
-database.ref('members').on('value', snap => {
+    // Load Partner Data
+database.ref('partners').on('value', snap => {
+    let html = '';
     if(snap.exists()) {
-        let data = snap.val();
+        let partnersArray = [];
+        snap.forEach(child => { partnersArray.push(child.val()); });
         
-        // Render Boys
-        if(data.boys && data.boys.length > 0) {
-            document.getElementById('boys-list').innerHTML = data.boys.map(n => `<li>${n}</li>`).join('');
-        } else {
-            document.getElementById('boys-list').innerHTML = '<li style="color:#aaa; font-style:italic;">Data belum ditambahkan...</li>';
-        }
-
-        // Render Ladies
-        if(data.ladies && data.ladies.length > 0) {
-            document.getElementById('ladies-list').innerHTML = data.ladies.map(n => `<li>${n}</li>`).join('');
-        } else {
-            document.getElementById('ladies-list').innerHTML = '<li style="color:#aaa; font-style:italic;">Data belum ditambahkan...</li>';
-        }
+        // Looping data partner ke dalam kotak grid
+        partnersArray.sort((a,b) => b.timestamp - a.timestamp).forEach(p => {
+            // Kalau foto kosong, otomatis generate gambar inisial dari huruf depannya
+            let imgUrl = p.image || ('https://via.placeholder.com/60/111111/ffffff?text=' + p.name.charAt(0));
+            
+            html += `
+            <div class="partner-item">
+                <img src="${imgUrl}" alt="${p.name}" class="partner-img">
+                <div class="partner-name">${p.name}</div>
+            </div>`;
+        });
     }
+    if(html === '') html = '<div style="color:#aaa; font-size:12px; width:100%; text-align:center;">Belum ada partner...</div>';
+    
+    // Targetkan ID 'partner-list' yang ada di slide ke-2 (dari HTML sebelumnya)
+    document.getElementById('partner-list').innerHTML = html;
 });
 
     function spawnSkull() {
@@ -2366,4 +2432,4 @@ database.ref('members').on('value', snap => {
 
   </script>
 </body>
-  </html>
+                                         </html>
