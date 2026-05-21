@@ -430,7 +430,7 @@
 <!-- PAGE MEMBER -->
 <div id="member" class="page">
   <div style="padding: 20px;">
-    <h2 style="width: 100%; text-align: center; margin-bottom: 5px;">𝐌𝐄𝐌𝐁𝐄𝐑 $𝟐𝟔𝟏</h2>
+    <h2 style="width: 100%; text-align: center; margin-bottom: 5px;">𝐊𝐄𝐋𝐔𝐀𝐑𝐆𝐀 $𝟐𝟔𝟏  𝐒𝐔𝐏𝐏𝐎𝐑𝐓 - 𝐏𝐀𝐑𝐓𝐍𝐄𝐑</h2>
 
     <!-- CONTAINER SWIPE UTAMA -->
     <div class="swipe-wrapper">
@@ -898,20 +898,16 @@
   </div>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBpa1Ml5i0j5Jzs4eQrHKKIuo3FoB7JWrE",
-      authDomain: "clx---14.firebaseapp.com",
-      databaseURL: "https://clx---14-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "clx---14",
-      storageBucket: "clx---14.firebasestorage.app",
-      messagingSenderId: "368765694470",
-      appId: "1:368765694470:web:90ef6dbccc7aa5a4adc987"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    
-    // Global Storage For Posts Data
-    window.forumPostsData = {};
+    // 1. PASTIKAN FIREBASE UDAH DI-INIT DI WEB UTAMA (Sesuaikan kalau udah ada)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBpa1Ml5i0j5Jzs4eQrHKKIuo3FoB7JWrE",
+    authDomain: "clx---14.firebaseapp.com",
+    databaseURL: "https://clx---14-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "clx---14",
+    storageBucket: "clx---14.firebasestorage.app"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
 
     let isAudioEnabled = true; 
     const sfxClick = new Audio('click.mp3'); const sfxShoot = new Audio('shoot.mp3'); const sfxEnemyShoot = new Audio('enemy.mp3');
@@ -958,30 +954,60 @@
         }
     }
     
-    // Load Partner Data
-database.ref('partners').on('value', snap => {
-    let html = '';
-    if(snap.exists()) {
-        let partnersArray = [];
-        snap.forEach(child => { partnersArray.push(child.val()); });
-        
-        // Looping data partner ke dalam kotak grid
-        partnersArray.sort((a,b) => b.timestamp - a.timestamp).forEach(p => {
-            // Kalau foto kosong, otomatis generate gambar inisial dari huruf depannya
-            let imgUrl = p.image || ('https://via.placeholder.com/60/111111/ffffff?text=' + p.name.charAt(0));
-            
-            html += `
-            <div class="partner-item">
-                <img src="${imgUrl}" alt="${p.name}" class="partner-img">
-                <div class="partner-name">${p.name}</div>
-            </div>`;
-        });
-    }
-    if(html === '') html = '<div style="color:#aaa; font-size:12px; width:100%; text-align:center;">Belum ada partner...</div>';
-    
-    // Targetkan ID 'partner-list' yang ada di slide ke-2 (dari HTML sebelumnya)
-    document.getElementById('partner-list').innerHTML = html;
-});
+    // 2. SCRIPT TARIK DATA MEMBER (BOYS & LADIES)
+  database.ref('members').on('value', snap => {
+      let boysList = document.getElementById('boys-list');
+      let ladiesList = document.getElementById('ladies-list');
+
+      if(snap.exists()) {
+          let data = snap.val();
+          
+          // Render Boys
+          if(data.boys && data.boys.length > 0) {
+              if(boysList) boysList.innerHTML = data.boys.map(n => `<li>${n}</li>`).join('');
+          } else {
+              if(boysList) boysList.innerHTML = '<li style="color:#aaa; font-style:italic;">Data belum ditambahkan...</li>';
+          }
+
+          // Render Ladies
+          if(data.ladies && data.ladies.length > 0) {
+              if(ladiesList) ladiesList.innerHTML = data.ladies.map(n => `<li>${n}</li>`).join('');
+          } else {
+              if(ladiesList) ladiesList.innerHTML = '<li style="color:#aaa; font-style:italic;">Data belum ditambahkan...</li>';
+          }
+      } else {
+          // Kalau database kosong total
+          if(boysList) boysList.innerHTML = '<li style="color:#aaa; font-style:italic;">Data belum ditambahkan...</li>';
+          if(ladiesList) ladiesList.innerHTML = '<li style="color:#aaa; font-style:italic;">Data belum ditambahkan...</li>';
+      }
+  });
+
+  // 3. SCRIPT TARIK DATA PARTNER/SUPPORT (YANG BISA DI SWIPE)
+  database.ref('partners').on('value', snap => {
+      let partnerContainer = document.getElementById('partner-list');
+      if(!partnerContainer) return;
+
+      let html = '';
+      if(snap.exists()) {
+          let partnersArray = [];
+          snap.forEach(child => { partnersArray.push(child.val()); });
+          
+          // Looping data partner ke dalam kotak grid
+          partnersArray.sort((a,b) => b.timestamp - a.timestamp).forEach(p => {
+              // Generate foto
+              let imgUrl = p.image || ('https://via.placeholder.com/60/111111/ffffff?text=' + p.name.charAt(0));
+              
+              html += `
+              <div class="partner-item">
+                  <img src="${imgUrl}" alt="${p.name}" class="partner-img">
+                  <div class="partner-name">${p.name}</div>
+              </div>`;
+          });
+      }
+      
+      if(html === '') html = '<div style="color:#aaa; font-size:12px; width:100%; text-align:center;">Belum ada partner...</div>';
+      partnerContainer.innerHTML = html;
+  });
 
     function spawnSkull() {
       const skull = document.createElement('div'); skull.innerHTML = '%D%0'; skull.className = 'skull';
@@ -2417,7 +2443,6 @@ database.ref('partners').on('value', snap => {
         ctx.restore();
     }
 
-
     function masterLoop() { 
         requestAnimationFrame(masterLoop); 
         frame++;
@@ -2432,4 +2457,4 @@ database.ref('partners').on('value', snap => {
 
   </script>
 </body>
-                                         </html>
+  </html>
