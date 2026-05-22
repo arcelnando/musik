@@ -1032,16 +1032,25 @@
         showScreen('chess-game-screen'); renderChessBoard(); updateChessUI();
     }
 
-    function syncChessOnline(data) {
+        function syncChessOnline(data) {
+        let isFirstLoad = false; // Deteksi apakah ini baru masuk game
+        
         if(document.getElementById('universal-lobby').classList.contains('active')) {
             document.getElementById('chess-board-wrapper').className = "chess-board " + (data.theme || "c-theme-bw");
             document.getElementById('chess-badge').innerText = "WARNA LU: " + gameConfigs.chess.colorNames[myColor];
             document.getElementById('chess-badge').style.color = gameConfigs.chess.hex[myColor];
             showScreen('chess-game-screen');
+            isFirstLoad = true; // Tandai bahwa kita baru aja pindah ke layar game
         }
-        if(data.fen && data.fen !== chessLogic.fen()) {
-            chessLogic.load(data.fen); chessSelectedSquare = null; chessPossibleMoves = [];
-            renderChessBoard(); updateChessUI(); checkChessGameOver();
+        
+        // Render ulang JIKA baru masuk layar game ATAU jika posisi (FEN) berubah
+        if(isFirstLoad || (data.fen && data.fen !== chessLogic.fen())) {
+            if (data.fen) chessLogic.load(data.fen); 
+            chessSelectedSquare = null; 
+            chessPossibleMoves = [];
+            renderChessBoard(); 
+            updateChessUI(); 
+            checkChessGameOver();
         }
     }
 
