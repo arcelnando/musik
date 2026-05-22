@@ -149,7 +149,7 @@
     letter-spacing: 2px; 
     -webkit-text-stroke: 2px #2d3436; 
     text-shadow: 4px 4px 0px #2d3436; 
-    margin-top: 8vh; 
+    margin-top: 8vh; /* <--- INI TAMBAHANNYA BIAR TURUN */
     margin-bottom: 5px; 
     font-weight: 700; 
 }
@@ -204,7 +204,7 @@
     .room-container.dark .floor { background: #1e272e !important; }
     .rug { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 250px; height: 60px; background: rgba(255,255,255,0.4); border: 4px solid #2d3436; border-radius: 50%; transition: 0.3s;}
 
-    .pet-wrapper { position: absolute; bottom: 25%; display: flex; justify-content: center; align-items: flex-end; z-index: 50; transition: left 0.5s; }
+    .pet-wrapper { position: absolute; bottom: 25%; left: 50%; transform: translateX(-50%); display: flex; justify-content: center; align-items: flex-end; z-index: 50; }
     .size-container { position: relative; transform-origin: bottom center; transition: transform 0.5s; display: flex; justify-content: center; align-items: flex-end;}
     .pet-svg { width: 130px; height: 130px; transform-origin: bottom center; transition: all 0.3s ease; position: relative; z-index: 2;}
     
@@ -484,7 +484,7 @@
         <button class="btn-kawaii btn-yellow" style="width: 250px; margin-bottom: 20px; animation: petBreathe 2s infinite;" onclick="claimDaily()">KLAIM KOIN HARIAN</button>
 
         <div class="kawaii-panel">
-            <button id="btn-adopsi-home" class="btn-kawaii btn-pink" onclick="showScreen('screen-guide')">ADOPSI ANABUL</button>
+            <button class="btn-kawaii btn-pink" onclick="showScreen('screen-guide')">ADOPSI ANABUL</button>
             <button class="btn-kawaii btn-green" onclick="showScreen('screen-shop')">TOKO & AKSESORIS</button>
             <button class="btn-kawaii btn-blue" onclick="showScreen('screen-visit')">VISIT TEMEN</button>
             <button class="btn-kawaii btn-red" onclick="exitToArcade()">KEMBALI KE ARCADE</button>
@@ -614,9 +614,9 @@
             <h2 style="margin-bottom: 15px; color:#ff9ff3; -webkit-text-stroke: 1px #2d3436; font-weight:700;">PANDUAN BERMAIN</h2>
             <div style="background: #fdf1f3; border: 3px solid #2d3436; padding: 15px; border-radius: 20px; text-align: left; font-size: 14px; margin-bottom: 20px; line-height: 1.5; color:#2d3436; font-weight:600;">
                 <p>🍎 Beri makan agar tidak kelaparan (Mengurangi stamina lambat: 1 poin/1 menit).</p><br>
-                <p>🤢 Jika kotor/lapar dibiarkan lama, akan <b>SAKIT</b>! Beri obat. Jika kelaparan dan sakit terlalu lama bisa MATI!</p><br>
+                <p>🤢 Jika kotor/lapar dibiarkan lama, akan <b>SAKIT</b>! Beri obat.</p><br>
                 <p>💤 Matikan lampu untuk tidur. (Stamina bertambah 1 poin/1 menit tidur). Offline tetap dihitung!</p><br>
-                <p>🎮 Mainkan 6 Mini Games untuk mencari koin dan EXP agar pet membesar.</p>
+                <p>🎮 Mainkan 5 Mini Games untuk mencari koin.</p>
             </div>
             <button class="btn-kawaii btn-yellow" onclick="showScreen('screen-select')">MENGERTI!</button>
             <button class="btn-kawaii btn-red" onclick="showScreen('screen-home-pet')">KEMBALI</button>
@@ -656,30 +656,16 @@
         <div class="wallpaper bg-default" id="room-wallpaper"></div>
         <div class="floor floor-default" id="room-floor"><div class="rug"></div></div>
         
-        <!-- PET KITA -->
-        <div class="pet-wrapper" id="wrapper-1" style="left:50%; transform: translateX(-50%);">
+        <div class="pet-wrapper" id="wrapper-1">
            <div class="size-container">
-               <svg class="acc-svg" viewBox="0 0 100 100"></svg>
-               <div class="pet-render-target"></div>
+               <svg class="acc-svg" id="acc-layer" viewBox="0 0 100 100"></svg>
+               <div id="pet-render"></div>
                <svg class="pillow-svg" viewBox="0 0 100 50">
                    <rect x="5" y="10" width="90" height="35" rx="15" fill="#f5f6fa" stroke="#2d3436" stroke-width="4"/>
                    <line x1="15" y1="27" x2="85" y2="27" stroke="#dcdde1" stroke-width="2" stroke-linecap="round" stroke-dasharray="5,5"/>
                </svg>
            </div>
         </div>
-
-        <!-- PET TEMAN (VISIT) -->
-        <div class="pet-wrapper" id="wrapper-2" style="display:none; left:75%; transform: translateX(-50%) scaleX(-1);">
-           <div class="size-container">
-               <svg class="acc-svg" viewBox="0 0 100 100"></svg>
-               <div class="pet-render-target"></div>
-               <svg class="pillow-svg" viewBox="0 0 100 50">
-                   <rect x="5" y="10" width="90" height="35" rx="15" fill="#f5f6fa" stroke="#2d3436" stroke-width="4"/>
-                   <line x1="15" y1="27" x2="85" y2="27" stroke="#dcdde1" stroke-width="2" stroke-linecap="round" stroke-dasharray="5,5"/>
-               </svg>
-           </div>
-        </div>
-
     </div>
 
     <!-- UI LAYERS PET -->
@@ -688,7 +674,7 @@
             <!-- Header HUD -->
             <div class="hud-top">
                 <div class="hud-header">
-                    <div class="pet-name-ui" id="ui-name">NAMA <span id="ui-lvl" style="font-size:12px; color:#ff7675;">Lv.1</span></div>
+                    <div class="pet-name-ui" id="ui-name">NAMA</div>
                     <div class="coin-display">🪙 <span id="ui-coins">0</span></div>
                 </div>
                 <div class="status-bars" id="hud-status-bars">
@@ -705,7 +691,7 @@
                         <div class="bar-fill fill-energy" id="bar-energy"></div>
                     </div>
                 </div>
-                <div id="visit-mode-text" style="display:none; color:#2d3436; text-align:center; font-weight:bold; margin-top:5px;">🐾 KAMAR TEMAN & ANABULMU 🐾</div>
+                <div id="visit-mode-text" style="display:none; color:#2d3436; text-align:center; font-weight:bold; margin-top:5px;">🐾 MODE BERKUNJUNG 🐾</div>
             </div>
 
             <!-- Panels Interaksi -->
@@ -721,9 +707,8 @@
                         <span style="font-size:12px; font-weight:bold;">MANDI</span>
                     </div>
                 </div>
-                <!-- PANEL MAIN -->
+                <!-- PANEL MAIN (MINI GAMES DARI HTML 1) -->
                 <div class="interactive-panel" id="panel-play">
-                    <div class="item-card" onclick="openMiniGame('tangkap')"><span style="font-size:24px; font-family:sans-serif;">🧺</span><span style="font-size:10px; font-weight:bold;">TANGKAP</span></div>
                     <div class="item-card" onclick="openMiniGame('mancing')"><span style="font-size:24px; font-family:sans-serif;">🎣</span><span style="font-size:10px; font-weight:bold;">MANCING</span></div>
                     <div class="item-card" onclick="openMiniGame('tebak')"><span style="font-size:24px; font-family:sans-serif;">🔢</span><span style="font-size:10px; font-weight:bold;">TEBAK</span></div>
                     <div class="item-card" onclick="openMiniGame('balap')"><span style="font-size:24px; font-family:sans-serif;">🏁</span><span style="font-size:10px; font-weight:bold;">BALAP</span></div>
@@ -926,9 +911,9 @@
     function showEndLeaderboard(winnersList, namesMap, conf) { let listHtml = ''; winnersList.forEach((col, index) => { let pName = namesMap[col] || conf.colorNames[col] || "PEMAIN"; let medal = index === 0 ? "🥇" : (index === 1 ? "🥈" : (index === 2 ? "🥉" : "💀")); let rankCol = (index === 0) ? "#ffd700" : (index === winnersList.length - 1 ? "#ff4757" : "#ccc"); listHtml += `<div class="lb-item-elegant" style="--rank-color: ${conf.hex[col]};"><span class="lb-rank">${medal}</span><span class="lb-name" style="color: ${rankCol};">${pName}</span></div>`; }); document.getElementById('leaderboard-list').innerHTML = listHtml; showScreen('leaderboard-screen'); }
 
     // ==========================================================================
-    // ARCADE ENGINES (Dipersingkat & Fix Ular Tangga Lag)
+    // ARCADE ENGINES (Dipersingkat)
     // ==========================================================================
-    const snlLayouts = [{ 4:14, 9:31, 20:38, 28:84, 40:59, 51:67, 63:81, 71:91, 17:7, 54:34, 62:19, 64:60, 87:24, 93:73, 95:75, 99:78 }]; let snlGameState = {}; let snlPlayers = {}; let snlTypes = {}; let snlNames = {}; let snlActiveLayout = {}; let snlConfig = { board: 'default', snake: 'default' }; function getSnLCellCoords(pos) { if(pos < 1) pos = 1; if(pos > 100) pos = 100; let zeroIdx = pos - 1; let row = Math.floor(zeroIdx / 10); let col = zeroIdx % 10; if (row % 2 !== 0) col = 9 - col; return { r: 9 - row, c: col }; } function initSnLBoardHTML() { const boardEl = document.getElementById('snl-board'); boardEl.innerHTML = ''; for (let row = 9; row >= 0; row--) { for (let col = 0; col < 10; col++) { let cellNum = (row % 2 === 0) ? (row * 10 + col + 1) : (row * 10 + (9 - col) + 1); boardEl.innerHTML += `<div class="snl-cell" id="snl-cell-${cellNum}"></div>`; } } } function drawVisualSnL() { const svg = document.getElementById('snl-svg-layer'); let sGrad1 = "#3a0000", sGrad2 = "#1a0000", sGrad3 = "#050000", scalesC1 = "#ff0033"; if(snlConfig.snake === 'pink') { sGrad1 = "#ff1493"; sGrad2 = "#ff69b4"; sGrad3 = "#ffb6c1"; scalesC1 = "#fff"; } svg.innerHTML = `<defs><linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fdfbfb" /><stop offset="50%" stop-color="#bdc3c7" /><stop offset="100%" stop-color="#606c88" /></linearGradient><linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${sGrad1}" /><stop offset="50%" stop-color="${sGrad2}" /><stop offset="100%" stop-color="${sGrad3}" /></linearGradient></defs>`; const cw = svg.clientWidth / 10; const ch = svg.clientHeight / 10; for (const [start, end] of Object.entries(snlActiveLayout)) { let sNum = parseInt(start); let eNum = parseInt(end); let s = getSnLCellCoords(sNum); let e = getSnLCellCoords(eNum); let sx = (s.c * cw) + (cw / 2); let sy = (s.r * ch) + (ch / 2); let ex = (e.c * cw) + (cw / 2); let ey = (e.r * ch) + (ch / 2); let isLadder = eNum > sNum; if (isLadder) { let dx = ex - sx; let dy = ey - sy; let len = Math.sqrt(dx*dx + dy*dy); let nx = (-dy/len) * (cw*0.12); let ny = (dx/len) * (cw*0.12); svg.innerHTML += `<line x1="${sx+nx}" y1="${sy+ny}" x2="${ex+nx}" y2="${ey+ny}" stroke="#2c3e50" stroke-width="8" stroke-linecap="round"/><line x1="${sx+nx}" y1="${sy+ny}" x2="${ex+nx}" y2="${ey+ny}" stroke="url(#silverGrad)" stroke-width="5" stroke-linecap="round" />`; } else { let hx = sx, hy = sy, tx = ex, ty = ey; let mx = (hx+tx)/2; let my = (hy+ty)/2; let dx = tx - hx; let dy = ty - hy; let nx = -dy * 0.3; let ny = dx * 0.3; svg.innerHTML += `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="url(#snakeGrad)" stroke-width="14" fill="none" stroke-linecap="round" />`; } } } window.addEventListener('resize', () => { if(document.getElementById('snl-game-screen').classList.contains('active')) drawVisualSnL(); }); function renderSnLPawns() { const container = document.getElementById('snl-token-layer'); if(!container) return; container.innerHTML = ''; gameConfigs.snl.colors.forEach((col, i) => { if(snlTypes[col] !== 'none' && snlPlayers[col]) { let p = document.createElement('div'); p.className = `snl-pawn snl-p-${col}`; p.style.backgroundColor = gameConfigs.snl.hex[col]; let oX = [-8, 8, -8, 8, 0][i] || 0; let oY = [-8, -8, 8, 8, 0][i] || 0; if(snlPlayers[col].pos === 0) { p.style.left = `calc(8% + ${oX*1.5}px)`; p.style.top = `calc(92% + ${oY*1.5}px)`; p.style.transform = 'translate(-50%, -50%) scale(0.7)'; p.style.display = 'block'; } else { let c = getSnLCellCoords(snlPlayers[col].pos); p.style.left = `calc(${c.c*10+5}% + ${oX}px)`; p.style.top = `calc(${c.r*10+5}% + ${oY}px)`; p.style.transform = 'translate(-50%, -50%) scale(1.15)'; p.style.display = 'block'; } container.appendChild(p); } }); } function updateSnLUI() { let tCol = snlGameState.turn; let btn = document.getElementById('snl-dice'); let log = document.getElementById('snl-log-msg'); document.getElementById('snl-turn-info').innerText = `${snlNames[tCol]||gameConfigs.snl.colorNames[tCol]} (${gameConfigs.snl.colorNames[tCol]})`; document.getElementById('snl-turn-info').style.color = gameConfigs.snl.hex[tCol]; btn.innerText = snlGameState.dice > 0 ? snlGameState.dice : '🎲'; let isMyTurn = isOnline ? (tCol === myColor) : (snlTypes[tCol] === 'human'); if(isMyTurn) { if(!snlGameState.hasRolled && !snlGameState.moving) { btn.disabled = false; log.innerText = "Giliran! Lempar dadu."; } else { btn.disabled = true; log.innerText = "Jalan..."; } } else { btn.disabled = true; log.innerText = "Nunggu..."; } } function startSnLOffline() { isOnline = false; activeGame = 'snl'; snlConfig = { board: document.getElementById('snl-theme-board').value, snake: document.getElementById('snl-theme-snake').value }; snlTypes = { red: document.getElementById('snl-off-red').value, blue: document.getElementById('snl-off-blue').value, green: document.getElementById('snl-off-green').value, yellow: document.getElementById('snl-off-yellow').value, purple: document.getElementById('snl-off-purple').value }; snlNames = { red: "P1", blue: "P2", green: "P3", yellow: "P4", purple: "P5" }; snlPlayers = {}; gameConfigs.snl.colors.forEach(c => { if(snlTypes[c] !== 'none') snlPlayers[c] = { pos: 0 }; }); snlActiveLayout = snlLayouts[0]; snlGameState = { turn: 'red', dice: 0, hasRolled: false, moving: false, winners: [] }; initSnLBoardHTML(); setTimeout(() => { showScreen('snl-game-screen'); drawVisualSnL(); renderSnLPawns(); updateSnLUI(); }, 100); } function syncSnLOnline(data) { if(document.getElementById('universal-lobby').classList.contains('active')) { snlActiveLayout = snlLayouts[0]; snlPlayers = data.board; snlGameState = data.state; snlTypes = {red:'none', blue:'none', green:'none', yellow:'none', purple:'none'}; Object.keys(data.players).forEach(c => snlTypes[c] = 'human'); snlNames = data.players; initSnLBoardHTML(); setTimeout(() => { showScreen('snl-game-screen'); drawVisualSnL(); renderSnLPawns(); updateSnLUI(); }, 100); } else if(document.getElementById('snl-game-screen').classList.contains('active')) { snlGameState = data.state; if(!snlGameState.winners) snlGameState.winners = []; if (!(snlGameState.turn === myColor && snlGameState.moving)) { snlPlayers = data.board; renderSnLPawns(); } updateSnLUI(); if(snlGameState.winners.length > 0) showEndLeaderboard(snlGameState.winners, snlNames, gameConfigs.snl); } } function rollSnLDice() { if(snlGameState.hasRolled || snlGameState.moving) return; document.getElementById('snl-dice').disabled = true; let rng = Math.floor(Math.random() * 6) + 1; if(isOnline) { database.ref(`snl_rooms/${roomCode}/state`).update({ dice: rng, hasRolled: true, moving: true }); executeSnLMove(snlGameState.turn, rng); } else { snlGameState.dice = rng; snlGameState.hasRolled = true; snlGameState.moving = true; updateSnLUI(); executeSnLMove(snlGameState.turn, rng); } } async function executeSnLMove(color, dice) { let curPos = snlPlayers[color].pos; let tgtPos; if (curPos === 0) { if (dice === 1) { tgtPos = 1; snlPlayers[color].pos = 1; renderSnLPawns(); passSnLNextTurn(color); return; } else { setTimeout(() => { passSnLNextTurn(color); }, 1000); return; } } else { tgtPos = curPos + dice; if (tgtPos > 100) { passSnLNextTurn(color); return; } } snlPlayers[color].pos = tgtPos; renderSnLPawns(); if (snlActiveLayout[tgtPos]) { curPos = snlActiveLayout[tgtPos]; snlPlayers[color].pos = curPos; renderSnLPawns(); } if (curPos === 100 && !snlGameState.winners.includes(color)) { snlGameState.winners.push(color); } if (dice === 6 || curPos === 100) { if (isOnline && myColor === color) database.ref().update({ [`snl_rooms/${roomCode}/board/${color}`]: snlPlayers[color], [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false }); else { snlGameState.moving = false; snlGameState.hasRolled = false; updateSnLUI(); } } else { passSnLNextTurn(color); } } function passSnLNextTurn(color) { let maxC = gameConfigs.snl.colors.length; let idx = gameConfigs.snl.colors.indexOf(color); let nextTurn=color; for(let i=1;i<=maxC;i++) { let n = gameConfigs.snl.colors[(idx+i)%maxC]; if(snlTypes[n]!=='none' && !snlGameState.winners.includes(n)) { nextTurn=n; break; } } if (isOnline && myColor === color) { database.ref().update({ [`snl_rooms/${roomCode}/state/turn`]: nextTurn, [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false }); } else { snlGameState.moving = false; snlGameState.turn = nextTurn; snlGameState.dice = 0; snlGameState.hasRolled = false; updateSnLUI(); } }
+    const snlLayouts = [{ 4:14, 9:31, 20:38, 28:84, 40:59, 51:67, 63:81, 71:91, 17:7, 54:34, 62:19, 64:60, 87:24, 93:73, 95:75, 99:78 }]; let snlGameState = {}; let snlPlayers = {}; let snlTypes = {}; let snlNames = {}; let snlActiveLayout = {}; let snlConfig = { board: 'default', snake: 'default' }; function getSnLCellCoords(pos) { if(pos < 1) pos = 1; if(pos > 100) pos = 100; let zeroIdx = pos - 1; let row = Math.floor(zeroIdx / 10); let col = zeroIdx % 10; if (row % 2 !== 0) col = 9 - col; return { r: 9 - row, c: col }; } function initSnLBoardHTML() { const boardEl = document.getElementById('snl-board'); boardEl.innerHTML = ''; for (let row = 9; row >= 0; row--) { for (let col = 0; col < 10; col++) { let cellNum = (row % 2 === 0) ? (row * 10 + col + 1) : (row * 10 + (9 - col) + 1); boardEl.innerHTML += `<div class="snl-cell" id="snl-cell-${cellNum}"></div>`; } } } function drawVisualSnL() { const svg = document.getElementById('snl-svg-layer'); let sGrad1 = "#3a0000", sGrad2 = "#1a0000", sGrad3 = "#050000", scalesC1 = "#ff0033"; if(snlConfig.snake === 'pink') { sGrad1 = "#ff1493"; sGrad2 = "#ff69b4"; sGrad3 = "#ffb6c1"; scalesC1 = "#fff"; } svg.innerHTML = `<defs><filter id="snlShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000" flood-opacity="0.85"/></filter><filter id="eyeGlow"><feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#ff0000" flood-opacity="1"/></filter><linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fdfbfb" /><stop offset="50%" stop-color="#bdc3c7" /><stop offset="100%" stop-color="#606c88" /></linearGradient><linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${sGrad1}" /><stop offset="50%" stop-color="${sGrad2}" /><stop offset="100%" stop-color="${sGrad3}" /></linearGradient></defs>`; const cw = svg.clientWidth / 10; const ch = svg.clientHeight / 10; for (const [start, end] of Object.entries(snlActiveLayout)) { let sNum = parseInt(start); let eNum = parseInt(end); let s = getSnLCellCoords(sNum); let e = getSnLCellCoords(eNum); let sx = (s.c * cw) + (cw / 2); let sy = (s.r * ch) + (ch / 2); let ex = (e.c * cw) + (cw / 2); let ey = (e.r * ch) + (ch / 2); let isLadder = eNum > sNum; if (isLadder) { let dx = ex - sx; let dy = ey - sy; let len = Math.sqrt(dx*dx + dy*dy); let nx = (-dy/len) * (cw*0.12); let ny = (dx/len) * (cw*0.12); svg.innerHTML += `<line x1="${sx+nx}" y1="${sy+ny}" x2="${ex+nx}" y2="${ey+ny}" stroke="#2c3e50" stroke-width="8" stroke-linecap="round" filter="url(#snlShadow)"/><line x1="${sx+nx}" y1="${sy+ny}" x2="${ex+nx}" y2="${ey+ny}" stroke="url(#silverGrad)" stroke-width="5" stroke-linecap="round" />`; } else { let hx = sx, hy = sy, tx = ex, ty = ey; let mx = (hx+tx)/2; let my = (hy+ty)/2; let dx = tx - hx; let dy = ty - hy; let nx = -dy * 0.3; let ny = dx * 0.3; svg.innerHTML += `<path d="M ${hx} ${hy} Q ${mx+nx} ${my+ny} ${tx} ${ty}" stroke="url(#snakeGrad)" stroke-width="14" fill="none" stroke-linecap="round" />`; } } } window.addEventListener('resize', () => { if(document.getElementById('snl-game-screen').classList.contains('active')) drawVisualSnL(); }); function renderSnLPawns() { const container = document.getElementById('snl-token-layer'); if(!container) return; container.innerHTML = ''; gameConfigs.snl.colors.forEach((col, i) => { if(snlTypes[col] !== 'none' && snlPlayers[col]) { let p = document.createElement('div'); p.className = `snl-pawn snl-p-${col}`; p.style.backgroundColor = gameConfigs.snl.hex[col]; let oX = [-8, 8, -8, 8, 0][i] || 0; let oY = [-8, -8, 8, 8, 0][i] || 0; if(snlPlayers[col].pos === 0) { p.style.left = `calc(8% + ${oX*1.5}px)`; p.style.top = `calc(92% + ${oY*1.5}px)`; p.style.transform = 'translate(-50%, -50%) scale(0.7)'; p.style.display = 'block'; } else { let c = getSnLCellCoords(snlPlayers[col].pos); p.style.left = `calc(${c.c*10+5}% + ${oX}px)`; p.style.top = `calc(${c.r*10+5}% + ${oY}px)`; p.style.transform = 'translate(-50%, -50%) scale(1.15)'; p.style.display = 'block'; } container.appendChild(p); } }); } function updateSnLUI() { let tCol = snlGameState.turn; let btn = document.getElementById('snl-dice'); let log = document.getElementById('snl-log-msg'); document.getElementById('snl-turn-info').innerText = `${snlNames[tCol]||gameConfigs.snl.colorNames[tCol]} (${gameConfigs.snl.colorNames[tCol]})`; document.getElementById('snl-turn-info').style.color = gameConfigs.snl.hex[tCol]; btn.innerText = snlGameState.dice > 0 ? snlGameState.dice : '🎲'; let isMyTurn = isOnline ? (tCol === myColor) : (snlTypes[tCol] === 'human'); if(isMyTurn) { if(!snlGameState.hasRolled && !snlGameState.moving) { btn.disabled = false; log.innerText = "Giliran! Lempar dadu."; } else { btn.disabled = true; log.innerText = "Jalan..."; } } else { btn.disabled = true; log.innerText = "Nunggu..."; } } function startSnLOffline() { isOnline = false; activeGame = 'snl'; snlConfig = { board: document.getElementById('snl-theme-board').value, snake: document.getElementById('snl-theme-snake').value }; snlTypes = { red: document.getElementById('snl-off-red').value, blue: document.getElementById('snl-off-blue').value, green: document.getElementById('snl-off-green').value, yellow: document.getElementById('snl-off-yellow').value, purple: document.getElementById('snl-off-purple').value }; snlNames = { red: "P1", blue: "P2", green: "P3", yellow: "P4", purple: "P5" }; snlPlayers = {}; gameConfigs.snl.colors.forEach(c => { if(snlTypes[c] !== 'none') snlPlayers[c] = { pos: 0 }; }); snlActiveLayout = snlLayouts[0]; snlGameState = { turn: 'red', dice: 0, hasRolled: false, moving: false, winners: [] }; initSnLBoardHTML(); setTimeout(() => { showScreen('snl-game-screen'); drawVisualSnL(); renderSnLPawns(); updateSnLUI(); }, 100); } function syncSnLOnline(data) { if(document.getElementById('universal-lobby').classList.contains('active')) { snlActiveLayout = snlLayouts[0]; snlPlayers = data.board; snlGameState = data.state; snlTypes = {red:'none', blue:'none', green:'none', yellow:'none', purple:'none'}; Object.keys(data.players).forEach(c => snlTypes[c] = 'human'); snlNames = data.players; initSnLBoardHTML(); setTimeout(() => { showScreen('snl-game-screen'); drawVisualSnL(); renderSnLPawns(); updateSnLUI(); }, 100); } else if(document.getElementById('snl-game-screen').classList.contains('active')) { snlGameState = data.state; if(!snlGameState.winners) snlGameState.winners = []; if (!(snlGameState.turn === myColor && snlGameState.moving)) { snlPlayers = data.board; renderSnLPawns(); } updateSnLUI(); if(snlGameState.winners.length > 0) showEndLeaderboard(snlGameState.winners, snlNames, gameConfigs.snl); } } function rollSnLDice() { if(snlGameState.hasRolled || snlGameState.moving) return; document.getElementById('snl-dice').disabled = true; let rng = Math.floor(Math.random() * 6) + 1; if(isOnline) { database.ref(`snl_rooms/${roomCode}/state`).update({ dice: rng, hasRolled: true, moving: true }); executeSnLMove(snlGameState.turn, rng); } else { snlGameState.dice = rng; snlGameState.hasRolled = true; snlGameState.moving = true; updateSnLUI(); executeSnLMove(snlGameState.turn, rng); } } async function executeSnLMove(color, dice) { let curPos = snlPlayers[color].pos; let tgtPos; if (curPos === 0) { if (dice === 1) { tgtPos = 1; snlPlayers[color].pos = 1; renderSnLPawns(); passSnLNextTurn(color); return; } else { setTimeout(() => { passSnLNextTurn(color); }, 1000); return; } } else { tgtPos = curPos + dice; if (tgtPos > 100) { passSnLNextTurn(color); return; } } snlPlayers[color].pos = tgtPos; renderSnLPawns(); if (snlActiveLayout[tgtPos]) { curPos = snlActiveLayout[tgtPos]; snlPlayers[color].pos = curPos; renderSnLPawns(); } if (curPos === 100 && !snlGameState.winners.includes(color)) { snlGameState.winners.push(color); } if (dice === 6 || curPos === 100) { if (isOnline && myColor === color) database.ref().update({ [`snl_rooms/${roomCode}/board/${color}`]: snlPlayers[color], [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false }); else { snlGameState.moving = false; snlGameState.hasRolled = false; updateSnLUI(); } } else { passSnLNextTurn(color); } } function passSnLNextTurn(color) { let maxC = gameConfigs.snl.colors.length; let idx = gameConfigs.snl.colors.indexOf(color); let nextTurn=color; for(let i=1;i<=maxC;i++) { let n = gameConfigs.snl.colors[(idx+i)%maxC]; if(snlTypes[n]!=='none' && !snlGameState.winners.includes(n)) { nextTurn=n; break; } } if (isOnline && myColor === color) { database.ref().update({ [`snl_rooms/${roomCode}/state/turn`]: nextTurn, [`snl_rooms/${roomCode}/state/dice`]: 0, [`snl_rooms/${roomCode}/state/hasRolled`]: false, [`snl_rooms/${roomCode}/state/moving`]: false }); } else { snlGameState.moving = false; snlGameState.turn = nextTurn; snlGameState.dice = 0; snlGameState.hasRolled = false; updateSnLUI(); } }
     
     // TTT Engine
     let tttBoard = ['','','','','','','','','']; let tttTurn = 'X'; let tttMode = 'local'; let tttScores = {X:0, O:0}; const tttPatterns = [[0,1,2],[3,4,5],[6,7,8], [0,3,6],[1,4,7],[2,5,8], [0,4,8],[2,4,6]]; function startTTTOffline() { isOnline = false; activeGame = 'ttt'; tttMode = document.getElementById('ttt-off-mode').value; tttScores = {X:0, O:0}; tttBoard = ['','','','','','','','','']; tttTurn = 'X'; showScreen('ttt-game-screen'); renderTTTGrid(); updateTTTUI(); } function syncTTTOnline(data) { if(document.getElementById('universal-lobby').classList.contains('active')) { tttBoard = data.board; tttTurn = data.turn; tttScores = data.scores || {X:0,O:0}; showScreen('ttt-game-screen'); renderTTTGrid(); updateTTTUI(); } else if(document.getElementById('ttt-game-screen').classList.contains('active')) { tttBoard = data.board; tttTurn = data.turn; tttScores = data.scores || {X:0,O:0}; renderTTTGrid(); updateTTTUI(); if(data.winner) handleTTTEnd(data.winner); } } function renderTTTGrid() { let grid = document.getElementById('ttt-grid'); grid.innerHTML = ''; for(let i=0; i<9; i++) { let cell = document.createElement('div'); cell.className = 'ttt-cell ' + (tttBoard[i] ? tttBoard[i].toLowerCase() : ''); cell.innerText = tttBoard[i]; cell.onclick = () => makeTTTMove(i); grid.appendChild(cell); } } function updateTTTUI() { document.getElementById('ttt-name-x').innerText = `P1 (X): ${tttScores.X}`; document.getElementById('ttt-name-o').innerText = `P2 (O): ${tttScores.O}`; document.getElementById('ttt-turn-display').innerText = `GILIRAN: ${tttTurn}`; } function makeTTTMove(idx) { if(tttBoard[idx] !== '') return; if(isOnline && tttTurn !== myColor) return; if(isOnline) { tttBoard[idx] = myColor; renderTTTGrid(); let winner = checkTTTWinLogic(tttBoard); if(winner) database.ref(`ttt_rooms/${roomCode}`).update({board: tttBoard, winner: winner}); else database.ref(`ttt_rooms/${roomCode}`).update({board: tttBoard, turn: (myColor==='X'?'O':'X')}); } else { tttBoard[idx] = tttTurn; let w = checkTTTWinLogic(tttBoard); if(w) handleTTTEnd(w); else { tttTurn = tttTurn==='X'?'O':'X'; updateTTTUI(); renderTTTGrid(); } } } function checkTTTWinLogic(brd) { for(let p of tttPatterns) { if(brd[p[0]] && brd[p[0]]===brd[p[1]] && brd[p[0]]===brd[p[2]]) return brd[p[0]]; } if(!brd.includes('')) return 'DRAW'; return null; } function handleTTTEnd(winner) { if(winner==='X') tttScores.X++; if(winner==='O') tttScores.O++; showEndLeaderboard([winner==='DRAW'?'O':'X'], {X:'P1', O:'P2'}, gameConfigs.ttt); setTimeout(() => { if(!isOnline) { tttBoard = ['','','','','','','','','']; tttTurn = 'X'; renderTTTGrid(); updateTTTUI(); } showScreen('ttt-game-screen'); }, 3000); }
@@ -943,7 +928,6 @@
     // LOGIKA ANABUL VIRTUAL + FIREBASE (NEUBRUTALISM INTEGRATION)
     // ==========================================================================
     let petData = null;
-    let friendPetData = null;
     let isSleeping = false;
     let gameIntervalPet;
     let isVisiting = false;
@@ -982,18 +966,7 @@
         scarf: `<path d="M 35 65 Q 50 75 65 65 L 70 75 Q 50 85 30 75 Z" fill="#ff4757" stroke="#2d3436" stroke-width="4"/><path d="M 60 70 L 65 95 L 50 90 L 55 70 Z" fill="#ff4757" stroke="#2d3436" stroke-width="4"/>`
     };
 
-    function checkPetExistsBtn() {
-        let btnAdopsi = document.getElementById('btn-adopsi-home');
-        if(petData) {
-            btnAdopsi.innerText = "MASUK KAMAR";
-            btnAdopsi.onclick = () => { isVisiting = false; setupPetRoomUI(); };
-        } else {
-            btnAdopsi.innerText = "ADOPSI ANABUL";
-            btnAdopsi.onclick = () => showScreen('screen-guide');
-        }
-    }
-
-    // Fungsi Utama Hub Pet
+    // Fungsi Utama Hub Pet (Menggantikan Tampilan Arcade dengan Wrapper Kawaii)
     function openPetHub() {
         myGlobalName = checkNameAuth(); if(!myGlobalName) return;
         document.getElementById('anabul-wrapper').style.display = 'block';
@@ -1004,7 +977,6 @@
                 setupPetRoomUI();
             } else {
                 showScreen('screen-home-pet');
-                checkPetExistsBtn();
             }
         });
     }
@@ -1023,14 +995,8 @@
 
     function loadPetData(callback) {
         database.ref('users/' + myGlobalName + '/pet').once('value').then(snap => {
-            if(snap.exists()) { 
-                petData = snap.val(); 
-                petData.level = petData.level || 1;
-                petData.exp = petData.exp || 0;
-                callback(true); 
-            } else { 
-                callback(false); 
-            }
+            if(snap.exists()) { petData = snap.val(); callback(true); } 
+            else { callback(false); }
         });
     }
 
@@ -1054,20 +1020,6 @@
         isSleeping = petData.isSleeping || false;
     }
 
-    function addExp(amount) {
-        if(!petData || isVisiting) return;
-        petData.exp += amount;
-        let needed = petData.level * 100;
-        if(petData.exp >= needed) {
-            petData.exp -= needed;
-            petData.level++;
-            createFloatingTextPet("LEVEL UP!", "center");
-            updatePetUI();
-            updatePetRender(petData, 'wrapper-1');
-        }
-        savePetData();
-    }
-
     let tempPetType = 'cat';
     function selectPet(type, el) { 
         tempPetType = type; 
@@ -1085,7 +1037,6 @@
         petData = { 
             name: name, type: tempPetType, color: color, pattern: pattern, coins: 500, 
             food: 100, clean: 100, energy: 100, sick: false, isSleeping: false,
-            level: 1, exp: 0,
             ownedBgs: ['bg-default'], activeBg: 'bg-default',
             ownedAccs: ['none'], activeAcc: 'none',
             ownedClothes: ['none'], activeClothes: 'none',
@@ -1100,18 +1051,9 @@
         document.getElementById('screen-select').classList.remove('active');
         document.getElementById('screen-home-pet').classList.remove('active');
         
-        document.getElementById('room-wallpaper').className = 'wallpaper ' + (isVisiting ? friendPetData.activeBg : petData.activeBg);
-
-        if(isVisiting) {
-            document.getElementById('wrapper-1').style.left = '35%';
-            document.getElementById('wrapper-2').style.display = 'flex';
-            updatePetRender(petData, 'wrapper-1');
-            updatePetRender(friendPetData, 'wrapper-2');
-        } else {
-            document.getElementById('wrapper-1').style.left = '50%';
-            document.getElementById('wrapper-2').style.display = 'none';
-            updatePetRender(petData, 'wrapper-1');
-        }
+        updatePetRender();
+        document.getElementById('room-wallpaper').className = 'wallpaper ' + petData.activeBg;
+        equipAcc(petData.activeAcc);
 
         document.getElementById('room').style.display = 'flex';
         document.getElementById('game-ui').classList.add('active');
@@ -1141,37 +1083,20 @@
         updatePetUI();
     }
 
-    function updatePetRender(dataObj, wrapperId) {
-        if(!dataObj) return;
-        let baseSvg = getPetSVGDynamic(dataObj.type, dataObj.color, dataObj.pattern);
-        let clothesSvg = dataObj.activeClothes !== 'none' ? petClothes[dataObj.activeClothes] : '';
+    function updatePetRender() {
+        let baseSvg = getPetSVGDynamic(petData.type, petData.color, petData.pattern);
+        let clothesSvg = petData.activeClothes !== 'none' ? petClothes[petData.activeClothes] : '';
         let finalSvg = baseSvg.replace('</svg>', clothesSvg + '</svg>');
+        document.getElementById('pet-render').innerHTML = finalSvg;
         
-        let wrap = document.getElementById(wrapperId);
-        wrap.querySelector('.pet-render-target').innerHTML = finalSvg;
-        
-        let svgEl = wrap.querySelector('.pet-svg');
-        if((dataObj.isSleeping || (wrapperId==='wrapper-1' && isSleeping)) && svgEl) svgEl.classList.replace('idle', 'sleep');
-        
-        let accLayer = wrap.querySelector('.acc-svg');
-        if(dataObj.activeAcc === 'none') {
-            accLayer.classList.remove('acc-active'); accLayer.innerHTML = '';
-        } else {
-            accLayer.classList.add('acc-active'); accLayer.innerHTML = petAccessories[dataObj.activeAcc];
-        }
-
-        // Pertumbuhan Level
-        let scaleVal = 1 + ((dataObj.level || 1) * 0.05);
-        if(scaleVal > 1.6) scaleVal = 1.6;
-        wrap.querySelector('.size-container').style.transform = `scale(${scaleVal})`;
-        
-        if(dataObj.clean < 40) svgEl.classList.add('is-dirty'); else svgEl.classList.remove('is-dirty');
-        if(dataObj.sick) svgEl.classList.add('is-sick'); else svgEl.classList.remove('is-sick');
+        let svgEl = document.querySelector('.pet-svg');
+        if(isSleeping && svgEl) svgEl.classList.replace('idle', 'sleep');
+        updatePetUI();
     }
 
     function updatePetUI() {
         if(!petData) return;
-        document.getElementById('ui-name').innerHTML = petData.name + ` <span id="ui-lvl" style="font-size:12px; color:#ff7675;">Lv.${petData.level||1}</span>`;
+        document.getElementById('ui-name').innerText = petData.name;
         document.getElementById('ui-coins').innerText = petData.coins;
         
         document.getElementById('bar-food').style.width = petData.food + '%';
@@ -1182,9 +1107,11 @@
         document.getElementById('bar-clean').classList.toggle('fill-danger', petData.clean < 20);
         document.getElementById('bar-energy').classList.toggle('fill-danger', petData.energy < 20);
 
-        let svgEl = document.querySelector('#wrapper-1 .pet-svg');
+        let svgEl = document.querySelector('.pet-svg');
         if(svgEl) {
-            if(petData.sick) { document.getElementById('ui-name').innerHTML = "🤢 " + petData.name + ` <span style="font-size:12px; color:#ff7675;">Lv.${petData.level||1}</span>`; } 
+            if(petData.clean < 40) svgEl.classList.add('is-dirty'); else svgEl.classList.remove('is-dirty');
+            if(petData.sick) { svgEl.classList.add('is-sick'); document.getElementById('ui-name').innerText = "🤢 " + petData.name; } 
+            else { svgEl.classList.remove('is-sick'); }
         }
     }
 
@@ -1202,18 +1129,6 @@
                 petData.energy = Math.min(100, petData.energy + 1);
                 if(Math.random() < 0.6) createFloatingZzzPet();
             }
-
-            if(petData.sick) {
-                petData.energy = Math.max(0, petData.energy - 2);
-                if(petData.energy === 0 && petData.food === 0) {
-                    alert("Anabul kamu telah mati karena kelaparan dan sakit... 😭");
-                    petData = null;
-                    database.ref('users/' + myGlobalName + '/pet').remove();
-                    exitPetRoom();
-                    return;
-                }
-            }
-
             updatePetUI();
             savePetData();
         }, 60000); 
@@ -1234,9 +1149,7 @@
         let cost = item === 'apple' ? 10 : 20; let gain = item === 'apple' ? 20 : 40;
         if(petData.coins >= cost) {
             petData.coins -= cost; petData.food = Math.min(100, petData.food + gain); petData.clean = Math.max(0, petData.clean - 10);
-            triggerPetAnimation('eat'); createFloatingTextPet("+ Kenyang", "center"); 
-            addExp(10);
-            updatePetUI(); savePetData();
+            triggerPetAnimation('eat'); createFloatingTextPet("+ Kenyang", "center"); updatePetUI(); savePetData();
         } else { alert("Koin tidak cukup!"); }
     }
 
@@ -1245,29 +1158,25 @@
         if(!petData.sick) { alert("Anabul sedang sehat!"); return; }
         if(petData.coins >= 50) {
             petData.coins -= 50; petData.sick = false; petData.food = Math.min(100, petData.food + 20);
-            createFloatingTextPet("✨ Sembuh!", "center"); triggerPetAnimation('play'); 
-            addExp(20);
-            updatePetUI(); updatePetRender(petData, 'wrapper-1'); savePetData();
+            createFloatingTextPet("✨ Sembuh!", "center"); triggerPetAnimation('play'); updatePetUI(); savePetData();
         } else { alert("Koin tidak cukup beli obat!"); }
     }
 
     function washPet() {
         if(isSleeping || isVisiting) return;
-        petData.clean = 100; triggerPetAnimation('play'); createFloatingTextPet("✨ Bersih!", "center"); 
-        addExp(15);
-        updatePetUI(); updatePetRender(petData, 'wrapper-1'); savePetData();
+        petData.clean = 100; triggerPetAnimation('play'); createFloatingTextPet("✨ Bersih!", "center"); updatePetUI(); savePetData();
     }
 
     function toggleSleep() {
         if(isVisiting) return;
         isSleeping = !isSleeping; petData.isSleeping = isSleeping; savePetData();
-        let roomEl = document.getElementById('room'); let svgEl = document.querySelector('#wrapper-1 .pet-svg');
+        let roomEl = document.getElementById('room'); let svgEl = document.querySelector('.pet-svg');
         if(isSleeping) { roomEl.classList.add('dark'); svgEl.classList.replace('idle', 'sleep'); createFloatingZzzPet(); } 
         else { roomEl.classList.remove('dark'); svgEl.classList.replace('sleep', 'idle'); }
     }
 
     function triggerPetAnimation(animName) {
-        let svg = document.querySelector('#wrapper-1 .pet-svg');
+        let svg = document.querySelector('.pet-svg');
         if(svg && !isSleeping) { svg.classList.remove('idle', 'eat', 'play'); void svg.offsetWidth; svg.classList.add(animName); setTimeout(() => { svg.classList.remove(animName); svg.classList.add('idle'); }, 600); }
     }
 
@@ -1283,43 +1192,32 @@
         document.getElementById('game-ui').classList.remove('active');
         clearInterval(gameIntervalPet);
         showScreen('screen-home-pet');
-        checkPetExistsBtn();
     }
 
     function claimDaily() {
         let now = new Date().getTime(); let cooldownMs = 86400000; 
-        if(!petData) {
-            loadPetData((exists) => {
-                if(exists) doClaim(now, cooldownMs);
-                else alert("Adopsi anabul dulu untuk klaim koin!");
-            });
-        } else {
-            doClaim(now, cooldownMs);
-        }
-    }
-    
-    function doClaim(now, cooldownMs) {
-        let lastClaim = petData.lastClaim || 0;
-        if(now - lastClaim > cooldownMs) { 
-            petData.coins += 500; petData.lastClaim = now; savePetData();
-            alert("Berhasil klaim 500 KOIN! Balik lagi besok ya.");
-            if(document.getElementById('ui-coins')) document.getElementById('ui-coins').innerText = petData.coins;
-            if(document.getElementById('shop-coins')) document.getElementById('shop-coins').innerText = petData.coins;
-        } else {
-            let sisaMs = cooldownMs - (now - lastClaim); let sisaJam = Math.ceil(sisaMs / (1000 * 60 * 60));
-            alert("Kamu udah klaim! Tunggu " + sisaJam + " jam lagi.");
-        }
+        loadPetData((exists) => {
+            if(exists) {
+                let lastClaim = petData.lastClaim || 0;
+                if(now - lastClaim > cooldownMs) { 
+                    petData.coins += 500; petData.lastClaim = now; savePetData();
+                    alert("Berhasil klaim 500 KOIN! Balik lagi besok ya.");
+                } else {
+                    let sisaMs = cooldownMs - (now - lastClaim); let sisaJam = Math.ceil(sisaMs / (1000 * 60 * 60));
+                    alert("Kamu udah klaim! Tunggu " + sisaJam + " jam lagi.");
+                }
+            } else { alert("Adopsi anabul dulu untuk klaim koin!"); }
+        });
     }
 
     function visitFriend() {
         let fName = document.getElementById('visit-friend-name').value.trim().toUpperCase();
         if(!fName) { alert("Masukan nama teman!"); return; }
-        if(fName === myGlobalName.toUpperCase()) { alert("Itu kan anabul lu sendiri!"); return; }
         database.ref('users/' + fName + '/pet').once('value').then(snap => {
             if(snap.exists()) {
-                friendPetData = snap.val();
-                friendPetData.level = friendPetData.level || 1;
+                petData = snap.val();
                 isVisiting = true;
+                isSleeping = petData.isSleeping || false;
                 document.getElementById('screen-visit').classList.remove('active');
                 setupPetRoomUI();
             } else {
@@ -1337,9 +1235,9 @@
     function buyBg(id, cost) { if(petData.ownedBgs.includes(id)) return; if(petData.coins >= cost) { petData.coins -= cost; petData.ownedBgs.push(id); document.getElementById('shop-coins').innerText = petData.coins; savePetData(); updateShopUI(); alert("Berhasil dibeli!"); } else { alert("Koin tidak cukup!"); } }
     function equipBg(id) { if(!petData.ownedBgs.includes(id)) return; petData.activeBg = id; document.getElementById('room-wallpaper').className = 'wallpaper ' + id; savePetData(); updateShopUI(); }
     function buyAcc(id, cost) { if(petData.ownedAccs.includes(id)) return; if(petData.coins >= cost) { petData.coins -= cost; petData.ownedAccs.push(id); document.getElementById('shop-coins').innerText = petData.coins; savePetData(); updateShopUI(); alert("Aksesoris dibeli!"); } else { alert("Koin tidak cukup!"); } }
-    function equipAcc(id) { if(!petData.ownedAccs.includes(id)) return; petData.activeAcc = id; updatePetRender(petData, 'wrapper-1'); savePetData(); updateShopUI(); }
+    function equipAcc(id) { if(!petData.ownedAccs.includes(id)) return; petData.activeAcc = id; let accLayer = document.getElementById('acc-layer'); if(id === 'none') { accLayer.classList.remove('acc-active'); accLayer.innerHTML = ''; } else { accLayer.classList.add('acc-active'); accLayer.innerHTML = petAccessories[id]; } savePetData(); updateShopUI(); }
     function buyClothes(id, cost) { if(petData.ownedClothes.includes(id)) return; if(petData.coins >= cost) { petData.coins -= cost; petData.ownedClothes.push(id); document.getElementById('shop-coins').innerText = petData.coins; savePetData(); updateShopUI(); alert("Baju dibeli!"); } else { alert("Koin tidak cukup!"); } }
-    function equipClothes(id) { if(!petData.ownedClothes.includes(id)) return; petData.activeClothes = id; updatePetRender(petData, 'wrapper-1'); savePetData(); updateShopUI(); }
+    function equipClothes(id) { if(!petData.ownedClothes.includes(id)) return; petData.activeClothes = id; updatePetRender(); savePetData(); updateShopUI(); }
 
     function updateShopUI() {
         document.querySelectorAll('#shop-bg .shop-item').forEach(item => { let id = item.id; let btn = item.querySelector('.shop-btn'); if(petData.ownedBgs.includes(id)) { item.classList.add('owned'); btn.innerText = (petData.activeBg === id) ? "DIPAKAI" : "PAKAI"; btn.onclick = () => equipBg(id); } });
@@ -1363,84 +1261,7 @@
         let header = document.getElementById('mg-header');
         mgActive = true; clearInterval(mgInterval);
 
-        if(gameType === 'tangkap') {
-            header.innerText = "TANGKAP BARANG";
-            let score = 0; let timeLeft = 15;
-            content.innerHTML = `
-                <p id="tangkap-time" style="color:#d63031; font-weight:bold;">Waktu: ${timeLeft}</p>
-                <p id="tangkap-score" style="color:#2d3436; font-weight:bold;">Skor: 0</p>
-                <div id="tangkap-area" style="position:relative; width:100%; height:200px; background:#dfe6e9; border:3px solid #2d3436; border-radius:15px; overflow:hidden; margin-top:10px;">
-                    <div id="tangkap-basket" style="position:absolute; bottom:5px; left:50%; width:50px; height:20px; background:#e1b12c; border:2px solid #2d3436; border-radius:0 0 10px 10px; transform:translateX(-50%); text-align:center; line-height:20px; font-size:12px;">🧺</div>
-                </div>
-            `;
-            let area = document.getElementById('tangkap-area');
-            let basket = document.getElementById('tangkap-basket');
-            let basketX = area.clientWidth / 2;
-            
-            area.addEventListener('touchmove', (e) => {
-                let rect = area.getBoundingClientRect();
-                let x = e.touches[0].clientX - rect.left;
-                if(x < 25) x = 25; if(x > area.clientWidth - 25) x = area.clientWidth - 25;
-                basketX = x;
-                basket.style.left = x + 'px';
-            }, {passive:true});
-            area.addEventListener('mousemove', (e) => {
-                let rect = area.getBoundingClientRect();
-                let x = e.clientX - rect.left;
-                if(x < 25) x = 25; if(x > area.clientWidth - 25) x = area.clientWidth - 25;
-                basketX = x;
-                basket.style.left = x + 'px';
-            });
-
-            let items = [];
-            mgInterval = setInterval(() => {
-                if(!mgActive) return;
-                timeLeft--;
-                document.getElementById('tangkap-time').innerText = "Waktu: " + timeLeft;
-                if(timeLeft <= 0) {
-                    mgActive=false; clearInterval(mgInterval);
-                    if(score > 0) winMiniGame(score, "Panen Besar!"); else loseMiniGame("Kosong melompong!");
-                }
-            }, 1000);
-
-            let spawnInterval = setInterval(() => {
-                if(!mgActive) { clearInterval(spawnInterval); return; }
-                let types = ['🍎', '🍕', '🪙', '💣'];
-                let type = types[Math.floor(Math.random() * types.length)];
-                let item = document.createElement('div');
-                item.innerText = type;
-                item.style.position = 'absolute';
-                item.style.top = '0px';
-                item.style.left = (Math.random() * (area.clientWidth - 30)) + 'px';
-                item.style.fontSize = '20px';
-                area.appendChild(item);
-                items.push({el: item, y: 0, type: type});
-            }, 600);
-
-            let moveInterval = setInterval(() => {
-                if(!mgActive) { clearInterval(moveInterval); return; }
-                for(let i=items.length-1; i>=0; i--) {
-                    let it = items[i];
-                    it.y += 5;
-                    it.el.style.top = it.y + 'px';
-                    if(it.y > 170) {
-                        let itLeft = parseInt(it.el.style.left);
-                        if(Math.abs(itLeft - (basketX - 25)) < 40) {
-                            if(it.type === '💣') { score -= 5; if(score<0) score=0; }
-                            else if(it.type === '🪙') score += 3;
-                            else score += 1;
-                            document.getElementById('tangkap-score').innerText = "Skor: " + score;
-                            it.el.remove();
-                            items.splice(i, 1);
-                        } else if(it.y > 200) {
-                            it.el.remove();
-                            items.splice(i, 1);
-                        }
-                    }
-                }
-            }, 50);
-        }
-        else if(gameType === 'mancing') {
+        if(gameType === 'mancing') {
             header.innerText = "MANCING MANIA";
             content.innerHTML = `
                 <p style="color:#2d3436; font-size:12px; margin-bottom:10px; font-weight:bold;">Klik TANGKAP saat garis merah di area hijau!</p>
@@ -1519,10 +1340,8 @@
     }
 
     function winMiniGame(reward, msg) {
-        petData.coins += reward; 
-        addExp(25);
-        savePetData(); updatePetUI();
-        document.getElementById('mg-content').innerHTML = `<h3 style="color:#2ed573; margin-bottom:10px; font-weight:700;">${msg}</h3><p style="color:#2d3436; font-weight:bold;">+${reward} KOIN | +25 EXP</p>`;
+        petData.coins += reward; savePetData(); updatePetUI();
+        document.getElementById('mg-content').innerHTML = `<h3 style="color:#2ed573; margin-bottom:10px; font-weight:700;">${msg}</h3><p style="color:#2d3436; font-weight:bold;">+${reward} KOIN</p>`;
     }
     function loseMiniGame(msg) { document.getElementById('mg-content').innerHTML = `<h3 style="color:#ff4757; font-weight:700;">${msg}</h3>`; }
     function closeMiniGame() { mgActive = false; clearInterval(mgInterval); document.getElementById('pet-minigame-overlay').classList.remove('active'); }
@@ -1530,3 +1349,5 @@
   </script>
 </body>
 </html>
+
+jangan ubah apapun yang ga gua minta gua minta kode perbaikan agar text di anabul ga terlalu keatas gitu jangan berikan seluruh kodenya ajarin aja cara benerinnya
