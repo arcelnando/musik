@@ -1709,7 +1709,7 @@ function feedPet(item,cost,gain){
   if(petData.coins>=cost){petData.coins-=cost;petData.food=Math.min(100,petData.food+gain);petData.clean=Math.max(0,petData.clean-5);triggerPetAnimation('eat');createFloatingText("+ Kenyang 😋","center");gainXP(10);}
   else alert("Koin tidak cukup!");
 }
-/* Ganti fungsi giveMedicine lama dengan ini */
+/* Ganti fungsi giveMedicine() */
 function giveMedicine() {
   if(!petData.sick) { alert("Anabul sedang sehat!"); return; }
   
@@ -1718,25 +1718,59 @@ function giveMedicine() {
     petData.sick = false;
     petData.dirty = false;
     
-    // Beri minimal 50 food/clean agar tidak trigger sakit detik berikutnya
-    petData.food = Math.max(petData.food, 50);
-    petData.clean = Math.max(petData.clean, 50);
+    // Status otomatis FULL semuanya
+    petData.food = 100;
+    petData.clean = 100;
+    petData.energy = 100;
     
-    // Beri masa kebal selama 120 menit
+    // Beri masa kebal selama 2 Jam agar tidak gampang sakit lagi
     petData.immuneLevel = 120; 
     
-    createFloatingText("✨ Sembuh & Kebal!","center");
+    createFloatingText("✨ Sembuh & FULL!","center");
     triggerPetAnimation('play');
     gainXP(20);
     savePetData();
+    updateUI();
   } else {
     alert("Koin tidak cukup!");
   }
 }
-function playPet(){
-  if(isSleeping)return;if(petData.sick){alert("Anabul sakit!");return;}if(petData.energy<20){alert("Energi habis! Suruh tidur dulu.");return;}
-  petData.energy-=20;petData.clean-=15;petData.food-=10;petData.coins+=15+Math.floor(Math.random()*10);
-  triggerPetAnimation('play');createFloatingText("+ Koin & XP","center");gainXP(15);
+/* Ganti fungsi playPet() */
+function playPet() {
+  if(isSleeping) return; 
+  if(petData.sick) { alert("Anabul sakit!"); return; }
+  if(petData.energy < 5) { alert("Energi habis! Suruh tidur dulu."); return; }
+  
+  petData.energy -= 2;  // Sangat lambat (dulu 20)
+  petData.clean -= 3;   // Dulu 15
+  petData.food -= 2;    // Dulu 10
+  petData.coins += 15 + Math.floor(Math.random()*10);
+  
+  triggerPetAnimation('play');
+  createFloatingText("+ Koin & XP","center");
+  gainXP(15);
+  updateUI();
+}
+
+/* Ganti fungsi gameTick() */
+function gameTick() {
+  if(!isSleeping) {
+    // Pengurangan pasif sangat lambat (0.1 poin per 3 detik)
+    let d = 0.1; 
+    petData.food = Math.max(0, petData.food - d);
+    petData.energy = Math.max(0, petData.energy - d);
+    petData.clean = Math.max(0, petData.clean - d);
+    
+    if(petData.food < 20 || petData.clean < 10) {
+      if(!petData.immuneLevel || petData.immuneLevel <= 0) petData.sick = true;
+    }
+    if(petData.clean < 40) petData.dirty = true;
+  } else {
+    // Kalau tidur cepat pulih
+    petData.energy = Math.min(100, petData.energy + 1.5); 
+    if(Math.random() < 0.6) createFloatingZzz();
+  }
+  updateUI();
 }
 /* Ganti fungsi toggleSleep lama dengan ini */
 function toggleSleep() {
@@ -1769,56 +1803,128 @@ function toggleShower(){
   if(isShowering){sh.style.display='block';showerInterval=setInterval(()=>{let d=document.createElement('div');d.className='water-drop';d.style.left=(Math.random()*80)+'px';sh.appendChild(d);setTimeout(()=>d.remove(),500);},50);}
   else{sh.style.display='none';clearInterval(showerInterval);}
 }
-function toggleSoap(){isSoaping=!isSoaping;if(isSoaping)createFloatingText("Gosok sekarang! 🧼","center");}
+// ============================================================
+// 1. SISTEM SABUN BISA DIGESER
+// ============================================================
+let soapIcon = document.createElement('div');
+soapIcon.innerHTML = '🧼';
+soapIcon.style.position = 'absolute';
+soapIcon.style.fontSize = '50px';
+soapIcon.style.display = 'none';
+soapIcon.style.pointerEvents = 'none';
+soapIcon.style.zIndex = '9999';
+soapIcon.style.transform = 'translate(-50%, -50%)';
+document.body.appendChild(soapIcon);
 
-let petWrap=document.getElementById('wrapper-1');
-petWrap.addEventListener('touchmove',e=>{if(!isSoaping)return;let t=e.touches[0];createBubble(t.clientX,t.clientY);petData.clean=Math.min(100,petData.clean+1);if(petData.clean>=40)petData.dirty=false;if(petData.clean===100)gainXP(1);updateUI();});
-petWrap.addEventListener('mousemove',e=>{if(!isSoaping||e.buttons!==1)return;createBubble(e.clientX,e.clientY);petData.clean=Math.min(100,petData.clean+1);if(petData.clean>=40)petData.dirty=false;if(petData.clean===100)gainXP(1);updateUI();});
-
-function createBubble(x,y){
-  let b=document.createElement('div');b.className='soap-bubble';b.style.left=x+'px';b.style.top=y+'px';
-  let sz=(10+Math.random()*20)+'px';b.style.width=sz;b.style.height=sz;
-  document.body.appendChild(b);setTimeout(()=>b.remove(),1000);
+function toggleSoap() {
+  isSoaping = !isSoaping;
+  if(isSoaping) {
+    createFloatingText("Geser sabun ke anabul! 🧼", "center");
+    soapIcon.style.display = 'block';
+  } else {
+    soapIcon.style.display = 'none';
+  }
 }
-function createFloatingText(text){let ft=document.createElement('div');ft.className='floating-text';ft.innerText=text;ft.style.left='50%';ft.style.top='40%';ft.style.transform='translate(-50%,-50%)';document.body.appendChild(ft);setTimeout(()=>ft.remove(),1000);}
-function createFloatingZzz(){let ft=document.createElement('div');ft.className='floating-text floating-zzz';ft.innerText='Zzz';ft.style.left='55%';ft.style.top='60%';ft.style.transform='translate(-50%,-50%)';document.body.appendChild(ft);setTimeout(()=>ft.remove(),2000);}
 
-// SHOP
-function generateShopUI(){
-  document.getElementById('shop-coins').innerText=petData.coins;
-  ['clothes','bg','skin','bath'].forEach(cat=>{
-    let c=document.getElementById('shop-'+cat);c.innerHTML='';
-    allShopItems[cat].forEach(item=>{
-      let owned=petData.ownedItems.includes(item.id);let locked=petData.level<item.reqLvl;
-      let d=document.createElement('div');d.className=`shop-item ${owned?'owned':''} ${locked?'locked':''}`;
-      let vis=item.svg?`<svg viewBox="0 0 100 100" style="width:50px;height:50px;border:1px solid #ccc;border-radius:10px;">${item.svg}</svg>`:`<div style="width:50px;height:50px;border:2px solid #000;border-radius:10px;${item.css||'background:'+item.val}"></div>`;
-      let badge=locked?`<div class="lock-badge">LV${item.reqLvl}</div>`:'';
-      let btnTxt=owned?(isActiveItem(item.id)?"✓ DIPAKAI":"PAKAI"):`BELI (${item.cost})`;
-      d.innerHTML=`${badge}${vis}<span style="font-size:12px;font-weight:bold;margin-top:5px;">${item.name}</span><button class="shop-btn" onclick="buyOrEquip('${cat}','${item.id}',${item.cost})">${btnTxt}</button>`;
-      c.appendChild(d);
-    });
+// Deteksi geseran di seluruh ruangan (area kamar)
+let roomEl = document.getElementById('room');
+if(roomEl) {
+  roomEl.addEventListener('touchmove', e => {
+    if(!isSoaping) return;
+    let t = e.touches[0];
+    soapIcon.style.left = t.clientX + 'px';
+    soapIcon.style.top = t.clientY + 'px';
+    
+    createBubble(t.clientX, t.clientY);
+    cleanPetLogic();
+  });
+
+  roomEl.addEventListener('mousemove', e => {
+    if(!isSoaping) return;
+    soapIcon.style.left = e.clientX + 'px';
+    soapIcon.style.top = e.clientY + 'px';
+    
+    if(e.buttons === 1) { // Busa keluar kalau diklik + digeser
+      createBubble(e.clientX, e.clientY);
+      cleanPetLogic();
+    }
   });
 }
-function switchShop(type,e){
-  document.querySelectorAll('.shop-tab').forEach(t=>t.classList.remove('active'));if(e)e.target.classList.add('active');
-  ['clothes','bg','skin','bath'].forEach(cat=>document.getElementById('shop-'+cat).style.display=cat===type?'grid':'none');
+
+function cleanPetLogic() {
+  petData.clean = Math.min(100, petData.clean + 1.5);
+  if(petData.clean >= 40) petData.dirty = false;
+  if(petData.clean === 100) gainXP(1);
+  updateUI();
 }
-function isActiveItem(id){return[petData.activeBg,petData.activeAcc,petData.activeClothes,petData.activeSoap,petData.activePillow].includes(id);}
-function buyOrEquip(cat,id,cost){
-  if(petData.ownedItems.includes(id)){
-    if(cat==='bg')petData.activeBg=id;
-    if(cat==='clothes')petData.activeClothes=id;
-    if(cat==='skin')petData.activeAcc=id;
-    if(cat==='bath'){let it=allShopItems.bath.find(b=>b.id===id);if(it){if(it.type==='soap')petData.activeSoap=id;else petData.activePillow=id;}}
-    if(document.getElementById('room').style.display!=='none'){setupRoomStyle();updatePetRender('pet-size',petData,isSleeping);}
+
+// ============================================================
+// 2. STAMINA SANGAT LAMBAT & AKTIVITAS MAIN
+// ============================================================
+function playPet() {
+  if(isSleeping) return; 
+  if(petData.sick) { alert("Anabul sakit! Beri obat dulu."); return; }
+  if(petData.energy < 5) { alert("Energi habis! Suruh tidur dulu."); return; }
+  
+  petData.energy -= 2;  // Potongan sangat kecil (dulu 20)
+  petData.clean -= 3;   
+  petData.food -= 2;    
+  petData.coins += 15 + Math.floor(Math.random()*10);
+  
+  triggerPetAnimation('play');
+  createFloatingText("+ Koin & XP","center");
+  gainXP(15);
+  updateUI();
+}
+
+function gameTick() {
+  if(!isSleeping) {
+    // Pengurangan pasif sangat lambat (0.1 poin per 3 detik)
+    let d = 0.1; 
+    petData.food = Math.max(0, petData.food - d);
+    petData.energy = Math.max(0, petData.energy - d);
+    petData.clean = Math.max(0, petData.clean - d);
+    
+    if(petData.food < 20 || petData.clean < 10) {
+      if(!petData.immuneLevel || petData.immuneLevel <= 0) petData.sick = true;
+    }
+    if(petData.clean < 40) petData.dirty = true;
   } else {
-    if(petData.coins>=cost){petData.coins-=cost;petData.ownedItems.push(id);alert("Berhasil dibeli!");}
-    else{alert("Koin tidak cukup!");return;}
+    // Kalau sedang tidur, energi cepat pulih
+    petData.energy = Math.min(100, petData.energy + 1.5); 
+    if(Math.random() < 0.6) createFloatingZzz();
   }
-  generateShopUI();savePetData();
+  updateUI();
 }
-let shopWrap=document.getElementById('shop-wrapper');
-shopWrap.addEventListener('touchmove',()=>{if(Math.random()<0.01){petData.coins+=5;createFloatingText("+5 Koin! 🪙");document.getElementById('shop-coins').innerText=petData.coins;savePetData();}});
+
+// ============================================================
+// 3. OBAT (SEKALIGUS FULL 100% SEMUA STATUS)
+// ============================================================
+function giveMedicine() {
+  if(!petData.sick) { alert("Anabul sedang sehat!"); return; }
+  
+  if(petData.coins >= 50) {
+    petData.coins -= 50;
+    petData.sick = false;
+    petData.dirty = false;
+    
+    // Status otomatis FULL semuanya
+    petData.food = 100;
+    petData.clean = 100;
+    petData.energy = 100;
+    
+    // Beri masa kebal selama 2 Jam
+    petData.immuneLevel = 120; 
+    
+    createFloatingText("✨ Sembuh & FULL!","center");
+    triggerPetAnimation('play');
+    gainXP(20);
+    savePetData();
+    updateUI();
+  } else {
+    alert("Koin tidak cukup!");
+  }
+}
 
 // ============================================================
 // ANABUL MULTIPLAYER VISIT (FIXED)
@@ -1992,4 +2098,4 @@ function mgAction(game, arg) {
 }
 </script>
 </body>
-        </html>
+  </html>
