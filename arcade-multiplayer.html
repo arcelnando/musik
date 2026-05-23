@@ -498,9 +498,10 @@
     <button class="btn-kawaii btn-yellow" onclick="claimDaily()">KLAIM HARIAN (1000 KOIN)</button>
     <div class="kawaii-panel">
       <button class="btn-kawaii btn-pink" onclick="goToKamarAtauAdopsi()"> KAMAR ANABUL (PLAY)</button>
-      <button class="btn-kawaii btn-green" onclick="generateShopUI(); showAnabulScreen('screen-shop')"> TOKO & AKSESORIS</button>
-      <button class="btn-kawaii btn-blue" onclick="showAnabulScreen('screen-multiplayer')"> VISIT TEMEN (ONLINE)</button>
-      <button class="btn-kawaii btn-purple" onclick="openGuide()"> PANDUAN MERAWAT</button>
+      <button class="btn-kawaii btn-green" onclick="generateInventoryUI(); showAnabulScreen('screen-inventory')"> 🎒 TAS (INVENTORY)</button>
+      <button class="btn-kawaii btn-blue" onclick="generateShopUI(); showAnabulScreen('screen-shop')"> 🛒 TOKO ITEM</button>
+      <button class="btn-kawaii btn-purple" onclick="showAnabulScreen('screen-multiplayer')"> VISIT TEMEN (ONLINE)</button>
+      <button class="btn-kawaii btn-yellow" onclick="openGuide()"> PANDUAN MERAWAT</button>
       <button class="btn-kawaii btn-red" onclick="returnToMaster()" style="margin-top:15px;"> KEMBALI KE UNIVERSE</button>
     </div>
   </div>
@@ -519,11 +520,11 @@
     </div>
   </div>
 
-  <!-- SHOP -->
+  <!-- SHOP (TOKO ITEM BARU) -->
   <div id="screen-shop" class="screen">
     <div class="kawaii-panel" id="shop-wrapper" style="padding:20px;">
-      <h2 style="margin-bottom:5px;"> TOKO ANABUL</h2>
-      <p style="font-size:12px;color:#666;margin-bottom:10px;">(Swipe area toko buat cari koin!)</p>
+      <h2 style="margin-bottom:5px;">🛒 TOKO ANABUL</h2>
+      <p style="font-size:12px;color:#666;margin-bottom:10px;">(Barang yang belum kamu beli)</p>
       <div class="coin-display" style="margin-bottom:15px;">🪙 <span id="shop-coins">0</span></div>
       <div class="shop-tabs">
         <div class="shop-tab active" onclick="switchShop('clothes',event)">Baju</div>
@@ -531,11 +532,30 @@
         <div class="shop-tab" onclick="switchShop('skin',event)">Aksesoris</div>
         <div class="shop-tab" onclick="switchShop('bath',event)">Sabun</div>
       </div>
-      <div class="shop-items" id="shop-clothes"></div>
+      <div class="shop-items" id="shop-clothes" style="display:flex;"></div>
       <div class="shop-items" id="shop-bg" style="display:none;"></div>
       <div class="shop-items" id="shop-skin" style="display:none;"></div>
       <div class="shop-items" id="shop-bath" style="display:none;"></div>
-      <button class="btn-kawaii btn-red" style="margin-top:15px;" onclick="showAnabulScreen('screen-home')">KEMBALI</button>
+      <button class="btn-kawaii btn-red" style="margin-top:15px;" onclick="closeShopPopup('screen-shop')">TUTUP TOKO</button>
+    </div>
+  </div>
+
+  <!-- INVENTORY (TAS BARANG MILIKMU) -->
+  <div id="screen-inventory" class="screen">
+    <div class="kawaii-panel" id="inventory-wrapper" style="padding:20px;">
+      <h2 style="margin-bottom:5px;">🎒 TAS ANABUL</h2>
+      <p style="font-size:12px;color:#666;margin-bottom:10px;">(Barang yang sudah kamu beli)</p>
+      <div class="shop-tabs">
+        <div class="shop-tab active" onclick="switchInventory('clothes',event)">Baju</div>
+        <div class="shop-tab" onclick="switchInventory('bg',event)">Latar</div>
+        <div class="shop-tab" onclick="switchInventory('skin',event)">Aksesoris</div>
+        <div class="shop-tab" onclick="switchInventory('bath',event)">Sabun</div>
+      </div>
+      <div class="shop-items" id="inv-clothes" style="display:flex;"></div>
+      <div class="shop-items" id="inv-bg" style="display:none;"></div>
+      <div class="shop-items" id="inv-skin" style="display:none;"></div>
+      <div class="shop-items" id="inv-bath" style="display:none;"></div>
+      <button class="btn-kawaii btn-red" style="margin-top:15px;" onclick="closeShopPopup('screen-inventory')">TUTUP TAS</button>
     </div>
   </div>
 
@@ -611,34 +631,49 @@
       </div>
 
       <div class="room-panels-container">
-  <div class="interactive-panel active" id="panel-kitchen">
-    <div class="item-card" onclick="feedPet('apple',10,20)"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="14" r="8" fill="#ff7675"/><path d="M12 6 q 2 -4 6 -2" stroke="#55efc4" stroke-width="2" fill="none"/></svg><span style="font-size:10px;font-weight:bold;">APEL (10🪙)</span></div>
-    <div class="item-card" onclick="feedPet('pizza',20,40)"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 2 L22 20 L2 20 Z" fill="#feca57"/><circle cx="12" cy="14" r="2" fill="#d63031"/><circle cx="8" cy="16" r="1.5" fill="#d63031"/><circle cx="16" cy="17" r="2" fill="#d63031"/></svg><span style="font-size:10px;font-weight:bold;">PIZZA (20🪙)</span></div>
-    <div class="item-card" onclick="feedPet('burger',25,50)"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 10 Q12 2 20 10" fill="#e17055"/><rect x="5" y="11" width="14" height="2" fill="#55efc4"/><rect x="4" y="14" width="16" height="3" rx="1" fill="#8b4513"/><path d="M4 18 Q12 22 20 18" fill="#e17055"/></svg><span style="font-size:10px;font-weight:bold;">BURGER (25🪙)</span></div>
-    <div class="item-card" onclick="feedPet('sushi',30,60)"><svg viewBox="0 0 24 24" width="30" height="30"><rect x="6" y="10" width="12" height="8" rx="2" fill="#dfe6e9"/><path d="M5 10 Q12 6 19 10" fill="#ff7675"/><rect x="10" y="8" width="4" height="12" fill="#2d3436"/></svg><span style="font-size:10px;font-weight:bold;">SUSHI (30🪙)</span></div>
-    <div class="item-card" onclick="feedPet('icecream',15,25)"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 12 L16 12 L12 22 Z" fill="#e17055"/><circle cx="12" cy="8" r="5" fill="#ff9ff3"/></svg><span style="font-size:10px;font-weight:bold;">ES KRIM (15🪙)</span></div>
-    <div class="item-card" onclick="giveMedicine()"><svg viewBox="0 0 24 24" width="30" height="30"><rect x="4" y="10" width="16" height="6" rx="3" fill="#74b9ff"/><path d="M12 10 L12 16 M4 10 A3 3 0 0 1 12 10 V16 A3 3 0 0 1 4 16 Z" fill="#ff7675"/></svg><span style="font-size:10px;font-weight:bold;">OBAT (50🪙)</span></div>
-  </div>
-  <div class="interactive-panel" id="panel-bathroom">
-    <div class="item-card" id="btn-shower" onclick="toggleShower()"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 4 L12 10 M8 12 V16 M12 12 V18 M16 12 V16" stroke="#74b9ff" stroke-width="2" stroke-linecap="round"/><ellipse cx="12" cy="10" rx="6" ry="2" fill="#b2bec3"/></svg><span style="font-size:10px;font-weight:bold;">SHOWER</span></div>
-    <div class="item-card" id="btn-soap" onclick="toggleSoap()"><svg viewBox="0 0 24 24" width="30" height="30"><ellipse cx="12" cy="12" rx="8" ry="5" fill="#a29bfe"/><circle cx="8" cy="8" r="2" fill="#fff" opacity="0.5"/><circle cx="16" cy="6" r="1.5" fill="#fff" opacity="0.5"/></svg><span style="font-size:10px;font-weight:bold;">GOSOK SABUN</span></div>
-  </div>
-  <div class="interactive-panel" id="panel-play">
-    <!-- SOLO GAMES -->
-    <div class="item-card" onclick="openMiniGame('mancing')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 22 L10 2 M10 2 Q18 6 18 14 M18 14 Q16 16 14 14" fill="none" stroke="#2d3436" stroke-width="2"/><circle cx="14" cy="14" r="2" fill="#ff7675"/></svg><span style="font-size:10px;font-weight:bold;">MANCING (SOLO)</span></div>
-    <div class="item-card" onclick="openMiniGame('lari-solo')"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="8" fill="#55efc4" stroke="#2d3436" stroke-width="2"/><path d="M8 12 L16 12 M12 8 L12 16" stroke="#2d3436" stroke-width="2"/></svg><span style="font-size:10px;font-weight:bold;">LOMPAT (SOLO)</span></div>
-    <div class="item-card" onclick="openMiniGame('tikus')"><svg viewBox="0 0 24 24" width="30" height="30"><ellipse cx="12" cy="14" rx="6" ry="4" fill="#a29bfe"/><circle cx="8" cy="10" r="3" fill="#a29bfe"/><circle cx="16" cy="10" r="3" fill="#a29bfe"/></svg><span style="font-size:10px;font-weight:bold;">TAP TIKUS (SOLO)</span></div>
-    <!-- MULTI GAMES -->
-    <div class="item-card" onclick="openMiniGame('lomba-lari')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 16 L20 16 M4 8 L20 8" stroke="#ff7675" stroke-width="3" stroke-dasharray="4"/></svg><span style="font-size:10px;font-weight:bold;">LARI (MULTI)</span></div>
-    <div class="item-card" onclick="openMiniGame('tarik-tambang')"><svg viewBox="0 0 24 24" width="30" height="30"><line x1="2" y1="12" x2="22" y2="12" stroke="#d35400" stroke-width="3"/><circle cx="12" cy="12" r="3" fill="#ff4757"/></svg><span style="font-size:10px;font-weight:bold;">TAMBANG (MULTI)</span></div>
-    <div class="item-card" onclick="openMiniGame('tebak-gaya')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 4 Q16 4 16 10 Q16 16 12 16 Q8 16 8 10 Q8 4 12 4" fill="#feca57"/><circle cx="12" cy="20" r="2" fill="#2d3436"/></svg><span style="font-size:10px;font-weight:bold;">TEBAK (MULTI)</span></div>
-  </div>
-  <div class="interactive-panel" id="panel-bedroom">
-    <div class="item-card" onclick="toggleSleep()"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 01-4.4 2.26 5.4 5.4 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" fill="#f1c40f"/></svg><span style="font-size:10px;font-weight:bold;">LAMPU/TIDUR</span></div>
-    <div class="item-card" onclick="generateShopUI(); showAnabulScreen('screen-shop')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 6h16v2H4zm2 2h12v12H6z" fill="#ff9ff3"/><rect x="8" y="10" width="8" height="4" fill="#fff"/></svg><span style="font-size:10px;font-weight:bold;">SHOP KAMAR</span></div>
-  </div>
-</div>
-</div>
+        <!-- PANEL DAPUR -->
+        <div class="interactive-panel active" id="panel-kitchen">
+          <!-- Makanan diinjeksi via JS (initMakanan) -->
+        </div>
+
+        <!-- PANEL KAMAR MANDI -->
+        <div class="interactive-panel" id="panel-bathroom">
+          <div class="item-card" id="btn-shower" onclick="toggleShower()"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 4 L12 10 M8 12 V16 M12 12 V18 M16 12 V16" stroke="#74b9ff" stroke-width="2" stroke-linecap="round"/><ellipse cx="12" cy="10" rx="6" ry="2" fill="#b2bec3"/></svg><span style="font-size:10px;font-weight:bold;">SHOWER</span></div>
+          <div class="item-card" id="btn-soap" onclick="toggleSoap()"><svg viewBox="0 0 24 24" width="30" height="30"><ellipse cx="12" cy="12" rx="8" ry="5" fill="#a29bfe"/><circle cx="8" cy="8" r="2" fill="#fff" opacity="0.5"/><circle cx="16" cy="6" r="1.5" fill="#fff" opacity="0.5"/></svg><span style="font-size:10px;font-weight:bold;">GOSOK SABUN</span></div>
+        </div>
+
+        <!-- PANEL MAIN / GAME -->
+        <div class="interactive-panel" id="panel-play">
+          <div class="item-card" onclick="openMiniGame('mancing')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 22 L10 2 M10 2 Q18 6 18 14 M18 14 Q16 16 14 14" fill="none" stroke="#2d3436" stroke-width="2"/><circle cx="14" cy="14" r="2" fill="#ff7675"/></svg><span style="font-size:10px;font-weight:bold;">MANCING (SOLO)</span></div>
+          <div class="item-card" onclick="openMiniGame('lari-solo')"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="8" fill="#55efc4" stroke="#2d3436" stroke-width="2"/><path d="M8 12 L16 12 M12 8 L12 16" stroke="#2d3436" stroke-width="2"/></svg><span style="font-size:10px;font-weight:bold;">LOMPAT (SOLO)</span></div>
+          <div class="item-card" onclick="openMiniGame('tikus')"><svg viewBox="0 0 24 24" width="30" height="30"><ellipse cx="12" cy="14" rx="6" ry="4" fill="#a29bfe"/><circle cx="8" cy="10" r="3" fill="#a29bfe"/><circle cx="16" cy="10" r="3" fill="#a29bfe"/></svg><span style="font-size:10px;font-weight:bold;">TAP TIKUS (SOLO)</span></div>
+          <div class="item-card" onclick="openMiniGame('lomba-lari')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 16 L20 16 M4 8 L20 8" stroke="#ff7675" stroke-width="3" stroke-dasharray="4"/></svg><span style="font-size:10px;font-weight:bold;">LARI (MULTI)</span></div>
+          <div class="item-card" onclick="openMiniGame('tarik-tambang')"><svg viewBox="0 0 24 24" width="30" height="30"><line x1="2" y1="12" x2="22" y2="12" stroke="#d35400" stroke-width="3"/><circle cx="12" cy="12" r="3" fill="#ff4757"/></svg><span style="font-size:10px;font-weight:bold;">TAMBANG (MULTI)</span></div>
+          <div class="item-card" onclick="openMiniGame('tebak-gaya')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 4 Q16 4 16 10 Q16 16 12 16 Q8 16 8 10 Q8 4 12 4" fill="#feca57"/><circle cx="12" cy="20" r="2" fill="#2d3436"/></svg><span style="font-size:10px;font-weight:bold;">TEBAK (MULTI)</span></div>
+        </div>
+
+        <!-- PANEL BEDROOM (DIPERBARUI) -->
+        <div class="interactive-panel" id="panel-bedroom">
+          <!-- Tombol Tidur -->
+          <div class="item-card" onclick="toggleSleep()">
+            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 01-4.4 2.26 5.4 5.4 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" fill="#f1c40f"/></svg>
+            <span style="font-size:10px;font-weight:bold;">LAMPU/TIDUR</span>
+          </div>
+          <!-- Tombol Buka Lemari / Tas dari dalam Kamar -->
+          <div class="item-card" onclick="generateInventoryUI(); document.getElementById('screen-inventory').classList.add('active');">
+            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 6h16v2H4zm2 2h12v12H6z" fill="#a29bfe"/><rect x="8" y="10" width="8" height="4" fill="#fff"/></svg>
+            <span style="font-size:10px;font-weight:bold;">LEMARI (TAS)</span>
+          </div>
+          <!-- Tombol Buka Toko dari dalam Kamar -->
+          <div class="item-card" onclick="generateShopUI(); document.getElementById('screen-shop').classList.add('active');">
+            <svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="10" fill="#feca57"/><text x="12" y="16" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">$</text></svg>
+            <span style="font-size:10px;font-weight:bold;">TOKO ITEM</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
     <!-- NAV dengan SVG kawaii -->
     <div class="hud-bottom">
       <button class="nav-btn active" id="nav-btn-kitchen" onclick="goToRoom('kitchen')">
@@ -2144,4 +2179,4 @@ function mgAction(game, arg) {
 }
 </script>
 </body>
-  </html>
+          </html>
