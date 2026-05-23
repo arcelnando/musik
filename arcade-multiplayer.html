@@ -237,6 +237,70 @@
     /* VISIT ROOM enhanced */
     #screen-visit-room{overflow:hidden;}
     .visit-room-container{position:relative;width:100%;height:100vh;}
+    
+    /* =========================================
+   TAMBAHKAN / UBAH CSS INI DI FILE KAMU
+========================================= */
+
+.shop-items {
+  display: none; /* Default disembunyikan */
+  flex-direction: row;
+  flex-wrap: nowrap; /* Jangan turun ke bawah */
+  overflow-x: auto; /* Bikin mini swipe horizontal */
+  overflow-y: hidden;
+  gap: 15px;
+  padding: 10px;
+  width: 100%;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Biar swipe lancar di HP */
+}
+
+/* Sembunyikan scrollbar biar lebih rapi kaya game beneran */
+.shop-items::-webkit-scrollbar {
+  display: none;
+}
+.shop-items {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.shop-item {
+  flex: 0 0 auto; /* Wajib! Supaya item ga menyusut/gepeng */
+  width: 120px; /* Ukuran kartu item, sesuaikan selera */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+#panel-kitchen {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important; /* Paksa berbaris ke samping */
+  overflow-x: auto; /* Bikin bisa di-swipe horizontal */
+  overflow-y: hidden;
+  max-height: 180px; /* Batasi tingginya biar Anabul tetap kelihatan! */
+  justify-content: flex-start;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
+
+/* Sembunyikan scrollbar bawaan */
+#panel-kitchen::-webkit-scrollbar {
+  display: none;
+}
+
+/* Paksa kartu makanan agar tidak gepeng */
+#panel-kitchen .item-card {
+  flex: 0 0 auto !important; 
+  width: 110px;
+  height: 130px;
+}
   </style>
 </head>
 <body class="master-theme">
@@ -1818,10 +1882,15 @@ function createBubble(x, y) {
 // SISTEM TOKO (SHOP), BELI, & PAKAI ITEM
 // ============================================================
 function switchShop(tabId, event) {
+  // Reset semua tab
   document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
   event.currentTarget.classList.add('active');
+  
+  // Sembunyikan semua kontainer shop
   document.querySelectorAll('.shop-items').forEach(c => c.style.display = 'none');
-  document.getElementById('shop-' + tabId).style.display = 'grid';
+  
+  // Tampilkan yang dipilih dengan mode FLEX (bukan grid lagi) biar bisa di-swipe
+  document.getElementById('shop-' + tabId).style.display = 'flex';
 }
 
 function generateShopUI() {
@@ -1832,12 +1901,20 @@ function generateShopUI() {
     if (!container) return;
     
     let htmlArray = [];
-    allShopItems[category].forEach(item => {
+    
+    // Sortir: Item yang sudah dimiliki (atau gratis) ditaruh di paling kiri (awal)
+    let sortedItems = allShopItems[category].sort((a, b) => {
+      let aOwned = petData.ownedItems.includes(a.id) || a.cost === 0;
+      let bOwned = petData.ownedItems.includes(b.id) || b.cost === 0;
+      return (aOwned === bOwned) ? 0 : aOwned ? -1 : 1;
+    });
+
+    sortedItems.forEach(item => {
       let isOwned = petData.ownedItems.includes(item.id) || item.cost === 0;
       let canAfford = petData.coins >= item.cost;
       let isLocked = petData.level < item.reqLvl;
       
-      let btnText = isOwned ? 'PAKAI' : (isLocked ? `Buka Lv.${item.reqLvl}` : `BELI (${item.cost}🪙)`);
+      let btnText = isOwned ? 'PAKAI' : (isLocked ? `Lv.${item.reqLvl}` : `BELI (${item.cost}🪙)`);
       let btnState = isOwned ? `onclick="equipItem('${category}', '${item.id}')"` : 
                      (isLocked || !canAfford ? 'disabled' : `onclick="buyItem('${category}', '${item.id}', ${item.cost})"`);
 
@@ -1848,7 +1925,7 @@ function generateShopUI() {
       if (category === 'bath' && (petData.activePillow === item.id || petData.activeSoap === item.val)) isEquipped = true;
 
       if (isEquipped) {
-        btnText = "SEDANG DIPAKAI";
+        btnText = "DIPAKAI";
         btnState = "disabled";
       }
 
@@ -1856,11 +1933,11 @@ function generateShopUI() {
                    (item.svg ? `<svg viewBox="0 0 100 100" width="40" height="40">${item.svg}</svg>` : `<div style="font-size:24px;">${item.val ? '🛏️' : '📦'}</div>`);
 
       htmlArray.push(`
-        <div class="shop-item ${isOwned ? 'owned' : ''} ${isLocked ? 'locked' : ''}">
+        <div class="shop-item ${isOwned ? 'owned' : ''} ${isLocked ? 'locked' : ''}" ${isOwned ? 'style="border: 2px solid #2ed573;"' : ''}>
           ${isLocked ? `<div class="lock-badge">Lv.${item.reqLvl}</div>` : ''}
           ${visual}
-          <span style="font-size:10px;font-weight:bold;margin-bottom:5px;">${item.name}</span>
-          <button class="shop-btn" ${btnState}>${btnText}</button>
+          <span style="font-size:10px;font-weight:bold;margin-top:5px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;">${item.name}</span>
+          <button class="shop-btn" ${btnState} style="width:100%;">${btnText}</button>
         </div>
       `);
     });
