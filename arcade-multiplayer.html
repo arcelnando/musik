@@ -145,7 +145,17 @@
     .guest-name{position:absolute;top:-30px;background:#fff;padding:2px 10px;border:2px solid #000;border-radius:10px;font-weight:bold;font-size:12px;white-space:nowrap;}
     .pillow-svg{position:absolute;bottom:-5px;width:180px;height:60px;z-index:1;display:none;opacity:0;transition:0.5s;}
     .pet-svg.sleep~.pillow-svg{display:block;opacity:1;animation:popIn 0.5s forwards;}
-    .acc-svg{position:absolute;top:-10px;width:80px;height:80px;z-index:3;display:none;pointer-events:none;left:50%;transform:translateX(-50%);}
+.acc-svg {
+    position: absolute;
+    bottom: 0;
+    width: 130px;
+    height: 130px;
+    z-index: 3;
+    display: none;
+    pointer-events: none;
+    left: 50%;
+    transform: translateX(-50%);
+}
     .acc-active{display:block!important;}
     @keyframes breathe{0%,100%{transform:scale(1,1);}50%{transform:scale(1.03,0.97);}}
     @keyframes eatBounce{0%,100%{transform:scale(1,1) translateY(0);}50%{transform:scale(1.2,0.8) translateY(-15px);}}
@@ -1357,12 +1367,13 @@ function randColor(id, offset) {
 // =========================================================
 // 1. GENERATOR 1.000 BAJU (Kombinasi Base + Lengan/Hoodie + Detail)
 // =========================================================
+/* Timpa array bajuBases yang lama dengan ini */
 const bajuBases = [
-  { nama: 'Kaos', path: `M 25 55 Q 50 65 75 55 L 80 85 Q 50 95 20 85 Z` },
-  { nama: 'Jubah', path: `M 30 50 L 70 50 L 85 95 L 15 95 Z` },
-  { nama: 'Gaun', path: `M 35 55 Q 50 50 65 55 L 85 95 Q 50 100 15 95 Z` },
-  { nama: 'Rompi', path: `M 30 55 L 70 55 L 65 85 L 35 85 Z` },
-  { nama: 'Kemeja', path: `M 25 55 Q 50 65 75 55 L 70 85 Q 50 95 30 85 Z` }
+  { nama: 'Kaos', path: `M 30 55 Q 50 60 70 55 L 75 80 Q 50 90 25 80 Z` },
+  { nama: 'Jubah', path: `M 35 50 L 65 50 L 80 90 L 20 90 Z` },
+  { nama: 'Gaun', path: `M 35 55 Q 50 50 65 55 L 80 90 Q 50 95 20 90 Z` },
+  { nama: 'Rompi', path: `M 30 55 L 70 55 L 65 80 L 35 80 Z` },
+  { nama: 'Kemeja', path: `M 30 55 Q 50 60 70 55 L 65 80 Q 50 90 35 80 Z` }
 ];
 const bajuAddons = [
   { nama: 'Polos', svg: `` },
@@ -1568,13 +1579,38 @@ function loadPetData(){
   let s=localStorage.getItem('261anabul_data_v2');
   if(s){let p=JSON.parse(s);petData={...petData,...p};calculateOfflineTime();}
 }
-function calculateOfflineTime(){
-  let now=Date.now();let diff=Math.floor((now-petData.lastOnline)/60000);
-  if(diff>5&&petData.isCreated){
-    let rp=Math.floor(diff/5);petData.energy=Math.min(100,petData.energy+(rp*10));
-    let dm=Math.max(0.2,1-(petData.level*0.02));
-    petData.food=Math.max(0,petData.food-(diff*0.5*dm));petData.clean=Math.max(0,petData.clean-(diff*0.5*dm));
-    if(petData.food<20||petData.clean<10)petData.sick=true;if(petData.clean<40)petData.dirty=true;
+/* Ganti seluruh fungsi calculateOfflineTime */
+function calculateOfflineTime() {
+  let now = Date.now();
+  let diffMins = Math.floor((now - petData.lastOnline) / 60000); // Hitung selisih waktu dalam Menit
+  
+  if(diffMins > 0 && petData.isCreated) {
+    if(petData.isSleeping) {
+      // MODE TIDUR: Stamina/Energi pulih
+      petData.energy = Math.min(100, petData.energy + (diffMins * 1.5));
+    } else {
+      // MODE BANGUN: Stamina turun 2 poin per menit (10% per 5 menit)
+      petData.energy = Math.max(0, petData.energy - (diffMins * 2));
+    }
+    
+    // Makanan dan kebersihan turun lebih lambat kalau sedang tidur
+    let drainRate = petData.isSleeping ? 0.1 : 0.5;
+    petData.food = Math.max(0, petData.food - (diffMins * drainRate));
+    petData.clean = Math.max(0, petData.clean - (diffMins * drainRate));
+    
+    // Cek durasi obat (Immunity System)
+    if(petData.immuneLevel && petData.immuneLevel > 0) {
+      petData.immuneLevel -= diffMins; 
+    }
+    
+    // Jatuh sakit hanya jika imun sudah habis
+    if(petData.food < 20 || petData.clean < 10) {
+      if(!petData.immuneLevel || petData.immuneLevel <= 0) {
+        petData.sick = true;
+      }
+    }
+    
+    if(petData.clean < 40) petData.dirty = true;
   }
 }
 function goToKamarAtauAdopsi(){
@@ -1673,24 +1709,60 @@ function feedPet(item,cost,gain){
   if(petData.coins>=cost){petData.coins-=cost;petData.food=Math.min(100,petData.food+gain);petData.clean=Math.max(0,petData.clean-5);triggerPetAnimation('eat');createFloatingText("+ Kenyang 😋","center");gainXP(10);}
   else alert("Koin tidak cukup!");
 }
-function giveMedicine(){
-  if(!petData.sick){alert("Anabul sedang sehat!");return;}
-  if(petData.coins>=50){petData.coins-=50;petData.sick=false;petData.dirty=false;petData.food=Math.min(100,petData.food+20);createFloatingText("✨ Sembuh!","center");triggerPetAnimation('play');gainXP(20);}
-  else alert("Koin tidak cukup!");
+/* Ganti fungsi giveMedicine lama dengan ini */
+function giveMedicine() {
+  if(!petData.sick) { alert("Anabul sedang sehat!"); return; }
+  
+  if(petData.coins >= 50) {
+    petData.coins -= 50;
+    petData.sick = false;
+    petData.dirty = false;
+    
+    // Beri minimal 50 food/clean agar tidak trigger sakit detik berikutnya
+    petData.food = Math.max(petData.food, 50);
+    petData.clean = Math.max(petData.clean, 50);
+    
+    // Beri masa kebal selama 120 menit
+    petData.immuneLevel = 120; 
+    
+    createFloatingText("✨ Sembuh & Kebal!","center");
+    triggerPetAnimation('play');
+    gainXP(20);
+    savePetData();
+  } else {
+    alert("Koin tidak cukup!");
+  }
 }
 function playPet(){
   if(isSleeping)return;if(petData.sick){alert("Anabul sakit!");return;}if(petData.energy<20){alert("Energi habis! Suruh tidur dulu.");return;}
   petData.energy-=20;petData.clean-=15;petData.food-=10;petData.coins+=15+Math.floor(Math.random()*10);
   triggerPetAnimation('play');createFloatingText("+ Koin & XP","center");gainXP(15);
 }
-function toggleSleep(){
-  isSleeping=!isSleeping;let room=document.getElementById('room');
-  if(isSleeping)room.classList.add('dark');else room.classList.remove('dark');
-  updatePetRender('pet-size',petData,isSleeping);
+/* Ganti fungsi toggleSleep lama dengan ini */
+function toggleSleep() {
+  isSleeping = !isSleeping;
+  petData.isSleeping = isSleeping; // Simpan status ke memori
+  savePetData();
+  
+  let room = document.getElementById('room');
+  if(isSleeping) room.classList.add('dark');
+  else room.classList.remove('dark');
+  updatePetRender('pet-size', petData, isSleeping);
 }
-function triggerPetAnimation(an){
-  let svg=document.querySelector('#pet-render .pet-svg');
-  if(svg&&!isSleeping){svg.classList.remove('idle','eat','play');void svg.offsetWidth;svg.classList.add(an);setTimeout(()=>{svg.classList.remove(an);svg.classList.add('idle');},600);}
+
+/* Ganti fungsi loadPetData lama dengan ini */
+function loadPetData() {
+  let s = localStorage.getItem('261anabul_data_v2');
+  if(s) {
+    let p = JSON.parse(s);
+    petData = {...petData, ...p};
+    isSleeping = petData.isSleeping || false; // Tarik status lampu
+    
+    // Setel mode gelap otomatis kalau memang ditinggal tidur
+    if(isSleeping) document.getElementById('room').classList.add('dark');
+    
+    calculateOfflineTime();
+  }
 }
 function toggleShower(){
   isShowering=!isShowering;let sh=document.getElementById('shower-head');
@@ -1920,4 +1992,4 @@ function mgAction(game, arg) {
 }
 </script>
 </body>
-          </html>
+        </html>
