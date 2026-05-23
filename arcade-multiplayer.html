@@ -79,12 +79,12 @@
     .center-arena{grid-area:7/7/10/10;background-color:rgba(17,17,17,0.2);border:3px solid rgba(0,0,0,0.3);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:5;text-align:center;color:rgba(255,255,255,0.8);font-size:16px;font-weight:bold;}
     .token-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
     .token{position:absolute;transition:all 0.25s linear;pointer-events:auto;cursor:pointer;z-index:10;transform-origin:center bottom;display:flex;align-items:center;justify-content:center;font-size:18px;background-color:transparent;background-size:100% 100%;background-position:center bottom;background-repeat:no-repeat;}
-    .token.red{background-color:#ff4757;border-radius:50%;border:2px solid #fff;}
-    .token.blue{background-color:#1e90ff;border-radius:50%;border:2px solid #fff;}
-    .token.green{background-color:#2ed573;border-radius:50%;border:2px solid #fff;}
-    .token.skull{background-color:#a4b0be;border-radius:50%;border:2px solid #fff;}
-    .token.yellow{background-color:#fdcb6e;border-radius:50%;border:2px solid #fff;}
-    .token.token-active{animation:bounceSolid 0.6s infinite alternate;z-index:20;filter:drop-shadow(0px 0px 8px #ffeb3b);}
+    ./* Update Pion Ludo & Ular Tangga Pakai Asset Gambar */
+.token.red, .snl-p-red { background-color: transparent !important; background-image: url('merah.png'); border: none !important; }
+.token.blue, .snl-p-blue { background-color: transparent !important; background-image: url('biru.png'); border: none !important; }
+.token.green, .snl-p-green { background-color: transparent !important; background-image: url('hijau.png'); border: none !important; }
+.token.skull { background-color: transparent !important; background-image: url('abu.png'); border: none !important; }
+.snl-pawn { background-size: contain; background-repeat: no-repeat; background-position: center; border: none !important; box-shadow: none !important; }
     @keyframes bounceSolid{0%{transform:scale(1) translateY(0);}100%{transform:scale(1.1) translateY(-8px);}}
     .snl-board-container{width:100%;padding-top:100%;position:relative;background-color:#111;background-size:100% 100%;background-repeat:no-repeat;border:4px solid #fff;border-radius:8px;box-shadow:8px 8px 0px rgba(0,0,0,0.8);overflow:hidden;transition:background-image 0.5s;}
     .snl-grid{position:absolute;top:0;left:0;width:100%;height:100%;display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(10,1fr);z-index:2;}
@@ -421,6 +421,7 @@
   <div id="screen-home" class="screen active">
     <h1 class="title-main">261 ANABUL</h1>
     <p class="subtitle">ULTIMATE KAWAII</p>
+    <button class="btn-kawaii btn-yellow" onclick="claimDaily()">KLAIM HARIAN (1000 KOIN)</button>
     <div class="kawaii-panel">
       <button class="btn-kawaii btn-pink" onclick="goToKamarAtauAdopsi()"> KAMAR ANABUL (PLAY)</button>
       <button class="btn-kawaii btn-green" onclick="generateShopUI(); showAnabulScreen('screen-shop')"> TOKO & AKSESORIS</button>
@@ -536,36 +537,34 @@
       </div>
 
       <div class="room-panels-container">
-        <div class="interactive-panel active" id="panel-kitchen">
-          <div class="item-card" onclick="feedPet('apple',10,20)"><span style="font-size:24px;">🍎</span><span style="font-size:10px;font-weight:bold;">APEL (10🪙)</span></div>
-          <div class="item-card" onclick="feedPet('pizza',20,40)"><span style="font-size:24px;">🍕</span><span style="font-size:10px;font-weight:bold;">PIZZA (20🪙)</span></div>
-          <div class="item-card" onclick="feedPet('burger',25,50)"><span style="font-size:24px;">🍔</span><span style="font-size:10px;font-weight:bold;">BURGER (25🪙)</span></div>
-          <div class="item-card" onclick="feedPet('sushi',30,60)"><span style="font-size:24px;">🍣</span><span style="font-size:10px;font-weight:bold;">SUSHI (30🪙)</span></div>
-          <div class="item-card" onclick="feedPet('icecream',15,25)"><span style="font-size:24px;">🍦</span><span style="font-size:10px;font-weight:bold;">ES KRIM (15🪙)</span></div>
-          <div class="item-card" onclick="giveMedicine()"><span style="font-size:24px;">💊</span><span style="font-size:10px;font-weight:bold;">OBAT (50🪙)</span></div>
-        </div>
-        <div class="interactive-panel" id="panel-bathroom">
-          <div class="item-card" id="btn-shower" onclick="toggleShower()"><span style="font-size:24px;">🚿</span><span style="font-size:10px;font-weight:bold;">SHOWER</span></div>
-          <div class="item-card" id="btn-soap" onclick="toggleSoap()"><span style="font-size:24px;">🧼</span><span style="font-size:10px;font-weight:bold;">GOSOK SABUN</span></div>
-        </div>
-        <div class="interactive-panel" id="panel-play">
-          <div class="item-card" onclick="openMiniGame('coin-flip')"><span style="font-size:24px;">🪙</span><span style="font-size:10px;font-weight:bold;">LEMPAR KOIN</span></div>
-          <div class="item-card" onclick="openMiniGame('dice-roll')"><span style="font-size:24px;">🎲</span><span style="font-size:10px;font-weight:bold;">DADU KEBERUNTUNGAN</span></div>
-          <div class="item-card" onclick="openMiniGame('rock-paper')"><span style="font-size:24px;">✊</span><span style="font-size:10px;font-weight:bold;">SUIT vs ANABUL</span></div>
-          <div class="item-card" onclick="openMiniGame('number-guess')"><span style="font-size:24px;">🔢</span><span style="font-size:10px;font-weight:bold;">TEBAK ANGKA</span></div>
-          <div class="item-card" onclick="openMiniGame('memory')"><span style="font-size:24px;">🃏</span><span style="font-size:10px;font-weight:bold;">KARTU MEMORI</span></div>
-          <div class="item-card" onclick="openMiniGame('reaction')"><span style="font-size:24px;">⚡</span><span style="font-size:10px;font-weight:bold;">REAKSI CEPAT</span></div>
-          <div class="item-card" onclick="openMiniGame('math-quiz')"><span style="font-size:24px;">🧮</span><span style="font-size:10px;font-weight:bold;">KUIS MATEMATIKA</span></div>
-          <div class="item-card" onclick="openMiniGame('color-match')"><span style="font-size:24px;">🎨</span><span style="font-size:10px;font-weight:bold;">TEBAK WARNA</span></div>
-          <div class="item-card" onclick="openMiniGame('word-scramble')"><span style="font-size:24px;">📝</span><span style="font-size:10px;font-weight:bold;">ACAK KATA</span></div>
-          <div class="item-card" onclick="openMiniGame('catch-star')"><span style="font-size:24px;">⭐</span><span style="font-size:10px;font-weight:bold;">TANGKAP BINTANG</span></div>
-        </div>
-        <div class="interactive-panel" id="panel-bedroom">
-          <div class="item-card" onclick="toggleSleep()"><span style="font-size:24px;">💡</span><span style="font-size:10px;font-weight:bold;">LAMPU/TIDUR</span></div>
-        </div>
-      </div>
-    </div>
-
+  <div class="interactive-panel active" id="panel-kitchen">
+    <div class="item-card" onclick="feedPet('apple',10,20)"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="14" r="8" fill="#ff7675"/><path d="M12 6 q 2 -4 6 -2" stroke="#55efc4" stroke-width="2" fill="none"/></svg><span style="font-size:10px;font-weight:bold;">APEL (10🪙)</span></div>
+    <div class="item-card" onclick="feedPet('pizza',20,40)"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 2 L22 20 L2 20 Z" fill="#feca57"/><circle cx="12" cy="14" r="2" fill="#d63031"/><circle cx="8" cy="16" r="1.5" fill="#d63031"/><circle cx="16" cy="17" r="2" fill="#d63031"/></svg><span style="font-size:10px;font-weight:bold;">PIZZA (20🪙)</span></div>
+    <div class="item-card" onclick="feedPet('burger',25,50)"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 10 Q12 2 20 10" fill="#e17055"/><rect x="5" y="11" width="14" height="2" fill="#55efc4"/><rect x="4" y="14" width="16" height="3" rx="1" fill="#8b4513"/><path d="M4 18 Q12 22 20 18" fill="#e17055"/></svg><span style="font-size:10px;font-weight:bold;">BURGER (25🪙)</span></div>
+    <div class="item-card" onclick="feedPet('sushi',30,60)"><svg viewBox="0 0 24 24" width="30" height="30"><rect x="6" y="10" width="12" height="8" rx="2" fill="#dfe6e9"/><path d="M5 10 Q12 6 19 10" fill="#ff7675"/><rect x="10" y="8" width="4" height="12" fill="#2d3436"/></svg><span style="font-size:10px;font-weight:bold;">SUSHI (30🪙)</span></div>
+    <div class="item-card" onclick="feedPet('icecream',15,25)"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 12 L16 12 L12 22 Z" fill="#e17055"/><circle cx="12" cy="8" r="5" fill="#ff9ff3"/></svg><span style="font-size:10px;font-weight:bold;">ES KRIM (15🪙)</span></div>
+    <div class="item-card" onclick="giveMedicine()"><svg viewBox="0 0 24 24" width="30" height="30"><rect x="4" y="10" width="16" height="6" rx="3" fill="#74b9ff"/><path d="M12 10 L12 16 M4 10 A3 3 0 0 1 12 10 V16 A3 3 0 0 1 4 16 Z" fill="#ff7675"/></svg><span style="font-size:10px;font-weight:bold;">OBAT (50🪙)</span></div>
+  </div>
+  <div class="interactive-panel" id="panel-bathroom">
+    <div class="item-card" id="btn-shower" onclick="toggleShower()"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 4 L12 10 M8 12 V16 M12 12 V18 M16 12 V16" stroke="#74b9ff" stroke-width="2" stroke-linecap="round"/><ellipse cx="12" cy="10" rx="6" ry="2" fill="#b2bec3"/></svg><span style="font-size:10px;font-weight:bold;">SHOWER</span></div>
+    <div class="item-card" id="btn-soap" onclick="toggleSoap()"><svg viewBox="0 0 24 24" width="30" height="30"><ellipse cx="12" cy="12" rx="8" ry="5" fill="#a29bfe"/><circle cx="8" cy="8" r="2" fill="#fff" opacity="0.5"/><circle cx="16" cy="6" r="1.5" fill="#fff" opacity="0.5"/></svg><span style="font-size:10px;font-weight:bold;">GOSOK SABUN</span></div>
+  </div>
+  <div class="interactive-panel" id="panel-play">
+    <!-- SOLO GAMES -->
+    <div class="item-card" onclick="openMiniGame('mancing')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 22 L10 2 M10 2 Q18 6 18 14 M18 14 Q16 16 14 14" fill="none" stroke="#2d3436" stroke-width="2"/><circle cx="14" cy="14" r="2" fill="#ff7675"/></svg><span style="font-size:10px;font-weight:bold;">MANCING (SOLO)</span></div>
+    <div class="item-card" onclick="openMiniGame('lari-solo')"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="8" fill="#55efc4" stroke="#2d3436" stroke-width="2"/><path d="M8 12 L16 12 M12 8 L12 16" stroke="#2d3436" stroke-width="2"/></svg><span style="font-size:10px;font-weight:bold;">LOMPAT (SOLO)</span></div>
+    <div class="item-card" onclick="openMiniGame('tikus')"><svg viewBox="0 0 24 24" width="30" height="30"><ellipse cx="12" cy="14" rx="6" ry="4" fill="#a29bfe"/><circle cx="8" cy="10" r="3" fill="#a29bfe"/><circle cx="16" cy="10" r="3" fill="#a29bfe"/></svg><span style="font-size:10px;font-weight:bold;">TAP TIKUS (SOLO)</span></div>
+    <!-- MULTI GAMES -->
+    <div class="item-card" onclick="openMiniGame('lomba-lari')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 16 L20 16 M4 8 L20 8" stroke="#ff7675" stroke-width="3" stroke-dasharray="4"/></svg><span style="font-size:10px;font-weight:bold;">LARI (MULTI)</span></div>
+    <div class="item-card" onclick="openMiniGame('tarik-tambang')"><svg viewBox="0 0 24 24" width="30" height="30"><line x1="2" y1="12" x2="22" y2="12" stroke="#d35400" stroke-width="3"/><circle cx="12" cy="12" r="3" fill="#ff4757"/></svg><span style="font-size:10px;font-weight:bold;">TAMBANG (MULTI)</span></div>
+    <div class="item-card" onclick="openMiniGame('tebak-gaya')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 4 Q16 4 16 10 Q16 16 12 16 Q8 16 8 10 Q8 4 12 4" fill="#feca57"/><circle cx="12" cy="20" r="2" fill="#2d3436"/></svg><span style="font-size:10px;font-weight:bold;">TEBAK (MULTI)</span></div>
+  </div>
+  <div class="interactive-panel" id="panel-bedroom">
+    <div class="item-card" onclick="toggleSleep()"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 01-4.4 2.26 5.4 5.4 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" fill="#f1c40f"/></svg><span style="font-size:10px;font-weight:bold;">LAMPU/TIDUR</span></div>
+    <div class="item-card" onclick="generateShopUI(); showAnabulScreen('screen-shop')"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 6h16v2H4zm2 2h12v12H6z" fill="#ff9ff3"/><rect x="8" y="10" width="8" height="4" fill="#fff"/></svg><span style="font-size:10px;font-weight:bold;">SHOP KAMAR</span></div>
+  </div>
+</div>
+</div>
     <!-- NAV dengan SVG kawaii -->
     <div class="hud-bottom">
       <button class="nav-btn active" id="nav-btn-kitchen" onclick="goToRoom('kitchen')">
@@ -1340,36 +1339,245 @@ const svgs={
   bear:`<svg class="pet-svg idle" viewBox="0 0 100 100"><circle cx="50" cy="70" r="30" fill="__COLOR__"/><circle cx="25" cy="30" r="12" fill="__COLOR__"/><circle cx="75" cy="30" r="12" fill="__COLOR__"/><circle cx="25" cy="30" r="6" fill="#f5f6fa" opacity="0.5"/><circle cx="75" cy="30" r="6" fill="#f5f6fa" opacity="0.5"/><circle cx="50" cy="45" r="28" fill="__COLOR__"/><ellipse cx="50" cy="55" rx="14" ry="10" fill="#f5f6fa"/><ellipse cx="50" cy="51" rx="5" ry="3" fill="#2d3436"/><g class="eyes-open"><circle cx="38" cy="40" r="4" fill="#000"/><circle cx="39" cy="39" r="1.5" fill="#fff"/><circle cx="62" cy="40" r="4" fill="#000"/><circle cx="63" cy="39" r="1.5" fill="#fff"/></g><g class="eyes-closed"><path d="M 33 42 Q 38 45 43 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/><path d="M 57 42 Q 62 45 67 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/></g><ellipse cx="35" cy="95" rx="8" ry="5" fill="__COLOR__"/><ellipse cx="65" cy="95" rx="8" ry="5" fill="__COLOR__"/>__PATTERN__<g class="dirt-spots"><circle cx="30" cy="70" r="8" fill="#634731" opacity="0.6"/><circle cx="70" cy="65" r="10" fill="#634731" opacity="0.5"/><circle cx="50" cy="35" r="7" fill="#634731" opacity="0.7"/></g></svg>`
 };
 
-const allShopItems={clothes:[],bg:[],skin:[],bath:[]};
-allShopItems.bg.push({id:'bg-default',name:'Dapur (Gratis)',cost:0,reqLvl:1,css:'background:#ffda79;'});
-allShopItems.bg.push({id:'bg-sky',name:'Langit Biru',cost:200,reqLvl:2,css:'background:linear-gradient(#87CEEB,#e0f7ff);'});
-allShopItems.bg.push({id:'bg-stars',name:'Bintang Malam',cost:400,reqLvl:5,css:'background:#2c3e50;background-image:radial-gradient(#f1c40f 2px,transparent 2px);background-size:20px 20px;'});
-allShopItems.bg.push({id:'bg-wood',name:'Kamar Kayu',cost:600,reqLvl:10,css:'background:repeating-linear-gradient(90deg,#d2b48c,#d2b48c 20px,#cdaa7d 20px,#cdaa7d 40px);'});
-allShopItems.bg.push({id:'bg-garden',name:'Taman Indah',cost:800,reqLvl:15,css:'background:#55efc4;background-image:radial-gradient(#00b894 4px,transparent 4px);background-size:30px 30px;'});
-allShopItems.skin.push({id:'none',name:'Lepas Aksesoris',cost:0,reqLvl:1,svg:''});
-allShopItems.skin.push({id:'acc-bow',name:'Pita Merah',cost:100,reqLvl:2,svg:`<path d="M30 60 L50 70 L30 80 Z M70 60 L50 70 L70 80 Z" fill="#ff4757" stroke="#2d3436" stroke-width="4"/><circle cx="50" cy="70" r="6" fill="#feca57" stroke="#2d3436" stroke-width="4"/>`});
-allShopItems.skin.push({id:'acc-glasses',name:'Kacamata',cost:300,reqLvl:5,svg:`<rect x="25" y="45" width="20" height="15" rx="5" fill="#2d3436"/><rect x="55" y="45" width="20" height="15" rx="5" fill="#2d3436"/><line x1="45" y1="52" x2="55" y2="52" stroke="#2d3436" stroke-width="4"/>`});
-allShopItems.skin.push({id:'acc-crown',name:'Mahkota Raja',cost:1000,reqLvl:10,svg:`<path d="M 20 30 L 30 0 L 50 20 L 70 0 L 80 30 Z" fill="#f1c40f" stroke="#2d3436" stroke-width="4"/>`});
-allShopItems.skin.push({id:'acc-cowboy',name:'Topi Koboi',cost:1200,reqLvl:12,svg:`<ellipse cx="50" cy="25" rx="40" ry="10" fill="#d35400" stroke="#2d3436" stroke-width="3"/><path d="M 30 20 Q 50 -10 70 20 Z" fill="#e67e22" stroke="#2d3436" stroke-width="3"/>`});
-allShopItems.bath.push({id:'soap-pink',name:'Sabun Pink',cost:100,reqLvl:2,val:'#ff9ff3',type:'soap'});
-allShopItems.bath.push({id:'soap-blue',name:'Sabun Biru',cost:200,reqLvl:4,val:'#74b9ff',type:'soap'});
-allShopItems.bath.push({id:'pillow-red',name:'Bantal Merah',cost:300,reqLvl:5,val:'#ff7675',type:'pillow'});
-allShopItems.bath.push({id:'pillow-gold',name:'Bantal Emas',cost:800,reqLvl:12,val:'#f1c40f',type:'pillow'});
-const clothColors=['#74b9ff','#ff9ff3','#55efc4','#ffeaa7','#ff7675','#a29bfe','#fab1a0','#81ecec','#fdcb6e','#e17055'];
-const clothTypes=['Kaos','Jaket','Jubah','Rompi','Syal'];
-allShopItems.clothes.push({id:'none',name:'Lepas Baju',cost:0,reqLvl:1,svg:''});
-let cIdx=1;
-clothTypes.forEach(type=>{
-  clothColors.forEach(color=>{
-    let svg='';
-    if(type==='Kaos')svg=`<path d="M 30 75 Q 50 60 70 75 L 65 95 Q 50 100 35 95 Z" fill="${color}" stroke="#2d3436" stroke-width="4"/>`;
-    if(type==='Jaket')svg=`<path d="M 25 70 Q 50 55 75 70 L 70 95 Q 50 100 30 95 Z" fill="${color}" stroke="#2d3436" stroke-width="4"/><line x1="50" y1="62" x2="50" y2="98" stroke="#2d3436" stroke-width="4"/>`;
-    if(type==='Jubah')svg=`<path d="M 20 60 L 80 60 L 90 95 L 10 95 Z" fill="${color}" stroke="#2d3436" stroke-width="4"/><circle cx="50" cy="65" r="5" fill="#f1c40f" stroke="#2d3436" stroke-width="2"/>`;
-    if(type==='Rompi')svg=`<path d="M 35 70 L 65 70 L 60 90 L 40 90 Z" fill="${color}" stroke="#2d3436" stroke-width="4"/>`;
-    if(type==='Syal')svg=`<path d="M 35 65 Q 50 75 65 65 L 70 75 Q 50 85 30 75 Z" fill="${color}" stroke="#2d3436" stroke-width="4"/><path d="M 60 70 L 65 95 L 50 90 L 55 70 Z" fill="${color}" stroke="#2d3436" stroke-width="4"/>`;
-    allShopItems.clothes.push({id:`c_${cIdx}`,name:`${type} ${cIdx}`,cost:cIdx*50,reqLvl:Math.ceil(cIdx/2),svg});cIdx++;
+// =====================================================================
+// 25.000 ITEMS PROCEDURAL ENGINE (5K BAJU, 5K LATAR, 5K ACC, 5K MAKAN)
+// Dibuat dengan Sistem Kombinasi Modular (Beda Bentuk 100%)
+// =====================================================================
+
+const allShopItems = { clothes: [], bg: [], skin: [], bath: [] };
+
+// Helper: Bikin warna acak HSL
+function randColor(id, offset) {
+  let h = (id * 137 + offset) % 360;
+  let s = 60 + (id % 40);
+  let l = 40 + ((id * 3) % 40);
+  return `hsl(${h}, ${s}%, ${l}%)`;
+}
+
+// =========================================================
+// 1. GENERATOR 5.000 BAJU (Kombinasi Base + Lengan/Hoodie + Detail)
+// =========================================================
+const bajuBases = [
+  { nama: 'Kaos', path: `M 30 75 Q 50 60 70 75 L 65 95 Q 50 100 35 95 Z` },
+  { nama: 'Jubah', path: `M 20 60 L 80 60 L 90 95 L 10 95 Z` },
+  { nama: 'Gaun', path: `M 35 65 Q 50 60 65 65 L 85 95 L 15 95 Z` },
+  { nama: 'Jas', path: `M 25 70 Q 50 55 75 70 L 70 95 Q 50 100 30 95 Z` },
+  { nama: 'Tanktop', path: `M 35 70 Q 50 65 65 70 L 60 95 Q 50 98 40 95 Z` },
+  { nama: 'Rompi', path: `M 35 70 L 65 70 L 60 90 L 40 90 Z` }
+];
+const bajuAddons = [
+  { nama: 'Polos', svg: `` },
+  { nama: 'Hoodie', svg: `<path d="M 25 65 Q 50 30 75 65 L 50 75 Z" fill="VAR_C2"/><path d="M 40 65 L 40 80 M 60 65 L 60 80" stroke="#fff" stroke-width="2"/>` },
+  { nama: 'Lengan Panjang', svg: `<path d="M 25 70 L 10 90 L 20 95 L 30 75 Z M 75 70 L 90 90 L 80 95 L 70 75 Z" fill="VAR_C1"/>` },
+  { nama: 'Kerah Kemeja', svg: `<polygon points="40,65 50,75 60,65 50,60" fill="#fff"/>` },
+  { nama: 'Syal Lebar', svg: `<path d="M 30 65 Q 50 80 70 65 L 75 75 Q 50 90 25 75 Z" fill="VAR_C2"/>` },
+  { nama: 'Sayap Jubah', svg: `<path d="M 20 60 Q -10 40 10 90 Q 30 60 30 70 Z M 80 60 Q 110 40 90 90 Q 70 60 70 70 Z" fill="VAR_C2"/>` }
+];
+const bajuDetails = [
+  { nama: '', svg: `` },
+  { nama: 'Berlencana', svg: `<circle cx="60" cy="75" r="4" fill="VAR_C3"/>` },
+  { nama: 'Berkancing', svg: `<circle cx="50" cy="70" r="1.5" fill="#000"/><circle cx="50" cy="80" r="1.5" fill="#000"/><circle cx="50" cy="90" r="1.5" fill="#000"/>` },
+  { nama: 'Berkantong', svg: `<rect x="55" y="75" width="8" height="10" rx="2" fill="VAR_C3"/>` },
+  { nama: 'Garis Tengah', svg: `<line x1="50" y1="65" x2="50" y2="95" stroke="VAR_C3" stroke-width="3"/>` },
+  { nama: 'Bersabuk', svg: `<rect x="30" y="85" width="40" height="5" fill="#2d3436"/><rect x="45" y="84" width="10" height="7" fill="VAR_C3"/>` },
+  { nama: 'Bintang', svg: `<polygon points="50,70 52,75 57,75 53,78 55,83 50,80 45,83 47,78 43,75 48,75" fill="#f1c40f"/>` }
+];
+
+allShopItems.clothes.push({ id: 'none', name: 'Lepas Baju', cost: 0, reqLvl: 1, svg: '' });
+for (let i = 1; i <= 5000; i++) {
+  let base = bajuBases[i % bajuBases.length];
+  let addon = bajuAddons[(i * 3) % bajuAddons.length];
+  let detail = bajuDetails[(i * 7) % bajuDetails.length];
+  
+  let c1 = randColor(i, 0);
+  let c2 = randColor(i, 45); // Warna kontras
+  let c3 = randColor(i, 120); // Warna aksen
+  
+  let svgRaw = `<path d="${base.path}" fill="${c1}" stroke="#2d3436" stroke-width="3"/>` + addon.svg + detail.svg;
+  svgRaw = svgRaw.replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3);
+  
+  allShopItems.clothes.push({
+    id: `baju_${i}`,
+    name: `${base.nama} ${addon.nama} ${i}`,
+    cost: 10 + Math.floor(i/50),
+    reqLvl: Math.max(1, Math.floor(i/200)),
+    svg: svgRaw
   });
-});
+}
+
+// =========================================================
+// 2. GENERATOR 5.000 AKSESORIS (Pita, Kacamata, Topi, Mahkota, dll + Modifikasi)
+// =========================================================
+allShopItems.skin.push({ id: 'none', name: 'Lepas Aksesoris', cost: 0, reqLvl: 1, svg: '' });
+const accBases = [
+  { p: `<path d="M30 60 L50 70 L30 80 Z M70 60 L50 70 L70 80 Z" fill="VAR_C1" stroke="#2d3436" stroke-width="3"/><circle cx="50" cy="70" r="6" fill="VAR_C2"/>`, n: 'Pita' },
+  { p: `<rect x="25" y="45" width="20" height="15" rx="5" fill="VAR_C1"/><rect x="55" y="45" width="20" height="15" rx="5" fill="VAR_C1"/><line x1="45" y1="52" x2="55" y2="52" stroke="#2d3436" stroke-width="3"/>`, n: 'Kacamata' },
+  { p: `<path d="M 20 30 L 30 0 L 50 20 L 70 0 L 80 30 Z" fill="VAR_C1" stroke="#2d3436" stroke-width="3"/>`, n: 'Mahkota' },
+  { p: `<ellipse cx="50" cy="25" rx="40" ry="10" fill="VAR_C1" stroke="#2d3436" stroke-width="3"/><path d="M 30 20 Q 50 -10 70 20 Z" fill="VAR_C2" stroke="#2d3436" stroke-width="3"/>`, n: 'Topi' },
+  { p: `<path d="M 10 50 Q -10 20 20 40 Q 0 60 15 50 Z M 90 50 Q 110 20 80 40 Q 100 60 85 50 Z" fill="VAR_C1" stroke="#2d3436" stroke-width="2"/>`, n: 'Sayap' },
+  { p: `<path d="M 35 65 Q 50 80 65 65" fill="none" stroke="#2d3436" stroke-width="3"/><circle cx="50" cy="73" r="6" fill="VAR_C1"/>`, n: 'Kalung' }
+];
+const accMods = [
+  ``,
+  `<circle cx="50" cy="15" r="5" fill="VAR_C3"/>`, // Permata tengah
+  `<polygon points="20,10 25,20 15,20" fill="VAR_C3"/><polygon points="80,10 85,20 75,20" fill="VAR_C3"/>`, // Duri
+  `<path d="M 40 0 L 50 10 L 60 0 Z" fill="VAR_C3"/>` // Ornamen Atas
+];
+
+for (let i = 1; i <= 5000; i++) {
+  let base = accBases[i % accBases.length];
+  let mod = accMods[(i * 11) % accMods.length];
+  let c1 = randColor(i, 30); let c2 = randColor(i, 90); let c3 = randColor(i, 200);
+  
+  let svgRaw = (base.p + mod).replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3);
+  allShopItems.skin.push({ id: `acc_${i}`, name: `${base.n} Unik ${i}`, cost: 15 + Math.floor(i/40), reqLvl: Math.max(1, Math.floor(i/250)), svg: svgRaw });
+}
+
+// =========================================================
+// 3. GENERATOR 5.000 LATAR BACKGROUND (CSS Pattern Engine)
+// =========================================================
+allShopItems.bg.push({ id: 'bg-default', name: 'Kamar (Gratis)', cost: 0, reqLvl: 1, css: 'background:#ffda79;' });
+const bgEngines = [
+  (c1, c2) => `background: linear-gradient(135deg, ${c1}, ${c2});`,
+  (c1, c2) => `background: radial-gradient(circle at center, ${c1} 20%, ${c2} 100%);`,
+  (c1, c2) => `background: repeating-linear-gradient(45deg, ${c1}, ${c1} 20px, ${c2} 20px, ${c2} 40px);`,
+  (c1, c2) => `background: ${c1}; background-image: radial-gradient(${c2} 15%, transparent 15%); background-size: 30px 30px;`,
+  (c1, c2) => `background: ${c1}; background-image: linear-gradient(rgba(255,255,255,.3) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.3) 2px, transparent 2px); background-size: 40px 40px;`
+];
+for (let i = 1; i <= 5000; i++) {
+  let engine = bgEngines[i % bgEngines.length];
+  let css = engine(randColor(i, 0), randColor(i, 180));
+  allShopItems.bg.push({ id: `bg_${i}`, name: `Latar Epik ${i}`, cost: 50 + Math.floor(i/20), reqLvl: Math.max(1, Math.floor(i/150)), css: css });
+}
+
+// =========================================================
+// 4. GENERATOR 5.000 SABUN & BANTAL
+// =========================================================
+for (let i = 1; i <= 2500; i++) {
+  allShopItems.bath.push({ id: `soap_${i}`, name: `Sabun Mewah ${i}`, cost: 5 + Math.floor(i/50), reqLvl: 1, val: randColor(i, 0), type: 'soap' });
+}
+for (let i = 1; i <= 2500; i++) {
+  allShopItems.bath.push({ id: `pillow_${i}`, name: `Kasur Sultan ${i}`, cost: 10 + Math.floor(i/50), reqLvl: 1, val: randColor(i, 50), type: 'pillow' });
+}
+
+// =========================================================
+// 5. GENERATOR 5.000 MAKANAN (Kombinasi Wadah + Isi + Topping)
+// =========================================================
+function initMakanan() {
+  const panelDapur = document.getElementById('panel-kitchen');
+  if (!panelDapur) return;
+  
+  // Karena masukin 5.000 DOM ke HTML bisa bikin HP nge-lag parah pas buka menu DAPUR,
+  // Kita inject pake Array Map join biar prosesnya cepat tanpa memberatkan DOM Reflow.
+  let htmlDapurArray = [];
+
+  const foodBases = [
+    { p: `<path d="M 4 18 Q 12 22 20 18 L 18 10 L 6 10 Z" fill="VAR_C1"/>`, n: 'Mangkok' },
+    { p: `<ellipse cx="12" cy="18" rx="10" ry="3" fill="VAR_C1"/>`, n: 'Piring' },
+    { p: `<rect x="6" y="8" width="12" height="14" rx="2" fill="VAR_C1" opacity="0.8"/>`, n: 'Gelas' },
+    { p: `<polygon points="12,20 2,10 12,2 22,10" fill="VAR_C1"/>`, n: 'Bungkus Daun' }
+  ];
+  
+  const foodMains = [
+    { p: `<circle cx="12" cy="12" r="6" fill="VAR_C2"/>`, n: 'Bulat' },
+    { p: `<path d="M 12 4 L 20 16 L 4 16 Z" fill="VAR_C2"/>`, n: 'Segitiga' },
+    { p: `<rect x="6" y="8" width="12" height="8" rx="2" fill="VAR_C2"/>`, n: 'Kotak' },
+    { p: `<ellipse cx="12" cy="14" rx="8" ry="4" fill="VAR_C2"/>`, n: 'Cairan' },
+    { p: `<path d="M 8 8 Q 12 4 16 8 Q 20 12 16 16 Q 12 20 8 16 Q 4 12 8 8 Z" fill="VAR_C2"/>`, n: 'Gumpal' }
+  ];
+
+  const foodToppings = [
+    ``, // Tanpa topping
+    `<circle cx="12" cy="10" r="2" fill="#ff7675"/>`, // Ceri
+    `<line x1="8" y1="10" x2="16" y2="10" stroke="VAR_C3" stroke-width="2"/>`, // Saus lurus
+    `<circle cx="10" cy="12" r="1" fill="#fff"/><circle cx="14" cy="10" r="1" fill="#fff"/>`, // Wijen
+    `<path d="M 8 10 Q 12 14 16 10" fill="none" stroke="VAR_C3" stroke-width="2"/>` // Saus melengkung
+  ];
+
+  for (let i = 1; i <= 5000; i++) {
+    let base = foodBases[i % foodBases.length];
+    let main = foodMains[(i * 7) % foodMains.length];
+    let topping = foodToppings[(i * 13) % foodToppings.length];
+    
+    let c1 = randColor(i, 0); 
+    let c2 = randColor(i, 80); 
+    let c3 = randColor(i, 160);
+    
+    let svgRaw = `<svg viewBox="0 0 24 24" width="30" height="30">` + (base.p + main.p + topping).replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3) + `</svg>`;
+    
+    let harga = 10 + Math.floor(i / 50); 
+    let kenyang = harga * 2; 
+
+    htmlDapurArray.push(`
+      <div class="item-card" onclick="feedPet('makanan_${i}', ${harga}, ${kenyang})">
+        ${svgRaw}
+        <span style="font-size:10px;font-weight:bold;">${main.n} ${base.n} ${i} (${harga}🪙)</span>
+      </div>`);
+  }
+
+  // Inject Tombol Obat di index terakhir
+  htmlDapurArray.push(`
+    <div class="item-card" onclick="giveMedicine()">
+      <svg viewBox="0 0 24 24" width="30" height="30"><rect x="4" y="10" width="16" height="6" rx="3" fill="#74b9ff"/><path d="M12 10 L12 16 M4 10 A3 3 0 0 1 12 10 V16 A3 3 0 0 1 4 16 Z" fill="#ff7675"/></svg>
+      <span style="font-size:10px;font-weight:bold;">OBAT SAKIT (50🪙)</span>
+    </div>`);
+    
+  // Render masif ke DOM
+  panelDapur.innerHTML = htmlDapurArray.join('');
+}
+
+// Logic Klaim Harian
+function claimDaily() {
+  let now = Date.now();
+  if (!petData.lastClaim || now - petData.lastClaim >= 86400000) {
+    petData.coins += 1000;
+    petData.lastClaim = now;
+    alert("Klaim berhasil! +1000 Koin 🪙");
+    savePetData();
+    if(document.getElementById('ui-coins')) document.getElementById('ui-coins').innerText = petData.coins;
+  } else {
+    let sisaWaktu = Math.ceil((86400000 - (now - petData.lastClaim)) / 3600000);
+    alert("Kamu sudah klaim hari ini! Kembali lagi dalam " + sisaWaktu + " jam.");
+  }
+}
+
+// 5. FUNGSI GENERATE 100 MAKANAN (10 Makanan Dasar x 10 Rasa)
+function initMakanan() {
+  const panelDapur = document.getElementById('panel-kitchen');
+  if (!panelDapur) return;
+  
+  let htmlDapur = '';
+  const basisMakanan = [
+    { nama: 'Apel', emj: '🍎' }, { nama: 'Pizza', emj: '🍕' }, { nama: 'Burger', emj: '🍔' }, 
+    { nama: 'Sushi', emj: '🍣' }, { nama: 'Es Krim', emj: '🍦' }, { nama: 'Donat', emj: '🍩' }, 
+    { nama: 'Kue', emj: '🍰' }, { nama: 'Cokelat', emj: '🍫' }, { nama: 'Permen', emj: '🍬' }, 
+    { nama: 'Anggur', emj: '🍇' }
+  ];
+  const rasaMakanan = ['Manis', 'Pedas', 'Asin', 'Gurih', 'Spesial', 'Keju', 'Bakar', 'Goreng', 'Raksasa', 'Mini'];
+
+  let idMakan = 1;
+  basisMakanan.forEach((basis) => {
+    rasaMakanan.forEach((rasa) => {
+      let harga = 10 + Math.floor(Math.random() * 40); // Harga acak 10-50
+      let kenyang = harga * 2; // Kenyang sesuai harga
+      htmlDapur += `
+        <div class="item-card" onclick="feedPet('${basis.nama}_${idMakan}', ${harga}, ${kenyang})">
+          <span style="font-size:24px;">${basis.emj}</span>
+          <span style="font-size:10px;font-weight:bold;">${basis.nama} ${rasa} (${harga}🪙)</span>
+        </div>`;
+      idMakan++;
+    });
+  });
+
+  // Tambahkan Tombol Obat di akhir
+  htmlDapur += `
+    <div class="item-card" onclick="giveMedicine()">
+      <span style="font-size:24px;">💊</span>
+      <span style="font-size:10px;font-weight:bold;">OBAT SAKIT (50🪙)</span>
+    </div>`;
+    
+  panelDapur.innerHTML = htmlDapur;
+}
 
 function savePetData(){petData.lastOnline=Date.now();localStorage.setItem('261anabul_data_v2',JSON.stringify(petData));}
 function loadPetData(){
@@ -1443,8 +1651,21 @@ function gainXP(amount){
   updateUI();savePetData();
 }
 function gameTick(){
-  if(!isSleeping){let d=Math.max(0.5,2-(petData.level*0.02));petData.food=Math.max(0,petData.food-d);petData.energy=Math.max(0,petData.energy-(d*0.5));petData.clean=Math.max(0,petData.clean-d);if(petData.food<20||petData.clean<10)petData.sick=true;if(petData.clean<40)petData.dirty=true;}
-  else{petData.energy=Math.min(100,petData.energy+5);if(Math.random()<0.6)createFloatingZzz();}
+  if(!isSleeping){
+    // Interval game adalah 3 detik. 1 menit = 60 detik (20 tick). 
+    // Turun 10% dalam 20 tick = 0.5% per tick.
+    let d = 0.5;
+    petData.food = Math.max(0, petData.food - d);
+    petData.energy = Math.max(0, petData.energy - d);
+    petData.clean = Math.max(0, petData.clean - d);
+    
+    if(petData.food < 20 || petData.clean < 10) petData.sick = true;
+    if(petData.clean < 40) petData.dirty = true;
+  } else {
+    // Energi pulih lebih lambat jadi tidur terasa lebih lama (dulu +5, sekarang +1.5)
+    petData.energy = Math.min(100, petData.energy + 1.5); 
+    if(Math.random() < 0.6) createFloatingZzz();
+  }
   updateUI();
 }
 function updateUI(){
@@ -1535,7 +1756,7 @@ function buyOrEquip(cat,id,cost){
     if(cat==='bath'){let it=allShopItems.bath.find(b=>b.id===id);if(it){if(it.type==='soap')petData.activeSoap=id;else petData.activePillow=id;}}
     if(document.getElementById('room').style.display!=='none'){setupRoomStyle();updatePetRender('pet-size',petData,isSleeping);}
   } else {
-    if(petData.coins>=cost){petData.coins-=cost;petData.ownedItems.push(id);alert("Berhasil dibeli! ✅");}
+    if(petData.coins>=cost){petData.coins-=cost;petData.ownedItems.push(id);alert("Berhasil dibeli!");}
     else{alert("Koin tidak cukup!");return;}
   }
   generateShopUI();savePetData();
@@ -1624,170 +1845,95 @@ function closeGuide(){document.getElementById('guide-modal').classList.remove('a
 // 10 MINI GAMES
 // ============================================================
 let mgState={};
+
+// ====================================================================
+// 1. DUA FUNGSI INI HARUS DI LUAR openMiniGame AGAR BISA DIPANGGIL
+// ====================================================================
+function closeMiniGame() {
+  document.getElementById('minigame-modal').classList.remove('active');
+  if (mgState.catchTimer) clearInterval(mgState.catchTimer);
+  if (mgState.spawnTimer) clearInterval(mgState.spawnTimer);
+}
+
+function mgReward(coins, xp) {
+  petData.coins += coins;
+  gainXP(xp);
+  createFloatingText(`+${coins}🪙 +${xp}XP`, "center");
+}
+
+// ====================================================================
+// 2. BARU DI BAWAHNYA KITA BUAT FUNGSI openMiniGame
+// ====================================================================
 function openMiniGame(type){
-  let box=document.getElementById('minigame-content');
-  mgState={type,step:0};
-  let html='';
-  if(type==='coin-flip'){
-    html=`<div class="minigame-title">🪙 LEMPAR KOIN</div><div class="minigame-subtitle">Tebak hasilnya!</div><div class="mg-result" id="mg-result">-</div><button class="mg-btn btn-pink" onclick="mgCoinFlip('heads')">KEPALA</button><button class="mg-btn btn-blue" onclick="mgCoinFlip('tails')">EKOR</button>`;
-  } else if(type==='dice-roll'){
-    html=`<div class="minigame-title">🎲 DADU KEBERUNTUNGAN</div><div class="minigame-subtitle">Tebak angka dadu (1-6)!</div><div class="mg-result" id="mg-result">-</div><div style="display:flex;flex-wrap:wrap;justify-content:center;">${[1,2,3,4,5,6].map(n=>`<button class="mg-btn btn-yellow" onclick="mgDiceRoll(${n})">${n}</button>`).join('')}</div>`;
-  } else if(type==='rock-paper'){
-    html=`<div class="minigame-title">✊ SUIT vs ANABUL</div><div class="minigame-subtitle">Pilih gerakanmu!</div><div class="mg-result" id="mg-result">-</div><button class="mg-btn btn-pink" onclick="mgRPS('rock')">✊ BATU</button><button class="mg-btn btn-blue" onclick="mgRPS('paper')">✋ KERTAS</button><button class="mg-btn btn-green" onclick="mgRPS('scissors')">✌️ GUNTING</button>`;
-  } else if(type==='number-guess'){
-    let secret=Math.floor(Math.random()*10)+1;mgState.secret=secret;mgState.tries=3;
-    html=`<div class="minigame-title">🔢 TEBAK ANGKA</div><div class="minigame-subtitle">Angka 1-10, sisa <span id="mg-tries">3</span> percobaan!</div><div class="mg-result" id="mg-result">-</div><div style="display:flex;flex-wrap:wrap;justify-content:center;">${Array.from({length:10},(_,i)=>`<button class="mg-btn btn-yellow" onclick="mgGuessNum(${i+1})">${i+1}</button>`).join('')}</div>`;
-  } else if(type==='memory'){
-    let pairs=['🐱','🐶','🐰','🐻','🍎','🍕'];let cards=[...pairs,...pairs].sort(()=>Math.random()-0.5);
-    mgState.cards=cards;mgState.flipped=[];mgState.matched=[];mgState.moves=0;
-    html=`<div class="minigame-title">🃏 KARTU MEMORI</div><div class="minigame-subtitle">Temukan pasangan kartu!</div><div class="mg-result" id="mg-result">Gerakan: 0</div><div id="mg-memory-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0;">${cards.map((_,i)=>`<button id="mc-${i}" class="mg-btn btn-blue" onclick="mgMemoryClick(${i})" style="font-size:24px;padding:10px;">❓</button>`).join('')}</div>`;
-  } else if(type==='reaction'){
-    html=`<div class="minigame-title">⚡ REAKSI CEPAT</div><div class="minigame-subtitle">Tekan tombol HIJAU secepat mungkin!</div><div class="mg-result" id="mg-result">Siap-siap...</div><button id="mg-react-btn" class="mg-btn btn-red" style="width:100%;font-size:20px;padding:20px;" onclick="mgReactionClick()">TUNGGU...</button>`;
-    setTimeout(()=>mgStartReaction(),1500+Math.random()*2000);
-  } else if(type==='math-quiz'){
-    mgStartMath();return;
-  } else if(type==='color-match'){
-    mgStartColorMatch();return;
-  } else if(type==='word-scramble'){
-    mgStartWordScramble();return;
-  } else if(type==='catch-star'){
-    html=mgCatchStarHTML();
-  }
-  box.innerHTML=html+`<button class="mg-btn btn-red" style="width:90%;margin-top:10px;" onclick="closeMiniGame()">TUTUP</button>`;
-  document.getElementById('minigame-modal').classList.add('active');
-  if(type==='catch-star')mgStartCatchStar();
-}
-function closeMiniGame(){document.getElementById('minigame-modal').classList.remove('active');if(mgState.catchTimer)clearInterval(mgState.catchTimer);if(mgState.spawnTimer)clearInterval(mgState.spawnTimer);}
-function mgReward(coins,xp){petData.coins+=coins;gainXP(xp);createFloatingText(`+${coins}🪙 +${xp}XP`);}
+  let box = document.getElementById('minigame-content');
+  mgState = {type, step:0, clicks:0};
+  let html = '';
+  let hasGuest = document.getElementById('guest-wrapper').style.display === 'flex';
 
-// Coin Flip
-function mgCoinFlip(guess){
-  let r=Math.random()<0.5?'heads':'tails';let win=r===guess;
-  let res=document.getElementById('mg-result');
-  res.innerText=(r==='heads'?'KEPALA 🪙':'EKOR 🪙')+(win?' - MENANG! 🎉':' - KALAH 😢');
-  res.style.color=win?'#00b894':'#d63031';
-  if(win)mgReward(50,5);else mgReward(5,1);
-}
-// Dice Roll
-function mgDiceRoll(guess){
-  let r=Math.floor(Math.random()*6)+1;let win=r===guess;
-  document.getElementById('mg-result').innerText=`Dadu: ${r} ${win?'- TEPAT! 🎉':'- Meleset 😢'}`;
-  document.getElementById('mg-result').style.color=win?'#00b894':'#d63031';
-  if(win)mgReward(100,10);else mgReward(5,1);
-}
-// Rock Paper Scissors
-function mgRPS(choice){
-  let opts=['rock','paper','scissors'];let ai=opts[Math.floor(Math.random()*3)];
-  let emj={rock:'✊',paper:'✋',scissors:'✌️'};
-  let win=(choice==='rock'&&ai==='scissors')||(choice==='paper'&&ai==='rock')||(choice==='scissors'&&ai==='paper');
-  let draw=choice===ai;
-  let r=document.getElementById('mg-result');
-  r.innerText=`Kamu: ${emj[choice]} vs Anabul: ${emj[ai]} - ${draw?'SERI ➡️':(win?'MENANG 🎉':'KALAH 😢')}`;
-  r.style.color=win?'#00b894':(draw?'#e67e22':'#d63031');
-  if(win)mgReward(80,8);else if(draw)mgReward(20,2);else mgReward(5,1);
-}
-// Number Guess
-function mgGuessNum(n){
-  let r=document.getElementById('mg-result');
-  if(n===mgState.secret){r.innerText=`BENAR! Angkanya ${n} 🎉`;r.style.color='#00b894';mgReward(150,15);return;}
-  mgState.tries--;
-  document.getElementById('mg-tries').innerText=mgState.tries;
-  if(mgState.tries===0){r.innerText=`HABIS! Jawabannya ${mgState.secret} 😢`;r.style.color='#d63031';mgReward(5,1);}
-  else{r.innerText=n<mgState.secret?'Terlalu kecil! ⬆️':'Terlalu besar! ⬇️';r.style.color='#e67e22';}
-}
-// Memory Card
-function mgMemoryClick(i){
-  if(mgState.flipped.length>=2||mgState.matched.includes(i)||mgState.flipped.includes(i))return;
-  let btn=document.getElementById(`mc-${i}`);btn.innerText=mgState.cards[i];btn.style.background='#ffeaa7';btn.disabled=true;
-  mgState.flipped.push(i);mgState.moves++;document.getElementById('mg-result').innerText=`Gerakan: ${mgState.moves}`;
-  if(mgState.flipped.length===2){
-    let[a,b]=mgState.flipped;
-    if(mgState.cards[a]===mgState.cards[b]){mgState.matched.push(a,b);mgState.flipped=[];if(mgState.matched.length===mgState.cards.length){document.getElementById('mg-result').innerText=`Selesai dalam ${mgState.moves} gerakan! 🎉`;mgReward(200-mgState.moves*5,20);}}
-    else{setTimeout(()=>{document.getElementById(`mc-${a}`).innerText='❓';document.getElementById(`mc-${a}`).style.background='';document.getElementById(`mc-${a}`).disabled=false;document.getElementById(`mc-${b}`).innerText='❓';document.getElementById(`mc-${b}`).style.background='';document.getElementById(`mc-${b}`).disabled=false;mgState.flipped=[];},800);}
+  if(type === 'mancing') {
+    html = `<div class="minigame-title">🎣 MANCING IKAN</div><div class="minigame-subtitle">Tarik pas ikan kena kail!</div><div class="mg-result" id="mg-result">Tunggu...</div><button class="mg-btn btn-blue" style="width:100%; height:80px; font-size:24px;" onclick="mgAction('mancing')">TARIK KAIL!</button>`;
+    setTimeout(() => { if(document.getElementById('mg-result')) document.getElementById('mg-result').innerText = "IKAN MAKAN! TARIK!"; mgState.ready = true; }, 1500 + Math.random()*2000);
+  } else if(type === 'lari-solo') {
+    html = `<div class="minigame-title">🏃 LOMPAT RINTANGAN</div><div class="minigame-subtitle">Tap tombol lompat berkali-kali!</div><div class="mg-result" id="mg-result">Skor: 0</div><button class="mg-btn btn-green" style="width:100%; height:80px; font-size:24px;" onclick="mgAction('lari-solo')">LOMPAT!</button>`;
+  } else if(type === 'tikus') {
+    html = `<div class="minigame-title">🐭 TANGKAP TIKUS</div><div class="minigame-subtitle">Klik secepat mungkin sebelum kabur!</div><div class="mg-result" id="mg-result">Cari tikusnya...</div><button id="btn-tikus" class="mg-btn btn-purple" style="display:none; position:relative; font-size:24px;" onclick="mgAction('tikus')">🐭 TANGKAP!</button>`;
+    setTimeout(() => { let b = document.getElementById('btn-tikus'); if(b) {b.style.display='inline-block'; b.style.left = (Math.random()*50-25)+'px'; mgState.start = Date.now();} }, 1000);
+  } else if(type === 'lomba-lari') {
+    if(!hasGuest) return alert("Mode Multi! Ajak teman visit rumahmu dulu!");
+    html = `<div class="minigame-title">🏁 LOMBA LARI</div><div class="minigame-subtitle">Adu cepat tap tombol vs Teman!</div><div class="mg-result" id="mg-result">Lari: 0m</div><button class="mg-btn btn-red" style="width:100%; height:80px; font-size:24px;" onclick="mgAction('lomba-lari')">LARI!</button>`;
+  } else if(type === 'tarik-tambang') {
+    if(!hasGuest) return alert("Mode Multi! Ajak teman visit rumahmu dulu!");
+    html = `<div class="minigame-title">🪢 TARIK TAMBANG</div><div class="minigame-subtitle">Tap untuk narik! Kekuatan diuji!</div><div class="mg-result" id="mg-result">Kekuatan Tarik: 50%</div><button class="mg-btn btn-yellow" style="width:100%; height:80px; font-size:24px;" onclick="mgAction('tarik-tambang')">TARIK!</button>`;
+  } else if(type === 'tebak-gaya') {
+    if(!hasGuest) return alert("Mode Multi! Ajak teman visit rumahmu dulu!");
+    html = `<div class="minigame-title">🎭 TEBAK GAYA</div><div class="minigame-subtitle">Teman memperagakan Hewan apa?</div><div class="mg-result" id="mg-result">Pilih tebakanmu...</div>
+    <div style="display:flex; justify-content:center; flex-wrap:wrap;">
+      <button class="mg-btn btn-pink" onclick="mgAction('tebak','KUCING')">KUCING</button>
+      <button class="mg-btn btn-blue" onclick="mgAction('tebak','ANJING')">ANJING</button>
+    </div>`;
   }
-}
-// Reaction
-let mgReactionReady=false,mgReactionStart=0;
-function mgStartReaction(){mgReactionReady=true;mgReactionStart=Date.now();let btn=document.getElementById('mg-react-btn');if(btn){btn.style.background='#55efc4';btn.innerText='TEKAN SEKARANG! ⚡';}}
-function mgReactionClick(){
-  if(!mgReactionReady){document.getElementById('mg-result').innerText='Terlalu cepat! Tunggu hijau!';return;}
-  let ms=Date.now()-mgReactionStart;document.getElementById('mg-result').innerText=`Reaksi: ${ms}ms! ${ms<500?'LUAR BIASA! 🚀':(ms<1000?'BAGUS! ✅':'LAMBAT 🐢')}`;
-  if(ms<300)mgReward(200,20);else if(ms<500)mgReward(150,15);else if(ms<1000)mgReward(80,8);else mgReward(20,2);
-  mgReactionReady=false;
-}
-// Math Quiz
-function mgStartMath(){
-  let a=Math.floor(Math.random()*20)+1,b=Math.floor(Math.random()*20)+1;
-  let ops=['+','-','*'];let op=ops[Math.floor(Math.random()*3)];
-  let ans=op==='+'?a+b:(op==='-'?a-b:a*b);
-  let wrongs=[ans+Math.floor(Math.random()*5)+1,ans-Math.floor(Math.random()*5)-1,ans+Math.floor(Math.random()*10)+5];
-  let choices=[ans,...wrongs].sort(()=>Math.random()-0.5);
-  let box=document.getElementById('minigame-content');
-  box.innerHTML=`<div class="minigame-title">🧮 KUIS MATEMATIKA</div><div class="minigame-subtitle">Hitung dengan benar!</div><div style="font-size:32px;font-weight:900;color:#2d3436;margin:15px 0;">${a} ${op==='*'?'×':op} ${b} = ?</div><div class="mg-result" id="mg-result">-</div>${choices.map(c=>`<button class="mg-btn btn-yellow" onclick="mgMathAnswer(${c},${ans})" style="margin:5px;">${c}</button>`).join('')}<button class="mg-btn btn-red" style="width:90%;margin-top:10px;" onclick="closeMiniGame()">TUTUP</button>`;
+
+  box.innerHTML = html + `<button class="mg-btn btn-red" style="width:90%; margin-top:10px;" onclick="closeMiniGame()">SELESAI</button>`;
   document.getElementById('minigame-modal').classList.add('active');
-}
-function mgMathAnswer(choice,correct){
-  let win=choice===correct;let r=document.getElementById('mg-result');
-  r.innerText=win?'BENAR! 🎉':`Salah! Jawabannya ${correct} 😢`;r.style.color=win?'#00b894':'#d63031';
-  if(win)mgReward(100,10);else mgReward(5,1);
-}
-// Color Match
-function mgStartColorMatch(){
-  const colors=[{name:'MERAH',hex:'#ff7675'},{name:'BIRU',hex:'#74b9ff'},{name:'HIJAU',hex:'#55efc4'},{name:'KUNING',hex:'#feca57'},{name:'UNGU',hex:'#a29bfe'}];
-  let target=colors[Math.floor(Math.random()*colors.length)];
-  let fakeColor=colors[Math.floor(Math.random()*colors.length)];
-  let showText=Math.random()<0.5;
-  let displayText=showText?fakeColor.name:target.name;let displayColor=showText?target.hex:fakeColor.hex;
-  let box=document.getElementById('minigame-content');
-  box.innerHTML=`<div class="minigame-title">🎨 TEBAK WARNA</div><div class="minigame-subtitle">Pilih warna yang SESUAI dengan WARNA TEKS (bukan tulisannya)!</div><div style="font-size:36px;font-weight:900;color:${displayColor};margin:15px 0;-webkit-text-stroke:1px #2d3436;">${displayText}</div><div class="mg-result" id="mg-result">-</div><div style="display:flex;flex-wrap:wrap;justify-content:center;">${colors.map(c=>`<button class="mg-btn" onclick="mgColorAnswer('${c.hex}','${displayColor}')" style="background:${c.hex};border:3px solid #2d3436;margin:5px;width:50px;height:50px;border-radius:50%;">${c.hex===displayColor?'':''}</button>`).join('')}</div><button class="mg-btn btn-red" style="width:90%;margin-top:10px;" onclick="closeMiniGame()">TUTUP</button>`;
-  document.getElementById('minigame-modal').classList.add('active');
-}
-function mgColorAnswer(chosen,correct){
-  let win=chosen===correct;let r=document.getElementById('mg-result');
-  r.innerText=win?'TEPAT! 🎉':'Salah! 😢';r.style.color=win?'#00b894':'#d63031';
-  if(win)mgReward(120,12);else mgReward(5,1);
-}
-// Word Scramble
-const mgWords=['KUCING','ANJING','KELINCI','BERUANG','RUMAH','MAKAN','TIDUR','MAIN'];
-function mgStartWordScramble(){
-  let word=mgWords[Math.floor(Math.random()*mgWords.length)];
-  let scrambled=word.split('').sort(()=>Math.random()-0.5).join('');
-  mgState.word=word;
-  let box=document.getElementById('minigame-content');
-  box.innerHTML=`<div class="minigame-title">📝 ACAK KATA</div><div class="minigame-subtitle">Susun huruf menjadi kata yang benar!</div><div style="font-size:32px;font-weight:900;color:#2d3436;letter-spacing:5px;margin:15px 0;">${scrambled}</div><input id="mg-word-input" class="input-kawaii" placeholder="JAWABAN..." style="margin-bottom:10px;" oninput="this.value=this.value.toUpperCase()"><div class="mg-result" id="mg-result">-</div><button class="mg-btn btn-green" onclick="mgCheckWord()">CEK JAWABAN</button><button class="mg-btn btn-red" style="width:90%;margin-top:10px;" onclick="closeMiniGame()">TUTUP</button>`;
-  document.getElementById('minigame-modal').classList.add('active');
-}
-function mgCheckWord(){
-  let inp=document.getElementById('mg-word-input').value.trim().toUpperCase();let win=inp===mgState.word;
-  let r=document.getElementById('mg-result');r.innerText=win?`BENAR! "${mgState.word}" 🎉`:`Salah! Jawabannya "${mgState.word}" 😢`;r.style.color=win?'#00b894':'#d63031';
-  if(win)mgReward(130,13);else mgReward(5,1);
-}
-// Catch Star
-function mgCatchStarHTML(){
-  return`<div class="minigame-title">⭐ TANGKAP BINTANG</div><div class="minigame-subtitle">Tap bintang sebanyak mungkin dalam 15 detik!</div><div class="mg-result" id="mg-result">Skor: 0 | Waktu: 15s</div><div id="mg-star-arena" style="position:relative;width:100%;height:200px;background:#ffeaa7;border:3px solid #2d3436;border-radius:15px;overflow:hidden;margin:10px 0;"></div>`;
-}
-function mgStartCatchStar(){
-  let score=0,time=15;
-  mgState.catchScore=0;
-  function tick(){
-    time--;document.getElementById('mg-result').innerText=`Skor: ${score} | Waktu: ${time}s`;
-    if(time<=0){clearInterval(mgState.catchTimer);clearInterval(mgState.spawnTimer);document.getElementById('mg-result').innerText=`Skor: ${score}! ${score>=10?'HEBAT! 🌟':(score>=5?'BAGUS! ✅':'COBA LAGI 😢')}`;mgReward(score*10,score);}
-  }
-  function spawnStar(){
-    let arena=document.getElementById('mg-star-arena');if(!arena)return;
-    let star=document.createElement('div');star.innerText='⭐';star.style.cssText=`position:absolute;font-size:28px;cursor:pointer;left:${Math.random()*80}%;top:${Math.random()*70}%;animation:popIn 0.3s ease;`;
-    star.onclick=()=>{score++;document.getElementById('mg-result').innerText=`Skor: ${score} | Waktu: ${time}s`;star.remove();};
-    arena.appendChild(star);setTimeout(()=>star.remove(),1200);
-  }
-  mgState.catchTimer=setInterval(tick,1000);mgState.spawnTimer=setInterval(spawnStar,500);
 }
 
-// INIT
-window.onload=function(){
-  loadPetData();
-  let saved=localStorage.getItem('nickname261');
-  if(saved&&document.getElementById('global-nickname'))document.getElementById('global-nickname').value=saved;
-};
+// ====================================================================
+// 3. FUNGSI LOGIKA MINI GAMENYA (mgAction)
+// ====================================================================
+function mgAction(game, arg) {
+  let r = document.getElementById('mg-result');
+  if(!r) return;
+  
+  if(game === 'mancing') {
+    if(mgState.ready) { r.innerText = "DAPAT IKAN BESAR! 🎉"; r.style.color="#00b894"; mgReward(150, 15); mgState.ready = false; } 
+    else { r.innerText = "Terlalu cepat kail putus! 😢"; r.style.color="#d63031"; mgReward(5, 1); }
+  } else if(game === 'lari-solo') {
+    mgState.clicks++; r.innerText = `Skor Lompat: ${mgState.clicks}`;
+    if(mgState.clicks % 10 === 0) mgReward(10, 2);
+  } else if(game === 'tikus') {
+    let waktu = Date.now() - mgState.start;
+    document.getElementById('btn-tikus').style.display='none';
+    if(waktu < 800) { r.innerText = "Kena! Gerak cepat! 🎉"; r.style.color="#00b894"; mgReward(120, 15); }
+    else { r.innerText = "Tikus kabur kelamaan! 😢"; r.style.color="#d63031"; mgReward(5, 1); }
+  } else if(game === 'lomba-lari') {
+    mgState.clicks++; 
+    let teman = Math.floor(Math.random() * (mgState.clicks + 2)); // Simulasi teman lari
+    r.innerText = `Kamu: ${mgState.clicks}m | Teman: ${teman}m`;
+    if(mgState.clicks >= 20) { r.innerText = "KAMU MENANG! 🏆"; mgReward(200, 20); document.querySelector('.btn-red').disabled=true;}
+  } else if(game === 'tarik-tambang') {
+    if(mgState.clicks === 0) mgState.pos = 50;
+    mgState.clicks++;
+    mgState.pos += 5; // Tarik
+    mgState.pos -= Math.floor(Math.random() * 8); // Teman narik balik
+    r.innerText = `Kekuatan Tarik: ${mgState.pos}%`;
+    if(mgState.pos >= 100) { r.innerText = "KAMU MENANG TARIKAN! 💪"; mgReward(200, 20); document.querySelector('.btn-yellow').disabled=true; }
+    else if(mgState.pos <= 0) { r.innerText = "Yahh ditarik teman! Kalah!"; }
+  } else if(game === 'tebak') {
+    let hewan = ["KUCING","ANJING"][Math.floor(Math.random()*2)];
+    if(arg === hewan) { r.innerText = `BENAR! Jawabannya ${hewan} 🎉`; r.style.color="#00b894"; mgReward(100, 10); }
+    else { r.innerText = `SALAH! Tadi gayanya ${hewan} 😢`; r.style.color="#d63031"; mgReward(10, 1); }
+  }
+}
 </script>
 </body>
-          </html>
+  </html>
