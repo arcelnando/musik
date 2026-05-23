@@ -1327,7 +1327,7 @@ function checkChessGameOver(){
 }
 
 // ============================================================
-// ANABUL LOGIC
+// ANABUL LOGIC (VARIABLES & DATA)
 // ============================================================
 let petData={
   isCreated:false,name:"PET",type:"cat",baseColor:"#ffffff",
@@ -1338,7 +1338,6 @@ let petData={
   lastOnline:Date.now()
 };
 let isSleeping=false,gameInterval,showerInterval,isSoaping=false,isShowering=false;
-// Note: visitRoomCode is separate from arcade roomCode
 let anabulRoomCode=null,anabulIsHost=false,anabulRoomRef=null;
 let tempType='cat',tempColor='#ffffff';
 
@@ -1350,13 +1349,10 @@ const svgs={
 };
 
 // =====================================================================
-// 5.000 ITEMS PROCEDURAL ENGINE (ANTI NGE-LAG, 1K PER KATEGORI)
-// Dibuat dengan Sistem Kombinasi Modular (Beda Bentuk 100%)
+// 5.000 ITEMS PROCEDURAL ENGINE
 // =====================================================================
-
 const allShopItems = { clothes: [], bg: [], skin: [], bath: [] };
 
-// Helper: Bikin warna acak HSL yang bervariasi
 function randColor(id, offset) {
   let h = (id * 137 + offset) % 360;
   let s = 60 + (id % 40);
@@ -1364,10 +1360,7 @@ function randColor(id, offset) {
   return `hsl(${h}, ${s}%, ${l}%)`;
 }
 
-// =========================================================
-// 1. GENERATOR 1.000 BAJU (Kombinasi Base + Lengan/Hoodie + Detail)
-// =========================================================
-/* Timpa array bajuBases yang lama dengan ini */
+// 1. GENERATOR 1.000 BAJU
 const bajuBases = [
   { nama: 'Kaos', path: `M 30 55 Q 50 60 70 55 L 75 80 Q 50 90 25 80 Z` },
   { nama: 'Jubah', path: `M 35 50 L 65 50 L 80 90 L 20 90 Z` },
@@ -1389,24 +1382,18 @@ const bajuDetails = [
   { nama: 'Garis Tengah', svg: `<line x1="50" y1="55" x2="50" y2="90" stroke="VAR_C3" stroke-width="3"/>` },
   { nama: 'Bersabuk', svg: `<rect x="25" y="78" width="50" height="5" fill="#2d3436"/><rect x="45" y="77" width="10" height="7" fill="VAR_C3"/>` }
 ];
-
 allShopItems.clothes.push({ id: 'none', name: 'Lepas Baju', cost: 0, reqLvl: 1, svg: '' });
 for (let i = 1; i <= 1000; i++) {
   let base = bajuBases[i % bajuBases.length];
   let addon = bajuAddons[(i * 3) % bajuAddons.length];
   let detail = bajuDetails[(i * 7) % bajuDetails.length];
-  
   let c1 = randColor(i, 0); let c2 = randColor(i, 45); let c3 = randColor(i, 120);
-  
   let svgRaw = `<path d="${base.path}" fill="${c1}" stroke="#2d3436" stroke-width="3"/>` + addon.svg + detail.svg;
   svgRaw = svgRaw.replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3);
-  
   allShopItems.clothes.push({ id: `baju_${i}`, name: `${base.nama} ${addon.nama} ${i}`, cost: 10 + Math.floor(i/20), reqLvl: Math.max(1, Math.floor(i/40)), svg: svgRaw });
 }
 
-// =========================================================
 // 2. GENERATOR 1.000 AKSESORIS
-// =========================================================
 allShopItems.skin.push({ id: 'none', name: 'Lepas Aksesoris', cost: 0, reqLvl: 1, svg: '' });
 const accBases = [
   { p: `<path d="M 35 25 L 50 35 L 65 25 Z" fill="VAR_C1" stroke="#2d3436" stroke-width="2"/><circle cx="50" cy="30" r="5" fill="VAR_C2"/>`, n: 'Pita Kepala' },
@@ -1415,25 +1402,16 @@ const accBases = [
   { p: `<ellipse cx="50" cy="20" rx="25" ry="6" fill="VAR_C1" stroke="#2d3436" stroke-width="2"/><path d="M 35 15 Q 50 -10 65 15 Z" fill="VAR_C2" stroke="#2d3436" stroke-width="2"/>`, n: 'Topi' },
   { p: `<path d="M 40 55 Q 50 65 60 55" fill="none" stroke="VAR_C1" stroke-width="3"/><circle cx="50" cy="62" r="5" fill="VAR_C2"/>`, n: 'Kalung Leher' }
 ];
-const accMods = [
-  ``,
-  `<circle cx="50" cy="15" r="4" fill="VAR_C3"/>`, // Permata tengah
-  `<path d="M 45 5 L 50 15 L 55 5 Z" fill="VAR_C3"/>`, // Ornamen Atas
-  `<circle cx="35" cy="30" r="3" fill="VAR_C3"/><circle cx="65" cy="30" r="3" fill="VAR_C3"/>` // Titik Samping
-];
-
+const accMods = [``, `<circle cx="50" cy="15" r="4" fill="VAR_C3"/>`, `<path d="M 45 5 L 50 15 L 55 5 Z" fill="VAR_C3"/>`, `<circle cx="35" cy="30" r="3" fill="VAR_C3"/><circle cx="65" cy="30" r="3" fill="VAR_C3"/>`];
 for (let i = 1; i <= 1000; i++) {
   let base = accBases[i % accBases.length];
   let mod = accMods[(i * 11) % accMods.length];
   let c1 = randColor(i, 30); let c2 = randColor(i, 90); let c3 = randColor(i, 200);
-  
   let svgRaw = (base.p + mod).replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3);
   allShopItems.skin.push({ id: `acc_${i}`, name: `${base.n} Mod ${i}`, cost: 15 + Math.floor(i/20), reqLvl: Math.max(1, Math.floor(i/50)), svg: svgRaw });
 }
 
-// =========================================================
-// 3. GENERATOR 1.000 LATAR BACKGROUND (CSS Pattern Engine)
-// =========================================================
+// 3. GENERATOR 1.000 LATAR BACKGROUND
 allShopItems.bg.push({ id: 'bg-default', name: 'Kamar (Gratis)', cost: 0, reqLvl: 1, css: 'background:#ffda79;' });
 const bgEngines = [
   (c1, c2) => `background: linear-gradient(135deg, ${c1}, ${c2});`,
@@ -1448,33 +1426,21 @@ for (let i = 1; i <= 1000; i++) {
   allShopItems.bg.push({ id: `bg_${i}`, name: `Latar Epik ${i}`, cost: 50 + Math.floor(i/10), reqLvl: Math.max(1, Math.floor(i/30)), css: css });
 }
 
-// =========================================================
-// 4. GENERATOR 1.000 SABUN & BANTAL (500 Sabun + 500 Bantal)
-// =========================================================
-for (let i = 1; i <= 500; i++) {
-  allShopItems.bath.push({ id: `soap_${i}`, name: `Sabun Mewah ${i}`, cost: 5 + Math.floor(i/10), reqLvl: 1, val: randColor(i, 0), type: 'soap' });
-}
-for (let i = 1; i <= 500; i++) {
-  allShopItems.bath.push({ id: `pillow_${i}`, name: `Kasur Sultan ${i}`, cost: 10 + Math.floor(i/10), reqLvl: 1, val: randColor(i, 50), type: 'pillow' });
-}
+// 4. GENERATOR 1.000 SABUN & BANTAL
+for (let i = 1; i <= 500; i++) { allShopItems.bath.push({ id: `soap_${i}`, name: `Sabun Mewah ${i}`, cost: 5 + Math.floor(i/10), reqLvl: 1, val: randColor(i, 0), type: 'soap' }); }
+for (let i = 1; i <= 500; i++) { allShopItems.bath.push({ id: `pillow_${i}`, name: `Kasur Sultan ${i}`, cost: 10 + Math.floor(i/10), reqLvl: 1, val: randColor(i, 50), type: 'pillow' }); }
 
-// =========================================================
-// 5. GENERATOR 1.000 MAKANAN (Kombinasi Wadah + Isi + Topping)
-// =========================================================
+// 5. GENERATOR 1.000 MAKANAN
 function initMakanan() {
   const panelDapur = document.getElementById('panel-kitchen');
   if (!panelDapur) return;
-  
-  // Pakai array dan `.join('')` agar pas di-render nggak nge-lag (Fast DOM Injection)
   let htmlDapurArray = [];
-
   const foodBases = [
     { p: `<path d="M 4 18 Q 12 22 20 18 L 18 10 L 6 10 Z" fill="VAR_C1"/>`, n: 'Mangkok' },
     { p: `<ellipse cx="12" cy="18" rx="10" ry="3" fill="VAR_C1"/>`, n: 'Piring' },
     { p: `<rect x="6" y="8" width="12" height="14" rx="2" fill="VAR_C1" opacity="0.8"/>`, n: 'Gelas' },
     { p: `<polygon points="12,20 2,10 12,2 22,10" fill="VAR_C1"/>`, n: 'Daun' }
   ];
-  
   const foodMains = [
     { p: `<circle cx="12" cy="12" r="6" fill="VAR_C2"/>`, n: 'Bulat' },
     { p: `<path d="M 12 4 L 20 16 L 4 16 Z" fill="VAR_C2"/>`, n: 'Segitiga' },
@@ -1482,25 +1448,21 @@ function initMakanan() {
     { p: `<ellipse cx="12" cy="14" rx="8" ry="4" fill="VAR_C2"/>`, n: 'Cairan' },
     { p: `<path d="M 8 8 Q 12 4 16 8 Q 20 12 16 16 Q 12 20 8 16 Q 4 12 8 8 Z" fill="VAR_C2"/>`, n: 'Gumpal' }
   ];
-
   const foodToppings = [
-    ``, // Tanpa topping
-    `<circle cx="12" cy="10" r="2" fill="#ff7675"/>`, // Ceri
-    `<line x1="8" y1="10" x2="16" y2="10" stroke="VAR_C3" stroke-width="2"/>`, // Saus lurus
-    `<circle cx="10" cy="12" r="1" fill="#fff"/><circle cx="14" cy="10" r="1" fill="#fff"/>`, // Wijen
-    `<path d="M 8 10 Q 12 14 16 10" fill="none" stroke="VAR_C3" stroke-width="2"/>` // Saus melengkung
+    ``, 
+    `<circle cx="12" cy="10" r="2" fill="#ff7675"/>`, 
+    `<line x1="8" y1="10" x2="16" y2="10" stroke="VAR_C3" stroke-width="2"/>`, 
+    `<circle cx="10" cy="12" r="1" fill="#fff"/><circle cx="14" cy="10" r="1" fill="#fff"/>`, 
+    `<path d="M 8 10 Q 12 14 16 10" fill="none" stroke="VAR_C3" stroke-width="2"/>`
   ];
 
   for (let i = 1; i <= 1000; i++) {
     let base = foodBases[i % foodBases.length];
     let main = foodMains[(i * 7) % foodMains.length];
     let topping = foodToppings[(i * 13) % foodToppings.length];
-    
     let c1 = randColor(i, 0); let c2 = randColor(i, 80); let c3 = randColor(i, 160);
-    
     let svgRaw = `<svg viewBox="0 0 24 24" width="30" height="30">` + (base.p + main.p + topping).replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3) + `</svg>`;
-    
-    let harga = 10 + Math.floor(i / 10); // Harga perlahan naik dari 10 sampai 110 koin
+    let harga = 10 + Math.floor(i / 10); 
     let kenyang = harga * 2; 
 
     htmlDapurArray.push(`
@@ -1510,18 +1472,18 @@ function initMakanan() {
       </div>`);
   }
 
-  // Inject Tombol Obat Sakit di Urutan Paling Terakhir (Penting!)
   htmlDapurArray.push(`
     <div class="item-card" onclick="giveMedicine()">
       <svg viewBox="0 0 24 24" width="30" height="30"><rect x="4" y="10" width="16" height="6" rx="3"fill="#74b9ff"/><path d="M12 10 L12 16 M4 10 A3 3 0 0 1 12 10 V16 A3 3 0 0 1 4 16 Z" fill="#ff7675"/></svg>
       <span style="font-size:10px;font-weight:bold;">OBAT SAKIT (50🪙)</span>
     </div>`);
     
-  // Render masif ke DOM sekaligus (Sangat cepat dan ringan)
   panelDapur.innerHTML = htmlDapurArray.join('');
 }
 
-// Logic Klaim Harian
+// ============================================================
+// DAILY CLAIM
+// ============================================================
 function claimDaily() {
   let now = Date.now();
   if (!petData.lastClaim || now - petData.lastClaim >= 86400000) {
@@ -1536,83 +1498,53 @@ function claimDaily() {
   }
 }
 
-// 5. FUNGSI GENERATE 100 MAKANAN (10 Makanan Dasar x 10 Rasa)
-function initMakanan() {
-  const panelDapur = document.getElementById('panel-kitchen');
-  if (!panelDapur) return;
-  
-  let htmlDapur = '';
-  const basisMakanan = [
-    { nama: 'Apel', emj: '🍎' }, { nama: 'Pizza', emj: '🍕' }, { nama: 'Burger', emj: '🍔' }, 
-    { nama: 'Sushi', emj: '🍣' }, { nama: 'Es Krim', emj: '🍦' }, { nama: 'Donat', emj: '🍩' }, 
-    { nama: 'Kue', emj: '🍰' }, { nama: 'Cokelat', emj: '🍫' }, { nama: 'Permen', emj: '🍬' }, 
-    { nama: 'Anggur', emj: '🍇' }
-  ];
-  const rasaMakanan = ['Manis', 'Pedas', 'Asin', 'Gurih', 'Spesial', 'Keju', 'Bakar', 'Goreng', 'Raksasa', 'Mini'];
-
-  let idMakan = 1;
-  basisMakanan.forEach((basis) => {
-    rasaMakanan.forEach((rasa) => {
-      let harga = 10 + Math.floor(Math.random() * 40); // Harga acak 10-50
-      let kenyang = harga * 2; // Kenyang sesuai harga
-      htmlDapur += `
-        <div class="item-card" onclick="feedPet('${basis.nama}_${idMakan}', ${harga}, ${kenyang})">
-          <span style="font-size:24px;">${basis.emj}</span>
-          <span style="font-size:10px;font-weight:bold;">${basis.nama} ${rasa} (${harga}🪙)</span>
-        </div>`;
-      idMakan++;
-    });
-  });
-
-  // Tambahkan Tombol Obat di akhir
-  htmlDapur += `
-    <div class="item-card" onclick="giveMedicine()">
-      <span style="font-size:24px;">💊</span>
-      <span style="font-size:10px;font-weight:bold;">OBAT SAKIT (50🪙)</span>
-    </div>`;
-    
-  panelDapur.innerHTML = htmlDapur;
-}
-
+// ============================================================
+// ANABUL CORE / SYSTEM
+// ============================================================
 function savePetData(){petData.lastOnline=Date.now();localStorage.setItem('261anabul_data_v2',JSON.stringify(petData));}
-function loadPetData(){
-  let s=localStorage.getItem('261anabul_data_v2');
-  if(s){let p=JSON.parse(s);petData={...petData,...p};calculateOfflineTime();}
+
+function loadPetData() {
+  let s = localStorage.getItem('261anabul_data_v2');
+  if(s) {
+    let p = JSON.parse(s);
+    petData = {...petData, ...p};
+    isSleeping = petData.isSleeping || false;
+    if(isSleeping) document.getElementById('room').classList.add('dark');
+    calculateOfflineTime();
+  }
 }
-/* Ganti seluruh fungsi calculateOfflineTime */
+
 function calculateOfflineTime() {
   let now = Date.now();
-  let diffMins = Math.floor((now - petData.lastOnline) / 60000); // Hitung selisih waktu dalam Menit
+  let diffMins = Math.floor((now - petData.lastOnline) / 60000); 
   
   if(diffMins > 0 && petData.isCreated) {
     if(petData.isSleeping) {
-      // MODE TIDUR: Stamina/Energi pulih
       petData.energy = Math.min(100, petData.energy + (diffMins * 1.5));
     } else {
-      // MODE BANGUN: Stamina turun 2 poin per menit (10% per 5 menit)
       petData.energy = Math.max(0, petData.energy - (diffMins * 2));
     }
     
-    // Makanan dan kebersihan turun lebih lambat kalau sedang tidur
     let drainRate = petData.isSleeping ? 0.1 : 0.5;
     petData.food = Math.max(0, petData.food - (diffMins * drainRate));
     petData.clean = Math.max(0, petData.clean - (diffMins * drainRate));
     
-    // Cek durasi obat (Immunity System)
     if(petData.immuneLevel && petData.immuneLevel > 0) {
       petData.immuneLevel -= diffMins; 
     }
     
-    // Jatuh sakit hanya jika imun sudah habis
     if(petData.food < 20 || petData.clean < 10) {
       if(!petData.immuneLevel || petData.immuneLevel <= 0) {
         petData.sick = true;
       }
     }
-    
     if(petData.clean < 40) petData.dirty = true;
   }
 }
+
+// ============================================================
+// ANABUL UI & NAVIGATION
+// ============================================================
 function goToKamarAtauAdopsi(){
   if(petData.isCreated){
     document.getElementById('screen-home').classList.remove('active');
@@ -1621,14 +1553,17 @@ function goToKamarAtauAdopsi(){
     goToRoom('kitchen');updateUI();clearInterval(gameInterval);gameInterval=setInterval(gameTick,3000);
   } else {showAnabulScreen('screen-select');updatePreview();}
 }
+
 function showAnabulScreen(id){
   document.querySelectorAll('#anabul-app .screen').forEach(s=>s.classList.remove('active'));
   let t=document.getElementById(id);if(t)t.classList.add('active');
   if(id==='screen-home'){document.getElementById('room').style.display='none';document.getElementById('game-ui').classList.remove('active');clearInterval(gameInterval);savePetData();}
 }
+
 function selectPet(type,el){tempType=type;document.querySelectorAll('.pet-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');updatePreview();}
 function selectPetColor(color,el){tempColor=color;document.querySelectorAll('.color-swatch').forEach(c=>c.style.transform='scale(1)');el.style.transform='scale(1.2)';updatePreview();}
 function updatePreview(){document.getElementById('preview-container').innerHTML=getPetSvgString(tempType,tempColor,'none',false);}
+
 function getPetSvgString(type,baseColor,clothesId,isSleepState){
   let bt=type.split('_')[0];let base=svgs[bt]||svgs.cat;
   let pat="";
@@ -1640,6 +1575,7 @@ function getPetSvgString(type,baseColor,clothesId,isSleepState){
   if(isSleepState){fin=fin.replace('class="pet-svg idle"','class="pet-svg sleep"');fin=fin.replace('class="eyes-open"','class="eyes-open" style="display:none;"');fin=fin.replace('class="eyes-closed"','class="eyes-closed" style="display:block;"');}
   return fin;
 }
+
 function updatePetRender(tw,pD,isSleep){
   let ri=tw==='pet-size'?'pet-render':'guest-render';
   let ai=tw==='pet-size'?'acc-layer':'guest-acc-layer';
@@ -1648,6 +1584,7 @@ function updatePetRender(tw,pD,isSleep){
   document.getElementById(ai).innerHTML=acc?acc.svg:'';
   let scale=1+(pD.level*0.02);document.getElementById(tw).style.transform=`scale(${scale})`;
 }
+
 function startAnabulGame(){
   let n=document.getElementById('input-pet-name').value.trim().toUpperCase();if(n)petData.name=n;
   petData.isCreated=true;petData.type=tempType;petData.baseColor=tempColor;
@@ -1656,6 +1593,7 @@ function startAnabulGame(){
   document.getElementById('room').style.display='flex';document.getElementById('game-ui').classList.add('active');
   goToRoom('kitchen');updateUI();clearInterval(gameInterval);gameInterval=setInterval(gameTick,3000);savePetData();
 }
+
 function setupRoomStyle(){
   let bg=allShopItems.bg.find(b=>b.id===petData.activeBg);
   if(bg)document.getElementById('room-wallpaper').style=bg.css;
@@ -1665,29 +1603,13 @@ function setupRoomStyle(){
     if(pi)plEl.setAttribute('fill',pi.val);
   }
 }
+
 function gainXP(amount){
   petData.xp+=amount;let req=petData.level*100;
   if(petData.xp>=req){petData.xp-=req;petData.level++;petData.coins+=100;createFloatingText("⭐ LEVEL UP!","center");updatePetRender('pet-size',petData,isSleeping);}
   updateUI();savePetData();
 }
-function gameTick(){
-  if(!isSleeping){
-    // Interval game adalah 3 detik. 1 menit = 60 detik (20 tick). 
-    // Turun 10% dalam 20 tick = 0.5% per tick.
-    let d = 0.5;
-    petData.food = Math.max(0, petData.food - d);
-    petData.energy = Math.max(0, petData.energy - d);
-    petData.clean = Math.max(0, petData.clean - d);
-    
-    if(petData.food < 20 || petData.clean < 10) petData.sick = true;
-    if(petData.clean < 40) petData.dirty = true;
-  } else {
-    // Energi pulih lebih lambat jadi tidur terasa lebih lama (dulu +5, sekarang +1.5)
-    petData.energy = Math.min(100, petData.energy + 1.5); 
-    if(Math.random() < 0.6) createFloatingZzz();
-  }
-  updateUI();
-}
+
 function updateUI(){
   document.getElementById('ui-name').innerText=petData.name;document.getElementById('ui-level').innerText=petData.level;document.getElementById('ui-coins').innerText=petData.coins;
   document.getElementById('bar-food').style.width=petData.food+'%';document.getElementById('bar-clean').style.width=petData.clean+'%';document.getElementById('bar-energy').style.width=petData.energy+'%';
@@ -1696,6 +1618,7 @@ function updateUI(){
   let svgEl=document.querySelector('#pet-render .pet-svg');
   if(svgEl){if(petData.dirty)svgEl.classList.add('is-dirty');else svgEl.classList.remove('is-dirty');if(petData.sick){svgEl.classList.add('is-sick');document.getElementById('ui-name').innerText="🤢 "+petData.name;}else svgEl.classList.remove('is-sick');}
 }
+
 function goToRoom(rn){
   if(isSleeping&&rn!=='bedroom'){alert("Bangunkan dulu sebelum pindah!");return;}
   document.querySelectorAll('.interactive-panel').forEach(p=>p.classList.remove('active'));
@@ -1704,12 +1627,16 @@ function goToRoom(rn){
   let nb=document.getElementById('nav-btn-'+rn);if(nb)nb.classList.add('active');
   isSoaping=false;isShowering=false;document.getElementById('shower-head').style.display='none';clearInterval(showerInterval);
 }
+
+// ============================================================
+// ANABUL ACTIONS
+// ============================================================
 function feedPet(item,cost,gain){
   if(isSleeping)return;if(petData.sick){alert("Anabul sakit! Berikan OBAT dulu!");return;}
   if(petData.coins>=cost){petData.coins-=cost;petData.food=Math.min(100,petData.food+gain);petData.clean=Math.max(0,petData.clean-5);triggerPetAnimation('eat');createFloatingText("+ Kenyang 😋","center");gainXP(10);}
   else alert("Koin tidak cukup!");
 }
-/* Ganti fungsi giveMedicine() */
+
 function giveMedicine() {
   if(!petData.sick) { alert("Anabul sedang sehat!"); return; }
   
@@ -1717,13 +1644,9 @@ function giveMedicine() {
     petData.coins -= 50;
     petData.sick = false;
     petData.dirty = false;
-    
-    // Status otomatis FULL semuanya
     petData.food = 100;
     petData.clean = 100;
     petData.energy = 100;
-    
-    // Beri masa kebal selama 2 Jam agar tidak gampang sakit lagi
     petData.immuneLevel = 120; 
     
     createFloatingText("✨ Sembuh & FULL!","center");
@@ -1735,15 +1658,15 @@ function giveMedicine() {
     alert("Koin tidak cukup!");
   }
 }
-/* Ganti fungsi playPet() */
+
 function playPet() {
   if(isSleeping) return; 
-  if(petData.sick) { alert("Anabul sakit!"); return; }
+  if(petData.sick) { alert("Anabul sakit! Beri obat dulu."); return; }
   if(petData.energy < 5) { alert("Energi habis! Suruh tidur dulu."); return; }
   
-  petData.energy -= 2;  // Sangat lambat (dulu 20)
-  petData.clean -= 3;   // Dulu 15
-  petData.food -= 2;    // Dulu 10
+  petData.energy -= 2;  
+  petData.clean -= 3;   
+  petData.food -= 2;    
   petData.coins += 15 + Math.floor(Math.random()*10);
   
   triggerPetAnimation('play');
@@ -1752,10 +1675,8 @@ function playPet() {
   updateUI();
 }
 
-/* Ganti fungsi gameTick() */
 function gameTick() {
   if(!isSleeping) {
-    // Pengurangan pasif sangat lambat (0.1 poin per 3 detik)
     let d = 0.1; 
     petData.food = Math.max(0, petData.food - d);
     petData.energy = Math.max(0, petData.energy - d);
@@ -1766,45 +1687,30 @@ function gameTick() {
     }
     if(petData.clean < 40) petData.dirty = true;
   } else {
-    // Kalau tidur cepat pulih
     petData.energy = Math.min(100, petData.energy + 1.5); 
     if(Math.random() < 0.6) createFloatingZzz();
   }
   updateUI();
 }
-/* Ganti fungsi toggleSleep lama dengan ini */
+
 function toggleSleep() {
   isSleeping = !isSleeping;
-  petData.isSleeping = isSleeping; // Simpan status ke memori
+  petData.isSleeping = isSleeping; 
   savePetData();
-  
   let room = document.getElementById('room');
   if(isSleeping) room.classList.add('dark');
   else room.classList.remove('dark');
   updatePetRender('pet-size', petData, isSleeping);
 }
 
-/* Ganti fungsi loadPetData lama dengan ini */
-function loadPetData() {
-  let s = localStorage.getItem('261anabul_data_v2');
-  if(s) {
-    let p = JSON.parse(s);
-    petData = {...petData, ...p};
-    isSleeping = petData.isSleeping || false; // Tarik status lampu
-    
-    // Setel mode gelap otomatis kalau memang ditinggal tidur
-    if(isSleeping) document.getElementById('room').classList.add('dark');
-    
-    calculateOfflineTime();
-  }
-}
 function toggleShower(){
   isShowering=!isShowering;let sh=document.getElementById('shower-head');
   if(isShowering){sh.style.display='block';showerInterval=setInterval(()=>{let d=document.createElement('div');d.className='water-drop';d.style.left=(Math.random()*80)+'px';sh.appendChild(d);setTimeout(()=>d.remove(),500);},50);}
   else{sh.style.display='none';clearInterval(showerInterval);}
 }
+
 // ============================================================
-// 1. SISTEM SABUN BISA DIGESER
+// SYSTEM SABUN GOSOK BISA DIGESER
 // ============================================================
 let soapIcon = document.createElement('div');
 soapIcon.innerHTML = '🧼';
@@ -1826,30 +1732,32 @@ function toggleSoap() {
   }
 }
 
-// Deteksi geseran di seluruh ruangan (area kamar)
-let roomEl = document.getElementById('room');
-if(roomEl) {
-  roomEl.addEventListener('touchmove', e => {
-    if(!isSoaping) return;
-    let t = e.touches[0];
-    soapIcon.style.left = t.clientX + 'px';
-    soapIcon.style.top = t.clientY + 'px';
-    
-    createBubble(t.clientX, t.clientY);
-    cleanPetLogic();
-  });
-
-  roomEl.addEventListener('mousemove', e => {
-    if(!isSoaping) return;
-    soapIcon.style.left = e.clientX + 'px';
-    soapIcon.style.top = e.clientY + 'px';
-    
-    if(e.buttons === 1) { // Busa keluar kalau diklik + digeser
-      createBubble(e.clientX, e.clientY);
+document.addEventListener('DOMContentLoaded', () => {
+  let roomEl = document.getElementById('room');
+  if(roomEl) {
+    roomEl.addEventListener('touchmove', e => {
+      if(!isSoaping) return;
+      let t = e.touches[0];
+      soapIcon.style.left = t.clientX + 'px';
+      soapIcon.style.top = t.clientY + 'px';
+      createBubble(t.clientX, t.clientY);
       cleanPetLogic();
-    }
-  });
-}
+    });
+
+    roomEl.addEventListener('mousemove', e => {
+      if(!isSoaping) return;
+      soapIcon.style.left = e.clientX + 'px';
+      soapIcon.style.top = e.clientY + 'px';
+      if(e.buttons === 1) { 
+        createBubble(e.clientX, e.clientY);
+        cleanPetLogic();
+      }
+    });
+  }
+  
+  // Call initMakanan here so it renders on load
+  initMakanan();
+});
 
 function cleanPetLogic() {
   petData.clean = Math.min(100, petData.clean + 1.5);
@@ -1859,81 +1767,151 @@ function cleanPetLogic() {
 }
 
 // ============================================================
-// 2. STAMINA SANGAT LAMBAT & AKTIVITAS MAIN
+// HELPER ANIMASI & EFEK
 // ============================================================
-function playPet() {
-  if(isSleeping) return; 
-  if(petData.sick) { alert("Anabul sakit! Beri obat dulu."); return; }
-  if(petData.energy < 5) { alert("Energi habis! Suruh tidur dulu."); return; }
+function createFloatingText(msg, pos) {
+  let f = document.createElement('div');
+  f.innerText = msg;
+  f.style.position = 'absolute';
+  f.style.left = pos === 'center' ? '50%' : (Math.random() * 80 + 10) + '%';
+  f.style.top = '40%';
+  f.style.transform = 'translate(-50%, -50%)';
+  f.style.color = '#ff4757';
+  f.style.fontWeight = 'bold';
+  f.style.textShadow = '1px 1px 2px white';
+  f.style.zIndex = '1000';
+  f.style.transition = 'all 1s ease-out';
+  document.body.appendChild(f);
   
-  petData.energy -= 2;  // Potongan sangat kecil (dulu 20)
-  petData.clean -= 3;   
-  petData.food -= 2;    
-  petData.coins += 15 + Math.floor(Math.random()*10);
-  
-  triggerPetAnimation('play');
-  createFloatingText("+ Koin & XP","center");
-  gainXP(15);
-  updateUI();
+  setTimeout(() => { f.style.top = '30%'; f.style.opacity = '0'; }, 50);
+  setTimeout(() => f.remove(), 1000);
 }
 
-function gameTick() {
-  if(!isSleeping) {
-    // Pengurangan pasif sangat lambat (0.1 poin per 3 detik)
-    let d = 0.1; 
-    petData.food = Math.max(0, petData.food - d);
-    petData.energy = Math.max(0, petData.energy - d);
-    petData.clean = Math.max(0, petData.clean - d);
-    
-    if(petData.food < 20 || petData.clean < 10) {
-      if(!petData.immuneLevel || petData.immuneLevel <= 0) petData.sick = true;
-    }
-    if(petData.clean < 40) petData.dirty = true;
-  } else {
-    // Kalau sedang tidur, energi cepat pulih
-    petData.energy = Math.min(100, petData.energy + 1.5); 
-    if(Math.random() < 0.6) createFloatingZzz();
-  }
-  updateUI();
+function createFloatingZzz() {
+  createFloatingText("Zzz...", "random");
+}
+
+function triggerPetAnimation(type) {
+  let svg = document.querySelector('#pet-render .pet-svg');
+  if (!svg) return;
+  svg.classList.add('anim-' + type);
+  setTimeout(() => svg.classList.remove('anim-' + type), 800);
+}
+
+function createBubble(x, y) {
+  let b = document.createElement('div');
+  b.innerText = '🫧';
+  b.style.position = 'absolute';
+  b.style.left = (x - 10) + 'px';
+  b.style.top = (y - 10) + 'px';
+  b.style.fontSize = (15 + Math.random() * 15) + 'px';
+  b.style.pointerEvents = 'none';
+  b.style.zIndex = '9998';
+  b.style.transition = 'all 0.8s ease-out';
+  document.body.appendChild(b);
+  
+  setTimeout(() => { b.style.top = (y - 50) + 'px'; b.style.opacity = '0'; }, 50);
+  setTimeout(() => b.remove(), 800);
 }
 
 // ============================================================
-// 3. OBAT (SEKALIGUS FULL 100% SEMUA STATUS)
+// SISTEM TOKO (SHOP), BELI, & PAKAI ITEM
 // ============================================================
-function giveMedicine() {
-  if(!petData.sick) { alert("Anabul sedang sehat!"); return; }
+function switchShop(tabId, event) {
+  document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.querySelectorAll('.shop-items').forEach(c => c.style.display = 'none');
+  document.getElementById('shop-' + tabId).style.display = 'grid';
+}
+
+function generateShopUI() {
+  const categories = ['clothes', 'bg', 'skin', 'bath'];
   
-  if(petData.coins >= 50) {
-    petData.coins -= 50;
-    petData.sick = false;
-    petData.dirty = false;
+  categories.forEach(category => {
+    let container = document.getElementById('shop-' + category);
+    if (!container) return;
     
-    // Status otomatis FULL semuanya
-    petData.food = 100;
-    petData.clean = 100;
-    petData.energy = 100;
-    
-    // Beri masa kebal selama 2 Jam
-    petData.immuneLevel = 120; 
-    
-    createFloatingText("✨ Sembuh & FULL!","center");
-    triggerPetAnimation('play');
-    gainXP(20);
+    let htmlArray = [];
+    allShopItems[category].forEach(item => {
+      let isOwned = petData.ownedItems.includes(item.id) || item.cost === 0;
+      let canAfford = petData.coins >= item.cost;
+      let isLocked = petData.level < item.reqLvl;
+      
+      let btnText = isOwned ? 'PAKAI' : (isLocked ? `Buka Lv.${item.reqLvl}` : `BELI (${item.cost}🪙)`);
+      let btnState = isOwned ? `onclick="equipItem('${category}', '${item.id}')"` : 
+                     (isLocked || !canAfford ? 'disabled' : `onclick="buyItem('${category}', '${item.id}', ${item.cost})"`);
+
+      let isEquipped = false;
+      if (category === 'clothes' && petData.activeClothes === item.id) isEquipped = true;
+      if (category === 'bg' && petData.activeBg === item.id) isEquipped = true;
+      if (category === 'skin' && petData.activeAcc === item.id) isEquipped = true;
+      if (category === 'bath' && (petData.activePillow === item.id || petData.activeSoap === item.val)) isEquipped = true;
+
+      if (isEquipped) {
+        btnText = "SEDANG DIPAKAI";
+        btnState = "disabled";
+      }
+
+      let visual = category === 'bg' ? `<div style="width:40px;height:40px;border-radius:8px;${item.css}"></div>` : 
+                   (item.svg ? `<svg viewBox="0 0 100 100" width="40" height="40">${item.svg}</svg>` : `<div style="font-size:24px;">${item.val ? '🛏️' : '📦'}</div>`);
+
+      htmlArray.push(`
+        <div class="shop-item ${isOwned ? 'owned' : ''} ${isLocked ? 'locked' : ''}">
+          ${isLocked ? `<div class="lock-badge">Lv.${item.reqLvl}</div>` : ''}
+          ${visual}
+          <span style="font-size:10px;font-weight:bold;margin-bottom:5px;">${item.name}</span>
+          <button class="shop-btn" ${btnState}>${btnText}</button>
+        </div>
+      `);
+    });
+    container.innerHTML = htmlArray.join('');
+  });
+  document.getElementById('shop-coins').innerText = petData.coins;
+}
+
+function buyItem(category, id, cost) {
+  if (petData.coins >= cost) {
+    petData.coins -= cost;
+    petData.ownedItems.push(id);
+    createFloatingText("- " + cost + " Koin", "center");
+    equipItem(category, id); 
     savePetData();
     updateUI();
   } else {
-    alert("Koin tidak cukup!");
+    alert("Koin kamu kurang buat beli ini!");
+  }
+}
+
+function equipItem(category, id) {
+  if (!petData.ownedItems.includes(id) && id !== 'none' && id !== 'bg-default') return;
+  
+  if (category === 'clothes') petData.activeClothes = id;
+  if (category === 'bg') petData.activeBg = id;
+  if (category === 'skin') petData.activeAcc = id;
+  if (category === 'bath') {
+    let itm = allShopItems.bath.find(b => b.id === id);
+    if(itm) {
+      if(itm.type === 'soap') petData.activeSoap = itm.val;
+      if(itm.type === 'pillow') petData.activePillow = id;
+    }
+  }
+  
+  savePetData();
+  generateShopUI(); 
+  
+  if(document.getElementById('room').style.display !== 'none') {
+    setupRoomStyle();
+    updatePetRender('pet-size', petData, isSleeping);
   }
 }
 
 // ============================================================
-// ANABUL MULTIPLAYER VISIT (FIXED)
+// ANABUL MULTIPLAYER VISIT 
 // ============================================================
 function hostAnabulRoom(){
   if(!petData.isCreated){alert("Buat pet dulu!");return;}
   anabulRoomCode=Math.random().toString(36).substring(2,8).toUpperCase();
   anabulIsHost=true;
-  // Simpan data host + null untuk guest
   let init={host:{name:petData.name,type:petData.type,baseColor:petData.baseColor,activeClothes:petData.activeClothes,activeAcc:petData.activeAcc,level:petData.level},guest:null,ts:Date.now()};
   database.ref(`anabul_rooms/${anabulRoomCode}`).set(init)
     .then(()=>{
@@ -1960,7 +1938,6 @@ function joinAnabulRoom(){
     .catch(e=>{alert("Gagal connect Firebase: "+e.message);});
 }
 function enterAnabulRoom(){
-  // Tutup screen multiplayer, buka room
   document.getElementById('screen-multiplayer').classList.remove('active');
   setupRoomStyle();updatePetRender('pet-size',petData,false);
   document.getElementById('room').style.display='flex';
@@ -1969,7 +1946,6 @@ function enterAnabulRoom(){
   document.getElementById('visit-code-text').innerText=anabulRoomCode;
   goToRoom('kitchen');updateUI();
   clearInterval(gameInterval);gameInterval=setInterval(gameTick,3000);
-  // Listen perubahan room
   anabulRoomRef=database.ref(`anabul_rooms/${anabulRoomCode}`);
   anabulRoomRef.on('value',snap=>{
     if(!snap.exists()){quitAnabulGame();alert("Room ditutup.");return;}
@@ -1999,18 +1975,17 @@ function quitAnabulGame(){
   showAnabulScreen('screen-home');
 }
 
+// ============================================================
 // GUIDE
+// ============================================================
 function openGuide(){document.getElementById('guide-modal').classList.add('active');}
 function closeGuide(){document.getElementById('guide-modal').classList.remove('active');}
 
 // ============================================================
-// 10 MINI GAMES
+// MINI GAMES
 // ============================================================
 let mgState={};
 
-// ====================================================================
-// 1. DUA FUNGSI INI HARUS DI LUAR openMiniGame AGAR BISA DIPANGGIL
-// ====================================================================
 function closeMiniGame() {
   document.getElementById('minigame-modal').classList.remove('active');
   if (mgState.catchTimer) clearInterval(mgState.catchTimer);
@@ -2023,9 +1998,6 @@ function mgReward(coins, xp) {
   createFloatingText(`+${coins}🪙 +${xp}XP`, "center");
 }
 
-// ====================================================================
-// 2. BARU DI BAWAHNYA KITA BUAT FUNGSI openMiniGame
-// ====================================================================
 function openMiniGame(type){
   let box = document.getElementById('minigame-content');
   mgState = {type, step:0, clicks:0};
@@ -2059,9 +2031,6 @@ function openMiniGame(type){
   document.getElementById('minigame-modal').classList.add('active');
 }
 
-// ====================================================================
-// 3. FUNGSI LOGIKA MINI GAMENYA (mgAction)
-// ====================================================================
 function mgAction(game, arg) {
   let r = document.getElementById('mg-result');
   if(!r) return;
@@ -2079,14 +2048,14 @@ function mgAction(game, arg) {
     else { r.innerText = "Tikus kabur kelamaan! 😢"; r.style.color="#d63031"; mgReward(5, 1); }
   } else if(game === 'lomba-lari') {
     mgState.clicks++; 
-    let teman = Math.floor(Math.random() * (mgState.clicks + 2)); // Simulasi teman lari
+    let teman = Math.floor(Math.random() * (mgState.clicks + 2)); 
     r.innerText = `Kamu: ${mgState.clicks}m | Teman: ${teman}m`;
     if(mgState.clicks >= 20) { r.innerText = "KAMU MENANG! 🏆"; mgReward(200, 20); document.querySelector('.btn-red').disabled=true;}
   } else if(game === 'tarik-tambang') {
     if(mgState.clicks === 0) mgState.pos = 50;
     mgState.clicks++;
-    mgState.pos += 5; // Tarik
-    mgState.pos -= Math.floor(Math.random() * 8); // Teman narik balik
+    mgState.pos += 5; 
+    mgState.pos -= Math.floor(Math.random() * 8); 
     r.innerText = `Kekuatan Tarik: ${mgState.pos}%`;
     if(mgState.pos >= 100) { r.innerText = "KAMU MENANG TARIKAN! 💪"; mgReward(200, 20); document.querySelector('.btn-yellow').disabled=true; }
     else if(mgState.pos <= 0) { r.innerText = "Yahh ditarik teman! Kalah!"; }
