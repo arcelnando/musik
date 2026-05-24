@@ -2331,13 +2331,14 @@ let petData = {
   activeAcc: 'none', activeClothes: 'none', activeSoap: '#ffffff', activePillow: '#f5f6fa',
   lastOnline: Date.now(),
   furniture: { left: { id: 'none', scale: 1 }, right: { id: 'none', scale: 1 }, albumPic: null },
-  petPattern: 'none', petPatternColor: '#ff7675'
+  petPattern: 'none', petPatternColor: '#ff7675',
+  growthScore: 0,
+  maxGrowth: 500
 };
 
 let isSleeping = false, gameInterval, showerInterval, isSoaping = false, isShowering = false;
 let anabulRoomCode = null, anabulIsHost = false, anabulRoomRef = null;
 let tempType = 'cat', tempColor = '#ffffff', tempPattern = 'none', tempPatternColor = '#ff7675';
-
 let tempFurnitureEquipId = null;
 let cropTempImage = null;
 let cropDrag = { isDown: false, startX: 0, startY: 0, imgX: 0, imgY: 0 };
@@ -2379,7 +2380,6 @@ function randColor(id, offset) {
 
 function isItemRare(id, index) { return index % 13 === 0 || index === 777; }
 
-// RARE SVG ACCESSORIES (special high-quality ones)
 const rareSvgPool = [
   `<path d="M30 20 L40 0 L50 15 L60 0 L70 20 L65 28 L50 22 L35 28 Z" fill="url(#rg1)" stroke="#f9ca24" stroke-width="2"/><defs><linearGradient id="rg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f9ca24"/><stop offset="100%" style="stop-color:#e17055"/></linearGradient></defs><circle cx="50" cy="18" r="5" fill="#fff" opacity="0.8"/>`,
   `<ellipse cx="50" cy="20" rx="30" ry="8" fill="#6c5ce7" stroke="#a29bfe" stroke-width="2"/><path d="M28 16 Q50 -8 72 16" fill="#a29bfe" stroke="#6c5ce7" stroke-width="2"/><circle cx="50" cy="12" r="4" fill="#ffeaa7"/><circle cx="35" cy="14" r="2" fill="#fd79a8"/><circle cx="65" cy="14" r="2" fill="#fd79a8"/>`,
@@ -2417,7 +2417,7 @@ for (let i = 1; i <= 1000; i++) {
   let detail = bajuDetails[(i * 7) % bajuDetails.length];
   let c1 = randColor(i, 0); let c2 = randColor(i, 45); let c3 = randColor(i, 120);
   let rareStatus = isItemRare(`baju_${i}`, i);
-  let namePrefix = rareStatus ? "✨ RARE " : "";
+  let namePrefix = rareStatus ? "RARE " : "";
   let svgRaw = `<path d="${base.path}" fill="${c1}" stroke="#2d3436" stroke-width="3"/>` + addon.svg + detail.svg;
   svgRaw = svgRaw.replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3);
   allShopItems.clothes.push({ id: `baju_${i}`, name: `${namePrefix}${base.nama} ${addon.nama} ${i}`, cost: (rareStatus ? 500 : 10) + Math.floor(i / 20), reqLvl: Math.max(1, Math.floor(i / 40)), svg: svgRaw, rare: rareStatus });
@@ -2438,8 +2438,7 @@ for (let i = 1; i <= 1000; i++) {
   let mod = accMods[(i * 11) % accMods.length];
   let c1 = randColor(i, 30); let c2 = randColor(i, 90); let c3 = randColor(i, 200);
   let rareStatus = isItemRare(`acc_${i}`, i);
-  let namePrefix = rareStatus ? "✨ RARE " : "";
-  // Use special rare SVGs for every 13th item
+  let namePrefix = rareStatus ? "RARE " : "";
   let svgRaw = rareStatus ? rareSvgPool[Math.floor(i / 13) % rareSvgPool.length] : (base.p + mod).replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3);
   allShopItems.skin.push({ id: `acc_${i}`, name: `${namePrefix}${base.n} Mod ${i}`, cost: (rareStatus ? 600 : 15) + Math.floor(i / 20), reqLvl: Math.max(1, Math.floor(i / 50)), svg: svgRaw, rare: rareStatus });
 }
@@ -2457,21 +2456,21 @@ for (let i = 1; i <= 1000; i++) {
   let engine = bgEngines[i % bgEngines.length];
   let css = engine(randColor(i, 0), randColor(i, 180));
   let rareStatus = isItemRare(`bg_${i}`, i);
-  let namePrefix = rareStatus ? "✨ RARE " : "";
+  let namePrefix = rareStatus ? "RARE " : "";
   allShopItems.bg.push({ id: `bg_${i}`, name: `${namePrefix}Latar Epik ${i}`, cost: (rareStatus ? 1000 : 50) + Math.floor(i / 10), reqLvl: Math.max(1, Math.floor(i / 30)), css: css, rare: rareStatus });
 }
 
 // 4. BATH ITEMS
 for (let i = 1; i <= 500; i++) {
   let rareStatus = isItemRare(`soap_${i}`, i);
-  allShopItems.bath.push({ id: `soap_${i}`, name: `${rareStatus ? '✨ RARE ' : ''}Sabun Mewah ${i}`, cost: (rareStatus ? 300 : 5) + Math.floor(i / 10), reqLvl: 1, val: randColor(i, 0), type: 'soap', rare: rareStatus });
+  allShopItems.bath.push({ id: `soap_${i}`, name: `${rareStatus ? 'RARE ' : ''}Sabun Mewah ${i}`, cost: (rareStatus ? 300 : 5) + Math.floor(i / 10), reqLvl: 1, val: randColor(i, 0), type: 'soap', rare: rareStatus });
 }
 for (let i = 1; i <= 500; i++) {
   let rareStatus = isItemRare(`pillow_${i}`, i);
-  allShopItems.bath.push({ id: `pillow_${i}`, name: `${rareStatus ? '✨ RARE ' : ''}Kasur Sultan ${i}`, cost: (rareStatus ? 400 : 10) + Math.floor(i / 10), reqLvl: 1, val: randColor(i, 50), type: 'pillow', rare: rareStatus });
+  allShopItems.bath.push({ id: `pillow_${i}`, name: `${rareStatus ? 'RARE ' : ''}Kasur Sultan ${i}`, cost: (rareStatus ? 400 : 10) + Math.floor(i / 10), reqLvl: 1, val: randColor(i, 50), type: 'pillow', rare: rareStatus });
 }
 
-// 5. FURNITURE - 40 ITEMS (20 lama + 20 baru)
+// 5. FURNITURE
 const furnitureBases = [
   { n: 'Lepas Perabotan', svg: '', c: 0 },
   { n: 'Tanaman Hias', svg: `<rect x="40" y="70" width="20" height="30" fill="#cc8e35"/><ellipse cx="50" cy="50" rx="30" ry="40" fill="#2ed573"/><ellipse cx="50" cy="50" rx="15" ry="30" fill="#7bed9f"/>` },
@@ -2492,28 +2491,27 @@ const furnitureBases = [
   { n: 'Kursi Gaming', svg: `<rect x="40" y="20" width="20" height="50" rx="5" fill="#192a56"/><rect x="30" y="60" width="40" height="10" fill="#e84118"/><rect x="45" y="70" width="10" height="20" fill="#2f3542"/>` },
   { n: 'Karpet Bintang', svg: `<polygon points="50,10 60,40 90,40 65,60 75,90 50,70 25,90 35,60 10,40 40,40" fill="#f1c40f" opacity="0.8"/>` },
   { n: 'Lemari Pendingin', svg: `<rect x="30" y="10" width="40" height="80" fill="#f5f6fa" stroke="#dcdde1" stroke-width="3"/><line x1="30" y1="40" x2="70" y2="40" stroke="#dcdde1" stroke-width="3"/><rect x="35" y="20" width="5" height="15" fill="#bdc3c7"/><rect x="35" y="50" width="5" height="15" fill="#bdc3c7"/>` },
-  { n: '🖼️ ALBUM FOTO', svg: `<rect x="15" y="15" width="70" height="70" fill="#fff" stroke="#dfe6e9" stroke-width="5"/><rect x="25" y="25" width="50" height="40" fill="#74b9ff"/><polygon points="25,65 40,45 55,60 65,50 75,65" fill="#0984e3"/><circle cx="65" cy="35" r="4" fill="#ffeaa7"/>` },
-  // 20 NEW FURNITURE
-  { n: '🌙 Lampu Bulan', svg: `<path d="M30 50 Q30 20 50 20 Q35 35 38 50 Q35 65 50 80 Q30 80 30 50Z" fill="#ffeaa7" stroke="#f9ca24" stroke-width="2"/><circle cx="40" cy="38" r="3" fill="#f9ca24" opacity="0.5"/><circle cx="37" cy="55" r="2" fill="#f9ca24" opacity="0.4"/>` },
-  { n: '🎪 Tenda Sirkus', svg: `<polygon points="50,5 90,60 10,60" fill="#e74c3c"/><polygon points="50,5 70,60 30,60" fill="#f1c40f"/><rect x="25" y="60" width="50" height="30" fill="#3498db"/><path d="M45 75 Q50 65 55 75 Q50 85 45 75Z" fill="#e74c3c"/>` },
-  { n: '🔮 Bola Kristal', svg: `<circle cx="50" cy="45" r="32" fill="#a29bfe" opacity="0.7" stroke="#6c5ce7" stroke-width="3"/><circle cx="42" cy="37" r="10" fill="#fff" opacity="0.4"/><ellipse cx="50" cy="75" rx="25" ry="6" fill="#6c5ce7" opacity="0.5"/>` },
-  { n: '🏺 Guci Antik', svg: `<ellipse cx="50" cy="30" rx="18" ry="8" fill="#e17055"/><path d="M32 30 Q20 50 25 75 Q50 85 75 75 Q80 50 68 30Z" fill="#e17055"/><ellipse cx="50" cy="76" rx="25" ry="7" fill="#d63031"/><path d="M28 45 Q25 55 28 65" fill="none" stroke="#c0392b" stroke-width="2"/>` },
-  { n: '🎭 Topeng Teater', svg: `<ellipse cx="50" cy="45" rx="30" ry="35" fill="#fdcb6e"/><circle cx="38" cy="38" r="6" fill="#2d3436" opacity="0.8"/><circle cx="62" cy="38" r="6" fill="#2d3436" opacity="0.8"/><path d="M35 58 Q50 72 65 58" fill="none" stroke="#e17055" stroke-width="3"/>` },
-  { n: '🌵 Kaktus Lucu', svg: `<rect x="43" y="25" width="14" height="60" rx="7" fill="#00b894"/><rect x="22" y="45" width="25" height="10" rx="5" fill="#00b894"/><rect x="53" y="55" width="25" height="10" rx="5" fill="#00b894"/><ellipse cx="50" cy="90" rx="20" ry="5" fill="#636e72"/><circle cx="50" cy="22" r="5" fill="#fd79a8"/>` },
-  { n: '🎑 Lentera Jepang', svg: `<rect x="38" y="5" width="4" height="15" fill="#636e72"/><ellipse cx="50" cy="25" rx="20" ry="8" fill="#e74c3c"/><rect x="30" y="25" width="40" height="45" rx="5" fill="#f9ca24"/><ellipse cx="50" cy="70" rx="20" ry="8" fill="#e74c3c"/><line x1="40" y1="35" x2="40" y2="65" stroke="#e74c3c" stroke-width="2"/><line x1="50" y1="35" x2="50" y2="65" stroke="#e74c3c" stroke-width="2"/><line x1="60" y1="35" x2="60" y2="65" stroke="#e74c3c" stroke-width="2"/>` },
-  { n: '🪞 Cermin Mewah', svg: `<ellipse cx="50" cy="45" rx="28" ry="38" fill="#dfe6e9" stroke="#f9ca24" stroke-width="5"/><ellipse cx="50" cy="45" rx="22" ry="32" fill="#b2bec3" opacity="0.5"/><rect x="44" y="83" width="12" height="12" fill="#f9ca24"/><ellipse cx="50" cy="83" rx="8" ry="3" fill="#e17055"/>` },
-  { n: '🎠 Komidi Putar Mini', svg: `<line x1="50" y1="10" x2="50" y2="80" stroke="#e74c3c" stroke-width="4"/><line x1="50" y1="20" x2="20" y2="50" stroke="#e74c3c" stroke-width="3"/><line x1="50" y1="20" x2="80" y2="50" stroke="#e74c3c" stroke-width="3"/><circle cx="20" cy="50" r="8" fill="#f9ca24"/><circle cx="80" cy="50" r="8" fill="#6c5ce7"/><ellipse cx="50" cy="10" rx="25" ry="6" fill="#e74c3c"/>` },
-  { n: '🌊 Kolam Mini', svg: `<ellipse cx="50" cy="75" rx="40" ry="15" fill="#48dbfb"/><path d="M10 70 Q25 65 40 70 Q55 75 70 70 Q85 65 90 70" fill="none" stroke="#0984e3" stroke-width="3" opacity="0.5"/><circle cx="30" cy="65" r="5" fill="#fd79a8" opacity="0.6"/><circle cx="70" cy="68" r="7" fill="#ff9f43" opacity="0.5"/>` },
-  { n: '🎋 Bambu Keberuntungan', svg: `<rect x="38" y="10" width="12" height="85" fill="#6ab04c"/><rect x="53" y="25" width="10" height="70" fill="#7bed9f"/><line x1="38" y1="30" x2="50" y2="30" stroke="#2d3436" stroke-width="2"/><line x1="38" y1="50" x2="50" y2="50" stroke="#2d3436" stroke-width="2"/><line x1="38" y1="70" x2="50" y2="70" stroke="#2d3436" stroke-width="2"/>` },
-  { n: '☁️ Kursi Awan', svg: `<ellipse cx="50" cy="65" rx="35" ry="20" fill="#dfe6e9"/><circle cx="35" cy="58" r="18" fill="#dfe6e9"/><circle cx="55" cy="52" r="22" fill="#dfe6e9"/><circle cx="72" cy="58" r="15" fill="#dfe6e9"/>` },
-  { n: '🧸 Boneka Raksasa', svg: `<circle cx="50" cy="35" r="22" fill="#fdcb6e"/><circle cx="50" cy="65" r="28" fill="#fdcb6e"/><circle cx="35" cy="20" r="10" fill="#fdcb6e"/><circle cx="65" cy="20" r="10" fill="#fdcb6e"/><circle cx="44" cy="32" r="4" fill="#2d3436"/><circle cx="56" cy="32" r="4" fill="#2d3436"/><path d="M42 42 Q50 48 58 42" fill="none" stroke="#2d3436" stroke-width="2"/>` },
-  { n: '🌈 Peluncur Pelangi', svg: `<path d="M10 80 Q50 10 90 80" fill="none" stroke="#e74c3c" stroke-width="6"/><path d="M15 80 Q50 18 85 80" fill="none" stroke="#f9ca24" stroke-width="5"/><path d="M20 80 Q50 26 80 80" fill="none" stroke="#2ed573" stroke-width="4"/><path d="M25 80 Q50 34 75 80" fill="none" stroke="#74b9ff" stroke-width="3"/>` },
-  { n: '🏔️ Gunung Mini', svg: `<polygon points="50,10 85,80 15,80" fill="#636e72"/><polygon points="50,10 65,40 35,40" fill="#dfe6e9"/><polygon points="50,10 60,32 40,32" fill="#fff"/>` },
-  { n: '🎪 Panggung Pentas', svg: `<rect x="10" y="60" width="80" height="30" fill="#8e44ad"/><path d="M10 60 Q50 30 90 60 Z" fill="#9b59b6"/><rect x="5" y="55" width="10" height="35" fill="#6c3483"/><rect x="85" y="55" width="10" height="35" fill="#6c3483"/><circle cx="25" cy="50" r="5" fill="#ffeaa7"/><circle cx="75" cy="50" r="5" fill="#ffeaa7"/>` },
-  { n: '🌺 Pohon Sakura', svg: `<rect x="45" y="55" width="10" height="40" fill="#8e44ad"/><circle cx="50" cy="35" r="30" fill="#fd79a8" opacity="0.8"/><circle cx="35" cy="45" r="20" fill="#ff7675" opacity="0.7"/><circle cx="65" cy="45" r="20" fill="#fd79a8" opacity="0.7"/>` },
-  { n: '🎡 Ferris Wheel Mini', svg: `<circle cx="50" cy="45" r="35" fill="none" stroke="#3498db" stroke-width="4"/><line x1="50" y1="10" x2="50" y2="80" stroke="#3498db" stroke-width="2"/><line x1="15" y1="45" x2="85" y2="45" stroke="#3498db" stroke-width="2"/><line x1="25" y1="20" x2="75" y2="70" stroke="#3498db" stroke-width="2"/><line x1="75" y1="20" x2="25" y2="70" stroke="#3498db" stroke-width="2"/><circle cx="50" cy="45" r="6" fill="#e74c3c"/>` },
-  { n: '🛸 UFO Kecil', svg: `<ellipse cx="50" cy="55" rx="40" ry="12" fill="#a29bfe" opacity="0.8"/><ellipse cx="50" cy="45" rx="25" ry="18" fill="#6c5ce7"/><circle cx="50" cy="40" r="10" fill="#74b9ff" opacity="0.7"/><circle cx="30" cy="58" r="4" fill="#ffeaa7"/><circle cx="50" cy="62" r="4" fill="#ffeaa7"/><circle cx="70" cy="58" r="4" fill="#ffeaa7"/>` },
-  { n: '✨ ALTAR MISTIK', svg: `<rect x="30" y="60" width="40" height="30" fill="#2d3436"/><rect x="20" y="55" width="60" height="10" fill="#2d3436"/><path d="M50 10 L55 25 L70 25 L58 34 L63 50 L50 40 L37 50 L42 34 L30 25 L45 25 Z" fill="#f9ca24"/><circle cx="50" cy="30" r="8" fill="#e17055"/>` }
+  { n: 'ALBUM FOTO', svg: `<rect x="15" y="15" width="70" height="70" fill="#fff" stroke="#dfe6e9" stroke-width="5"/><rect x="25" y="25" width="50" height="40" fill="#74b9ff"/><polygon points="25,65 40,45 55,60 65,50 75,65" fill="#0984e3"/><circle cx="65" cy="35" r="4" fill="#ffeaa7"/>` },
+  { n: 'Lampu Bulan', svg: `<path d="M30 50 Q30 20 50 20 Q35 35 38 50 Q35 65 50 80 Q30 80 30 50Z" fill="#ffeaa7" stroke="#f9ca24" stroke-width="2"/><circle cx="40" cy="38" r="3" fill="#f9ca24" opacity="0.5"/><circle cx="37" cy="55" r="2" fill="#f9ca24" opacity="0.4"/>` },
+  { n: 'Tenda Sirkus', svg: `<polygon points="50,5 90,60 10,60" fill="#e74c3c"/><polygon points="50,5 70,60 30,60" fill="#f1c40f"/><rect x="25" y="60" width="50" height="30" fill="#3498db"/><path d="M45 75 Q50 65 55 75 Q50 85 45 75Z" fill="#e74c3c"/>` },
+  { n: 'Bola Kristal', svg: `<circle cx="50" cy="45" r="32" fill="#a29bfe" opacity="0.7" stroke="#6c5ce7" stroke-width="3"/><circle cx="42" cy="37" r="10" fill="#fff" opacity="0.4"/><ellipse cx="50" cy="75" rx="25" ry="6" fill="#6c5ce7" opacity="0.5"/>` },
+  { n: 'Guci Antik', svg: `<ellipse cx="50" cy="30" rx="18" ry="8" fill="#e17055"/><path d="M32 30 Q20 50 25 75 Q50 85 75 75 Q80 50 68 30Z" fill="#e17055"/><ellipse cx="50" cy="76" rx="25" ry="7" fill="#d63031"/><path d="M28 45 Q25 55 28 65" fill="none" stroke="#c0392b" stroke-width="2"/>` },
+  { n: 'Topeng Teater', svg: `<ellipse cx="50" cy="45" rx="30" ry="35" fill="#fdcb6e"/><circle cx="38" cy="38" r="6" fill="#2d3436" opacity="0.8"/><circle cx="62" cy="38" r="6" fill="#2d3436" opacity="0.8"/><path d="M35 58 Q50 72 65 58" fill="none" stroke="#e17055" stroke-width="3"/>` },
+  { n: 'Kaktus Lucu', svg: `<rect x="43" y="25" width="14" height="60" rx="7" fill="#00b894"/><rect x="22" y="45" width="25" height="10" rx="5" fill="#00b894"/><rect x="53" y="55" width="25" height="10" rx="5" fill="#00b894"/><ellipse cx="50" cy="90" rx="20" ry="5" fill="#636e72"/><circle cx="50" cy="22" r="5" fill="#fd79a8"/>` },
+  { n: 'Lentera Jepang', svg: `<rect x="38" y="5" width="4" height="15" fill="#636e72"/><ellipse cx="50" cy="25" rx="20" ry="8" fill="#e74c3c"/><rect x="30" y="25" width="40" height="45" rx="5" fill="#f9ca24"/><ellipse cx="50" cy="70" rx="20" ry="8" fill="#e74c3c"/><line x1="40" y1="35" x2="40" y2="65" stroke="#e74c3c" stroke-width="2"/><line x1="50" y1="35" x2="50" y2="65" stroke="#e74c3c" stroke-width="2"/><line x1="60" y1="35" x2="60" y2="65" stroke="#e74c3c" stroke-width="2"/>` },
+  { n: 'Cermin Mewah', svg: `<ellipse cx="50" cy="45" rx="28" ry="38" fill="#dfe6e9" stroke="#f9ca24" stroke-width="5"/><ellipse cx="50" cy="45" rx="22" ry="32" fill="#b2bec3" opacity="0.5"/><rect x="44" y="83" width="12" height="12" fill="#f9ca24"/><ellipse cx="50" cy="83" rx="8" ry="3" fill="#e17055"/>` },
+  { n: 'Komidi Putar Mini', svg: `<line x1="50" y1="10" x2="50" y2="80" stroke="#e74c3c" stroke-width="4"/><line x1="50" y1="20" x2="20" y2="50" stroke="#e74c3c" stroke-width="3"/><line x1="50" y1="20" x2="80" y2="50" stroke="#e74c3c" stroke-width="3"/><circle cx="20" cy="50" r="8" fill="#f9ca24"/><circle cx="80" cy="50" r="8" fill="#6c5ce7"/><ellipse cx="50" cy="10" rx="25" ry="6" fill="#e74c3c"/>` },
+  { n: 'Kolam Mini', svg: `<ellipse cx="50" cy="75" rx="40" ry="15" fill="#48dbfb"/><path d="M10 70 Q25 65 40 70 Q55 75 70 70 Q85 65 90 70" fill="none" stroke="#0984e3" stroke-width="3" opacity="0.5"/><circle cx="30" cy="65" r="5" fill="#fd79a8" opacity="0.6"/><circle cx="70" cy="68" r="7" fill="#ff9f43" opacity="0.5"/>` },
+  { n: 'Bambu Keberuntungan', svg: `<rect x="38" y="10" width="12" height="85" fill="#6ab04c"/><rect x="53" y="25" width="10" height="70" fill="#7bed9f"/><line x1="38" y1="30" x2="50" y2="30" stroke="#2d3436" stroke-width="2"/><line x1="38" y1="50" x2="50" y2="50" stroke="#2d3436" stroke-width="2"/><line x1="38" y1="70" x2="50" y2="70" stroke="#2d3436" stroke-width="2"/>` },
+  { n: 'Kursi Awan', svg: `<ellipse cx="50" cy="65" rx="35" ry="20" fill="#dfe6e9"/><circle cx="35" cy="58" r="18" fill="#dfe6e9"/><circle cx="55" cy="52" r="22" fill="#dfe6e9"/><circle cx="72" cy="58" r="15" fill="#dfe6e9"/>` },
+  { n: 'Boneka Raksasa', svg: `<circle cx="50" cy="35" r="22" fill="#fdcb6e"/><circle cx="50" cy="65" r="28" fill="#fdcb6e"/><circle cx="35" cy="20" r="10" fill="#fdcb6e"/><circle cx="65" cy="20" r="10" fill="#fdcb6e"/><circle cx="44" cy="32" r="4" fill="#2d3436"/><circle cx="56" cy="32" r="4" fill="#2d3436"/><path d="M42 42 Q50 48 58 42" fill="none" stroke="#2d3436" stroke-width="2"/>` },
+  { n: 'Peluncur Pelangi', svg: `<path d="M10 80 Q50 10 90 80" fill="none" stroke="#e74c3c" stroke-width="6"/><path d="M15 80 Q50 18 85 80" fill="none" stroke="#f9ca24" stroke-width="5"/><path d="M20 80 Q50 26 80 80" fill="none" stroke="#2ed573" stroke-width="4"/><path d="M25 80 Q50 34 75 80" fill="none" stroke="#74b9ff" stroke-width="3"/>` },
+  { n: 'Gunung Mini', svg: `<polygon points="50,10 85,80 15,80" fill="#636e72"/><polygon points="50,10 65,40 35,40" fill="#dfe6e9"/><polygon points="50,10 60,32 40,32" fill="#fff"/>` },
+  { n: 'Panggung Pentas', svg: `<rect x="10" y="60" width="80" height="30" fill="#8e44ad"/><path d="M10 60 Q50 30 90 60 Z" fill="#9b59b6"/><rect x="5" y="55" width="10" height="35" fill="#6c3483"/><rect x="85" y="55" width="10" height="35" fill="#6c3483"/><circle cx="25" cy="50" r="5" fill="#ffeaa7"/><circle cx="75" cy="50" r="5" fill="#ffeaa7"/>` },
+  { n: 'Pohon Sakura', svg: `<rect x="45" y="55" width="10" height="40" fill="#8e44ad"/><circle cx="50" cy="35" r="30" fill="#fd79a8" opacity="0.8"/><circle cx="35" cy="45" r="20" fill="#ff7675" opacity="0.7"/><circle cx="65" cy="45" r="20" fill="#fd79a8" opacity="0.7"/>` },
+  { n: 'Ferris Wheel Mini', svg: `<circle cx="50" cy="45" r="35" fill="none" stroke="#3498db" stroke-width="4"/><line x1="50" y1="10" x2="50" y2="80" stroke="#3498db" stroke-width="2"/><line x1="15" y1="45" x2="85" y2="45" stroke="#3498db" stroke-width="2"/><line x1="25" y1="20" x2="75" y2="70" stroke="#3498db" stroke-width="2"/><line x1="75" y1="20" x2="25" y2="70" stroke="#3498db" stroke-width="2"/><circle cx="50" cy="45" r="6" fill="#e74c3c"/>` },
+  { n: 'UFO Kecil', svg: `<ellipse cx="50" cy="55" rx="40" ry="12" fill="#a29bfe" opacity="0.8"/><ellipse cx="50" cy="45" rx="25" ry="18" fill="#6c5ce7"/><circle cx="50" cy="40" r="10" fill="#74b9ff" opacity="0.7"/><circle cx="30" cy="58" r="4" fill="#ffeaa7"/><circle cx="50" cy="62" r="4" fill="#ffeaa7"/><circle cx="70" cy="58" r="4" fill="#ffeaa7"/>` },
+  { n: 'ALTAR MISTIK', svg: `<rect x="30" y="60" width="40" height="30" fill="#2d3436"/><rect x="20" y="55" width="60" height="10" fill="#2d3436"/><path d="M50 10 L55 25 L70 25 L58 34 L63 50 L50 40 L37 50 L42 34 L30 25 L45 25 Z" fill="#f9ca24"/><circle cx="50" cy="30" r="8" fill="#e17055"/>` }
 ];
 furnitureBases.forEach((b, i) => {
   let isRare = i === 19 || i >= 37;
@@ -2521,43 +2519,105 @@ furnitureBases.forEach((b, i) => {
 });
 
 // ============================================================
-// FOOD INIT
+// FOOD INIT - Only 3 foods + 1 drink + 1 medicine
 // ============================================================
 function initMakanan() {
   const panelDapur = document.getElementById('panel-kitchen');
   if (!panelDapur) return;
-  let htmlDapurArray = [];
-  const foodBases = [
-    { p: `<path d="M 4 18 Q 12 22 20 18 L 18 10 L 6 10 Z" fill="VAR_C1"/>`, n: 'Mangkok' },
-    { p: `<ellipse cx="12" cy="18" rx="10" ry="3" fill="VAR_C1"/>`, n: 'Piring' },
-    { p: `<rect x="6" y="8" width="12" height="14" rx="2" fill="VAR_C1" opacity="0.8"/>`, n: 'Gelas' },
-    { p: `<polygon points="12,20 2,10 12,2 22,10" fill="VAR_C1"/>`, n: 'Daun' }
+
+  const foods = [
+    {
+      id: 'nasi',
+      name: 'Nasi Hangat',
+      cost: 20,
+      kenyang: 40,
+      svg: `<svg viewBox="0 0 48 48" width="48" height="48">
+        <ellipse cx="24" cy="32" rx="18" ry="8" fill="#e8d5b0"/>
+        <ellipse cx="24" cy="28" rx="18" ry="10" fill="#f5efe0"/>
+        <ellipse cx="24" cy="26" rx="14" ry="7" fill="#fff8ee"/>
+        <path d="M12 28 Q24 22 36 28" fill="none" stroke="#e8d5b0" stroke-width="1.5"/>
+        <rect x="22" y="12" width="4" height="14" rx="2" fill="#b5651d"/>
+        <rect x="21" y="10" width="6" height="5" rx="1" fill="#c0392b"/>
+      </svg>`,
+      desc: 'Mengenyangkan +40'
+    },
+    {
+      id: 'daging',
+      name: 'Daging Panggang',
+      cost: 50,
+      kenyang: 80,
+      svg: `<svg viewBox="0 0 48 48" width="48" height="48">
+        <ellipse cx="24" cy="30" rx="18" ry="10" fill="#7a3b1e"/>
+        <ellipse cx="24" cy="28" rx="16" ry="8" fill="#a0522d"/>
+        <path d="M12 28 Q18 24 24 26 Q30 28 36 24" fill="none" stroke="#7a3b1e" stroke-width="2.5"/>
+        <path d="M15 32 Q20 29 25 31 Q30 33 34 30" fill="none" stroke="#5a2d0c" stroke-width="1.5" opacity="0.6"/>
+        <rect x="22" y="10" width="4" height="16" rx="2" fill="#c0c0c0"/>
+        <ellipse cx="24" cy="9" rx="5" ry="3" fill="#a0a0a0"/>
+      </svg>`,
+      desc: 'Super kenyang +80'
+    },
+    {
+      id: 'kue',
+      name: 'Kue Manis',
+      cost: 35,
+      kenyang: 55,
+      svg: `<svg viewBox="0 0 48 48" width="48" height="48">
+        <ellipse cx="24" cy="32" rx="16" ry="9" fill="#f0a060"/>
+        <rect x="8" y="22" width="32" height="12" rx="6" fill="#f0a060"/>
+        <ellipse cx="24" cy="22" rx="16" ry="7" fill="#f7c080"/>
+        <path d="M12 22 Q24 16 36 22" fill="#ffe0a0" stroke="none"/>
+        <circle cx="16" cy="20" r="2.5" fill="#e74c3c"/>
+        <circle cx="24" cy="18" r="2.5" fill="#3498db"/>
+        <circle cx="32" cy="20" r="2.5" fill="#2ecc71"/>
+        <path d="M22 8 Q24 4 26 8 Q28 12 24 14 Q20 12 22 8Z" fill="#e74c3c"/>
+      </svg>`,
+      desc: 'Manis kenyang +55'
+    },
+    {
+      id: 'susu',
+      name: 'Susu Segar',
+      cost: 15,
+      kenyang: 25,
+      svg: `<svg viewBox="0 0 48 48" width="48" height="48">
+        <rect x="15" y="16" width="18" height="24" rx="4" fill="#f0f0f0" stroke="#ddd" stroke-width="1.5"/>
+        <rect x="15" y="14" width="18" height="6" rx="3" fill="#e0e0e0"/>
+        <rect x="18" y="10" width="12" height="6" rx="2" fill="#c8c8c8"/>
+        <rect x="17" y="18" width="14" height="3" fill="#2196F3" opacity="0.7"/>
+        <path d="M17 26 Q24 22 31 26 Q24 30 17 26Z" fill="#fff" opacity="0.5"/>
+        <rect x="17" y="32" width="14" height="2" fill="#aaa" opacity="0.3"/>
+      </svg>`,
+      desc: 'Minum segar +25'
+    }
   ];
-  const foodMains = [
-    { p: `<circle cx="12" cy="12" r="6" fill="VAR_C2"/>`, n: 'Bulat' },
-    { p: `<path d="M 12 4 L 20 16 L 4 16 Z" fill="VAR_C2"/>`, n: 'Segitiga' },
-    { p: `<rect x="6" y="8" width="12" height="8" rx="2" fill="VAR_C2"/>`, n: 'Kotak' },
-    { p: `<ellipse cx="12" cy="14" rx="8" ry="4" fill="VAR_C2"/>`, n: 'Cairan' },
-    { p: `<path d="M 8 8 Q 12 4 16 8 Q 20 12 16 16 Q 12 20 8 16 Q 4 12 8 8 Z" fill="VAR_C2"/>`, n: 'Gumpal' }
-  ];
-  const foodToppings = [
-    ``, `<circle cx="12" cy="10" r="2" fill="#ff7675"/>`, `<line x1="8" y1="10" x2="16" y2="10" stroke="VAR_C3" stroke-width="2"/>`,
-    `<circle cx="10" cy="12" r="1" fill="#fff"/><circle cx="14" cy="10" r="1" fill="#fff"/>`,
-    `<path d="M 8 10 Q 12 14 16 10" fill="none" stroke="VAR_C3" stroke-width="2"/>`
-  ];
-  for (let i = 1; i <= 1000; i++) {
-    let base = foodBases[i % foodBases.length]; let main = foodMains[(i * 7) % foodMains.length]; let topping = foodToppings[(i * 13) % foodToppings.length];
-    let c1 = randColor(i, 0); let c2 = randColor(i, 80); let c3 = randColor(i, 160);
-    let svgRaw = `<svg viewBox="0 0 24 24" width="30" height="30">` + (base.p + main.p + topping).replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3) + `</svg>`;
-    let harga = 10 + Math.floor(i / 10); let kenyang = harga * 2;
-    htmlDapurArray.push(`<div class="item-card" onclick="feedPet('makanan_${i}', ${harga}, ${kenyang})">${svgRaw}<span style="font-size:10px;font-weight:bold;">${main.n} ${base.n} ${i} (${harga}🪙)</span></div>`);
-  }
-  htmlDapurArray.push(`<div class="item-card" onclick="giveMedicine()"><svg viewBox="0 0 24 24" width="30" height="30"><rect x="4" y="10" width="16" height="6" rx="3" fill="#74b9ff"/><path d="M12 10 L12 16 M4 10 A3 3 0 0 1 12 10 V16 A3 3 0 0 1 4 16 Z" fill="#ff7675"/></svg><span style="font-size:10px;font-weight:bold;">OBAT SAKIT (50🪙)</span></div>`);
-  panelDapur.innerHTML = htmlDapurArray.join('');
+
+  let html = foods.map(f => `
+    <div class="item-card" onclick="feedPet('${f.id}', ${f.cost}, ${f.kenyang})" style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:8px;border-radius:12px;background:rgba(255,255,255,0.7);transition:transform 0.1s;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
+      ${f.svg}
+      <span style="font-size:11px;font-weight:700;color:#2d3436;text-align:center;">${f.name}</span>
+      <span style="font-size:10px;color:#636e72;">${f.desc}</span>
+      <span style="font-size:11px;font-weight:bold;color:#e17055;">${f.cost} koin</span>
+    </div>
+  `).join('');
+
+  html += `
+    <div class="item-card" onclick="giveMedicine()" style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:8px;border-radius:12px;background:rgba(116,185,255,0.2);border:2px solid #74b9ff;transition:transform 0.1s;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
+      <svg viewBox="0 0 48 48" width="48" height="48">
+        <rect x="8" y="20" width="32" height="14" rx="7" fill="#74b9ff"/>
+        <rect x="8" y="20" width="16" height="14" rx="7" fill="#ff7675"/>
+        <line x1="24" y1="20" x2="24" y2="34" stroke="#fff" stroke-width="2"/>
+        <rect x="21" y="10" width="6" height="12" rx="2" fill="#636e72"/>
+      </svg>
+      <span style="font-size:11px;font-weight:700;color:#2d3436;">Obat Sakit</span>
+      <span style="font-size:10px;color:#636e72;">Sembuhkan pet</span>
+      <span style="font-size:11px;font-weight:bold;color:#e17055;">50 koin</span>
+    </div>
+  `;
+
+  panelDapur.innerHTML = html;
 }
 
 // ============================================================
-// PATTERN UI - Build pattern picker HTML
+// PATTERN UI
 // ============================================================
 function buildPatternPicker() {
   const cont = document.getElementById('pattern-picker');
@@ -2623,12 +2683,43 @@ function applyMotifFromModal() {
   tempMotifId = null;
 }
 
+function applyPatternToPet() {
+  let colorEl = document.getElementById('pattern-color-pick');
+  petData.petPattern = tempPattern || 'none';
+  petData.petPatternColor = colorEl ? colorEl.value : '#ff7675';
+  savePetData();
+  updatePetRender('pet-size', petData, isSleeping);
+  createFloatingText("Motif diterapkan!", "center");
+}
+
+// ============================================================
+// GROWTH SYSTEM
+// ============================================================
+function addGrowthScore(amount) {
+  if (!petData.growthScore) petData.growthScore = 0;
+  if (!petData.maxGrowth) petData.maxGrowth = 500;
+  petData.growthScore = Math.min(petData.maxGrowth, petData.growthScore + amount);
+  savePetData();
+  applyGrowthScale();
+}
+
+function applyGrowthScale() {
+  let sizeEl = document.getElementById('pet-size');
+  if (!sizeEl) return;
+  let growthRatio = (petData.growthScore || 0) / (petData.maxGrowth || 500);
+  // Level scale + growth scale, max 2.2x
+  let baseScale = 1 + (petData.level * 0.02);
+  let growthScale = 1 + (growthRatio * 0.8);
+  sizeEl.style.transform = `scale(${(baseScale * growthScale).toFixed(3)})`;
+  sizeEl.style.transition = 'transform 0.5s ease';
+}
+
 // ============================================================
 // DAILY CLAIM & SAVE LOAD
 // ============================================================
 function claimDaily() {
   let now = Date.now();
-  if (!petData.lastClaim || now - petData.lastClaim >= 86400000) { petData.coins += 1000; petData.lastClaim = now; alert("Klaim berhasil! +1000 Koin 🪙"); savePetData(); if (document.getElementById('ui-coins')) document.getElementById('ui-coins').innerText = petData.coins; }
+  if (!petData.lastClaim || now - petData.lastClaim >= 86400000) { petData.coins += 1000; petData.lastClaim = now; alert("Klaim berhasil! +1000 Koin"); savePetData(); if (document.getElementById('ui-coins')) document.getElementById('ui-coins').innerText = petData.coins; }
   else { let sisaWaktu = Math.ceil((86400000 - (now - petData.lastClaim)) / 3600000); alert("Kamu sudah klaim hari ini! Kembali lagi dalam " + sisaWaktu + " jam."); }
 }
 
@@ -2641,6 +2732,8 @@ function loadPetData() {
     if (!petData.furniture) petData.furniture = { left: { id: 'none', scale: 1 }, right: { id: 'none', scale: 1 }, albumPic: null };
     if (!petData.petPattern) petData.petPattern = 'none';
     if (!petData.petPatternColor) petData.petPatternColor = '#ff7675';
+    if (petData.growthScore === undefined) petData.growthScore = 0;
+    if (!petData.maxGrowth) petData.maxGrowth = 500;
     isSleeping = petData.isSleeping || false; if (isSleeping) document.getElementById('room').classList.add('dark');
     calculateOfflineTime();
   }
@@ -2652,8 +2745,14 @@ function calculateOfflineTime() {
     if (petData.isSleeping) petData.energy = Math.min(100, petData.energy + (diffMins * 1.5)); else petData.energy = Math.max(0, petData.energy - (diffMins * 2));
     let drainRate = petData.isSleeping ? 0.1 : 0.5; petData.food = Math.max(0, petData.food - (diffMins * drainRate)); petData.clean = Math.max(0, petData.clean - (diffMins * drainRate));
     if (petData.immuneLevel && petData.immuneLevel > 0) petData.immuneLevel -= diffMins;
+    // Penalti lama ditinggal: kotor dan sakit
     if (petData.food < 20 || petData.clean < 10) { if (!petData.immuneLevel || petData.immuneLevel <= 0) petData.sick = true; }
     if (petData.clean < 40) petData.dirty = true;
+    // Growth penalty jika ditinggal lama
+    if (diffMins > 60) {
+      let penalty = Math.floor(diffMins / 30);
+      petData.growthScore = Math.max(0, (petData.growthScore || 0) - penalty);
+    }
   }
 }
 
@@ -2698,7 +2797,13 @@ function updatePetRender(tw, pD, isSleep) {
   let renderEl = document.getElementById(ri); let accEl = document.getElementById(ai);
   if (renderEl) renderEl.innerHTML = getPetSvgString(pD.type, pD.baseColor, pD.activeClothes, isSleep, pD.petPattern || 'none', pD.petPatternColor || '#ff7675');
   let acc = allShopItems.skin.find(a => a.id === pD.activeAcc); if (accEl) accEl.innerHTML = acc ? acc.svg : '';
-  let sizeEl = document.getElementById(tw); if (sizeEl) { let scale = 1 + (pD.level * 0.02); sizeEl.style.transform = `scale(${scale})`; }
+  // Apply growth-based scale
+  if (tw === 'pet-size') {
+    applyGrowthScale();
+  } else {
+    let sizeEl = document.getElementById(tw);
+    if (sizeEl) { let scale = 1 + (pD.level * 0.02); sizeEl.style.transform = `scale(${scale})`; }
+  }
 }
 
 function startAnabulGame() {
@@ -2718,7 +2823,7 @@ function setupRoomStyle() {
 
 function gainXP(amount) {
   petData.xp += amount; let req = petData.level * 100;
-  if (petData.xp >= req) { petData.xp -= req; petData.level++; petData.coins += 100; createFloatingText("⭐ LEVEL UP!", "center"); updatePetRender('pet-size', petData, isSleeping); }
+  if (petData.xp >= req) { petData.xp -= req; petData.level++; petData.coins += 100; createFloatingText("LEVEL UP!", "center"); updatePetRender('pet-size', petData, isSleeping); }
   updateUI(); savePetData();
 }
 
@@ -2726,8 +2831,11 @@ function updateUI() {
   document.getElementById('ui-name').innerText = petData.name; document.getElementById('ui-level').innerText = petData.level; document.getElementById('ui-coins').innerText = petData.coins;
   document.getElementById('bar-food').style.width = petData.food + '%'; document.getElementById('bar-clean').style.width = petData.clean + '%'; document.getElementById('bar-energy').style.width = petData.energy + '%'; document.getElementById('bar-xp').style.width = (petData.xp / (petData.level * 100) * 100) + '%';
   document.getElementById('bar-food').classList.toggle('fill-danger', petData.food < 20); document.getElementById('bar-clean').classList.toggle('fill-danger', petData.clean < 20); document.getElementById('bar-energy').classList.toggle('fill-danger', petData.energy < 20);
+  // Growth bar (if element exists)
+  let growthBar = document.getElementById('bar-growth');
+  if (growthBar) { growthBar.style.width = ((petData.growthScore || 0) / (petData.maxGrowth || 500) * 100) + '%'; }
   let svgEl = document.querySelector('#pet-render .pet-svg');
-  if (svgEl) { if (petData.dirty) svgEl.classList.add('is-dirty'); else svgEl.classList.remove('is-dirty'); if (petData.sick) { svgEl.classList.add('is-sick'); document.getElementById('ui-name').innerText = "🤢 " + petData.name; } else svgEl.classList.remove('is-sick'); }
+  if (svgEl) { if (petData.dirty) svgEl.classList.add('is-dirty'); else svgEl.classList.remove('is-dirty'); if (petData.sick) { svgEl.classList.add('is-sick'); document.getElementById('ui-name').innerText = "[sakit] " + petData.name; } else svgEl.classList.remove('is-sick'); }
 }
 
 function goToRoom(rn) {
@@ -2740,12 +2848,53 @@ function goToRoom(rn) {
 // ============================================================
 // CORE ACTIONS
 // ============================================================
-function feedPet(item, cost, gain) { if (isSleeping) return; if (petData.sick) { alert("Anabul sakit! Berikan OBAT dulu!"); return; } if (petData.coins >= cost) { petData.coins -= cost; petData.food = Math.min(100, petData.food + gain); petData.clean = Math.max(0, petData.clean - 5); triggerPetAnimation('eat'); createFloatingText("+ Kenyang 😋", "center"); gainXP(10); } else alert("Koin tidak cukup!"); }
-function giveMedicine() { if (!petData.sick) { alert("Anabul sedang sehat!"); return; } if (petData.coins >= 50) { petData.coins -= 50; petData.sick = false; petData.dirty = false; petData.food = 100; petData.clean = 100; petData.energy = 100; petData.immuneLevel = 120; createFloatingText("✨ Sembuh & FULL!", "center"); triggerPetAnimation('play'); gainXP(20); savePetData(); updateUI(); } else { alert("Koin tidak cukup!"); } }
-function playPet() { if (isSleeping) return; if (petData.sick) { alert("Anabul sakit! Beri obat dulu."); return; } if (petData.energy < 5) { alert("Energi habis! Suruh tidur dulu."); return; } petData.energy -= 2; petData.clean -= 3; petData.food -= 2; petData.coins += 15 + Math.floor(Math.random() * 10); triggerPetAnimation('play'); createFloatingText("+ Koin & XP", "center"); gainXP(15); updateUI(); }
+function feedPet(item, cost, gain) {
+  if (isSleeping) return;
+  if (petData.sick && item !== 'medicine') { alert("Anabul sakit! Berikan OBAT dulu!"); return; }
+  if (petData.coins >= cost) {
+    petData.coins -= cost;
+    petData.food = Math.min(100, petData.food + gain);
+    petData.clean = Math.max(0, petData.clean - 5);
+    triggerPetAnimation('eat');
+    createFloatingText("+ Kenyang", "center");
+    gainXP(10);
+    // Care = growth
+    addGrowthScore(2);
+  } else alert("Koin tidak cukup!");
+}
+
+function giveMedicine() {
+  if (!petData.sick) { alert("Anabul sedang sehat!"); return; }
+  if (petData.coins >= 50) {
+    petData.coins -= 50; petData.sick = false; petData.dirty = false; petData.food = 100; petData.clean = 100; petData.energy = 100; petData.immuneLevel = 120;
+    createFloatingText("Sembuh & FULL!", "center"); triggerPetAnimation('play'); gainXP(20); savePetData(); updateUI();
+  } else { alert("Koin tidak cukup!"); }
+}
+
+function playPet() {
+  if (isSleeping) return;
+  if (petData.sick) { alert("Anabul sakit! Beri obat dulu."); return; }
+  if (petData.energy < 5) { alert("Energi habis! Suruh tidur dulu."); return; }
+  petData.energy -= 2; petData.clean -= 3; petData.food -= 2; petData.coins += 15 + Math.floor(Math.random() * 10);
+  triggerPetAnimation('play'); createFloatingText("+ Koin & XP", "center"); gainXP(15);
+  addGrowthScore(3);
+  updateUI();
+}
 
 function gameTick() {
-  if (!isSleeping) { let d = 0.1; petData.food = Math.max(0, petData.food - d); petData.energy = Math.max(0, petData.energy - d); petData.clean = Math.max(0, petData.clean - d); if (petData.food < 20 || petData.clean < 10) { if (!petData.immuneLevel || petData.immuneLevel <= 0) petData.sick = true; } if (petData.clean < 40) petData.dirty = true; } else { petData.energy = Math.min(100, petData.energy + 1.5); if (Math.random() < 0.6) createFloatingZzz(); } updateUI();
+  if (!isSleeping) {
+    let d = 0.1; petData.food = Math.max(0, petData.food - d); petData.energy = Math.max(0, petData.energy - d); petData.clean = Math.max(0, petData.clean - d);
+    if (petData.food < 20 || petData.clean < 10) { if (!petData.immuneLevel || petData.immuneLevel <= 0) petData.sick = true; }
+    if (petData.clean < 40) petData.dirty = true;
+    // If all stats are high, slowly grow
+    if (petData.food > 70 && petData.clean > 70 && petData.energy > 70 && !petData.sick) {
+      addGrowthScore(0.5);
+    }
+  } else {
+    petData.energy = Math.min(100, petData.energy + 1.5);
+    if (Math.random() < 0.6) createFloatingZzz();
+  }
+  updateUI();
 }
 
 function toggleSleep() { isSleeping = !isSleeping; petData.isSleeping = isSleeping; savePetData(); let room = document.getElementById('room'); if (isSleeping) room.classList.add('dark'); else room.classList.remove('dark'); updatePetRender('pet-size', petData, isSleeping); }
@@ -2754,8 +2903,8 @@ function toggleShower() { isShowering = !isShowering; let sh = document.getEleme
 // ============================================================
 // SOAP DRAG
 // ============================================================
-let soapIcon = document.createElement('div'); soapIcon.innerHTML = '🧼'; soapIcon.style.position = 'absolute'; soapIcon.style.fontSize = '50px'; soapIcon.style.display = 'none'; soapIcon.style.pointerEvents = 'none'; soapIcon.style.zIndex = '9999'; soapIcon.style.transform = 'translate(-50%, -50%)'; document.body.appendChild(soapIcon);
-function toggleSoap() { isSoaping = !isSoaping; if (isSoaping) { createFloatingText("Geser sabun ke anabul! 🧼", "center"); soapIcon.style.display = 'block'; } else { soapIcon.style.display = 'none'; } }
+let soapIcon = document.createElement('div'); soapIcon.innerHTML = '[sabun]'; soapIcon.style.position = 'absolute'; soapIcon.style.fontSize = '32px'; soapIcon.style.fontWeight = 'bold'; soapIcon.style.color = '#74b9ff'; soapIcon.style.display = 'none'; soapIcon.style.pointerEvents = 'none'; soapIcon.style.zIndex = '9999'; soapIcon.style.transform = 'translate(-50%, -50%)'; soapIcon.style.background = '#fff'; soapIcon.style.padding = '4px 8px'; soapIcon.style.borderRadius = '8px'; soapIcon.style.border = '2px solid #74b9ff'; document.body.appendChild(soapIcon);
+function toggleSoap() { isSoaping = !isSoaping; if (isSoaping) { createFloatingText("Geser sabun ke anabul!", "center"); soapIcon.style.display = 'block'; } else { soapIcon.style.display = 'none'; } }
 
 document.addEventListener('DOMContentLoaded', () => {
   let roomEl = document.getElementById('room');
@@ -2765,15 +2914,86 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   initMakanan(); loadPetData(); buildPatternPicker();
 });
-function cleanPetLogic() { petData.clean = Math.min(100, petData.clean + 1.5); if (petData.clean >= 40) petData.dirty = false; if (petData.clean === 100) gainXP(1); updateUI(); }
+
+function cleanPetLogic() {
+  petData.clean = Math.min(100, petData.clean + 1.5);
+  if (petData.clean >= 40) petData.dirty = false;
+  if (petData.clean === 100) gainXP(1);
+  addGrowthScore(0.5);
+  updateUI();
+}
 
 // ============================================================
 // HELPER ANIMASI & EFEK
 // ============================================================
-function createFloatingText(msg, pos) { let f = document.createElement('div'); f.innerText = msg; f.style.position = 'absolute'; f.style.left = pos === 'center' ? '50%' : (Math.random() * 80 + 10) + '%'; f.style.top = '40%'; f.style.transform = 'translate(-50%, -50%)'; f.style.color = '#ff4757'; f.style.fontWeight = 'bold'; f.style.textShadow = '1px 1px 2px white'; f.style.zIndex = '1000'; f.style.transition = 'all 1s ease-out'; document.body.appendChild(f); setTimeout(() => { f.style.top = '30%'; f.style.opacity = '0'; }, 50); setTimeout(() => f.remove(), 1000); }
+function createFloatingText(msg, pos) { let f = document.createElement('div'); f.innerText = msg; f.style.position = 'absolute'; f.style.left = pos === 'center' ? '50%' : (Math.random() * 80 + 10) + '%'; f.style.top = '40%'; f.style.transform = 'translate(-50%, -50%)'; f.style.color = '#ff4757'; f.style.fontWeight = 'bold'; f.style.textShadow = '1px 1px 2px white'; f.style.zIndex = '1000'; f.style.transition = 'all 1s ease-out'; f.style.pointerEvents = 'none'; document.body.appendChild(f); setTimeout(() => { f.style.top = '30%'; f.style.opacity = '0'; }, 50); setTimeout(() => f.remove(), 1000); }
 function createFloatingZzz() { createFloatingText("Zzz...", "random"); }
 function triggerPetAnimation(type) { let svg = document.querySelector('#pet-render .pet-svg'); if (!svg) return; svg.classList.add('anim-' + type); setTimeout(() => svg.classList.remove('anim-' + type), 800); }
-function createBubble(x, y) { let b = document.createElement('div'); b.innerText = '🫧'; b.style.position = 'absolute'; b.style.left = (x - 10) + 'px'; b.style.top = (y - 10) + 'px'; b.style.fontSize = (15 + Math.random() * 15) + 'px'; b.style.pointerEvents = 'none'; b.style.zIndex = '9998'; b.style.transition = 'all 0.8s ease-out'; document.body.appendChild(b); setTimeout(() => { b.style.top = (y - 50) + 'px'; b.style.opacity = '0'; }, 50); setTimeout(() => b.remove(), 800); }
+function createBubble(x, y) { let b = document.createElement('div'); b.innerText = 'O'; b.style.position = 'absolute'; b.style.left = (x - 10) + 'px'; b.style.top = (y - 10) + 'px'; b.style.fontSize = (15 + Math.random() * 15) + 'px'; b.style.color = '#74b9ff'; b.style.pointerEvents = 'none'; b.style.zIndex = '9998'; b.style.transition = 'all 0.8s ease-out'; b.style.borderRadius = '50%'; b.style.border = '2px solid #74b9ff'; b.style.width = '20px'; b.style.height = '20px'; b.style.display = 'flex'; b.style.alignItems = 'center'; b.style.justifyContent = 'center'; document.body.appendChild(b); setTimeout(() => { b.style.top = (y - 50) + 'px'; b.style.opacity = '0'; }, 50); setTimeout(() => b.remove(), 800); }
+
+// ============================================================
+// ITEM PREVIEW MODAL
+// ============================================================
+function openItemPreview(category, itemId) {
+  let item;
+  if (category === 'clothes') item = allShopItems.clothes.find(i => i.id === itemId);
+  else if (category === 'skin') item = allShopItems.skin.find(i => i.id === itemId);
+  if (!item) return;
+
+  // Build preview HTML
+  let petPreviewSvg = getPetSvgString(
+    petData.type,
+    petData.baseColor,
+    category === 'clothes' ? itemId : petData.activeClothes,
+    false,
+    petData.petPattern || 'none',
+    petData.petPatternColor || '#ff7675'
+  );
+  let accSvg = category === 'skin' ? item.svg : (allShopItems.skin.find(a => a.id === petData.activeAcc) ? allShopItems.skin.find(a => a.id === petData.activeAcc).svg : '');
+
+  let isOwned = petData.ownedItems.includes(itemId) || item.cost === 0;
+  let canAfford = petData.coins >= item.cost;
+  let isLocked = petData.level < item.reqLvl;
+
+  let modal = document.getElementById('item-preview-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'item-preview-modal';
+    modal.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9000;display:flex;align-items:center;justify-content:center;`;
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:16px;padding:20px;max-width:320px;width:90%;text-align:center;position:relative;">
+      <div style="font-size:16px;font-weight:800;margin-bottom:10px;color:#2d3436;">${item.name}</div>
+      <div style="position:relative;width:120px;height:120px;margin:0 auto 12px;border:3px solid #dfe6e9;border-radius:50%;overflow:hidden;background:#f5f6fa;">
+        <div style="width:100%;height:100%;">${petPreviewSvg}</div>
+        <div style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;">${accSvg ? `<svg viewBox="0 0 100 100" style="width:100%;height:100%;">${accSvg}</svg>` : ''}</div>
+      </div>
+      <div style="font-size:12px;color:#636e72;margin-bottom:8px;">
+        ${item.rare ? '<span style="color:#e17055;font-weight:bold;">ITEM LANGKA</span><br>' : ''}
+        Harga: <b>${item.cost} koin</b> | Req Level: <b>${item.reqLvl}</b>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        ${isOwned
+          ? `<button onclick="equipItem('${category}','${itemId}');closeItemPreview();" style="background:#00b894;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;cursor:pointer;">PAKAI SEKARANG</button>`
+          : isLocked
+            ? `<button disabled style="background:#b2bec3;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;">Butuh Level ${item.reqLvl}</button>`
+            : !canAfford
+              ? `<button disabled style="background:#b2bec3;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;">Koin Kurang</button>`
+              : `<button onclick="buyItem('${category}','${itemId}',${item.cost});closeItemPreview();" style="background:#6c5ce7;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;cursor:pointer;">BELI ${item.cost} koin</button>`
+        }
+        <button onclick="closeItemPreview()" style="background:#dfe6e9;color:#2d3436;border:none;padding:10px 16px;border-radius:10px;font-weight:bold;cursor:pointer;">TUTUP</button>
+      </div>
+    </div>
+  `;
+  modal.style.display = 'flex';
+}
+
+function closeItemPreview() {
+  let modal = document.getElementById('item-preview-modal');
+  if (modal) modal.style.display = 'none';
+}
 
 // ============================================================
 // SHOP & INVENTORY
@@ -2802,7 +3022,7 @@ function generateShopUI() {
     });
     sortedItems.forEach(item => {
       let isOwned = petData.ownedItems.includes(item.id) || item.cost === 0; let canAfford = petData.coins >= item.cost; let isLocked = petData.level < item.reqLvl;
-      let btnText = isOwned ? 'PAKAI' : (isLocked ? `Lv.${item.reqLvl}` : `BELI (${item.cost}🪙)`);
+      let btnText = isOwned ? 'PAKAI' : (isLocked ? `Lv.${item.reqLvl}` : `BELI (${item.cost})`);
       let btnState = isOwned ? `onclick="equipItem('${category}', '${item.id}')"` : (isLocked || !canAfford ? 'disabled' : `onclick="buyItem('${category}', '${item.id}', ${item.cost})"`);
       let isEquipped = false;
       if (category === 'clothes' && petData.activeClothes === item.id) isEquipped = true;
@@ -2812,10 +3032,13 @@ function generateShopUI() {
       if (category === 'furniture') { if (petData.furniture.left.id === item.id || petData.furniture.right.id === item.id) btnText = "DIPAKAI (GANTI)"; }
       else if (isEquipped) { btnText = "DIPAKAI"; btnState = "disabled"; }
       let borderStyle = item.rare ? 'border: 2px dashed #ff9f43; background: rgba(255,159,67,0.1);' : (isOwned ? 'border: 2px solid #2ed573;' : '');
-      let visual = category === 'bg' ? `<div style="width:40px;height:40px;border-radius:8px;${item.css}"></div>` : (item.svg ? `<svg viewBox="0 0 100 100" width="40" height="40">${item.svg}</svg>` : `<div style="font-size:24px;">${item.val ? '🛏️' : '📦'}</div>`);
+      let visual = category === 'bg' ? `<div style="width:40px;height:40px;border-radius:8px;${item.css}"></div>` : (item.svg ? `<svg viewBox="0 0 100 100" width="40" height="40">${item.svg}</svg>` : `<div style="font-size:24px;">${item.val ? 'kasur' : 'item'}</div>`);
+      // Preview button for clothes & accessories
+      let previewBtn = (category === 'clothes' || category === 'skin') && item.id !== 'none'
+        ? `<button class="shop-btn" style="width:100%;background:#a29bfe;margin-bottom:2px;font-size:9px;" onclick="openItemPreview('${category}','${item.id}')">PREVIEW</button>` : '';
       let tradeBtn = ""; let hasGuest = document.getElementById('guest-wrapper') && document.getElementById('guest-wrapper').style.display === 'flex';
       if (item.rare && isOwned && item.id !== 'none' && hasGuest) { tradeBtn = `<button class="shop-btn btn-orange" style="width:100%; margin-top:2px; font-size:9px;" onclick="openTradeModal('${category}', '${item.id}')">JUAL KE TEMAN</button>`; }
-      htmlArray.push(`<div class="shop-item ${isOwned ? 'owned' : ''} ${isLocked ? 'locked' : ''}" style="${borderStyle}">${isLocked ? `<div class="lock-badge">Lv.${item.reqLvl}</div>` : ''}${visual}<span style="font-size:10px;font-weight:bold;margin-top:5px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;">${item.name}</span><button class="shop-btn" ${btnState} style="width:100%;">${btnText}</button>${tradeBtn}</div>`);
+      htmlArray.push(`<div class="shop-item ${isOwned ? 'owned' : ''} ${isLocked ? 'locked' : ''}" style="${borderStyle}">${isLocked ? `<div class="lock-badge">Lv.${item.reqLvl}</div>` : ''}${visual}<span style="font-size:10px;font-weight:bold;margin-top:5px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;">${item.name}</span>${previewBtn}<button class="shop-btn" ${btnState} style="width:100%;">${btnText}</button>${tradeBtn}</div>`);
     });
     container.innerHTML = htmlArray.join('');
   });
@@ -2838,10 +3061,12 @@ function generateInventoryUI() {
       if (category === 'furniture') { if (petData.furniture.left.id === item.id || petData.furniture.right.id === item.id) btnText = "DIPAKAI (GANTI)"; }
       else if (isEquipped) { btnText = "DIPAKAI"; btnState = "disabled"; }
       let borderStyle = item.rare ? 'border: 2px dashed #ff9f43; background: rgba(255,159,67,0.1);' : 'border: 2px solid #2ed573;';
-      let visual = category === 'bg' ? `<div style="width:40px;height:40px;border-radius:8px;${item.css}"></div>` : (item.svg ? `<svg viewBox="0 0 100 100" width="40" height="40">${item.svg}</svg>` : `<div style="font-size:24px;">${item.val ? '🛏️' : '📦'}</div>`);
+      let visual = category === 'bg' ? `<div style="width:40px;height:40px;border-radius:8px;${item.css}"></div>` : (item.svg ? `<svg viewBox="0 0 100 100" width="40" height="40">${item.svg}</svg>` : `<div style="font-size:24px;">${item.val ? 'kasur' : 'item'}</div>`);
+      let previewBtn = (category === 'clothes' || category === 'skin') && item.id !== 'none'
+        ? `<button class="shop-btn" style="width:100%;background:#a29bfe;margin-bottom:2px;font-size:9px;" onclick="openItemPreview('${category}','${item.id}')">PREVIEW</button>` : '';
       let tradeBtn = ""; let hasGuest = document.getElementById('guest-wrapper') && document.getElementById('guest-wrapper').style.display === 'flex';
       if (item.rare && item.id !== 'none' && hasGuest) { tradeBtn = `<button class="shop-btn btn-orange" style="width:100%; margin-top:2px; font-size:9px;" onclick="openTradeModal('${category}', '${item.id}')">JUAL KE TEMAN</button>`; }
-      htmlArray.push(`<div class="shop-item owned" style="${borderStyle}">${visual}<span style="font-size:10px;font-weight:bold;margin-top:5px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;">${item.name}</span><button class="shop-btn" ${btnState} style="width:100%;">${btnText}</button>${tradeBtn}</div>`);
+      htmlArray.push(`<div class="shop-item owned" style="${borderStyle}">${visual}<span style="font-size:10px;font-weight:bold;margin-top:5px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;">${item.name}</span>${previewBtn}<button class="shop-btn" ${btnState} style="width:100%;">${btnText}</button>${tradeBtn}</div>`);
     });
     if (ownedItems.length === 0) container.innerHTML = `<div style="width:100%; text-align:center; font-size:12px; color:#636e72; padding:20px;">Belum ada item di kategori ini. Beli di toko dulu yuk!</div>`;
     else container.innerHTML = htmlArray.join('');
@@ -2861,20 +3086,145 @@ function equipItem(category, id) {
 }
 
 // ============================================================
-// FURNITURE
+// FURNITURE - Extended: Album on Wall, Edit/Delete/Resize
 // ============================================================
-function confirmEquipFurniture(side) { petData.furniture[side].id = tempFurnitureEquipId; document.getElementById('furniture-pos-modal').classList.remove('active'); savePetData(); renderFurnitureRoom(); generateShopUI(); generateInventoryUI(); }
+function confirmEquipFurniture(side) {
+  petData.furniture[side].id = tempFurnitureEquipId;
+  document.getElementById('furniture-pos-modal').classList.remove('active');
+  savePetData(); renderFurnitureRoom(); generateShopUI(); generateInventoryUI();
+}
+
+function removeFurniture(side) {
+  petData.furniture[side].id = 'none';
+  petData.furniture[side].scale = 1;
+  savePetData(); renderFurnitureRoom(); generateShopUI(); generateInventoryUI();
+}
 
 function renderFurnitureRoom(customFurnData = null) {
   let fData = customFurnData || petData.furniture; if (!fData) return;
+
+  // ---- LEFT FURNITURE ----
   let leftCont = document.getElementById('room-furniture-left');
-  if (leftCont) { let itemL = allShopItems.furniture.find(i => i.id === fData.left.id); if (itemL && itemL.id !== 'none') { if (itemL.id === 'furn_19' && fData.albumPic) { leftCont.innerHTML = `<img src="${fData.albumPic}" class="album-photo-render furniture-item" style="transform: scale(${fData.left.scale || 1}) rotate(-5deg);">`; } else { leftCont.innerHTML = `<svg class="furniture-item" style="transform: scale(${fData.left.scale || 1});" viewBox="0 0 100 100" width="120" height="120">${itemL.svg}</svg>`; } } else leftCont.innerHTML = ''; }
+  if (leftCont) {
+    let itemL = allShopItems.furniture.find(i => i.id === fData.left.id);
+    if (itemL && itemL.id !== 'none') {
+      let isAlbum = itemL.id === 'furn_19';
+      if (isAlbum && fData.albumPic) {
+        leftCont.innerHTML = `
+          <div style="position:relative;display:inline-block;">
+            <div style="background:#fff;border:6px solid #c0a060;border-radius:4px;padding:4px;box-shadow:2px 2px 8px rgba(0,0,0,0.3);transform:rotate(-3deg) scale(${fData.left.scale || 1});transform-origin:center bottom;">
+              <img src="${fData.albumPic}" style="width:90px;height:90px;object-fit:cover;display:block;border-radius:2px;">
+            </div>
+            ${!customFurnData ? `
+            <div style="position:absolute;top:-10px;right:-10px;display:flex;gap:2px;">
+              <button onclick="scaleFurniture('left',0.1)" style="width:22px;height:22px;background:#00b894;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">+</button>
+              <button onclick="scaleFurniture('left',-0.1)" style="width:22px;height:22px;background:#fdcb6e;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">-</button>
+              <button onclick="removeFurniture('left')" style="width:22px;height:22px;background:#d63031;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">x</button>
+            </div>` : ''}
+          </div>`;
+      } else {
+        leftCont.innerHTML = `
+          <div style="position:relative;display:inline-block;">
+            <svg class="furniture-item" style="transform: scale(${fData.left.scale || 1});transform-origin:bottom center;" viewBox="0 0 100 100" width="120" height="120">${itemL.svg}</svg>
+            ${!customFurnData ? `
+            <div style="position:absolute;top:-10px;right:-10px;display:flex;gap:2px;">
+              <button onclick="scaleFurniture('left',0.1)" style="width:22px;height:22px;background:#00b894;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">+</button>
+              <button onclick="scaleFurniture('left',-0.1)" style="width:22px;height:22px;background:#fdcb6e;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">-</button>
+              <button onclick="removeFurniture('left')" style="width:22px;height:22px;background:#d63031;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">x</button>
+            </div>` : ''}
+          </div>`;
+      }
+    } else leftCont.innerHTML = '';
+  }
+
+  // ---- RIGHT FURNITURE ----
   let rightCont = document.getElementById('room-furniture-right');
-  if (rightCont) { let itemR = allShopItems.furniture.find(i => i.id === fData.right.id); if (itemR && itemR.id !== 'none') { if (itemR.id === 'furn_19' && fData.albumPic) { rightCont.innerHTML = `<img src="${fData.albumPic}" class="album-photo-render furniture-item" style="transform: scale(${fData.right.scale || 1}) rotate(5deg);">`; } else { rightCont.innerHTML = `<svg class="furniture-item" style="transform: scale(${fData.right.scale || 1}); transform-origin:bottom right;" viewBox="0 0 100 100" width="120" height="120">${itemR.svg}</svg>`; } } else rightCont.innerHTML = ''; }
-  if (!customFurnData && (fData.left.id !== 'none' || fData.right.id !== 'none')) { let ctrls = document.getElementById('furniture-controls'); if (ctrls) ctrls.style.display = 'flex'; } else { let ctrls = document.getElementById('furniture-controls'); if (ctrls) ctrls.style.display = 'none'; }
+  if (rightCont) {
+    let itemR = allShopItems.furniture.find(i => i.id === fData.right.id);
+    if (itemR && itemR.id !== 'none') {
+      let isAlbum = itemR.id === 'furn_19';
+      if (isAlbum && fData.albumPic) {
+        rightCont.innerHTML = `
+          <div style="position:relative;display:inline-block;">
+            <div style="background:#fff;border:6px solid #c0a060;border-radius:4px;padding:4px;box-shadow:2px 2px 8px rgba(0,0,0,0.3);transform:rotate(3deg) scale(${fData.right.scale || 1});transform-origin:center bottom;">
+              <img src="${fData.albumPic}" style="width:90px;height:90px;object-fit:cover;display:block;border-radius:2px;">
+            </div>
+            ${!customFurnData ? `
+            <div style="position:absolute;top:-10px;right:-10px;display:flex;gap:2px;">
+              <button onclick="scaleFurniture('right',0.1)" style="width:22px;height:22px;background:#00b894;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">+</button>
+              <button onclick="scaleFurniture('right',-0.1)" style="width:22px;height:22px;background:#fdcb6e;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">-</button>
+              <button onclick="removeFurniture('right')" style="width:22px;height:22px;background:#d63031;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">x</button>
+            </div>` : ''}
+          </div>`;
+      } else {
+        rightCont.innerHTML = `
+          <div style="position:relative;display:inline-block;">
+            <svg class="furniture-item" style="transform: scale(${fData.right.scale || 1});transform-origin:bottom center;" viewBox="0 0 100 100" width="120" height="120">${itemR.svg}</svg>
+            ${!customFurnData ? `
+            <div style="position:absolute;top:-10px;right:-10px;display:flex;gap:2px;">
+              <button onclick="scaleFurniture('right',0.1)" style="width:22px;height:22px;background:#00b894;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">+</button>
+              <button onclick="scaleFurniture('right',-0.1)" style="width:22px;height:22px;background:#fdcb6e;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">-</button>
+              <button onclick="removeFurniture('right')" style="width:22px;height:22px;background:#d63031;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;font-weight:bold;">x</button>
+            </div>` : ''}
+          </div>`;
+      }
+    } else rightCont.innerHTML = '';
+  }
+
+  // ---- ALBUM ON WALL (dinding) ----
+  renderWallAlbum(customFurnData);
 }
 
-function scaleFurniture(side, amount) { let current = petData.furniture[side].scale || 1; let next = current + amount; if (next >= 0.5 && next <= 2.5) { petData.furniture[side].scale = parseFloat(next.toFixed(1)); renderFurnitureRoom(); savePetData(); } }
+// Album di dinding - tampilkan sebagai frame di atas ruangan
+function renderWallAlbum(customFurnData) {
+  let fData = customFurnData || petData.furniture;
+  let wallAlbumEl = document.getElementById('room-wall-album');
+  if (!wallAlbumEl) return;
+
+  // Check if album is equipped on either side and has a pic
+  let hasAlbumLeft = fData.left && fData.left.id === 'furn_19' && fData.albumPic;
+  let hasAlbumRight = fData.right && fData.right.id === 'furn_19' && fData.albumPic;
+
+  if ((hasAlbumLeft || hasAlbumRight) && fData.albumPic) {
+    let s = hasAlbumLeft ? (fData.left.scale || 1) : (fData.right.scale || 1);
+    wallAlbumEl.innerHTML = `
+      <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;z-index:5;">
+        <!-- Gantungan foto di dinding -->
+        <div style="width:2px;height:18px;background:#8B6914;"></div>
+        <div style="transform:scale(${s});transform-origin:top center;transition:transform 0.3s;">
+          <div style="background:#fff;border:8px solid #c0a060;border-radius:3px;padding:4px;box-shadow:0 4px 15px rgba(0,0,0,0.3);position:relative;">
+            <img src="${fData.albumPic}" style="width:100px;height:100px;object-fit:cover;display:block;">
+            <div style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:12px;height:8px;background:#c0a060;border-radius:2px 2px 0 0;"></div>
+          </div>
+        </div>
+        ${!customFurnData ? `<div style="display:flex;gap:4px;margin-top:4px;">
+          <button onclick="scaleWallAlbum(0.1)" style="padding:2px 8px;background:#00b894;color:#fff;border:none;border-radius:6px;font-size:10px;cursor:pointer;">+ besar</button>
+          <button onclick="scaleWallAlbum(-0.1)" style="padding:2px 8px;background:#fdcb6e;color:#fff;border:none;border-radius:6px;font-size:10px;cursor:pointer;">- kecil</button>
+          <button onclick="removeWallAlbum()" style="padding:2px 8px;background:#d63031;color:#fff;border:none;border-radius:6px;font-size:10px;cursor:pointer;">hapus</button>
+        </div>` : ''}
+      </div>`;
+    wallAlbumEl.style.display = 'block';
+  } else {
+    wallAlbumEl.innerHTML = '';
+    wallAlbumEl.style.display = 'none';
+  }
+}
+
+function scaleWallAlbum(amount) {
+  let side = petData.furniture.left && petData.furniture.left.id === 'furn_19' ? 'left' : 'right';
+  scaleFurniture(side, amount);
+}
+
+function removeWallAlbum() {
+  if (petData.furniture.left && petData.furniture.left.id === 'furn_19') petData.furniture.left.id = 'none';
+  if (petData.furniture.right && petData.furniture.right.id === 'furn_19') petData.furniture.right.id = 'none';
+  savePetData(); renderFurnitureRoom();
+}
+
+function scaleFurniture(side, amount) {
+  let current = petData.furniture[side].scale || 1; let next = current + amount;
+  if (next >= 0.3 && next <= 2.5) { petData.furniture[side].scale = parseFloat(next.toFixed(1)); renderFurnitureRoom(); savePetData(); }
+}
 
 // ============================================================
 // CROP ALBUM FOTO
@@ -2943,17 +3293,17 @@ function openTradeModal(category, itemId) {
 function listenTradeSystem(tradeData) {
   let myRole = anabulIsHost ? 'host' : 'guest';
   if (tradeData.status === 'pending' && tradeData.seller !== myRole) {
-    database.ref(`anabul_rooms/${anabulRoomCode}/trade/status`).set('viewed'); let item = allShopItems[tradeData.category].find(i => i.id === tradeData.itemId); let konfirmasi = confirm(`Temanmu menawarkan ${item.name} seharga ${tradeData.price}🪙. Apakah kamu mau membelinya?`);
+    database.ref(`anabul_rooms/${anabulRoomCode}/trade/status`).set('viewed'); let item = allShopItems[tradeData.category].find(i => i.id === tradeData.itemId); let konfirmasi = confirm(`Temanmu menawarkan ${item.name} seharga ${tradeData.price} koin. Apakah kamu mau membelinya?`);
     if (konfirmasi) { if (petData.coins >= tradeData.price) { petData.coins -= tradeData.price; petData.ownedItems.push(tradeData.itemId); savePetData(); updateUI(); database.ref(`anabul_rooms/${anabulRoomCode}/trade/status`).set('accepted'); } else { alert("Koin kamu tidak cukup!"); database.ref(`anabul_rooms/${anabulRoomCode}/trade/status`).set('rejected'); } } else { database.ref(`anabul_rooms/${anabulRoomCode}/trade/status`).set('rejected'); }
   } else if (tradeData.status === 'accepted' && tradeData.seller === myRole) {
     petData.coins += tradeData.price; petData.ownedItems = petData.ownedItems.filter(id => id !== tradeData.itemId);
     if (petData.activeClothes === tradeData.itemId) petData.activeClothes = 'none'; if (petData.activeBg === tradeData.itemId) petData.activeBg = 'bg-default'; if (petData.activeAcc === tradeData.itemId) petData.activeAcc = 'none';
-    savePetData(); updateUI(); generateShopUI(); generateInventoryUI(); alert(`Item sukses terjual! Anda mendapatkan +${tradeData.price}🪙!`); database.ref(`anabul_rooms/${anabulRoomCode}/trade`).remove();
+    savePetData(); updateUI(); generateShopUI(); generateInventoryUI(); alert(`Item sukses terjual! Anda mendapatkan +${tradeData.price} koin!`); database.ref(`anabul_rooms/${anabulRoomCode}/trade`).remove();
   } else if (tradeData.status === 'rejected') { alert("Penawaran perdagangan ditolak oleh teman atau dibatalkan."); database.ref(`anabul_rooms/${anabulRoomCode}/trade`).remove(); }
 }
 
 // ============================================================
-// MINIGAMES ENGINE - ENHANCED
+// MINIGAMES ENGINE - ENHANCED VISUALS, NO EMOJI
 // ============================================================
 let mgState = {};
 
@@ -2965,12 +3315,12 @@ function closeMiniGame() {
   if (mgState.audioSource) { try { mgState.audioSource.stop(); } catch(e){} mgState.audioSource = null; }
   if (anabulRoomCode && mgState.isRedLightRunning) { database.ref(`anabul_rooms/${anabulRoomCode}/minigame`).remove(); }
   if (mgState.racingInterval) clearInterval(mgState.racingInterval);
+  if (mgState.obstacleInterval) clearInterval(mgState.obstacleInterval);
   mgState = {};
 }
 
-function mgReward(coins, xp) { petData.coins += coins; gainXP(xp); createFloatingText(`+${coins}🪙 +${xp}XP`, "center"); }
+function mgReward(coins, xp) { petData.coins += coins; gainXP(xp); createFloatingText(`+${coins} koin +${xp}XP`, "center"); addGrowthScore(xp / 5); }
 
-// Helper: render pet SVG small for minigame scenes
 function getMgPetSvg(size, extraClass) {
   return `<div style="width:${size}px;height:${size}px;display:inline-block;" class="${extraClass||''}">${getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, petData.petPattern||'none', petData.petPatternColor||'#ff7675')}</div>`;
 }
@@ -2983,122 +3333,225 @@ function openMiniGame(type) {
   let box = document.getElementById('minigame-content'); mgState = { type, step: 0, clicks: 0 }; let html = '';
   let hasGuest = document.getElementById('guest-wrapper') && document.getElementById('guest-wrapper').style.display === 'flex';
 
-  // ---- MANCING (FISHING WITH VISUAL) ----
+  // ============================================================
+  // MANCING - Fishing with clean SVG visuals
+  // ============================================================
   if (type === 'mancing') {
     html = `
-    <div class="minigame-title">🎣 MANCING IKAN</div>
-    <div style="position:relative;width:100%;height:220px;background:linear-gradient(180deg,#87CEEB 0%,#87CEEB 50%,#1a6fa0 50%,#0a4a70 100%);border-radius:12px;overflow:hidden;margin-bottom:8px;">
-      <!-- clouds -->
-      <div style="position:absolute;top:10px;left:10%;width:60px;height:20px;background:#fff;border-radius:20px;opacity:0.8;"></div>
-      <div style="position:absolute;top:8px;left:55%;width:50px;height:18px;background:#fff;border-radius:20px;opacity:0.7;"></div>
-      <!-- dock -->
-      <div style="position:absolute;bottom:50%;left:10px;width:60px;height:10px;background:#8B4513;border-radius:4px;"></div>
-      <div style="position:absolute;bottom:calc(50% + 10px);left:25px;width:8px;height:30px;background:#8B4513;border-radius:4px;"></div>
-      <!-- pet fishing on dock -->
-      <div id="mg-pet-fish" style="position:absolute;bottom:50%;left:5px;width:55px;height:55px;">${getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, petData.petPattern||'none', petData.petPatternColor||'#ff7675')}</div>
-      <!-- fishing line -->
-      <svg id="fish-line-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;">
-        <line id="fish-line" x1="40" y1="110" x2="150" y2="160" stroke="#555" stroke-width="1.5"/>
-        <circle id="fish-bobber" cx="150" cy="160" r="5" fill="#e74c3c"/>
+    <div class="minigame-title" style="font-size:16px;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:8px;color:#0984e3;">MANCING IKAN</div>
+    <div style="position:relative;width:100%;height:230px;border-radius:14px;overflow:hidden;margin-bottom:8px;box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+      <!-- Sky -->
+      <div style="position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(180deg,#87CEEB,#c9e8f5);"></div>
+      <!-- Clouds SVG -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:55%;pointer-events:none;" viewBox="0 0 320 120">
+        <ellipse cx="60" cy="30" rx="35" ry="16" fill="#fff" opacity="0.85"/>
+        <ellipse cx="80" cy="22" rx="22" ry="14" fill="#fff" opacity="0.85"/>
+        <ellipse cx="220" cy="40" rx="28" ry="12" fill="#fff" opacity="0.7"/>
+        <ellipse cx="238" cy="32" rx="18" ry="11" fill="#fff" opacity="0.7"/>
       </svg>
-      <!-- fish -->
-      <div id="mg-fish" style="position:absolute;font-size:28px;bottom:15%;left:55%;transition:all 0.3s;">🐟</div>
-      <!-- big fish reward -->
-      <div id="mg-big-fish" style="position:absolute;font-size:40px;bottom:20%;left:40%;display:none;">🐠</div>
-      <!-- water bubbles -->
-      <div id="fish-bubbles" style="position:absolute;bottom:55%;width:100%;display:flex;justify-content:space-around;font-size:14px;opacity:0.6;">🫧🫧🫧🫧</div>
+      <!-- Water -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:46%;background:linear-gradient(180deg,#1a8fc1,#0a5478);overflow:hidden;">
+        <!-- Water waves -->
+        <svg style="position:absolute;top:0;left:0;width:100%;" viewBox="0 0 320 20" preserveAspectRatio="none">
+          <path d="M0 10 Q40 0 80 10 Q120 20 160 10 Q200 0 240 10 Q280 20 320 10 L320 0 L0 0Z" fill="rgba(255,255,255,0.15)"/>
+        </svg>
+        <!-- Fish -->
+        <div id="mg-fish" style="position:absolute;bottom:25%;left:55%;transition:all 0.4s;">
+          <svg viewBox="0 0 50 30" width="44" height="26">
+            <ellipse cx="22" cy="15" rx="16" ry="10" fill="#ff9f43"/>
+            <path d="M38 15 L50 5 L50 25 Z" fill="#ff7675"/>
+            <circle cx="10" cy="12" r="3" fill="#2d3436"/>
+            <circle cx="9" cy="11" r="1" fill="#fff"/>
+            <path d="M14 10 Q18 7 22 10" fill="none" stroke="#e17055" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <!-- Big fish (reward) -->
+        <div id="mg-big-fish" style="position:absolute;bottom:30%;left:35%;display:none;transition:all 0.5s;">
+          <svg viewBox="0 0 70 42" width="70" height="42">
+            <ellipse cx="30" cy="21" rx="24" ry="16" fill="#6c5ce7"/>
+            <ellipse cx="26" cy="18" rx="12" ry="8" fill="#a29bfe" opacity="0.5"/>
+            <path d="M54 21 L70 8 L70 34 Z" fill="#5f27cd"/>
+            <circle cx="12" cy="17" r="4" fill="#2d3436"/>
+            <circle cx="11" cy="16" r="1.5" fill="#fff"/>
+            <path d="M18 13 Q24 9 30 13" fill="none" stroke="#a29bfe" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <!-- Dock -->
+      <div style="position:absolute;bottom:44%;left:0;width:72px;height:12px;background:#8B4513;border-radius:0 4px 4px 0;box-shadow:0 2px 4px rgba(0,0,0,0.3);"></div>
+      <!-- Dock pillar -->
+      <div style="position:absolute;bottom:calc(44% + 12px);left:28px;width:10px;height:40px;background:#6B3410;border-radius:3px;"></div>
+      <!-- Pet on dock -->
+      <div id="mg-pet-fish" style="position:absolute;bottom:calc(44% + 10px);left:2px;width:58px;height:58px;">
+        ${getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, petData.petPattern||'none', petData.petPatternColor||'#ff7675')}
+      </div>
+      <!-- Fishing line SVG -->
+      <svg id="fish-line-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;">
+        <line id="fish-line" x1="38" y1="108" x2="170" y2="165" stroke="#555" stroke-width="1.5"/>
+        <circle id="fish-bobber" cx="170" cy="165" r="6" fill="#e74c3c" stroke="#c0392b" stroke-width="1.5"/>
+        <circle id="fish-bobber-white" cx="170" cy="163" r="3" fill="#fff" opacity="0.6"/>
+      </svg>
+      <!-- Depth lines in water -->
+      <svg style="position:absolute;bottom:0;left:0;width:100%;height:46%;pointer-events:none;" viewBox="0 0 320 110" preserveAspectRatio="none">
+        <path d="M0 20 Q80 12 160 20 Q240 28 320 20" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+        <path d="M0 45 Q80 37 160 45 Q240 53 320 45" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
+      </svg>
     </div>
-    <div class="mg-result" id="mg-result" style="font-weight:bold;margin-bottom:8px;">Tunggu ikan makan kail... 🎣</div>
-    <button class="mg-btn btn-blue" style="width:100%;height:65px;font-size:20px;" onclick="mgAction('mancing')">TARIK KAIL! 🎣</button>
+    <div id="mg-result" style="text-align:center;font-weight:800;font-size:13px;color:#0984e3;margin-bottom:8px;min-height:18px;">Menunggu ikan makan kail...</div>
+    <button style="width:100%;height:62px;background:linear-gradient(135deg,#0984e3,#74b9ff);color:#fff;border:none;border-radius:12px;font-size:18px;font-weight:900;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 12px rgba(9,132,227,0.4);active:transform:scale(0.97);" onclick="mgAction('mancing')">TARIK KAIL</button>
     `;
+    // Start fishing wait timer
     setTimeout(() => {
       if (!document.getElementById('mg-result')) return;
-      document.getElementById('mg-result').innerText = "IKAN MAKAN! TARIK SEKARANG! 🎣";
+      document.getElementById('mg-result').innerText = "IKAN MAKAN! TARIK SEKARANG!";
       document.getElementById('mg-result').style.color = "#00b894";
-      // bobber animation
       let bobber = document.getElementById('fish-bobber');
-      if (bobber) { bobber.setAttribute('cy', '165'); }
+      if (bobber) { bobber.setAttribute('cy', '170'); }
+      let bobbW = document.getElementById('fish-bobber-white');
+      if (bobbW) { bobbW.setAttribute('cy', '168'); }
       mgState.ready = true;
-    }, 1500 + Math.random() * 2000);
+    }, 1500 + Math.random() * 2500);
   }
 
-  // ---- LARI SOLO (PLATFORMER STYLE) ----
+  // ============================================================
+  // LARI SOLO - Obstacle runner, clean SVG
+  // ============================================================
   else if (type === 'lari-solo') {
     html = `
-    <div class="minigame-title">🏃 LOMPAT RINTANGAN</div>
-    <div style="position:relative;width:100%;height:160px;background:linear-gradient(180deg,#87CEEB 60%,#5D9E3B 60%,#4a8a2e 100%);border-radius:12px;overflow:hidden;margin-bottom:8px;">
-      <div style="position:absolute;top:12px;left:20%;width:40px;height:15px;background:#fff;border-radius:10px;opacity:0.8;"></div>
-      <div style="position:absolute;top:8px;left:60%;width:55px;height:18px;background:#fff;border-radius:10px;opacity:0.7;"></div>
-      <div id="mg-runner" style="position:absolute;bottom:40%;left:15%;width:50px;height:50px;transition:bottom 0.3s;">${getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, petData.petPattern||'none', petData.petPatternColor||'#ff7675')}</div>
-      <div id="mg-obstacle" style="position:absolute;bottom:38%;left:80%;font-size:32px;transition:left 1s linear;">🌵</div>
-      <div id="mg-score-display" style="position:absolute;top:8px;right:10px;background:rgba(0,0,0,0.4);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:bold;">0</div>
+    <div class="minigame-title" style="font-size:16px;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:8px;color:#00b894;">LOMPAT RINTANGAN</div>
+    <div style="position:relative;width:100%;height:165px;border-radius:14px;overflow:hidden;margin-bottom:8px;box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+      <!-- Sky gradient -->
+      <div style="position:absolute;top:0;left:0;right:0;height:60%;background:linear-gradient(180deg,#74b9ff 0%,#a8d8ea 100%);"></div>
+      <!-- Ground -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:42%;background:linear-gradient(180deg,#55a630,#3d8b2f);"></div>
+      <!-- Ground strip -->
+      <div style="position:absolute;bottom:40%;left:0;right:0;height:3px;background:#2d6a2d;"></div>
+      <!-- Clouds -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:55%;pointer-events:none;" viewBox="0 0 320 90">
+        <ellipse cx="70" cy="25" rx="30" ry="13" fill="#fff" opacity="0.8"/>
+        <ellipse cx="85" cy="18" rx="18" ry="12" fill="#fff" opacity="0.8"/>
+        <ellipse cx="240" cy="30" rx="24" ry="11" fill="#fff" opacity="0.65"/>
+      </svg>
+      <!-- Score display -->
+      <div id="mg-score-display" style="position:absolute;top:8px;right:10px;background:rgba(0,0,0,0.5);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:bold;">0</div>
+      <!-- Pet runner -->
+      <div id="mg-runner" style="position:absolute;bottom:40%;left:14%;width:52px;height:52px;transition:bottom 0.28s cubic-bezier(0.25,0.46,0.45,0.94);">
+        ${getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, petData.petPattern||'none', petData.petPatternColor||'#ff7675')}
+      </div>
+      <!-- Obstacle (cactus SVG) -->
+      <div id="mg-obstacle" style="position:absolute;bottom:38%;left:82%;transition:left 0.05s linear;">
+        <svg viewBox="0 0 30 50" width="28" height="46">
+          <rect x="11" y="5" width="8" height="40" rx="4" fill="#00b894"/>
+          <rect x="2" y="18" width="12" height="7" rx="3.5" fill="#00b894"/>
+          <rect x="16" y="24" width="12" height="7" rx="3.5" fill="#00b894"/>
+          <ellipse cx="15" cy="48" rx="10" ry="4" fill="#636e72" opacity="0.6"/>
+        </svg>
+      </div>
     </div>
-    <div class="mg-result" id="mg-result">Tap lompat sebelum kena kaktus!</div>
-    <button class="mg-btn btn-green" style="width:100%;height:65px;font-size:22px;" onclick="mgAction('lari-solo')">LOMPAT! 🦘</button>
+    <div id="mg-result" style="text-align:center;font-size:12px;color:#636e72;margin-bottom:8px;font-weight:600;">Tap tombol untuk melompat!</div>
+    <button style="width:100%;height:65px;background:linear-gradient(135deg,#00b894,#55efc4);color:#fff;border:none;border-radius:12px;font-size:20px;font-weight:900;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 12px rgba(0,184,148,0.4);" onclick="mgAction('lari-solo')">LOMPAT</button>
     `;
     setTimeout(() => { startObstacleLoop(); }, 500);
   }
 
-  // ---- PIANO BEAT (MUSIC FROM GALLERY) ----
+  // ============================================================
+  // PIANO BEAT - Clean lane design, beat detection
+  // ============================================================
   else if (type === 'piano') {
     html = `
-    <div class="minigame-title">🎹 PIANO BEATS ANABUL</div>
-    <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;align-items:center;">
-      <label class="mg-btn btn-blue" style="padding:8px 12px;font-size:12px;cursor:pointer;">🎵 Pilih Lagu<input type="file" accept="audio/*" id="piano-music-file" style="display:none" onchange="loadPianoMusic(this)"></label>
-      <span id="piano-song-name" style="font-size:11px;color:#636e72;flex:1;">Belum ada lagu dipilih</span>
+    <div class="minigame-title" style="font-size:16px;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:8px;color:#6c5ce7;">PIANO BEATS</div>
+    <!-- Song picker -->
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+      <label style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">
+        PILIH LAGU
+        <input type="file" accept="audio/*" id="piano-music-file" style="display:none" onchange="loadPianoMusic(this)">
+      </label>
+      <span id="piano-song-name" style="font-size:11px;color:#636e72;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">Belum ada lagu dipilih</span>
     </div>
-    <div style="position:relative;width:100%;height:30px;background:#2d3436;border-radius:6px;overflow:hidden;margin-bottom:6px;">
-      <div id="piano-beat-bar" style="position:absolute;left:0;top:0;height:100%;width:0%;background:linear-gradient(90deg,#00cec9,#6c5ce7);border-radius:6px;transition:width 0.1s;"></div>
-      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;font-size:11px;font-weight:bold;" id="piano-beat-label">BEAT</div>
+    <!-- Beat visualizer bar -->
+    <div style="width:100%;height:28px;background:#1e1e2e;border-radius:8px;overflow:hidden;margin-bottom:8px;position:relative;">
+      <div id="piano-beat-bar" style="position:absolute;left:0;top:0;height:100%;width:0%;background:linear-gradient(90deg,#6c5ce7,#a29bfe,#fd79a8);border-radius:8px;transition:width 0.06s;"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);font-size:10px;font-weight:700;letter-spacing:2px;">BEAT METER</div>
     </div>
-    <div id="piano-board" style="width:100%;height:200px;background:#2d3436;position:relative;overflow:hidden;border:2px solid #636e72;border-radius:8px;display:flex;">
-      <div style="flex:1;border-right:1px solid #636e72;"></div>
-      <div style="flex:1;border-right:1px solid #636e72;"></div>
-      <div style="flex:1;border-right:1px solid #636e72;"></div>
-      <div style="flex:1;"></div>
+    <!-- Piano lanes -->
+    <div id="piano-board" style="width:100%;height:195px;background:#1e1e2e;position:relative;overflow:hidden;border-radius:10px;border:2px solid #2d2d44;display:flex;box-shadow:0 4px 15px rgba(0,0,0,0.4);">
+      <div style="flex:1;border-right:1px solid rgba(255,255,255,0.08);position:relative;"></div>
+      <div style="flex:1;border-right:1px solid rgba(255,255,255,0.08);position:relative;"></div>
+      <div style="flex:1;border-right:1px solid rgba(255,255,255,0.08);position:relative;"></div>
+      <div style="flex:1;position:relative;"></div>
+      <!-- Hit zone line -->
+      <div style="position:absolute;bottom:42px;left:0;right:0;height:3px;background:rgba(255,255,255,0.15);"></div>
+      <!-- Hit zone labels -->
+      <div style="position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:space-around;">
+        <div style="width:24%;height:36px;background:rgba(108,92,231,0.3);border-radius:6px;border:2px solid rgba(108,92,231,0.5);"></div>
+        <div style="width:24%;height:36px;background:rgba(253,121,168,0.3);border-radius:6px;border:2px solid rgba(253,121,168,0.5);"></div>
+        <div style="width:24%;height:36px;background:rgba(0,184,148,0.3);border-radius:6px;border:2px solid rgba(0,184,148,0.5);"></div>
+        <div style="width:24%;height:36px;background:rgba(253,203,110,0.3);border-radius:6px;border:2px solid rgba(253,203,110,0.5);"></div>
+      </div>
     </div>
-    <div class="mg-result" id="mg-result" style="margin-top:6px;">Skor Piano: 0 | Pilih lagu dulu! 🎵</div>
+    <div id="mg-result" style="text-align:center;font-size:12px;color:#a29bfe;margin-top:6px;font-weight:700;min-height:16px;">Skor: 0 — Pilih lagu untuk mulai!</div>
     `;
   }
 
-  // ---- RED LIGHT GREEN LIGHT (SQUID GAME VISUAL) ----
+  // ============================================================
+  // RED LIGHT GREEN LIGHT - Squid Game visual, clean SVG
+  // ============================================================
   else if (type === 'squid') {
     if (!hasGuest) return alert("Mode Multi! Ajak teman visit rumahmu dulu!");
-    let myPetHtml = getMgPetSvg(50);
-    let guestPetHtml = `<div id="squid-guest-pet" style="width:50px;height:50px;display:inline-block;">${getMgGuestSvg(50)}</div>`;
     html = `
-    <div class="minigame-title">🟢 RED LIGHT GREEN LIGHT 🔴</div>
-    <!-- SQUID GAME ARENA -->
-    <div style="position:relative;width:100%;height:260px;background:linear-gradient(180deg,#87CEEB 0%,#87CEEB 55%,#8B7355 55%,#7a6145 100%);border-radius:12px;overflow:hidden;margin-bottom:8px;">
-      <!-- Sky elements -->
-      <div style="position:absolute;top:15px;left:15%;font-size:20px;">☁️</div>
-      <div style="position:absolute;top:8px;right:20%;font-size:16px;">☁️</div>
-      <!-- FINISH LINE -->
-      <div style="position:absolute;right:15px;top:0;bottom:45%;width:6px;background:repeating-linear-gradient(180deg,#e74c3c 0,#e74c3c 10px,#fff 10px,#fff 20px);"></div>
-      <div style="position:absolute;right:8px;top:10px;background:#e74c3c;color:#fff;font-size:9px;font-weight:bold;padding:2px 5px;border-radius:4px;">FINISH</div>
-      <!-- Doll (squid game doll) -->
-      <div id="squid-doll" style="position:absolute;right:28px;bottom:44%;font-size:42px;transition:transform 0.3s;">🪆</div>
-      <!-- Ground detail -->
-      <div style="position:absolute;bottom:45%;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,#fff 0,#fff 20px,#e74c3c 20px,#e74c3c 40px);opacity:0.4;"></div>
-      <!-- MY PET -->
-      <div id="squid-my-pet" style="position:absolute;bottom:45%;left:5%;width:50px;height:50px;transition:left 0.5s ease;">${myPetHtml}</div>
-      <!-- GUEST PET -->
-      <div id="squid-guest-pet-wrap" style="position:absolute;bottom:52%;left:8%;width:50px;height:50px;transition:left 0.5s ease;">${guestPetHtml}</div>
-      <!-- LIGHT INDICATOR -->
-      <div id="squid-light" style="position:absolute;top:10px;left:50%;transform:translateX(-50%);width:120px;padding:8px 0;font-weight:bold;font-size:13px;text-align:center;background:#636e72;color:#fff;border-radius:20px;">MENUNGGU...</div>
+    <div class="minigame-title" style="font-size:15px;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:8px;color:#d63031;">RED LIGHT — GREEN LIGHT</div>
+    <!-- Arena -->
+    <div style="position:relative;width:100%;height:255px;border-radius:14px;overflow:hidden;margin-bottom:8px;box-shadow:0 4px 20px rgba(0,0,0,0.25);">
+      <!-- Sky -->
+      <div style="position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(180deg,#dfe6e9,#b2bec3);"></div>
+      <!-- Ground -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:46%;background:linear-gradient(180deg,#a0856a,#8B7355);"></div>
+      <div style="position:absolute;bottom:44%;left:0;right:0;height:3px;background:#7a6145;"></div>
       <!-- Distance markers -->
-      <div style="position:absolute;bottom:43%;left:0;right:0;display:flex;justify-content:space-between;padding:0 10px;font-size:9px;color:#636e72;opacity:0.7;">
-        <span>0m</span><span>12m</span><span>25m</span><span>38m</span><span>50m</span>
+      <div style="position:absolute;bottom:43%;left:0;right:0;display:flex;justify-content:space-between;padding:0 10px;">
+        ${[0,12,25,38,50].map(m => `<div style="width:2px;height:10px;background:rgba(255,255,255,0.5);"></div>`).join('')}
       </div>
+      <!-- Finish line (striped) -->
+      <div style="position:absolute;right:18px;top:0;bottom:45%;width:8px;background:repeating-linear-gradient(180deg,#e74c3c 0,#e74c3c 8px,#fff 8px,#fff 16px);"></div>
+      <!-- FINISH label -->
+      <div style="position:absolute;right:8px;top:10px;background:#e74c3c;color:#fff;font-size:9px;font-weight:800;padding:3px 5px;border-radius:4px;letter-spacing:0.5px;">FINISH</div>
+      <!-- Doll SVG (squid game style) -->
+      <div id="squid-doll" style="position:absolute;right:28px;bottom:44%;transition:transform 0.4s;">
+        <svg viewBox="0 0 40 56" width="38" height="52">
+          <!-- body -->
+          <ellipse cx="20" cy="40" rx="13" ry="16" fill="#fdcb6e"/>
+          <!-- dress (triangle) -->
+          <polygon points="7,34 33,34 26,55 14,55" fill="#e17055"/>
+          <!-- head -->
+          <circle cx="20" cy="18" r="13" fill="#fdcb6e"/>
+          <!-- pigtails -->
+          <circle cx="7" cy="10" r="4" fill="#fdcb6e"/>
+          <circle cx="33" cy="10" r="4" fill="#fdcb6e"/>
+          <!-- eyes (open) -->
+          <circle cx="15" cy="17" r="2.5" fill="#2d3436"/>
+          <circle cx="25" cy="17" r="2.5" fill="#2d3436"/>
+          <!-- smile -->
+          <path d="M14 23 Q20 28 26 23" fill="none" stroke="#d63031" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <!-- MY PET -->
+      <div id="squid-my-pet" style="position:absolute;bottom:44%;left:5%;width:50px;height:50px;transition:left 0.45s ease;">
+        ${getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, petData.petPattern||'none', petData.petPatternColor||'#ff7675')}
+      </div>
+      <!-- GUEST PET -->
+      <div id="squid-guest-pet-wrap" style="position:absolute;bottom:51%;left:8%;width:48px;height:48px;transition:left 0.45s ease;">
+        ${getMgGuestSvg(48)}
+      </div>
+      <!-- Light indicator (styled) -->
+      <div id="squid-light" style="position:absolute;top:8px;left:50%;transform:translateX(-50%);min-width:140px;padding:8px 14px;font-weight:900;font-size:12px;text-align:center;background:#636e72;color:#fff;border-radius:20px;letter-spacing:1px;text-shadow:0 1px 2px rgba(0,0,0,0.3);box-shadow:0 2px 8px rgba(0,0,0,0.2);">MENUNGGU...</div>
     </div>
-    <div class="mg-result" id="mg-result">Jarak: 0m / 50m</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
-      <button class="mg-btn btn-green" id="squid-move-btn" style="height:60px;font-size:18px;" onclick="mgAction('squid-step')">MAJU 🏃</button>
-      <button class="mg-btn btn-red" style="height:60px;font-size:18px;" onclick="mgAction('squid-stop')">BERHENTI ✋</button>
+    <div id="mg-result" style="text-align:center;font-size:12px;font-weight:700;color:#636e72;margin-bottom:6px;">Jarak: 0m / 50m</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button id="squid-move-btn" style="height:58px;background:linear-gradient(135deg,#00b894,#55efc4);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:900;cursor:pointer;letter-spacing:1px;box-shadow:0 3px 10px rgba(0,184,148,0.3);" onclick="mgAction('squid-step')">MAJU</button>
+      <button style="height:58px;background:linear-gradient(135deg,#d63031,#ff7675);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:900;cursor:pointer;letter-spacing:1px;box-shadow:0 3px 10px rgba(214,48,49,0.3);" onclick="mgAction('squid-stop')">BERHENTI</button>
     </div>
     `;
     setTimeout(() => { startRedLightGreenLightEngine(); }, 200);
-    // Listen for guest movement via firebase
     if (anabulRoomRef) {
       anabulRoomRef.child('minigame_player').on('value', snap => {
         if (!snap.exists()) return;
@@ -3112,54 +3565,69 @@ function openMiniGame(type) {
     }
   }
 
-  // ---- LOMBA LARI RACING (VISUAL) ----
+  // ============================================================
+  // LOMBA LARI RACING - SVG track, clean look
+  // ============================================================
   else if (type === 'lomba-lari') {
     if (!hasGuest) return alert("Mode Multi! Ajak teman visit rumahmu dulu!");
     html = `
-    <div class="minigame-title">🏁 LOMBA LARI vs TEMAN</div>
-    <!-- RACING TRACK -->
-    <div style="position:relative;width:100%;height:220px;background:linear-gradient(180deg,#87CEEB 0%,#87CEEB 45%,#4a8a2e 45%,#5D9E3B 60%,#d4a96a 60%,#c49a55 100%);border-radius:12px;overflow:hidden;margin-bottom:8px;">
-      <!-- Clouds -->
-      <div style="position:absolute;top:8px;left:10%;font-size:18px;">☁️</div>
-      <div style="position:absolute;top:5px;right:15%;font-size:14px;">☁️</div>
+    <div class="minigame-title" style="font-size:16px;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:8px;color:#e17055;">LOMBA LARI</div>
+    <!-- Race track -->
+    <div style="position:relative;width:100%;height:215px;border-radius:14px;overflow:hidden;margin-bottom:8px;box-shadow:0 4px 20px rgba(0,0,0,0.18);">
+      <!-- Background sky -->
+      <div style="position:absolute;top:0;left:0;right:0;height:45%;background:linear-gradient(180deg,#74b9ff,#c9e8f5);"></div>
+      <!-- Hills -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:45%;pointer-events:none;" viewBox="0 0 320 100" preserveAspectRatio="none">
+        <path d="M0 70 Q80 30 160 60 Q240 90 320 45 L320 100 L0 100Z" fill="#5D9E3B" opacity="0.5"/>
+        <ellipse cx="55" cy="20" rx="28" ry="12" fill="#fff" opacity="0.7"/>
+        <ellipse cx="68" cy="14" rx="18" ry="10" fill="#fff" opacity="0.7"/>
+        <ellipse cx="240" cy="25" rx="22" ry="10" fill="#fff" opacity="0.6"/>
+      </svg>
+      <!-- Track -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:56%;background:linear-gradient(180deg,#5D9E3B 0%,#4a8a2e 30%,#c49a55 30%,#d4a96a 100%);"></div>
+      <!-- Track lane lines -->
+      <div style="position:absolute;bottom:55%;left:0;right:0;height:3px;background:rgba(255,255,255,0.4);"></div>
+      <div style="position:absolute;bottom:40%;left:0;right:0;height:2px;background:rgba(255,255,255,0.25);"></div>
+      <!-- Lane numbers -->
+      <div style="position:absolute;left:4px;bottom:48%;color:#fff;font-size:10px;font-weight:700;opacity:0.8;">1</div>
+      <div style="position:absolute;left:4px;bottom:58%;color:#fff;font-size:10px;font-weight:700;opacity:0.8;">2</div>
       <!-- Finish line -->
-      <div style="position:absolute;right:20px;top:0;bottom:38%;width:8px;background:repeating-linear-gradient(180deg,#000 0,#000 8px,#fff 8px,#fff 16px);"></div>
-      <div style="position:absolute;right:10px;top:8px;background:#000;color:#fff;font-size:8px;font-weight:bold;padding:2px 4px;border-radius:3px;">🏁FINISH</div>
-      <!-- Track lane markers -->
-      <div style="position:absolute;bottom:40%;left:0;right:0;height:3px;background:rgba(255,255,255,0.5);"></div>
-      <div style="position:absolute;bottom:60%;left:0;right:0;height:3px;background:rgba(255,255,255,0.5);"></div>
+      <div style="position:absolute;right:22px;top:0;bottom:37%;width:10px;background:repeating-linear-gradient(180deg,#000 0,#000 8px,#fff 8px,#fff 16px);"></div>
+      <!-- Finish flag -->
+      <svg style="position:absolute;right:12px;top:5px;" viewBox="0 0 20 32" width="20" height="32">
+        <rect x="9" y="0" width="2" height="32" fill="#2d3436"/>
+        <polygon points="11,0 25,8 11,16" fill="#e74c3c"/>
+        <polygon points="11,0 25,8 25,0" fill="#fff"/>
+      </svg>
       <!-- MY PET (lower lane) -->
-      <div id="race-my-pet" style="position:absolute;bottom:39%;left:5%;width:55px;height:55px;transition:left 0.2s ease;">${getMgPetSvg(55, 'mg-running')}</div>
-      <!-- GUEST PET (upper lane) -->
-      <div id="race-guest-pet" style="position:absolute;bottom:58%;left:5%;width:50px;height:50px;transition:left 0.5s ease;">${getMgGuestSvg(50)}</div>
-      <!-- Lap counter/scoreboard -->
-      <div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.5);color:#fff;font-size:11px;padding:4px 8px;border-radius:8px;">
-        <span id="race-my-label" style="color:#74b9ff;">Kamu: 0m</span><br>
-        <span id="race-guest-label" style="color:#ff7675;">Teman: 0m</span>
+      <div id="race-my-pet" style="position:absolute;bottom:38%;left:5%;width:55px;height:55px;transition:left 0.18s ease;">
+        ${getMgPetSvg(55, 'mg-running')}
       </div>
-      <!-- Track number indicators -->
-      <div style="position:absolute;left:4px;bottom:45%;color:#fff;font-size:10px;opacity:0.8;">1</div>
-      <div style="position:absolute;left:4px;bottom:63%;color:#fff;font-size:10px;opacity:0.8;">2</div>
+      <!-- GUEST PET (upper lane) -->
+      <div id="race-guest-pet" style="position:absolute;bottom:54%;left:5%;width:50px;height:50px;transition:left 0.45s ease;">
+        ${getMgGuestSvg(50)}
+      </div>
+      <!-- Live scoreboard -->
+      <div style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.55);color:#fff;font-size:10px;padding:5px 8px;border-radius:8px;line-height:1.6;">
+        <div id="race-my-label" style="color:#74b9ff;font-weight:700;">Kamu: 0m</div>
+        <div id="race-guest-label" style="color:#ff7675;font-weight:700;">Teman: 0m</div>
+      </div>
     </div>
-    <div class="mg-result" id="mg-result">Tap cepat-cepat untuk lari! 🏃</div>
-    <button class="mg-btn btn-red" id="race-run-btn" style="width:100%;height:70px;font-size:24px;" onclick="mgAction('lomba-lari')">🏃 LARI!</button>
+    <div id="mg-result" style="text-align:center;font-size:12px;color:#636e72;font-weight:700;margin-bottom:6px;">Tap cepat untuk lari!</div>
+    <button id="race-run-btn" style="width:100%;height:68px;background:linear-gradient(135deg,#e17055,#ff7675);color:#fff;border:none;border-radius:12px;font-size:22px;font-weight:900;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 12px rgba(225,112,85,0.4);" onclick="mgAction('lomba-lari')">LARI</button>
     `;
-    // start guest AI movement
     setTimeout(() => {
       mgState.myDist = 0; mgState.guestDist = 0;
       mgState.racingInterval = setInterval(() => {
         if (!document.getElementById('race-guest-pet')) { clearInterval(mgState.racingInterval); return; }
-        // Guest moves randomly
         mgState.guestDist = Math.min(100, mgState.guestDist + (Math.random() * 2.5));
         let guestPct = 5 + (mgState.guestDist / 100) * 75;
-        let guestEl = document.getElementById('race-guest-pet');
-        if (guestEl) guestEl.style.left = guestPct + '%';
-        let gLabel = document.getElementById('race-guest-label');
-        if (gLabel) gLabel.innerText = `Teman: ${Math.floor(mgState.guestDist)}m`;
+        let guestEl = document.getElementById('race-guest-pet'); if (guestEl) guestEl.style.left = guestPct + '%';
+        let gLabel = document.getElementById('race-guest-label'); if (gLabel) gLabel.innerText = `Teman: ${Math.floor(mgState.guestDist)}m`;
         if (mgState.guestDist >= 100 && !mgState.raceFinished) {
           mgState.raceFinished = true;
-          document.getElementById('mg-result').innerText = "Teman menang! 😢 Coba lagi!";
-          document.getElementById('mg-result').style.color = "#d63031";
+          let r = document.getElementById('mg-result');
+          if (r) { r.innerText = "Teman menang! Coba lagi!"; r.style.color = "#d63031"; }
           let btn = document.getElementById('race-run-btn'); if (btn) btn.disabled = true;
           mgReward(30, 5);
           clearInterval(mgState.racingInterval);
@@ -3168,7 +3636,7 @@ function openMiniGame(type) {
     }, 500);
   }
 
-  box.innerHTML = html + `<button class="mg-btn btn-red" style="width:90%; margin-top:10px;" onclick="closeMiniGame()">SELESAI</button>`;
+  box.innerHTML = html + `<button style="width:90%;display:block;margin:10px auto 0;height:42px;background:#dfe6e9;color:#2d3436;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;" onclick="closeMiniGame()">SELESAI</button>`;
   document.getElementById('minigame-modal').classList.add('active');
 }
 
@@ -3177,19 +3645,15 @@ function openMiniGame(type) {
 // ============================================================
 function loadPianoMusic(inputEl) {
   let file = inputEl.files[0]; if (!file) return;
-  let nameEl = document.getElementById('piano-song-name');
-  if (nameEl) nameEl.innerText = file.name;
-  // Create audio context
+  let nameEl = document.getElementById('piano-song-name'); if (nameEl) nameEl.innerText = file.name;
   if (mgState.audioContext) { try { mgState.audioContext.close(); } catch(e){} }
   if (mgState.pianoInterval) clearInterval(mgState.pianoInterval);
   if (mgState.beatInterval) clearInterval(mgState.beatInterval);
-
   mgState.audioContext = new (window.AudioContext || window.webkitAudioContext)();
   mgState.pianoScore = 0;
   let reader = new FileReader();
   reader.onload = function(e) {
     mgState.audioContext.decodeAudioData(e.target.result, function(buffer) {
-      // Analyze beat via script processor
       let source = mgState.audioContext.createBufferSource();
       source.buffer = buffer;
       let analyser = mgState.audioContext.createAnalyser();
@@ -3198,78 +3662,89 @@ function loadPianoMusic(inputEl) {
       analyser.connect(mgState.audioContext.destination);
       source.start(0);
       mgState.audioSource = source;
-
       let bufferLength = analyser.frequencyBinCount;
       let dataArray = new Uint8Array(bufferLength);
       let lastBeat = 0;
-      let beatThreshold = 180; // beat detection threshold
-
-      // Beat detection loop
+      let beatThreshold = 180;
       mgState.beatInterval = setInterval(() => {
         analyser.getByteFrequencyData(dataArray);
-        // Get bass energy (first ~10% of frequencies = bass)
         let bassSum = 0;
         for (let i = 0; i < Math.floor(bufferLength * 0.1); i++) bassSum += dataArray[i];
         let bassAvg = bassSum / Math.floor(bufferLength * 0.1);
-        // Update beat bar
         let barEl = document.getElementById('piano-beat-bar');
-        if (barEl) barEl.style.width = Math.min(100, bassAvg / 2.5) + '%';
-        // Beat detected
+        if (barEl) barEl.style.width = Math.min(100, bassAvg / 2.55) + '%';
         let now = Date.now();
-        if (bassAvg > beatThreshold && now - lastBeat > 300) {
+        if (bassAvg > beatThreshold && now - lastBeat > 290) {
           lastBeat = now;
           spawnPianoTileOnBeat();
         }
       }, 50);
-
-      // Also fallback: spawn tiles on interval if no beat detected
       let spawnCount = 0;
       mgState.pianoInterval = setInterval(() => {
         spawnCount++;
-        // Fallback tile every 800ms if beat is slow
         if (spawnCount % 3 === 0) spawnPianoTileOnBeat();
       }, 800);
-
       source.onended = () => {
         if (mgState.beatInterval) clearInterval(mgState.beatInterval);
         if (mgState.pianoInterval) clearInterval(mgState.pianoInterval);
         let r = document.getElementById('mg-result');
-        if (r) { r.innerText = `Lagu selesai! Skor Piano Akhir: ${mgState.pianoScore||0} 🎹`; r.style.color="#6c5ce7"; }
+        if (r) { r.innerText = `Lagu selesai! Skor Akhir: ${mgState.pianoScore||0}`; r.style.color="#6c5ce7"; }
         mgReward((mgState.pianoScore||0) * 5, (mgState.pianoScore||0) * 2);
       };
     }, function() { alert("Format audio tidak didukung. Coba file MP3 atau WAV."); });
   };
   reader.readAsArrayBuffer(file);
-  document.getElementById('mg-result').innerText = "Skor Piano: 0 | Lagu dimuat, main!";
+  let r = document.getElementById('mg-result'); if (r) { r.innerText = "Skor: 0 — Siap main!"; r.style.color="#6c5ce7"; }
 }
+
+// Piano tile colors — vivid neon per lane
+const pianoLaneColors = [
+  { bg: '#6c5ce7', shadow: '#4a3bb5' },
+  { bg: '#fd79a8', shadow: '#c0567b' },
+  { bg: '#00b894', shadow: '#007a62' },
+  { bg: '#fdcb6e', shadow: '#c09a40' }
+];
 
 function spawnPianoTileOnBeat() {
   const board = document.getElementById('piano-board'); if (!board) return;
-  let tracks = [0, 25, 50, 75];
-  let leftPos = tracks[Math.floor(Math.random() * tracks.length)];
+  let laneIdx = Math.floor(Math.random() * 4);
+  let leftPos = laneIdx * 25;
+  let laneColor = pianoLaneColors[laneIdx];
   let tile = document.createElement('div');
-  tile.style.position = 'absolute'; tile.style.width = '25%'; tile.style.height = '45px';
-  tile.style.background = `hsl(${Math.random()*360},80%,35%)`; tile.style.left = leftPos + '%';
-  tile.style.top = '0px'; tile.style.cursor = 'pointer'; tile.style.borderRadius = '6px';
-  tile.style.boxShadow = 'inset 0 -4px 8px rgba(0,0,0,0.4)';
-  tile.style.border = '1px solid rgba(255,255,255,0.2)';
-  tile.onclick = (ev) => {
-    ev.stopPropagation(); mgState.pianoScore = (mgState.pianoScore||0) + 1;
-    let r = document.getElementById('mg-result'); if (r) r.innerText = `Skor Piano: ${mgState.pianoScore}`;
-    // Visual feedback
-    tile.style.background = '#00cec9'; tile.style.transform = 'scale(0.9)';
-    setTimeout(() => tile.remove(), 100);
-    // Ripple effect
-    createFloatingText("🎵", "center");
+  tile.style.position = 'absolute';
+  tile.style.width = '25%';
+  tile.style.height = '48px';
+  tile.style.background = laneColor.bg;
+  tile.style.left = leftPos + '%';
+  tile.style.top = '0px';
+  tile.style.cursor = 'pointer';
+  tile.style.borderRadius = '7px';
+  tile.style.boxShadow = `inset 0 -5px 0 ${laneColor.shadow}, 0 2px 8px rgba(0,0,0,0.3)`;
+  tile.style.border = '1px solid rgba(255,255,255,0.25)';
+  tile.style.transform = 'scaleX(0.88)';
+  // Click/touch handler
+  let tapped = false;
+  const tapFn = (ev) => {
+    if (tapped) return; tapped = true;
+    ev.stopPropagation();
+    mgState.pianoScore = (mgState.pianoScore||0) + 1;
+    let r = document.getElementById('mg-result'); if (r) { r.innerText = `Skor: ${mgState.pianoScore}`; r.style.color = "#6c5ce7"; }
+    tile.style.background = '#fff';
+    tile.style.transform = 'scaleX(0.88) scaleY(0.85)';
+    tile.style.opacity = '0.7';
+    setTimeout(() => { if (tile.parentNode) tile.remove(); }, 80);
+    createFloatingText("KETUK!", "center");
   };
+  tile.onclick = tapFn;
+  tile.ontouchstart = tapFn;
   board.appendChild(tile);
   let top = 0;
-  let speed = 3 + Math.random() * 2;
+  let speed = 3.5 + Math.random() * 2;
   let tInt = setInterval(() => {
     if (!tile.parentNode) { clearInterval(tInt); return; }
     top += speed; tile.style.top = top + 'px';
-    if (top > 160) { clearInterval(tInt); if (tile.parentNode) { tile.remove(); } }
-  }, 20);
+    if (top > 155) { clearInterval(tInt); if (tile.parentNode) tile.remove(); }
+  }, 18);
 }
 
 // ============================================================
@@ -3281,22 +3756,19 @@ function startObstacleLoop() {
   mgState.isJumping = false;
   mgState.obstacleInterval = setInterval(() => {
     if (!document.getElementById('mg-obstacle')) { clearInterval(mgState.obstacleInterval); return; }
-    mgState.obstaclePos -= 2.5;
+    mgState.obstaclePos -= 2.2;
     let obs = document.getElementById('mg-obstacle');
     if (obs) obs.style.left = mgState.obstaclePos + '%';
-    // Collision detection (pet is at ~15%)
     if (mgState.obstaclePos < 22 && mgState.obstaclePos > 10 && !mgState.isJumping) {
-      // Hit!
       let r = document.getElementById('mg-result');
-      if (r && !r.innerText.includes('Kena')) { r.innerText = `💥 Kena! Skor: ${mgState.clicks} | Coba lagi!`; r.style.color="#d63031"; }
+      if (r && !r.innerText.includes('Kena')) { r.innerText = `Kena! Skor: ${mgState.clicks} — Coba lagi!`; r.style.color="#d63031"; }
     }
-    if (mgState.obstaclePos < -10) {
-      // Passed!
-      mgState.obstaclePos = 88 + Math.random() * 20;
+    if (mgState.obstaclePos < -12) {
+      mgState.obstaclePos = 88 + Math.random() * 18;
+      if (obs) obs.style.left = mgState.obstaclePos + '%';
       mgReward(10, 2);
     }
-    if (obs) obs.style.left = mgState.obstaclePos + '%';
-  }, 30);
+  }, 28);
 }
 
 // ============================================================
@@ -3319,15 +3791,17 @@ function listenRedLightGreenLight(mgData) {
   if (!lightEl) return;
   mgState.currentServerLight = mgData.state;
   if (mgData.state === 'GREEN') {
-    lightEl.innerText = '🟢 GREEN LIGHT — MAJU!';
-    lightEl.style.background = '#00b894'; lightEl.style.color = '#fff';
-    if (dollEl) dollEl.style.transform = 'scaleX(-1)'; // doll looks away
-    lightEl.style.boxShadow = '0 0 20px #00b894';
+    lightEl.innerText = 'HIJAU — MAJU!';
+    lightEl.style.background = 'linear-gradient(135deg,#00b894,#55efc4)';
+    lightEl.style.color = '#fff';
+    if (dollEl) dollEl.style.transform = 'scaleX(-1)';
+    lightEl.style.boxShadow = '0 0 20px rgba(0,184,148,0.6)';
   } else {
-    lightEl.innerText = '🔴 RED LIGHT — BERHENTI!';
-    lightEl.style.background = '#d63031'; lightEl.style.color = '#fff';
-    if (dollEl) dollEl.style.transform = 'scaleX(1)'; // doll looks at players
-    lightEl.style.boxShadow = '0 0 20px #d63031';
+    lightEl.innerText = 'MERAH — BERHENTI!';
+    lightEl.style.background = 'linear-gradient(135deg,#d63031,#ff7675)';
+    lightEl.style.color = '#fff';
+    if (dollEl) dollEl.style.transform = 'scaleX(1)';
+    lightEl.style.boxShadow = '0 0 20px rgba(214,48,49,0.6)';
   }
 }
 
@@ -3339,26 +3813,38 @@ function mgAction(game, arg) {
 
   if (game === 'mancing') {
     if (mgState.ready) {
-      r.innerText = "DAPAT IKAN BESAR! 🎉"; r.style.color = "#00b894";
-      let bigFish = document.getElementById('mg-big-fish'); if (bigFish) { bigFish.style.display = 'block'; setTimeout(() => { if (bigFish) bigFish.style.display = 'none'; }, 2000); }
-      let fish = document.getElementById('mg-fish'); if (fish) { fish.style.bottom = '40%'; fish.style.fontSize = '36px'; setTimeout(() => { if(fish) { fish.style.bottom='15%'; fish.style.fontSize='28px'; } }, 1500); }
+      r.innerText = "DAPAT IKAN BESAR! Luar biasa!"; r.style.color = "#00b894";
+      let bigFish = document.getElementById('mg-big-fish');
+      if (bigFish) { bigFish.style.display = 'block'; setTimeout(() => { if (bigFish) bigFish.style.display = 'none'; }, 2000); }
+      let fish = document.getElementById('mg-fish');
+      if (fish) { fish.style.bottom = '45%'; fish.style.fontSize = '38px'; setTimeout(() => { if(fish) { fish.style.bottom='25%'; fish.style.fontSize='28px'; } }, 1500); }
+      // Update bobber to show fish caught
+      let bobber = document.getElementById('fish-bobber');
+      if (bobber) { bobber.style.fill = '#00b894'; }
       mgReward(150, 15); mgState.ready = false;
       setTimeout(() => {
         if (!document.getElementById('mg-result')) return;
-        r.innerText = "Tunggu ikan berikutnya..."; r.style.color = "";
-        setTimeout(() => { if (!document.getElementById('mg-result')) return; r.innerText = "IKAN MAKAN LAGI! TARIK!"; r.style.color="#00b894"; mgState.ready = true; }, 2000 + Math.random() * 3000); }, 1500);
-    } else { r.innerText = "Terlalu cepat, tali putus! 😢"; r.style.color = "#d63031"; mgReward(5, 1); }
+        r.innerText = "Tunggu ikan berikutnya..."; r.style.color = "#636e72";
+        if (bobber) bobber.setAttribute('fill', '#e74c3c');
+        setTimeout(() => {
+          if (!document.getElementById('mg-result')) return;
+          r.innerText = "IKAN MAKAN LAGI! TARIK!"; r.style.color="#00b894";
+          let bobberEl = document.getElementById('fish-bobber');
+          if (bobberEl) { bobberEl.setAttribute('cy', '170'); }
+          mgState.ready = true;
+        }, 2000 + Math.random() * 3000);
+      }, 1500);
+    } else { r.innerText = "Terlalu cepat, tali putus!"; r.style.color = "#d63031"; mgReward(5, 1); }
   }
 
   else if (game === 'lari-solo') {
     mgState.clicks++;
     let scoreEl = document.getElementById('mg-score-display'); if (scoreEl) scoreEl.innerText = mgState.clicks;
-    r.innerText = `Lompat: ${mgState.clicks}`;
-    // Trigger jump
+    r.innerText = `Lompatan: ${mgState.clicks}`;
     let runner = document.getElementById('mg-runner');
     if (runner && !mgState.isJumping) {
-      mgState.isJumping = true; runner.style.bottom = '60%';
-      setTimeout(() => { if (runner) runner.style.bottom = '40%'; mgState.isJumping = false; }, 400);
+      mgState.isJumping = true; runner.style.bottom = '62%';
+      setTimeout(() => { if (runner) runner.style.bottom = '40%'; mgState.isJumping = false; }, 350);
     }
     if (mgState.clicks % 10 === 0) mgReward(10, 2);
   }
@@ -3370,11 +3856,10 @@ function mgAction(game, arg) {
     let myEl = document.getElementById('race-my-pet'); if (myEl) myEl.style.left = Math.min(82, myPct) + '%';
     let myLabel = document.getElementById('race-my-label'); if (myLabel) myLabel.innerText = `Kamu: ${Math.floor(mgState.myDist)}m`;
     r.innerText = `Kamu: ${Math.floor(mgState.myDist)}m | Teman: ${Math.floor(mgState.guestDist||0)}m`;
-    // Share distance to firebase if multiplayer
     if (anabulRoomCode) { database.ref(`anabul_rooms/${anabulRoomCode}/minigame_player/${anabulIsHost?'host':'guest'}`).set({ dist: mgState.myDist }); }
     if (mgState.myDist >= 100 && !mgState.raceFinished) {
       mgState.raceFinished = true;
-      r.innerText = "🏆 KAMU MENANG! Luar biasa!"; r.style.color = "#00b894";
+      r.innerText = "KAMU MENANG! Luar biasa!"; r.style.color = "#00b894";
       let btn = document.getElementById('race-run-btn'); if (btn) btn.disabled = true;
       mgReward(200, 20);
       clearInterval(mgState.racingInterval);
@@ -3385,20 +3870,19 @@ function mgAction(game, arg) {
     if (!mgState.isRedLightRunning || mgState.playerEliminated) return;
     if (mgState.currentServerLight === 'RED') {
       mgState.playerEliminated = true;
-      r.innerText = "💥 KAMU BERGERAK DI RED LIGHT! ELEMINASI!"; r.style.color = "#d63031";
+      r.innerText = "BERGERAK DI LAMPU MERAH! ELEMINASI!"; r.style.color = "#d63031";
       let myPet = document.getElementById('squid-my-pet');
-      if (myPet) { myPet.style.filter = 'grayscale(1) opacity(0.4)'; myPet.style.transform = 'rotate(90deg)'; }
+      if (myPet) { myPet.style.filter = 'grayscale(1) opacity(0.35)'; myPet.style.transform = 'rotate(90deg)'; }
       let btn = document.getElementById('squid-move-btn'); if (btn) btn.disabled = true;
-      mgReward(0, 0); mgState.isRedLightRunning = false;
+      mgState.isRedLightRunning = false;
     } else {
       mgState.distance = (mgState.distance || 0) + 2;
       r.innerText = `Jarak: ${mgState.distance}m / 50m`;
       let myPct = 5 + (mgState.distance / 50) * 75;
       let myPet = document.getElementById('squid-my-pet'); if (myPet) myPet.style.left = Math.min(82, myPct) + '%';
-      // Share to firebase
       if (anabulRoomCode) { database.ref(`anabul_rooms/${anabulRoomCode}/minigame_player`).update({ [`${anabulIsHost?'host':'guest'}Dist`]: mgState.distance }); }
       if (mgState.distance >= 50) {
-        r.innerText = "🏁 GOAL!! SELAMAT FINISH! 🎉"; r.style.color = "#00b894";
+        r.innerText = "FINISH! SELAMAT MENANG!"; r.style.color = "#00b894";
         mgState.isRedLightRunning = false;
         let btn = document.getElementById('squid-move-btn'); if (btn) btn.disabled = true;
         mgReward(300, 30);
@@ -3407,8 +3891,7 @@ function mgAction(game, arg) {
   }
 
   else if (game === 'squid-stop') {
-    // Show stop animation
-    createFloatingText("✋ STOP!", "center");
+    createFloatingText("STOP!", "center");
   }
 }
 
