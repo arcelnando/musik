@@ -1277,15 +1277,13 @@
     <div class="kawaii-panel" id="shop-wrapper" style="padding:20px; max-height:90vh; overflow-y:auto; margin-top:5vh;">
       <h2 style="margin-bottom:5px; color:#ff6b81; font-weight:800;">TOKO ANABUL</h2>
       <div class="coin-display" style="margin-bottom:15px; align-self:center;">KOIN: <span id="shop-coins">0</span></div>
-
       <div id="shop-preview-area">
         <h3>FITTING ROOM</h3>
         <p style="font-size:10px; color:#ff9a9e; font-weight:bold; margin-bottom:8px;">Coba baju sebelum beli yuk!</p>
         <div id="shop-preview-render"></div>
         <div id="preview-item-name" style="font-size:13px; font-weight:800; color:#ff6b81; margin-top:8px; min-height:18px;">Pilih item di bawah</div>
-        <button id="btn-buy-preview" class="btn-kawaii btn-green" style="margin-top:10px; display:none; padding:8px 15px; font-size:14px; width: 100%;">BELI SEKARANG: KOIN <span id="preview-price">0</span></button>
+        <button id="btn-buy-preview" class="btn-kawaii btn-green" style="margin-top:10px; display:none; padding:8px 15px; font-size:14px; width:100%;">BELI SEKARANG: KOIN <span id="preview-price">0</span></button>
       </div>
-
       <p style="font-size:13px; color:#ff6b81; font-weight:800; margin-bottom:10px;">Katalog Tersedia:</p>
       <div class="shop-tabs">
         <div class="shop-tab active" onclick="switchShop('clothes',event)">Baju</div>
@@ -1294,13 +1292,11 @@
         <div class="shop-tab" onclick="switchShop('skin',event)">Aksesoris</div>
         <div class="shop-tab" onclick="switchShop('bath',event)">Sabun</div>
       </div>
-
       <div class="shop-items" id="shop-clothes" style="display:flex;"></div>
       <div class="shop-items" id="shop-bg" style="display:none;"></div>
       <div class="shop-items" id="shop-furniture" style="display:none;"></div>
       <div class="shop-items" id="shop-skin" style="display:none;"></div>
       <div class="shop-items" id="shop-bath" style="display:none;"></div>
-
       <button class="btn-kawaii btn-red" style="margin-top:15px;" onclick="document.getElementById('screen-shop').classList.remove('active'); if(document.getElementById('room').style.display === 'none' || document.getElementById('room').style.display === '') { showAnabulScreen('screen-home'); }">TUTUP TOKO</button>
     </div>
   </div>
@@ -1316,22 +1312,22 @@
         <div class="shop-tab" onclick="switchInventory('skin',event)">Aksesoris</div>
         <div class="shop-tab" onclick="switchInventory('bath',event)">Sabun</div>
       </div>
-
       <div class="shop-items" id="inv-clothes" style="display:flex;"></div>
       <div class="shop-items" id="inv-bg" style="display:none;"></div>
       <div class="shop-items" id="inv-furniture" style="display:none;"></div>
       <div class="shop-items" id="inv-skin" style="display:none;"></div>
       <div class="shop-items" id="inv-bath" style="display:none;"></div>
-
       <button class="btn-kawaii btn-red" style="margin-top:15px;" onclick="document.getElementById('screen-inventory').classList.remove('active'); if(document.getElementById('room').style.display === 'none' || document.getElementById('room').style.display === '') { showAnabulScreen('screen-home'); }">TUTUP TAS</button>
     </div>
   </div>
 
+  <!-- SCREEN SELECT: BUAT ANABUL (updated with pattern + custom color pickers) -->
   <div id="screen-select" class="screen">
-    <div class="kawaii-panel" style="margin-top: 5vh;">
+    <div class="kawaii-panel" style="margin-top:5vh; padding:15px;">
       <h2 style="margin-bottom:5px; text-align:center; color:#ff6b81; font-weight:800;">BUAT ANABUL</h2>
-      
-      <h3 style="margin-top:10px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">1. PILIH HEWAN</h3>
+
+      <!-- 1. PILIH HEWAN -->
+      <h3 style="margin-top:8px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">1. PILIH HEWAN</h3>
       <div class="pet-grid" style="grid-template-columns: repeat(4, 1fr);">
         <div class="pet-card selected" onclick="selectPet('cat',this)"><span>KUCING</span></div>
         <div class="pet-card" onclick="selectPet('dog',this)"><span>ANJING</span></div>
@@ -1339,48 +1335,67 @@
         <div class="pet-card" onclick="selectPet('bear',this)"><span>BERUANG</span></div>
       </div>
 
-      <h3 style="margin-top:5px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">2. PILIH MOTIF</h3>
-      <div class="pet-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="pet-card selected" onclick="selectPattern('polos',this)"><span>POLOS</span></div>
-        <div class="pet-card" onclick="selectPattern('belang',this)"><span>BELANG</span></div>
-        <div class="pet-card" onclick="selectPattern('bintik',this)"><span>BINTIK</span></div>
+      <!-- 2. PILIH WARNA BADAN (free color picker) -->
+      <h3 style="margin-top:8px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">2. WARNA BADAN</h3>
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:6px;">
+        <!-- Preset swatches -->
+        <div class="color-swatch" onclick="selectPetColor('#ffffff',this)" style="width:30px;height:30px;border-radius:50%;background:#ffffff;border:3px solid #ffb8c6;cursor:pointer;transform:scale(1.2);"></div>
+        <div class="color-swatch" onclick="selectPetColor('#fdcb6e',this)" style="width:30px;height:30px;border-radius:50%;background:#fdcb6e;border:3px solid #ffb8c6;cursor:pointer;"></div>
+        <div class="color-swatch" onclick="selectPetColor('#fab1a0',this)" style="width:30px;height:30px;border-radius:50%;background:#fab1a0;border:3px solid #ffb8c6;cursor:pointer;"></div>
+        <div class="color-swatch" onclick="selectPetColor('#a29bfe',this)" style="width:30px;height:30px;border-radius:50%;background:#a29bfe;border:3px solid #ffb8c6;cursor:pointer;"></div>
+        <div class="color-swatch" onclick="selectPetColor('#2d3436',this)" style="width:30px;height:30px;border-radius:50%;background:#2d3436;border:3px solid #ffb8c6;cursor:pointer;"></div>
+        <div class="color-swatch" onclick="selectPetColor('#74b9ff',this)" style="width:30px;height:30px;border-radius:50%;background:#74b9ff;border:3px solid #ffb8c6;cursor:pointer;"></div>
+        <!-- Free color picker -->
+        <label style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:#ff6b81;cursor:pointer;">
+          
+          <input type="color" id="custom-color-pick" value="#ffffff" onchange="tempColor=this.value; updatePreview();" style="width:30px;height:30px;border-radius:50%;border:3px solid #ffb8c6;cursor:pointer;padding:0;">
+        </label>
       </div>
 
-      <div style="display: flex; gap: 20px; justify-content: center; width: 100%; margin-bottom: 10px;">
-        <div>
-          <h3 style="margin-top:5px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">WARNA BADAN</h3>
-          <div class="color-picker" style="display:flex; justify-content:center; gap:5px;">
-            <input type="color" id="body-color-picker" value="#ffffff" onchange="selectPetColor(this.value, this)" style="width:45px; height:45px; border-radius:15px; border:3px solid #ffb8c6; cursor:pointer;">
-          </div>
-        </div>
-        <div>
-          <h3 style="margin-top:5px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">WARNA MOTIF</h3>
-          <div class="color-picker" style="display:flex; justify-content:center; gap:5px;">
-            <input type="color" id="pattern-color-picker" value="#2d3436" onchange="selectPatternColor(this.value, this)" style="width:45px; height:45px; border-radius:15px; border:3px solid #ffb8c6; cursor:pointer;">
-          </div>
-        </div>
+      <!-- 3. PILIH MOTIF -->
+      <h3 style="margin-top:8px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">3. PILIH MOTIF</h3>
+      <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:6px;" id="pattern-picker-select">
+        <div class="pet-card selected" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('none',this)"><span style="font-size:10px;">Polos</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('stripes',this)"><span style="font-size:10px;"> Belang</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('spots',this)"><span style="font-size:10px;"> Bintik</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('zigzag',this)"><span style="font-size:10px;"> Zigzag</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('hearts',this)"><span style="font-size:10px;">  Hati</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('stars',this)"><span style="font-size:10px;"> Bintang</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('diamonds',this)"><span style="font-size:10px;"> Berlian</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('waves',this)"><span style="font-size:10px;"> Ombak</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('galaxy',this)"><span style="font-size:10px;"> Galaxy</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('tribal',this)"><span style="font-size:10px;"> Tribal</span></div>
       </div>
 
-      <div id="preview-container" style="width:120px; height:120px; margin:0 auto 15px auto; border:4px dashed #ffb8c6; border-radius:20px; background:#fff0f5;"></div>
+      <!-- 4. WARNA MOTIF -->
+      <h3 style="margin-top:4px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">4. WARNA MOTIF</h3>
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+        <label style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:#ff6b81;cursor:pointer;">
+           Pilih Warna:
+          <input type="color" id="pattern-color-pick" value="#ff7675" onchange="tempPatternColor=this.value; updatePreview();" style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;cursor:pointer;padding:0;">
+        </label>
+        <div style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;" id="pattern-color-preview" style="background:#ff7675;"></div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div id="preview-container" style="width:130px; height:130px; margin:0 auto 12px auto; border:4px dashed #ffb8c6; border-radius:20px; background:#fff0f5; display:flex; align-items:center; justify-content:center;"></div>
+
+      <!-- NAMA -->
       <input type="text" id="input-pet-name" class="input-kawaii" placeholder="NAMA ANABUL..." maxlength="10">
-      <button class="btn-kawaii btn-pink" onclick="startAnabulGame()" style="margin-top:10px;">MASUK KAMAR</button>
+      <button class="btn-kawaii btn-pink" onclick="startAnabulGame()" style="margin-top:10px;">MASUK KAMAR </button>
     </div>
   </div>
 
-  <div class="room-container" id="room" style="display:none; position:relative; width: 100%; height: 100%;">
+  <!-- ROOM -->
+  <div class="room-container" id="room" style="display:none; position:relative; width:100%; height:100%;">
     <div class="wallpaper bg-default" id="room-wallpaper" style="position:absolute; width:100%; height:100%; z-index:0;"></div>
-
     <div id="room-wall-decor" style="position:absolute; top:10%; left:5%; width:90%; height:40%; z-index:1; pointer-events:none; display:flex; justify-content:space-between;"></div>
-
     <div class="shower-head" id="shower-head" style="z-index:4; display:none;"></div>
-
     <div class="floor floor-default" id="room-floor" style="position:absolute; bottom:0; width:100%; height:30%; z-index:2;">
       <div class="rug" id="room-rug" style="position:absolute; bottom:10%; left:50%; transform:translateX(-50%); z-index:2;"></div>
     </div>
-
     <div id="room-furniture-left" style="position:absolute; bottom:25%; left:5%; z-index:3;"></div>
     <div id="room-furniture-right" style="position:absolute; bottom:25%; right:5%; z-index:3;"></div>
-
     <div id="furniture-controls" style="position:absolute; top:15%; right:5%; z-index:50; display:none; flex-direction:column; gap:10px;">
       <div style="background:#fff; border:3px solid #ffb8c6; border-radius:10px; padding:5px; text-align:center;">
         <div style="font-size:10px; font-weight:bold; margin-bottom:5px; color:#ff6b81;">KIRI</div>
@@ -1393,7 +1408,6 @@
         <button onclick="scaleFurniture('right', -0.1)" style="background:#ff7675; border:none; color:#fff; border-radius:5px; width:25px; font-weight:bold;">-</button>
       </div>
     </div>
-
     <div class="guest-pet-wrapper" id="guest-wrapper" style="z-index:5; display:none;">
       <div class="guest-name" id="guest-name" style="background:#fff; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:bold; border:2px solid #ffb8c6; color:#ff6b81; position:absolute; top:-20px; left:50%; transform:translateX(-50%);">GUEST</div>
       <div class="size-container" id="guest-size">
@@ -1401,9 +1415,8 @@
         <div id="guest-render"></div>
       </div>
     </div>
-
-    <div class="pet-wrapper" id="wrapper-1" style="z-index:6; display: flex; justify-content: center; align-items: flex-end; position: absolute; bottom: 20%; width: 100%;">
-      <div class="size-container" id="pet-size" style="position: relative;">
+    <div class="pet-wrapper" id="wrapper-1" style="z-index:6; display:flex; justify-content:center; align-items:flex-end; position:absolute; bottom:20%; width:100%;">
+      <div class="size-container" id="pet-size" style="position:relative;">
         <svg class="acc-svg acc-active" id="acc-layer" viewBox="0 0 100 100" style="position:absolute; width:100%; height:100%; z-index:2; pointer-events:none;"></svg>
         <div id="pet-render" style="position:relative; z-index:1;"></div>
         <svg class="pillow-svg" id="pillow-layer" viewBox="0 0 100 50" style="position:absolute; bottom:-10px; z-index:0; width:100%;">
@@ -1411,10 +1424,10 @@
         </svg>
       </div>
     </div>
-
     <div id="room-foreground" style="position:absolute; bottom:0; left:0; width:100%; height:10%; z-index:7; pointer-events:none;"></div>
   </div>
 
+  <!-- GAME UI / HUD -->
   <div class="ui-layer" id="game-ui">
     <div>
       <div class="hud-top">
@@ -1440,20 +1453,23 @@
               <div class="bar-fill fill-energy" id="bar-energy"></div>
             </div>
             <div class="bar-wrap">
-              <span style="position:absolute;left:25px;font-size:10px;font-weight:bold;z-index:2;color:#fff; text-shadow:1px 1px 0 #d63031;">XP</span>
+              <span style="position:absolute;left:25px;font-size:10px;font-weight:bold;z-index:2;color:#fff;text-shadow:1px 1px 0 #d63031;">XP</span>
               <div class="bar-fill fill-xp" id="bar-xp"></div>
             </div>
           </div>
         </div>
-        <div id="room-code-display" style="text-align:center;font-weight:800;font-size:14px;margin-top:8px;display:none; color:#ff6b81;">
+        <div id="room-code-display" style="text-align:center;font-weight:800;font-size:14px;margin-top:8px;display:none;color:#ff6b81;">
           KODE: <span id="visit-code-text" style="color:#ff9f43; background:#fff; padding:2px 8px; border-radius:10px; border:2px dashed #ff9f43;"></span>
         </div>
       </div>
 
       <div class="room-panels-container">
+        <!-- DAPUR -->
         <div class="interactive-panel active" id="panel-kitchen">
-          </div>
+          <!-- diisi oleh initMakanan() -->
+        </div>
 
+        <!-- MANDI -->
         <div class="interactive-panel" id="panel-bathroom">
           <div class="item-card" onclick="toggleShower()">
             <svg viewBox="0 0 24 24" width="35" height="35"><path d="M12 4 L12 10 M8 12 V16 M12 12 V18 M16 12 V16" stroke="#74b9ff" stroke-width="2" stroke-linecap="round"/><ellipse cx="12" cy="10" rx="6" ry="2" fill="#b2bec3"/></svg>
@@ -1465,6 +1481,7 @@
           </div>
         </div>
 
+        <!-- MAIN -->
         <div class="interactive-panel" id="panel-play">
           <div class="item-card" onclick="openMiniGame('mancing')">
             <svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 22 L10 2 M10 2 Q18 6 18 14 M18 14 Q16 16 14 14" fill="none" stroke="#2d3436" stroke-width="2"/><circle cx="14" cy="14" r="3" fill="#ff7675"/></svg>
@@ -1476,15 +1493,15 @@
           </div>
           <div class="item-card" onclick="openMiniGame('piano')">
             <svg viewBox="0 0 24 24" width="30" height="30"><rect x="3" y="6" width="18" height="14" rx="3" fill="#ff9ff3"/><rect x="5" y="6" width="3" height="8" rx="1" fill="#fff"/><rect x="10" y="6" width="3" height="8" rx="1" fill="#fff"/><rect x="15" y="6" width="3" height="8" rx="1" fill="#fff"/></svg>
-            <span style="font-size:9px;font-weight:800;color:#ff6b81;">PIANO</span>
+            <span style="font-size:9px;font-weight:800;color:#ff6b81;">PIANO </span>
           </div>
           <div class="item-card" onclick="openMiniGame('lomba-lari')">
-            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 16 L20 16 M4 8 L20 8" stroke="#ff7675" stroke-width="3" stroke-dasharray="4"/></svg>
+            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 16 L20 16 M4 8 L20 8" stroke="#ff7675" stroke-width="3" stroke-dasharray="4"/><polygon points="18,12 22,12 20,8" fill="#ff7675"/></svg>
             <span style="font-size:9px;font-weight:800;color:#ff6b81;">LARI (M)</span>
           </div>
           <div class="item-card" onclick="openMiniGame('squid')">
             <svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="8" fill="#ff6b6b"/><rect x="9" y="9" width="6" height="6" fill="#fff" rx="1"/></svg>
-            <span style="font-size:9px;font-weight:800;color:#ff6b81;">RED LIGHT</span>
+            <span style="font-size:9px;font-weight:800;color:#ff6b81;">RED LIGHT </span>
           </div>
           <div class="item-card" onclick="playPet()">
             <svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 4 Q16 4 16 10 Q16 16 12 16 Q8 16 8 10 Q8 4 12 4" fill="#feca57"/><circle cx="12" cy="20" r="2" fill="#ff6b81"/></svg>
@@ -1492,6 +1509,7 @@
           </div>
         </div>
 
+        <!-- TIDUR -->
         <div class="interactive-panel" id="panel-bedroom">
           <div class="item-card" onclick="toggleSleep()">
             <svg viewBox="0 0 24 24" width="35" height="35"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 01-4.4 2.26 5.4 5.4 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" fill="#f1c40f"/></svg>
@@ -1505,11 +1523,16 @@
             <svg viewBox="0 0 24 24" width="35" height="35"><circle cx="12" cy="12" r="10" fill="#feca57"/><text x="12" y="17" font-size="14" text-anchor="middle" fill="#fff" font-weight="bold">$</text></svg>
             <span style="font-size:10px;font-weight:800;color:#ff6b81;">TOKO</span>
           </div>
+          <!-- GANTI MOTIF di kamar -->
+          <div class="item-card" onclick="document.getElementById('motif-modal').classList.add('active'); buildMotifModal();">
+            <svg viewBox="0 0 24 24" width="35" height="35"><circle cx="12" cy="12" r="9" fill="#a29bfe"/><circle cx="9" cy="9" r="2" fill="#fff" opacity="0.7"/><circle cx="15" cy="9" r="2" fill="#fff" opacity="0.7"/><circle cx="12" cy="15" r="2" fill="#fff" opacity="0.7"/></svg>
+            <span style="font-size:10px;font-weight:800;color:#ff6b81;">GANTI MOTIF</span>
+          </div>
         </div>
-
       </div>
     </div>
 
+    <!-- HUD BOTTOM NAV -->
     <div class="hud-bottom">
       <button class="nav-btn active" id="nav-btn-kitchen" onclick="goToRoom('kitchen')">
         <svg viewBox="0 0 40 40"><rect x="5" y="20" width="30" height="15" rx="5" fill="#ff7675" stroke="#fff" stroke-width="2"/><ellipse cx="13" cy="20" rx="5" ry="3" fill="#fdcb6e"/><ellipse cx="27" cy="20" rx="5" ry="3" fill="#fdcb6e"/><rect x="18" y="10" width="4" height="10" rx="2" fill="#ffeaa7"/></svg>
@@ -1534,28 +1557,36 @@
     </div>
   </div>
 
+  <!-- MINIGAME MODAL -->
   <div class="minigame-modal" id="minigame-modal">
-    <div class="minigame-box" id="minigame-content">
-      </div>
+    <div class="minigame-box" id="minigame-content"></div>
   </div>
 
+  <!-- GUIDE MODAL -->
   <div class="guide-modal" id="guide-modal">
     <div class="guide-box">
       <div class="guide-title" style="color:#ff6b81; font-weight:800; font-size:18px; margin-bottom:15px;">PANDUAN MERAWAT</div>
-      <div style="font-size:12px; color:#ff6b81; text-align:left; max-height: 50vh; overflow-y: auto;">
+      <div style="font-size:12px; color:#ff6b81; text-align:left; max-height:50vh; overflow-y:auto;">
         <h3 style="color:#f368e0; margin-bottom:5px;">MAKANAN & KEBERSIHAN</h3>
         <p style="margin-bottom:10px;">Beri makan agar anabul tidak sakit. Mandikan dengan sabun agar tetap wangi dan bersih!</p>
+        <h3 style="color:#f368e0; margin-bottom:5px;">MOTIF & WARNA PET</h3>
+        <p style="margin-bottom:10px;">Saat buat pet, pilih motif dan warna bebas. Di kamar tidur, klik <b>GANTI MOTIF</b> untuk mengubah motif sewaktu-waktu!</p>
         <h3 style="color:#f368e0; margin-bottom:5px;">DEKORASI & FITTING ROOM</h3>
-        <p style="margin-bottom:10px;">Beli Perabotan di Toko! Gunakan fitur <b>FITTING ROOM</b> di Toko untuk mencoba Baju dan Aksesoris dengan klik tombol "COBA" sebelum beli.</p>
+        <p style="margin-bottom:10px;">Beli Perabotan di Toko! Gunakan fitur <b>FITTING ROOM</b> untuk mencoba Baju dan Aksesoris sebelum beli.</p>
+        <h3 style="color:#f368e0; margin-bottom:5px;">PIANO 🎵</h3>
+        <p style="margin-bottom:10px;">Di Piano, kamu bisa <b>pilih lagu dari galeri HP</b>! Beat tile akan muncul mengikuti irama musikmu.</p>
+        <h3 style="color:#f368e0; margin-bottom:5px;">RED LIGHT GREEN LIGHT 🦑</h3>
+        <p style="margin-bottom:10px;">Mainkan bareng teman! Boneka akan berputar. Maju saat HIJAU, berhenti saat MERAH atau ELIMINASI!</p>
         <h3 style="color:#f368e0; margin-bottom:5px;">RARE ITEMS & MINI GAMES</h3>
-        <p style="margin-bottom:10px;">Mainkan Mini Games. Jika menang dengan skor tinggi, kamu bisa mendapatkan <b>RARE ITEMS</b> yang tidak dijual di toko!</p>
+        <p style="margin-bottom:10px;">Mainkan Mini Games untuk mendapatkan koin dan XP. Item RARE tersedia di toko dengan level tertentu!</p>
         <h3 style="color:#f368e0; margin-bottom:5px;">MABAR / VISIT TEMEN</h3>
-        <p>Bagikan Kode Rumahmu ke teman untuk main bareng secara real-time. Pamerkan kamarmu!</p>
+        <p>Bagikan Kode Rumahmu ke teman untuk main bareng secara real-time. Pamerkan kamarmu dan main lomba lari!</p>
       </div>
       <button class="btn-kawaii btn-pink" onclick="closeGuide()" style="margin-top:15px; width:100%;">MENGERTI!</button>
     </div>
   </div>
 
+  <!-- CROP MODAL -->
   <div class="crop-modal" id="crop-modal">
     <div class="crop-box">
       <h3 style="margin-bottom:10px; color:#ff6b81; font-weight:800;">CROP FOTO ALBUM</h3>
@@ -1564,7 +1595,7 @@
         <div class="crop-overlay"></div>
       </div>
       <p style="font-size:11px; color:#ff9a9e; font-weight:bold; margin-top:10px;">Geser slider untuk Zoom, tarik gambar untuk menggeser posisinya.</p>
-      <input type="range" id="crop-zoom" min="0.5" max="3" step="0.1" value="1" style="width:100%; margin:10px 0; accent-color: #ff9ff3;">
+      <input type="range" id="crop-zoom" min="0.5" max="3" step="0.1" value="1" style="width:100%; margin:10px 0; accent-color:#ff9ff3;">
       <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
         <button class="btn-kawaii btn-green" onclick="cropAndSave()" style="padding:10px; font-size:12px; margin:0; flex:1;">SIMPAN</button>
         <button class="btn-kawaii btn-red" onclick="closeCropModal()" style="padding:10px; font-size:12px; margin:0; flex:1;">BATAL</button>
@@ -1572,6 +1603,7 @@
     </div>
   </div>
 
+  <!-- FURNITURE POSITION MODAL -->
   <div class="minigame-modal" id="furniture-pos-modal">
     <div class="minigame-box">
       <h3 style="color:#ff6b81; font-weight:800;">TARUH DIMANA?</h3>
@@ -1584,9 +1616,32 @@
     </div>
   </div>
 
+  <!-- MOTIF MODAL (ganti motif dari kamar) -->
+  <div class="minigame-modal" id="motif-modal">
+    <div class="minigame-box" style="max-height:85vh; overflow-y:auto;">
+      <h3 style="color:#ff6b81; font-weight:800; margin-bottom:8px;">🎨 GANTI MOTIF PET</h3>
+      <p style="font-size:11px; color:#ff9a9e; font-weight:bold; margin-bottom:10px;">Pilih motif dan warna, lalu tekan TERAPKAN.</p>
+      <!-- Pattern grid -->
+      <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px;" id="motif-modal-grid">
+        <!-- filled by buildMotifModal() -->
+      </div>
+      <!-- Color picker -->
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+        <label style="font-size:11px; font-weight:800; color:#ff6b81;">🎨 Warna Motif:</label>
+        <input type="color" id="motif-color-pick" value="#ff7675" onchange="document.getElementById('motif-color-preview').style.background=this.value;" style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;cursor:pointer;padding:0;">
+        <div id="motif-color-preview" style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;background:#ff7675;"></div>
+      </div>
+      <!-- Preview -->
+      <div id="motif-preview-container" style="width:100px;height:100px;margin:0 auto 10px auto;border:3px dashed #ffb8c6;border-radius:15px;background:#fff0f5;display:flex;align-items:center;justify-content:center;"></div>
+      <button class="btn-kawaii btn-pink" onclick="applyMotifFromModal()" style="width:100%;">TERAPKAN ✨</button>
+      <button class="btn-kawaii btn-red" onclick="document.getElementById('motif-modal').classList.remove('active')" style="width:100%; margin-top:8px;">BATAL</button>
+    </div>
+  </div>
+
+  <!-- Hidden file inputs -->
   <input type="file" id="album-upload" accept="image/png, image/jpeg" style="display:none;" onchange="handleAlbumFile(event)">
 
-</div>```
+</div>
 
 <script>
 // ============================================================
@@ -2275,27 +2330,43 @@ let petData = {
   ownedItems: ['bg-default', 'none'], activeBg: 'bg-default',
   activeAcc: 'none', activeClothes: 'none', activeSoap: '#ffffff', activePillow: '#f5f6fa',
   lastOnline: Date.now(),
-  furniture: { left: { id: 'none', scale: 1 }, right: { id: 'none', scale: 1 }, albumPic: null }
+  furniture: { left: { id: 'none', scale: 1 }, right: { id: 'none', scale: 1 }, albumPic: null },
+  petPattern: 'none', petPatternColor: '#ff7675'
 };
 
 let isSleeping = false, gameInterval, showerInterval, isSoaping = false, isShowering = false;
 let anabulRoomCode = null, anabulIsHost = false, anabulRoomRef = null;
-let tempType = 'cat', tempColor = '#ffffff';
+let tempType = 'cat', tempColor = '#ffffff', tempPattern = 'none', tempPatternColor = '#ff7675';
 
-// Variabel Tambahan Furniture & Crop
 let tempFurnitureEquipId = null;
 let cropTempImage = null;
 let cropDrag = { isDown: false, startX: 0, startY: 0, imgX: 0, imgY: 0 };
 
+// ============================================================
+// PATTERN ENGINE
+// ============================================================
+const petPatterns = [
+  { id: 'none', name: 'Polos', fn: (c) => '' },
+  { id: 'stripes', name: 'Belang Harimau', fn: (c) => `<path d="M35 20 Q50 35 65 20 M30 35 Q50 50 70 35 M40 10 Q50 25 60 10" fill="none" stroke="${c}" stroke-width="4" opacity="0.35" stroke-linecap="round"/>` },
+  { id: 'spots', name: 'Bintik Macan Tutul', fn: (c) => `<circle cx="38" cy="65" r="7" fill="${c}" opacity="0.3"/><circle cx="63" cy="55" r="9" fill="${c}" opacity="0.25"/><circle cx="52" cy="78" r="5" fill="${c}" opacity="0.3"/><circle cx="30" cy="75" r="6" fill="${c}" opacity="0.28"/>` },
+  { id: 'zigzag', name: 'Zigzag Badai', fn: (c) => `<path d="M20 50 L30 40 L40 50 L50 40 L60 50 L70 40 L80 50" fill="none" stroke="${c}" stroke-width="3" opacity="0.3"/><path d="M20 60 L30 50 L40 60 L50 50 L60 60 L70 50 L80 60" fill="none" stroke="${c}" stroke-width="3" opacity="0.3"/>` },
+  { id: 'hearts', name: 'Hati Cinta', fn: (c) => `<path d="M38 68 C38 65 42 63 44 66 C46 63 50 65 50 68 C50 72 44 76 44 76 C44 76 38 72 38 68Z" fill="${c}" opacity="0.35"/><path d="M55 45 C55 43 58 42 59 44 C60 42 63 43 63 45 C63 47 59 50 59 50 C59 50 55 47 55 45Z" fill="${c}" opacity="0.35"/>` },
+  { id: 'stars', name: 'Bintang Galaxy', fn: (c) => `<polygon points="50,28 52,34 58,34 53,38 55,44 50,40 45,44 47,38 42,34 48,34" fill="${c}" opacity="0.35"/><polygon points="30,60 31,63 34,63 32,65 33,68 30,66 27,68 28,65 26,63 29,63" fill="${c}" opacity="0.35"/>` },
+  { id: 'diamonds', name: 'Berlian Mewah', fn: (c) => `<polygon points="50,50 56,58 50,66 44,58" fill="${c}" opacity="0.3"/><polygon points="30,70 34,76 30,82 26,76" fill="${c}" opacity="0.25"/>` },
+  { id: 'waves', name: 'Ombak Laut', fn: (c) => `<path d="M20 55 Q30 48 40 55 Q50 62 60 55 Q70 48 80 55" fill="none" stroke="${c}" stroke-width="3.5" opacity="0.3"/><path d="M20 68 Q30 61 40 68 Q50 75 60 68 Q70 61 80 68" fill="none" stroke="${c}" stroke-width="3.5" opacity="0.3"/>` },
+  { id: 'galaxy', name: 'Nebula Galaksi', fn: (c) => `<circle cx="45" cy="55" r="4" fill="${c}" opacity="0.2"/><circle cx="60" cy="45" r="3" fill="${c}" opacity="0.25"/><circle cx="35" cy="70" r="5" fill="${c}" opacity="0.18"/><circle cx="65" cy="70" r="3" fill="${c}" opacity="0.22"/><circle cx="50" cy="80" r="2" fill="${c}" opacity="0.3"/>` },
+  { id: 'tribal', name: 'Tribal Mistik', fn: (c) => `<path d="M35 40 L40 30 L45 40 L40 35 Z" fill="${c}" opacity="0.3"/><path d="M55 40 L60 30 L65 40 L60 35 Z" fill="${c}" opacity="0.3"/><path d="M40 65 L50 55 L60 65 L50 60 Z" fill="${c}" opacity="0.28"/>` }
+];
+
 const svgs = {
-  cat: `<svg class="pet-svg idle" viewBox="0 0 100 100"><path d="M 80 80 Q 95 80 95 60 Q 95 50 85 55" fill="none" stroke="__COLOR__" stroke-width="8" stroke-linecap="round"/><ellipse cx="50" cy="70" rx="35" ry="25" fill="__COLOR__"/><circle cx="50" cy="45" r="30" fill="__COLOR__"/><polygon points="25,30 20,5 40,20" fill="__COLOR__"/><polygon points="75,30 80,5 60,20" fill="__COLOR__"/><polygon points="28,27 24,12 36,22" fill="#ffb8b8"/><polygon points="72,27 76,12 64,22" fill="#ffb8b8"/><g class="eyes-open"><circle cx="40" cy="40" r="4" fill="#000"/><circle cx="41" cy="39" r="1.5" fill="#fff"/><circle cx="60" cy="40" r="4" fill="#000"/><circle cx="61" cy="39" r="1.5" fill="#fff"/></g><g class="eyes-closed"><path d="M 35 42 Q 40 45 45 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/><path d="M 55 42 Q 60 45 65 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/></g><polygon points="48,48 52,48 50,51" fill="#ff7675"/><path d="M 50 51 Q 45 55 40 52 M 50 51 Q 55 55 60 52" fill="none" stroke="#000" stroke-width="1.5"/><line x1="20" y1="42" x2="30" y2="45" stroke="#000" stroke-width="1"/><line x1="20" y1="48" x2="30" y2="48" stroke="#000" stroke-width="1"/><line x1="80" y1="42" x2="70" y2="45" stroke="#000" stroke-width="1"/><line x1="80" y1="48" x2="70" y2="48" stroke="#000" stroke-width="1"/><ellipse cx="35" cy="95" rx="8" ry="5" fill="__COLOR__"/><ellipse cx="65" cy="95" rx="8" ry="5" fill="__COLOR__"/>__PATTERN__<g class="dirt-spots"><circle cx="30" cy="70" r="8" fill="#634731" opacity="0.6"/><circle cx="70" cy="65" r="10" fill="#634731" opacity="0.5"/><circle cx="50" cy="35" r="7" fill="#634731" opacity="0.7"/></g></svg>`,
-  dog: `<svg class="pet-svg idle" viewBox="0 0 100 100"><path d="M 75 75 Q 95 60 85 45" fill="none" stroke="__COLOR__" stroke-width="8" stroke-linecap="round"/><rect x="30" y="50" width="40" height="40" rx="15" fill="__COLOR__"/><ellipse cx="50" cy="45" rx="30" ry="25" fill="__COLOR__"/><path d="M 25 40 Q 10 50 15 70 Q 25 70 30 50" fill="__COLOR__"/><path d="M 75 40 Q 90 50 85 70 Q 75 70 70 50" fill="__COLOR__"/><ellipse cx="50" cy="55" rx="15" ry="10" fill="#f5f6fa"/><ellipse cx="50" cy="52" rx="4" ry="3" fill="#2d3436"/><g class="eyes-open"><circle cx="38" cy="40" r="4" fill="#000"/><circle cx="39" cy="39" r="1.5" fill="#fff"/><circle cx="62" cy="40" r="4" fill="#000"/><circle cx="63" cy="39" r="1.5" fill="#fff"/></g><g class="eyes-closed"><path d="M 33 42 Q 38 45 43 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/><path d="M 57 42 Q 62 45 67 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/></g><ellipse cx="35" cy="90" rx="8" ry="5" fill="__COLOR__"/><ellipse cx="65" cy="90" rx="8" ry="5" fill="__COLOR__"/>__PATTERN__<g class="dirt-spots"><circle cx="30" cy="70" r="8" fill="#634731" opacity="0.6"/><circle cx="70" cy="65" r="10" fill="#634731" opacity="0.5"/><circle cx="50" cy="35" r="7" fill="#634731" opacity="0.7"/></g></svg>`,
-  rabbit: `<svg class="pet-svg idle" viewBox="0 0 100 100"><ellipse cx="50" cy="75" rx="30" ry="25" fill="__COLOR__"/><circle cx="50" cy="50" r="25" fill="__COLOR__"/><ellipse cx="35" cy="20" rx="8" ry="25" fill="__COLOR__"/><ellipse cx="65" cy="20" rx="8" ry="25" fill="__COLOR__"/><ellipse cx="35" cy="20" rx="4" ry="15" fill="#ffb8b8"/><ellipse cx="65" cy="20" rx="4" ry="15" fill="#ffb8b8"/><g class="eyes-open"><circle cx="40" cy="45" r="4" fill="#000"/><circle cx="41" cy="44" r="1.5" fill="#fff"/><circle cx="60" cy="45" r="4" fill="#000"/><circle cx="61" cy="44" r="1.5" fill="#fff"/></g><g class="eyes-closed"><path d="M 35 47 Q 40 50 45 47" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/><path d="M 55 47 Q 60 50 65 47" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/></g><polygon points="48,52 52,52 50,55" fill="#ff7675"/><circle cx="85" cy="80" r="10" fill="#f5f6fa"/><ellipse cx="35" cy="98" rx="10" ry="4" fill="__COLOR__"/><ellipse cx="65" cy="98" rx="10" ry="4" fill="__COLOR__"/>__PATTERN__<g class="dirt-spots"><circle cx="30" cy="70" r="8" fill="#634731" opacity="0.6"/><circle cx="70" cy="65" r="10" fill="#634731" opacity="0.5"/><circle cx="50" cy="35" r="7" fill="#634731" opacity="0.7"/></g></svg>`,
-  bear: `<svg class="pet-svg idle" viewBox="0 0 100 100"><circle cx="50" cy="70" r="30" fill="__COLOR__"/><circle cx="25" cy="30" r="12" fill="__COLOR__"/><circle cx="75" cy="30" r="12" fill="__COLOR__"/><circle cx="25" cy="30" r="6" fill="#f5f6fa" opacity="0.5"/><circle cx="75" cy="30" r="6" fill="#f5f6fa" opacity="0.5"/><circle cx="50" cy="45" r="28" fill="__COLOR__"/><ellipse cx="50" cy="55" rx="14" ry="10" fill="#f5f6fa"/><ellipse cx="50" cy="51" rx="5" ry="3" fill="#2d3436"/><g class="eyes-open"><circle cx="38" cy="40" r="4" fill="#000"/><circle cx="39" cy="39" r="1.5" fill="#fff"/><circle cx="62" cy="40" r="4" fill="#000"/><circle cx="63" cy="39" r="1.5" fill="#fff"/></g><g class="eyes-closed"><path d="M 33 42 Q 38 45 43 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/><path d="M 57 42 Q 62 45 67 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/></g><ellipse cx="35" cy="95" rx="8" ry="5" fill="__COLOR__"/><ellipse cx="65" cy="95" rx="8" ry="5" fill="__COLOR__"/>__PATTERN__<g class="dirt-spots"><circle cx="30" cy="70" r="8" fill="#634731" opacity="0.6"/><circle cx="70" cy="65" r="10" fill="#634731" opacity="0.5"/><circle cx="50" cy="35" r="7" fill="#634731" opacity="0.7"/></g></svg>`
+  cat: `<svg class="pet-svg idle" viewBox="0 0 100 100"><path d="M 80 80 Q 95 80 95 60 Q 95 50 85 55" fill="none" stroke="__COLOR__" stroke-width="8" stroke-linecap="round"/><ellipse cx="50" cy="70" rx="35" ry="25" fill="__COLOR__"/><circle cx="50" cy="45" r="30" fill="__COLOR__"/><polygon points="25,30 20,5 40,20" fill="__COLOR__"/><polygon points="75,30 80,5 60,20" fill="__COLOR__"/><polygon points="28,27 24,12 36,22" fill="#ffb8b8"/><polygon points="72,27 76,12 64,22" fill="#ffb8b8"/>__PATTERN__<g class="eyes-open"><circle cx="40" cy="40" r="4" fill="#000"/><circle cx="41" cy="39" r="1.5" fill="#fff"/><circle cx="60" cy="40" r="4" fill="#000"/><circle cx="61" cy="39" r="1.5" fill="#fff"/></g><g class="eyes-closed"><path d="M 35 42 Q 40 45 45 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/><path d="M 55 42 Q 60 45 65 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/></g><polygon points="48,48 52,48 50,51" fill="#ff7675"/><path d="M 50 51 Q 45 55 40 52 M 50 51 Q 55 55 60 52" fill="none" stroke="#000" stroke-width="1.5"/><line x1="20" y1="42" x2="30" y2="45" stroke="#000" stroke-width="1"/><line x1="20" y1="48" x2="30" y2="48" stroke="#000" stroke-width="1"/><line x1="80" y1="42" x2="70" y2="45" stroke="#000" stroke-width="1"/><line x1="80" y1="48" x2="70" y2="48" stroke="#000" stroke-width="1"/><ellipse cx="35" cy="95" rx="8" ry="5" fill="__COLOR__"/><ellipse cx="65" cy="95" rx="8" ry="5" fill="__COLOR__"/><g class="dirt-spots"><circle cx="30" cy="70" r="8" fill="#634731" opacity="0.6"/><circle cx="70" cy="65" r="10" fill="#634731" opacity="0.5"/><circle cx="50" cy="35" r="7" fill="#634731" opacity="0.7"/></g></svg>`,
+  dog: `<svg class="pet-svg idle" viewBox="0 0 100 100"><path d="M 75 75 Q 95 60 85 45" fill="none" stroke="__COLOR__" stroke-width="8" stroke-linecap="round"/><rect x="30" y="50" width="40" height="40" rx="15" fill="__COLOR__"/><ellipse cx="50" cy="45" rx="30" ry="25" fill="__COLOR__"/>__PATTERN__<path d="M 25 40 Q 10 50 15 70 Q 25 70 30 50" fill="__COLOR__"/><path d="M 75 40 Q 90 50 85 70 Q 75 70 70 50" fill="__COLOR__"/><ellipse cx="50" cy="55" rx="15" ry="10" fill="#f5f6fa"/><ellipse cx="50" cy="52" rx="4" ry="3" fill="#2d3436"/><g class="eyes-open"><circle cx="38" cy="40" r="4" fill="#000"/><circle cx="39" cy="39" r="1.5" fill="#fff"/><circle cx="62" cy="40" r="4" fill="#000"/><circle cx="63" cy="39" r="1.5" fill="#fff"/></g><g class="eyes-closed"><path d="M 33 42 Q 38 45 43 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/><path d="M 57 42 Q 62 45 67 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/></g><ellipse cx="35" cy="90" rx="8" ry="5" fill="__COLOR__"/><ellipse cx="65" cy="90" rx="8" ry="5" fill="__COLOR__"/><g class="dirt-spots"><circle cx="30" cy="70" r="8" fill="#634731" opacity="0.6"/><circle cx="70" cy="65" r="10" fill="#634731" opacity="0.5"/><circle cx="50" cy="35" r="7" fill="#634731" opacity="0.7"/></g></svg>`,
+  rabbit: `<svg class="pet-svg idle" viewBox="0 0 100 100"><ellipse cx="50" cy="75" rx="30" ry="25" fill="__COLOR__"/><circle cx="50" cy="50" r="25" fill="__COLOR__"/>__PATTERN__<ellipse cx="35" cy="20" rx="8" ry="25" fill="__COLOR__"/><ellipse cx="65" cy="20" rx="8" ry="25" fill="__COLOR__"/><ellipse cx="35" cy="20" rx="4" ry="15" fill="#ffb8b8"/><ellipse cx="65" cy="20" rx="4" ry="15" fill="#ffb8b8"/><g class="eyes-open"><circle cx="40" cy="45" r="4" fill="#000"/><circle cx="41" cy="44" r="1.5" fill="#fff"/><circle cx="60" cy="45" r="4" fill="#000"/><circle cx="61" cy="44" r="1.5" fill="#fff"/></g><g class="eyes-closed"><path d="M 35 47 Q 40 50 45 47" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/><path d="M 55 47 Q 60 50 65 47" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/></g><polygon points="48,52 52,52 50,55" fill="#ff7675"/><circle cx="85" cy="80" r="10" fill="#f5f6fa"/><ellipse cx="35" cy="98" rx="10" ry="4" fill="__COLOR__"/><ellipse cx="65" cy="98" rx="10" ry="4" fill="__COLOR__"/><g class="dirt-spots"><circle cx="30" cy="70" r="8" fill="#634731" opacity="0.6"/><circle cx="70" cy="65" r="10" fill="#634731" opacity="0.5"/><circle cx="50" cy="35" r="7" fill="#634731" opacity="0.7"/></g></svg>`,
+  bear: `<svg class="pet-svg idle" viewBox="0 0 100 100"><circle cx="50" cy="70" r="30" fill="__COLOR__"/><circle cx="25" cy="30" r="12" fill="__COLOR__"/><circle cx="75" cy="30" r="12" fill="__COLOR__"/><circle cx="25" cy="30" r="6" fill="#f5f6fa" opacity="0.5"/><circle cx="75" cy="30" r="6" fill="#f5f6fa" opacity="0.5"/><circle cx="50" cy="45" r="28" fill="__COLOR__"/>__PATTERN__<ellipse cx="50" cy="55" rx="14" ry="10" fill="#f5f6fa"/><ellipse cx="50" cy="51" rx="5" ry="3" fill="#2d3436"/><g class="eyes-open"><circle cx="38" cy="40" r="4" fill="#000"/><circle cx="39" cy="39" r="1.5" fill="#fff"/><circle cx="62" cy="40" r="4" fill="#000"/><circle cx="63" cy="39" r="1.5" fill="#fff"/></g><g class="eyes-closed"><path d="M 33 42 Q 38 45 43 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/><path d="M 57 42 Q 62 45 67 42" fill="none" stroke="#2d3436" stroke-width="2" stroke-linecap="round"/></g><ellipse cx="35" cy="95" rx="8" ry="5" fill="__COLOR__"/><ellipse cx="65" cy="95" rx="8" ry="5" fill="__COLOR__"/><g class="dirt-spots"><circle cx="30" cy="70" r="8" fill="#634731" opacity="0.6"/><circle cx="70" cy="65" r="10" fill="#634731" opacity="0.5"/><circle cx="50" cy="35" r="7" fill="#634731" opacity="0.7"/></g></svg>`
 };
 
 // =====================================================================
-// 5.000 ITEMS PROCEDURAL ENGINE WITH RARE ITEM LOGIC + 20 FURNITURE
+// SHOP ITEMS ENGINE
 // =====================================================================
 const allShopItems = { clothes: [], bg: [], skin: [], bath: [], furniture: [] };
 
@@ -2308,7 +2379,16 @@ function randColor(id, offset) {
 
 function isItemRare(id, index) { return index % 13 === 0 || index === 777; }
 
-// 1. GENERATOR 1.000 BAJU
+// RARE SVG ACCESSORIES (special high-quality ones)
+const rareSvgPool = [
+  `<path d="M30 20 L40 0 L50 15 L60 0 L70 20 L65 28 L50 22 L35 28 Z" fill="url(#rg1)" stroke="#f9ca24" stroke-width="2"/><defs><linearGradient id="rg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f9ca24"/><stop offset="100%" style="stop-color:#e17055"/></linearGradient></defs><circle cx="50" cy="18" r="5" fill="#fff" opacity="0.8"/>`,
+  `<ellipse cx="50" cy="20" rx="30" ry="8" fill="#6c5ce7" stroke="#a29bfe" stroke-width="2"/><path d="M28 16 Q50 -8 72 16" fill="#a29bfe" stroke="#6c5ce7" stroke-width="2"/><circle cx="50" cy="12" r="4" fill="#ffeaa7"/><circle cx="35" cy="14" r="2" fill="#fd79a8"/><circle cx="65" cy="14" r="2" fill="#fd79a8"/>`,
+  `<path d="M40 55 Q50 70 60 55" fill="none" stroke="#f9ca24" stroke-width="4"/><circle cx="50" cy="68" r="8" fill="#f9ca24"/><circle cx="50" cy="68" r="5" fill="#e17055"/><circle cx="33" cy="60" r="4" fill="#f9ca24"/><circle cx="67" cy="60" r="4" fill="#f9ca24"/>`,
+  `<rect x="28" y="33" width="18" height="14" rx="5" fill="#2d3436"/><rect x="54" y="33" width="18" height="14" rx="5" fill="#2d3436"/><line x1="46" y1="40" x2="54" y2="40" stroke="#636e72" stroke-width="2"/><rect x="30" y="35" width="14" height="10" rx="4" fill="#74b9ff" opacity="0.8"/><rect x="56" y="35" width="14" height="10" rx="4" fill="#fd79a8" opacity="0.8"/>`,
+  `<path d="M25 30 L35 5 L50 18 L65 5 L75 30 L65 35 L50 25 L35 35 Z" fill="#00cec9" stroke="#81ecec" stroke-width="2"/><circle cx="50" cy="22" r="7" fill="#ffeaa7"/><path d="M46 19 L48 25 L50 19 L52 25 L54 19" fill="none" stroke="#e17055" stroke-width="1.5"/>`
+];
+
+// 1. CLOTHES 1000
 const bajuBases = [
   { nama: 'Kaos', path: `M 30 55 Q 50 60 70 55 L 75 80 Q 50 90 25 80 Z` },
   { nama: 'Jubah', path: `M 35 50 L 65 50 L 80 90 L 20 90 Z` },
@@ -2343,7 +2423,7 @@ for (let i = 1; i <= 1000; i++) {
   allShopItems.clothes.push({ id: `baju_${i}`, name: `${namePrefix}${base.nama} ${addon.nama} ${i}`, cost: (rareStatus ? 500 : 10) + Math.floor(i / 20), reqLvl: Math.max(1, Math.floor(i / 40)), svg: svgRaw, rare: rareStatus });
 }
 
-// 2. GENERATOR 1.000 AKSESORIS
+// 2. ACCESSORIES 1000
 allShopItems.skin.push({ id: 'none', name: 'Lepas Aksesoris', cost: 0, reqLvl: 1, svg: '', rare: false });
 const accBases = [
   { p: `<path d="M 35 25 L 50 35 L 65 25 Z" fill="VAR_C1" stroke="#2d3436" stroke-width="2"/><circle cx="50" cy="30" r="5" fill="VAR_C2"/>`, n: 'Pita Kepala' },
@@ -2359,11 +2439,12 @@ for (let i = 1; i <= 1000; i++) {
   let c1 = randColor(i, 30); let c2 = randColor(i, 90); let c3 = randColor(i, 200);
   let rareStatus = isItemRare(`acc_${i}`, i);
   let namePrefix = rareStatus ? "✨ RARE " : "";
-  let svgRaw = (base.p + mod).replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3);
+  // Use special rare SVGs for every 13th item
+  let svgRaw = rareStatus ? rareSvgPool[Math.floor(i / 13) % rareSvgPool.length] : (base.p + mod).replace(/VAR_C1/g, c1).replace(/VAR_C2/g, c2).replace(/VAR_C3/g, c3);
   allShopItems.skin.push({ id: `acc_${i}`, name: `${namePrefix}${base.n} Mod ${i}`, cost: (rareStatus ? 600 : 15) + Math.floor(i / 20), reqLvl: Math.max(1, Math.floor(i / 50)), svg: svgRaw, rare: rareStatus });
 }
 
-// 3. GENERATOR 1.000 LATAR BACKGROUND
+// 3. BACKGROUNDS 1000
 allShopItems.bg.push({ id: 'bg-default', name: 'Kamar (Gratis)', cost: 0, reqLvl: 1, css: 'background:#ffda79;', rare: false });
 const bgEngines = [
   (c1, c2) => `background: linear-gradient(135deg, ${c1}, ${c2});`,
@@ -2380,7 +2461,7 @@ for (let i = 1; i <= 1000; i++) {
   allShopItems.bg.push({ id: `bg_${i}`, name: `${namePrefix}Latar Epik ${i}`, cost: (rareStatus ? 1000 : 50) + Math.floor(i / 10), reqLvl: Math.max(1, Math.floor(i / 30)), css: css, rare: rareStatus });
 }
 
-// 4. GENERATOR 1.000 SABUN & BANTAL
+// 4. BATH ITEMS
 for (let i = 1; i <= 500; i++) {
   let rareStatus = isItemRare(`soap_${i}`, i);
   allShopItems.bath.push({ id: `soap_${i}`, name: `${rareStatus ? '✨ RARE ' : ''}Sabun Mewah ${i}`, cost: (rareStatus ? 300 : 5) + Math.floor(i / 10), reqLvl: 1, val: randColor(i, 0), type: 'soap', rare: rareStatus });
@@ -2390,7 +2471,7 @@ for (let i = 1; i <= 500; i++) {
   allShopItems.bath.push({ id: `pillow_${i}`, name: `${rareStatus ? '✨ RARE ' : ''}Kasur Sultan ${i}`, cost: (rareStatus ? 400 : 10) + Math.floor(i / 10), reqLvl: 1, val: randColor(i, 50), type: 'pillow', rare: rareStatus });
 }
 
-// 5. GENERATOR 20 FURNITURE
+// 5. FURNITURE - 40 ITEMS (20 lama + 20 baru)
 const furnitureBases = [
   { n: 'Lepas Perabotan', svg: '', c: 0 },
   { n: 'Tanaman Hias', svg: `<rect x="40" y="70" width="20" height="30" fill="#cc8e35"/><ellipse cx="50" cy="50" rx="30" ry="40" fill="#2ed573"/><ellipse cx="50" cy="50" rx="15" ry="30" fill="#7bed9f"/>` },
@@ -2411,15 +2492,36 @@ const furnitureBases = [
   { n: 'Kursi Gaming', svg: `<rect x="40" y="20" width="20" height="50" rx="5" fill="#192a56"/><rect x="30" y="60" width="40" height="10" fill="#e84118"/><rect x="45" y="70" width="10" height="20" fill="#2f3542"/>` },
   { n: 'Karpet Bintang', svg: `<polygon points="50,10 60,40 90,40 65,60 75,90 50,70 25,90 35,60 10,40 40,40" fill="#f1c40f" opacity="0.8"/>` },
   { n: 'Lemari Pendingin', svg: `<rect x="30" y="10" width="40" height="80" fill="#f5f6fa" stroke="#dcdde1" stroke-width="3"/><line x1="30" y1="40" x2="70" y2="40" stroke="#dcdde1" stroke-width="3"/><rect x="35" y="20" width="5" height="15" fill="#bdc3c7"/><rect x="35" y="50" width="5" height="15" fill="#bdc3c7"/>` },
-  { n: '🖼️ ALBUM FOTO', svg: `<rect x="15" y="15" width="70" height="70" fill="#fff" stroke="#dfe6e9" stroke-width="5"/><rect x="25" y="25" width="50" height="40" fill="#74b9ff"/><polygon points="25,65 40,45 55,60 65,50 75,65" fill="#0984e3"/><circle cx="65" cy="35" r="4" fill="#ffeaa7"/>` }
+  { n: '🖼️ ALBUM FOTO', svg: `<rect x="15" y="15" width="70" height="70" fill="#fff" stroke="#dfe6e9" stroke-width="5"/><rect x="25" y="25" width="50" height="40" fill="#74b9ff"/><polygon points="25,65 40,45 55,60 65,50 75,65" fill="#0984e3"/><circle cx="65" cy="35" r="4" fill="#ffeaa7"/>` },
+  // 20 NEW FURNITURE
+  { n: '🌙 Lampu Bulan', svg: `<path d="M30 50 Q30 20 50 20 Q35 35 38 50 Q35 65 50 80 Q30 80 30 50Z" fill="#ffeaa7" stroke="#f9ca24" stroke-width="2"/><circle cx="40" cy="38" r="3" fill="#f9ca24" opacity="0.5"/><circle cx="37" cy="55" r="2" fill="#f9ca24" opacity="0.4"/>` },
+  { n: '🎪 Tenda Sirkus', svg: `<polygon points="50,5 90,60 10,60" fill="#e74c3c"/><polygon points="50,5 70,60 30,60" fill="#f1c40f"/><rect x="25" y="60" width="50" height="30" fill="#3498db"/><path d="M45 75 Q50 65 55 75 Q50 85 45 75Z" fill="#e74c3c"/>` },
+  { n: '🔮 Bola Kristal', svg: `<circle cx="50" cy="45" r="32" fill="#a29bfe" opacity="0.7" stroke="#6c5ce7" stroke-width="3"/><circle cx="42" cy="37" r="10" fill="#fff" opacity="0.4"/><ellipse cx="50" cy="75" rx="25" ry="6" fill="#6c5ce7" opacity="0.5"/>` },
+  { n: '🏺 Guci Antik', svg: `<ellipse cx="50" cy="30" rx="18" ry="8" fill="#e17055"/><path d="M32 30 Q20 50 25 75 Q50 85 75 75 Q80 50 68 30Z" fill="#e17055"/><ellipse cx="50" cy="76" rx="25" ry="7" fill="#d63031"/><path d="M28 45 Q25 55 28 65" fill="none" stroke="#c0392b" stroke-width="2"/>` },
+  { n: '🎭 Topeng Teater', svg: `<ellipse cx="50" cy="45" rx="30" ry="35" fill="#fdcb6e"/><circle cx="38" cy="38" r="6" fill="#2d3436" opacity="0.8"/><circle cx="62" cy="38" r="6" fill="#2d3436" opacity="0.8"/><path d="M35 58 Q50 72 65 58" fill="none" stroke="#e17055" stroke-width="3"/>` },
+  { n: '🌵 Kaktus Lucu', svg: `<rect x="43" y="25" width="14" height="60" rx="7" fill="#00b894"/><rect x="22" y="45" width="25" height="10" rx="5" fill="#00b894"/><rect x="53" y="55" width="25" height="10" rx="5" fill="#00b894"/><ellipse cx="50" cy="90" rx="20" ry="5" fill="#636e72"/><circle cx="50" cy="22" r="5" fill="#fd79a8"/>` },
+  { n: '🎑 Lentera Jepang', svg: `<rect x="38" y="5" width="4" height="15" fill="#636e72"/><ellipse cx="50" cy="25" rx="20" ry="8" fill="#e74c3c"/><rect x="30" y="25" width="40" height="45" rx="5" fill="#f9ca24"/><ellipse cx="50" cy="70" rx="20" ry="8" fill="#e74c3c"/><line x1="40" y1="35" x2="40" y2="65" stroke="#e74c3c" stroke-width="2"/><line x1="50" y1="35" x2="50" y2="65" stroke="#e74c3c" stroke-width="2"/><line x1="60" y1="35" x2="60" y2="65" stroke="#e74c3c" stroke-width="2"/>` },
+  { n: '🪞 Cermin Mewah', svg: `<ellipse cx="50" cy="45" rx="28" ry="38" fill="#dfe6e9" stroke="#f9ca24" stroke-width="5"/><ellipse cx="50" cy="45" rx="22" ry="32" fill="#b2bec3" opacity="0.5"/><rect x="44" y="83" width="12" height="12" fill="#f9ca24"/><ellipse cx="50" cy="83" rx="8" ry="3" fill="#e17055"/>` },
+  { n: '🎠 Komidi Putar Mini', svg: `<line x1="50" y1="10" x2="50" y2="80" stroke="#e74c3c" stroke-width="4"/><line x1="50" y1="20" x2="20" y2="50" stroke="#e74c3c" stroke-width="3"/><line x1="50" y1="20" x2="80" y2="50" stroke="#e74c3c" stroke-width="3"/><circle cx="20" cy="50" r="8" fill="#f9ca24"/><circle cx="80" cy="50" r="8" fill="#6c5ce7"/><ellipse cx="50" cy="10" rx="25" ry="6" fill="#e74c3c"/>` },
+  { n: '🌊 Kolam Mini', svg: `<ellipse cx="50" cy="75" rx="40" ry="15" fill="#48dbfb"/><path d="M10 70 Q25 65 40 70 Q55 75 70 70 Q85 65 90 70" fill="none" stroke="#0984e3" stroke-width="3" opacity="0.5"/><circle cx="30" cy="65" r="5" fill="#fd79a8" opacity="0.6"/><circle cx="70" cy="68" r="7" fill="#ff9f43" opacity="0.5"/>` },
+  { n: '🎋 Bambu Keberuntungan', svg: `<rect x="38" y="10" width="12" height="85" fill="#6ab04c"/><rect x="53" y="25" width="10" height="70" fill="#7bed9f"/><line x1="38" y1="30" x2="50" y2="30" stroke="#2d3436" stroke-width="2"/><line x1="38" y1="50" x2="50" y2="50" stroke="#2d3436" stroke-width="2"/><line x1="38" y1="70" x2="50" y2="70" stroke="#2d3436" stroke-width="2"/>` },
+  { n: '☁️ Kursi Awan', svg: `<ellipse cx="50" cy="65" rx="35" ry="20" fill="#dfe6e9"/><circle cx="35" cy="58" r="18" fill="#dfe6e9"/><circle cx="55" cy="52" r="22" fill="#dfe6e9"/><circle cx="72" cy="58" r="15" fill="#dfe6e9"/>` },
+  { n: '🧸 Boneka Raksasa', svg: `<circle cx="50" cy="35" r="22" fill="#fdcb6e"/><circle cx="50" cy="65" r="28" fill="#fdcb6e"/><circle cx="35" cy="20" r="10" fill="#fdcb6e"/><circle cx="65" cy="20" r="10" fill="#fdcb6e"/><circle cx="44" cy="32" r="4" fill="#2d3436"/><circle cx="56" cy="32" r="4" fill="#2d3436"/><path d="M42 42 Q50 48 58 42" fill="none" stroke="#2d3436" stroke-width="2"/>` },
+  { n: '🌈 Peluncur Pelangi', svg: `<path d="M10 80 Q50 10 90 80" fill="none" stroke="#e74c3c" stroke-width="6"/><path d="M15 80 Q50 18 85 80" fill="none" stroke="#f9ca24" stroke-width="5"/><path d="M20 80 Q50 26 80 80" fill="none" stroke="#2ed573" stroke-width="4"/><path d="M25 80 Q50 34 75 80" fill="none" stroke="#74b9ff" stroke-width="3"/>` },
+  { n: '🏔️ Gunung Mini', svg: `<polygon points="50,10 85,80 15,80" fill="#636e72"/><polygon points="50,10 65,40 35,40" fill="#dfe6e9"/><polygon points="50,10 60,32 40,32" fill="#fff"/>` },
+  { n: '🎪 Panggung Pentas', svg: `<rect x="10" y="60" width="80" height="30" fill="#8e44ad"/><path d="M10 60 Q50 30 90 60 Z" fill="#9b59b6"/><rect x="5" y="55" width="10" height="35" fill="#6c3483"/><rect x="85" y="55" width="10" height="35" fill="#6c3483"/><circle cx="25" cy="50" r="5" fill="#ffeaa7"/><circle cx="75" cy="50" r="5" fill="#ffeaa7"/>` },
+  { n: '🌺 Pohon Sakura', svg: `<rect x="45" y="55" width="10" height="40" fill="#8e44ad"/><circle cx="50" cy="35" r="30" fill="#fd79a8" opacity="0.8"/><circle cx="35" cy="45" r="20" fill="#ff7675" opacity="0.7"/><circle cx="65" cy="45" r="20" fill="#fd79a8" opacity="0.7"/>` },
+  { n: '🎡 Ferris Wheel Mini', svg: `<circle cx="50" cy="45" r="35" fill="none" stroke="#3498db" stroke-width="4"/><line x1="50" y1="10" x2="50" y2="80" stroke="#3498db" stroke-width="2"/><line x1="15" y1="45" x2="85" y2="45" stroke="#3498db" stroke-width="2"/><line x1="25" y1="20" x2="75" y2="70" stroke="#3498db" stroke-width="2"/><line x1="75" y1="20" x2="25" y2="70" stroke="#3498db" stroke-width="2"/><circle cx="50" cy="45" r="6" fill="#e74c3c"/>` },
+  { n: '🛸 UFO Kecil', svg: `<ellipse cx="50" cy="55" rx="40" ry="12" fill="#a29bfe" opacity="0.8"/><ellipse cx="50" cy="45" rx="25" ry="18" fill="#6c5ce7"/><circle cx="50" cy="40" r="10" fill="#74b9ff" opacity="0.7"/><circle cx="30" cy="58" r="4" fill="#ffeaa7"/><circle cx="50" cy="62" r="4" fill="#ffeaa7"/><circle cx="70" cy="58" r="4" fill="#ffeaa7"/>` },
+  { n: '✨ ALTAR MISTIK', svg: `<rect x="30" y="60" width="40" height="30" fill="#2d3436"/><rect x="20" y="55" width="60" height="10" fill="#2d3436"/><path d="M50 10 L55 25 L70 25 L58 34 L63 50 L50 40 L37 50 L42 34 L30 25 L45 25 Z" fill="#f9ca24"/><circle cx="50" cy="30" r="8" fill="#e17055"/>` }
 ];
 furnitureBases.forEach((b, i) => {
-  let isRare = i === 19;
+  let isRare = i === 19 || i >= 37;
   allShopItems.furniture.push({ id: i === 0 ? 'none' : `furn_${i}`, name: b.n, cost: i === 0 ? 0 : (isRare ? 800 : 50 + (i * 10)), reqLvl: i === 0 ? 1 : Math.max(1, Math.floor(i / 3)), svg: b.svg, rare: isRare });
 });
 
 // ============================================================
-// INITIALIZATION MAKANAN
+// FOOD INIT
 // ============================================================
 function initMakanan() {
   const panelDapur = document.getElementById('panel-kitchen');
@@ -2439,9 +2541,10 @@ function initMakanan() {
     { p: `<path d="M 8 8 Q 12 4 16 8 Q 20 12 16 16 Q 12 20 8 16 Q 4 12 8 8 Z" fill="VAR_C2"/>`, n: 'Gumpal' }
   ];
   const foodToppings = [
-    ``, `<circle cx="12" cy="10" r="2" fill="#ff7675"/>`, `<line x1="8" y1="10" x2="16" y2="10" stroke="VAR_C3" stroke-width="2"/>`, `<circle cx="10" cy="12" r="1" fill="#fff"/><circle cx="14" cy="10" r="1" fill="#fff"/>`, `<path d="M 8 10 Q 12 14 16 10" fill="none" stroke="VAR_C3" stroke-width="2"/>`
+    ``, `<circle cx="12" cy="10" r="2" fill="#ff7675"/>`, `<line x1="8" y1="10" x2="16" y2="10" stroke="VAR_C3" stroke-width="2"/>`,
+    `<circle cx="10" cy="12" r="1" fill="#fff"/><circle cx="14" cy="10" r="1" fill="#fff"/>`,
+    `<path d="M 8 10 Q 12 14 16 10" fill="none" stroke="VAR_C3" stroke-width="2"/>`
   ];
-
   for (let i = 1; i <= 1000; i++) {
     let base = foodBases[i % foodBases.length]; let main = foodMains[(i * 7) % foodMains.length]; let topping = foodToppings[(i * 13) % foodToppings.length];
     let c1 = randColor(i, 0); let c2 = randColor(i, 80); let c3 = randColor(i, 160);
@@ -2454,21 +2557,90 @@ function initMakanan() {
 }
 
 // ============================================================
-// DAILY CLAIM & SAVE LOAD SYSTEM
+// PATTERN UI - Build pattern picker HTML
+// ============================================================
+function buildPatternPicker() {
+  const cont = document.getElementById('pattern-picker');
+  if (!cont) return;
+  let html = petPatterns.map(p => `<div class="pattern-btn ${(petData.petPattern || 'none') === p.id ? 'selected' : ''}" onclick="selectPattern('${p.id}', this)" title="${p.name}" style="background:#eee;border:2px solid #ccc;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;margin:2px;">${p.name}</div>`).join('');
+  cont.innerHTML = html;
+}
+
+// ============================================================
+// FUNGSI TAMBAHAN UNTUK MOTIF MODAL & PATTERN SELECT
+// ============================================================
+
+// Dipanggil saat klik kartu motif di screen-select
+function selectPatternFromCard(patternId, el) {
+  tempPattern = patternId;
+  document.querySelectorAll('#pattern-picker-select .pet-card').forEach(b => b.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  updatePreview();
+}
+
+// Build isi motif modal (dipanggil saat buka motif-modal dari kamar)
+function buildMotifModal() {
+  let grid = document.getElementById('motif-modal-grid');
+  if (!grid) return;
+  // Set color picker to current
+  let cp = document.getElementById('motif-color-pick');
+  if (cp) { cp.value = petData.petPatternColor || '#ff7675'; document.getElementById('motif-color-preview').style.background = cp.value; }
+  // Build cards
+  let labels = { none:'Polos', stripes:' Belang', spots:' Bintik', zigzag:' Zigzag', hearts:'  Hati', stars:' Bintang', diamonds:' Berlian', waves:' Ombak', galaxy:' Galaxy', tribal:' Tribal' };
+  grid.innerHTML = petPatterns.map(p =>
+    `<div class="pet-card ${(petData.petPattern||'none') === p.id ? 'selected' : ''}" 
+      style="padding:5px 8px;min-width:60px;text-align:center;" 
+      onclick="selectMotifCard('${p.id}', this)">
+      <span style="font-size:10px;">${labels[p.id]||p.id}</span>
+    </div>`
+  ).join('');
+  updateMotifPreview();
+}
+
+let tempMotifId = null;
+function selectMotifCard(id, el) {
+  tempMotifId = id;
+  document.querySelectorAll('#motif-modal-grid .pet-card').forEach(b => b.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  updateMotifPreview();
+}
+
+function updateMotifPreview() {
+  let cont = document.getElementById('motif-preview-container'); if (!cont) return;
+  let mid = tempMotifId !== null ? tempMotifId : (petData.petPattern || 'none');
+  let col = document.getElementById('motif-color-pick'); let mc = col ? col.value : (petData.petPatternColor || '#ff7675');
+  cont.innerHTML = getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, mid, mc);
+}
+
+function applyMotifFromModal() {
+  let col = document.getElementById('motif-color-pick');
+  if (tempMotifId !== null) petData.petPattern = tempMotifId;
+  if (col) petData.petPatternColor = col.value;
+  savePetData();
+  updatePetRender('pet-size', petData, isSleeping);
+  document.getElementById('motif-modal').classList.remove('active');
+  createFloatingText("Motif diterapkan! ", "center");
+  tempMotifId = null;
+}
+
+// ============================================================
+// DAILY CLAIM & SAVE LOAD
 // ============================================================
 function claimDaily() {
   let now = Date.now();
-  if (!petData.lastClaim || now - petData.lastClaim >= 86400000) { petData.coins += 1000; petData.lastClaim = now; alert("Klaim berhasil! +1000 Koin 🪙"); savePetData(); if (document.getElementById('ui-coins')) document.getElementById('ui-coins').innerText = petData.coins; } 
+  if (!petData.lastClaim || now - petData.lastClaim >= 86400000) { petData.coins += 1000; petData.lastClaim = now; alert("Klaim berhasil! +1000 Koin 🪙"); savePetData(); if (document.getElementById('ui-coins')) document.getElementById('ui-coins').innerText = petData.coins; }
   else { let sisaWaktu = Math.ceil((86400000 - (now - petData.lastClaim)) / 3600000); alert("Kamu sudah klaim hari ini! Kembali lagi dalam " + sisaWaktu + " jam."); }
 }
 
-function savePetData() { petData.lastOnline = Date.now(); localStorage.setItem('261anabul_data_v2', JSON.stringify(petData)); }
+function savePetData() { petData.lastOnline = Date.now(); localStorage.setItem('261anabul_data_v3', JSON.stringify(petData)); }
 
 function loadPetData() {
-  let s = localStorage.getItem('261anabul_data_v2');
+  let s = localStorage.getItem('261anabul_data_v3');
   if (s) {
     let p = JSON.parse(s); petData = { ...petData, ...p };
     if (!petData.furniture) petData.furniture = { left: { id: 'none', scale: 1 }, right: { id: 'none', scale: 1 }, albumPic: null };
+    if (!petData.petPattern) petData.petPattern = 'none';
+    if (!petData.petPatternColor) petData.petPatternColor = '#ff7675';
     isSleeping = petData.isSleeping || false; if (isSleeping) document.getElementById('room').classList.add('dark');
     calculateOfflineTime();
   }
@@ -2486,11 +2658,11 @@ function calculateOfflineTime() {
 }
 
 // ============================================================
-// UI NAVIGATION & INTERACTIVE ENGINE
+// UI NAVIGATION
 // ============================================================
 function goToKamarAtauAdopsi() {
   if (petData.isCreated) {
-    document.getElementById('screen-home').classList.remove('active'); setupRoomStyle(); updatePetRender('pet-size', petData, false); renderFurnitureRoom(); 
+    document.getElementById('screen-home').classList.remove('active'); setupRoomStyle(); updatePetRender('pet-size', petData, false); renderFurnitureRoom();
     document.getElementById('room').style.display = 'flex'; document.getElementById('game-ui').classList.add('active');
     goToRoom('kitchen'); updateUI(); clearInterval(gameInterval); gameInterval = setInterval(gameTick, 3000);
   } else { showAnabulScreen('screen-select'); updatePreview(); }
@@ -2504,12 +2676,17 @@ function showAnabulScreen(id) {
 
 function selectPet(type, el) { tempType = type; document.querySelectorAll('.pet-card').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); updatePreview(); }
 function selectPetColor(color, el) { tempColor = color; document.querySelectorAll('.color-swatch').forEach(c => c.style.transform = 'scale(1)'); el.style.transform = 'scale(1.2)'; updatePreview(); }
-function updatePreview() { document.getElementById('preview-container').innerHTML = getPetSvgString(tempType, tempColor, 'none', false); }
+function updatePreview() {
+  let col = document.getElementById('custom-color-pick');
+  if (col && col.value) tempColor = col.value;
+  document.getElementById('preview-container').innerHTML = getPetSvgString(tempType, tempColor, 'none', false, tempPattern || 'none', tempPatternColor || '#ff7675');
+}
 
-function getPetSvgString(type, baseColor, clothesId, isSleepState) {
-  let bt = type.split('_')[0]; let base = svgs[bt] || svgs.cat; let pat = "";
-  if (type === 'cat_striped') pat = `<path d="M40 20 Q50 30 60 20 M35 30 Q50 40 65 30 M45 10 Q50 20 55 10" fill="none" stroke="#2d3436" stroke-width="3" opacity="0.15" stroke-linecap="round"/>`;
-  if (type === 'dog_spot') pat = `<circle cx="40" cy="65" r="8" fill="#2d3436" opacity="0.15"/><circle cx="65" cy="45" r="10" fill="#2d3436" opacity="0.15"/>`;
+function getPetSvgString(type, baseColor, clothesId, isSleepState, patternId, patternColor) {
+  let bt = type.split('_')[0]; let base = svgs[bt] || svgs.cat;
+  let pat = '';
+  let patObj = petPatterns.find(p => p.id === (patternId || 'none'));
+  if (patObj) pat = patObj.fn(patternColor || '#ff7675');
   let ci = allShopItems.clothes.find(c => c.id === clothesId); let cs = ci ? ci.svg : '';
   let fin = base.replace(/__COLOR__/g, baseColor).replace('__PATTERN__', pat).replace('</svg>', cs + '</svg>');
   if (isSleepState) { fin = fin.replace('class="pet-svg idle"', 'class="pet-svg sleep"').replace('class="eyes-open"', 'class="eyes-open" style="display:none;"').replace('class="eyes-closed"', 'class="eyes-closed" style="display:block;"'); }
@@ -2519,14 +2696,16 @@ function getPetSvgString(type, baseColor, clothesId, isSleepState) {
 function updatePetRender(tw, pD, isSleep) {
   let ri = tw === 'pet-size' ? 'pet-render' : 'guest-render'; let ai = tw === 'pet-size' ? 'acc-layer' : 'guest-acc-layer';
   let renderEl = document.getElementById(ri); let accEl = document.getElementById(ai);
-  if (renderEl) renderEl.innerHTML = getPetSvgString(pD.type, pD.baseColor, pD.activeClothes, isSleep);
+  if (renderEl) renderEl.innerHTML = getPetSvgString(pD.type, pD.baseColor, pD.activeClothes, isSleep, pD.petPattern || 'none', pD.petPatternColor || '#ff7675');
   let acc = allShopItems.skin.find(a => a.id === pD.activeAcc); if (accEl) accEl.innerHTML = acc ? acc.svg : '';
   let sizeEl = document.getElementById(tw); if (sizeEl) { let scale = 1 + (pD.level * 0.02); sizeEl.style.transform = `scale(${scale})`; }
 }
 
 function startAnabulGame() {
   let n = document.getElementById('input-pet-name').value.trim().toUpperCase(); if (n) petData.name = n;
+  let col = document.getElementById('custom-color-pick'); if (col && col.value) tempColor = col.value;
   petData.isCreated = true; petData.type = tempType; petData.baseColor = tempColor;
+  petData.petPattern = tempPattern || 'none'; petData.petPatternColor = tempPatternColor || '#ff7675';
   document.getElementById('screen-select').classList.remove('active'); setupRoomStyle(); updatePetRender('pet-size', petData, false); renderFurnitureRoom();
   document.getElementById('room').style.display = 'flex'; document.getElementById('game-ui').classList.add('active');
   goToRoom('kitchen'); updateUI(); clearInterval(gameInterval); gameInterval = setInterval(gameTick, 3000); savePetData();
@@ -2573,7 +2752,7 @@ function toggleSleep() { isSleeping = !isSleeping; petData.isSleeping = isSleepi
 function toggleShower() { isShowering = !isShowering; let sh = document.getElementById('shower-head'); if (isShowering) { sh.style.display = 'block'; showerInterval = setInterval(() => { let d = document.createElement('div'); d.className = 'water-drop'; d.style.left = (Math.random() * 80) + 'px'; sh.appendChild(d); setTimeout(() => d.remove(), 500); }, 50); } else { sh.style.display = 'none'; clearInterval(showerInterval); } }
 
 // ============================================================
-// SYSTEM SABUN GOSOK BISA DIGESER
+// SOAP DRAG
 // ============================================================
 let soapIcon = document.createElement('div'); soapIcon.innerHTML = '🧼'; soapIcon.style.position = 'absolute'; soapIcon.style.fontSize = '50px'; soapIcon.style.display = 'none'; soapIcon.style.pointerEvents = 'none'; soapIcon.style.zIndex = '9999'; soapIcon.style.transform = 'translate(-50%, -50%)'; document.body.appendChild(soapIcon);
 function toggleSoap() { isSoaping = !isSoaping; if (isSoaping) { createFloatingText("Geser sabun ke anabul! 🧼", "center"); soapIcon.style.display = 'block'; } else { soapIcon.style.display = 'none'; } }
@@ -2584,7 +2763,7 @@ document.addEventListener('DOMContentLoaded', () => {
     roomEl.addEventListener('touchmove', e => { if (!isSoaping) return; let t = e.touches[0]; soapIcon.style.left = t.clientX + 'px'; soapIcon.style.top = t.clientY + 'px'; createBubble(t.clientX, t.clientY); cleanPetLogic(); });
     roomEl.addEventListener('mousemove', e => { if (!isSoaping) return; soapIcon.style.left = e.clientX + 'px'; soapIcon.style.top = e.clientY + 'px'; if (e.buttons === 1) { createBubble(e.clientX, e.clientY); cleanPetLogic(); } });
   }
-  initMakanan(); loadPetData();
+  initMakanan(); loadPetData(); buildPatternPicker();
 });
 function cleanPetLogic() { petData.clean = Math.min(100, petData.clean + 1.5); if (petData.clean >= 40) petData.dirty = false; if (petData.clean === 100) gainXP(1); updateUI(); }
 
@@ -2597,9 +2776,8 @@ function triggerPetAnimation(type) { let svg = document.querySelector('#pet-rend
 function createBubble(x, y) { let b = document.createElement('div'); b.innerText = '🫧'; b.style.position = 'absolute'; b.style.left = (x - 10) + 'px'; b.style.top = (y - 10) + 'px'; b.style.fontSize = (15 + Math.random() * 15) + 'px'; b.style.pointerEvents = 'none'; b.style.zIndex = '9998'; b.style.transition = 'all 0.8s ease-out'; document.body.appendChild(b); setTimeout(() => { b.style.top = (y - 50) + 'px'; b.style.opacity = '0'; }, 50); setTimeout(() => b.remove(), 800); }
 
 // ============================================================
-// SISTEM TOKO, TAS (INVENTORY), DAN BELI
+// SHOP & INVENTORY
 // ============================================================
-
 function switchShop(tabId, event) {
   document.querySelectorAll('#screen-shop .shop-tab').forEach(t => t.classList.remove('active')); if (event) event.currentTarget.classList.add('active');
   document.querySelectorAll('#screen-shop .shop-items').forEach(c => c.style.display = 'none');
@@ -2665,7 +2843,7 @@ function generateInventoryUI() {
       if (item.rare && item.id !== 'none' && hasGuest) { tradeBtn = `<button class="shop-btn btn-orange" style="width:100%; margin-top:2px; font-size:9px;" onclick="openTradeModal('${category}', '${item.id}')">JUAL KE TEMAN</button>`; }
       htmlArray.push(`<div class="shop-item owned" style="${borderStyle}">${visual}<span style="font-size:10px;font-weight:bold;margin-top:5px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;">${item.name}</span><button class="shop-btn" ${btnState} style="width:100%;">${btnText}</button>${tradeBtn}</div>`);
     });
-    if(ownedItems.length === 0) container.innerHTML = `<div style="width:100%; text-align:center; font-size:12px; color:#636e72; padding:20px;">Belum ada item di kategori ini. Beli di toko dulu yuk!</div>`;
+    if (ownedItems.length === 0) container.innerHTML = `<div style="width:100%; text-align:center; font-size:12px; color:#636e72; padding:20px;">Belum ada item di kategori ini. Beli di toko dulu yuk!</div>`;
     else container.innerHTML = htmlArray.join('');
   });
 }
@@ -2674,7 +2852,7 @@ function buyItem(category, id, cost) { if (petData.coins >= cost) { petData.coin
 
 function equipItem(category, id) {
   if (!petData.ownedItems.includes(id) && id !== 'none' && id !== 'bg-default') return;
-  if (category === 'furniture') { tempFurnitureEquipId = id; if (id === 'furn_19') { let choice = confirm("Album Foto! Ingin pakai foto dari galerimu?"); if(choice) { document.getElementById('album-upload').click(); return; } } document.getElementById('furniture-pos-modal').classList.add('active'); return; }
+  if (category === 'furniture') { tempFurnitureEquipId = id; if (id === 'furn_19') { let choice = confirm("Album Foto! Ingin pakai foto dari galerimu?"); if (choice) { document.getElementById('album-upload').click(); return; } } document.getElementById('furniture-pos-modal').classList.add('active'); return; }
   if (category === 'clothes') petData.activeClothes = id;
   if (category === 'bg') petData.activeBg = id;
   if (category === 'skin') petData.activeAcc = id;
@@ -2683,7 +2861,7 @@ function equipItem(category, id) {
 }
 
 // ============================================================
-// FURNITURE RENDERING & SCALING ENGINE
+// FURNITURE
 // ============================================================
 function confirmEquipFurniture(side) { petData.furniture[side].id = tempFurnitureEquipId; document.getElementById('furniture-pos-modal').classList.remove('active'); savePetData(); renderFurnitureRoom(); generateShopUI(); generateInventoryUI(); }
 
@@ -2699,26 +2877,26 @@ function renderFurnitureRoom(customFurnData = null) {
 function scaleFurniture(side, amount) { let current = petData.furniture[side].scale || 1; let next = current + amount; if (next >= 0.5 && next <= 2.5) { petData.furniture[side].scale = parseFloat(next.toFixed(1)); renderFurnitureRoom(); savePetData(); } }
 
 // ============================================================
-// CROP ALBUM FOTO GALERI
+// CROP ALBUM FOTO
 // ============================================================
-function handleAlbumFile(event) { let file = event.target.files[0]; if (!file) return; let reader = new FileReader(); reader.onload = function(e) { cropTempImage = document.getElementById('crop-image-preview'); cropTempImage.src = e.target.result; cropTempImage.style.transform = "translate(-50%, -50%) scale(1)"; document.getElementById('crop-zoom').value = 1; document.getElementById('crop-modal').classList.add('active'); setupCropInteractions(); }; reader.readAsDataURL(file); }
+function handleAlbumFile(event) { let file = event.target.files[0]; if (!file) return; let reader = new FileReader(); reader.onload = function (e) { cropTempImage = document.getElementById('crop-image-preview'); cropTempImage.src = e.target.result; cropTempImage.style.transform = "translate(-50%, -50%) scale(1)"; document.getElementById('crop-zoom').value = 1; document.getElementById('crop-modal').classList.add('active'); setupCropInteractions(); }; reader.readAsDataURL(file); }
 function setupCropInteractions() {
   let cont = document.getElementById('crop-container'); let zoomSl = document.getElementById('crop-zoom');
-  zoomSl.oninput = function() { let scale = this.value; cropTempImage.style.transform = `translate(calc(-50% + ${cropDrag.imgX}px), calc(-50% + ${cropDrag.imgY}px)) scale(${scale})`; };
-  cont.onmousedown = cont.ontouchstart = function(e) { cropDrag.isDown = true; cropDrag.startX = e.clientX || (e.touches && e.touches[0].clientX); cropDrag.startY = e.clientY || (e.touches && e.touches[0].clientY); };
-  window.onmousemove = window.ontouchmove = function(e) { if (!cropDrag.isDown) return; let x = e.clientX || (e.touches && e.touches[0].clientX); let y = e.clientY || (e.touches && e.touches[0].clientY); let dx = x - cropDrag.startX; let dy = y - cropDrag.startY; cropDrag.startX = x; cropDrag.startY = y; cropDrag.imgX += dx; cropDrag.imgY += dy; let scale = zoomSl.value; cropTempImage.style.transform = `translate(calc(-50% + ${cropDrag.imgX}px), calc(-50% + ${cropDrag.imgY}px)) scale(${scale})`; };
-  window.onmouseup = window.ontouchend = function() { cropDrag.isDown = false; };
+  zoomSl.oninput = function () { let scale = this.value; cropTempImage.style.transform = `translate(calc(-50% + ${cropDrag.imgX}px), calc(-50% + ${cropDrag.imgY}px)) scale(${scale})`; };
+  cont.onmousedown = cont.ontouchstart = function (e) { cropDrag.isDown = true; cropDrag.startX = e.clientX || (e.touches && e.touches[0].clientX); cropDrag.startY = e.clientY || (e.touches && e.touches[0].clientY); };
+  window.onmousemove = window.ontouchmove = function (e) { if (!cropDrag.isDown) return; let x = e.clientX || (e.touches && e.touches[0].clientX); let y = e.clientY || (e.touches && e.touches[0].clientY); let dx = x - cropDrag.startX; let dy = y - cropDrag.startY; cropDrag.startX = x; cropDrag.startY = y; cropDrag.imgX += dx; cropDrag.imgY += dy; let scale = zoomSl.value; cropTempImage.style.transform = `translate(calc(-50% + ${cropDrag.imgX}px), calc(-50% + ${cropDrag.imgY}px)) scale(${scale})`; };
+  window.onmouseup = window.ontouchend = function () { cropDrag.isDown = false; };
 }
 function closeCropModal() { document.getElementById('crop-modal').classList.remove('active'); document.getElementById('album-upload').value = ''; }
-function cropAndSave() { let canvas = document.createElement('canvas'); canvas.width = 150; canvas.height = 150; let ctx = canvas.getContext('2d'); let scale = parseFloat(document.getElementById('crop-zoom').value); let w = cropTempImage.naturalWidth; let h = cropTempImage.naturalHeight; let cx = (150/2) - (w*scale/2) + cropDrag.imgX; let cy = (150/2) - (h*scale/2) + cropDrag.imgY; ctx.drawImage(cropTempImage, cx, cy, w * scale, h * scale); petData.furniture.albumPic = canvas.toDataURL('image/jpeg', 0.6); closeCropModal(); document.getElementById('furniture-pos-modal').classList.add('active'); }
+function cropAndSave() { let canvas = document.createElement('canvas'); canvas.width = 150; canvas.height = 150; let ctx = canvas.getContext('2d'); let scale = parseFloat(document.getElementById('crop-zoom').value); let w = cropTempImage.naturalWidth; let h = cropTempImage.naturalHeight; let cx = (150 / 2) - (w * scale / 2) + cropDrag.imgX; let cy = (150 / 2) - (h * scale / 2) + cropDrag.imgY; ctx.drawImage(cropTempImage, cx, cy, w * scale, h * scale); petData.furniture.albumPic = canvas.toDataURL('image/jpeg', 0.6); closeCropModal(); document.getElementById('furniture-pos-modal').classList.add('active'); }
 
 // ============================================================
-// ANABUL MULTIPLAYER NETWORK (FIREBASE)
+// MULTIPLAYER FIREBASE
 // ============================================================
 function hostAnabulRoom() {
   if (!petData.isCreated) { alert("Buat pet dulu!"); return; }
   anabulRoomCode = Math.random().toString(36).substring(2, 8).toUpperCase(); anabulIsHost = true;
-  let init = { host: { name: petData.name, type: petData.type, baseColor: petData.baseColor, activeClothes: petData.activeClothes, activeAcc: petData.activeAcc, level: petData.level, bg: petData.activeBg, furniture: petData.furniture }, guest: null, ts: Date.now(), minigame: null, trade: null };
+  let init = { host: { name: petData.name, type: petData.type, baseColor: petData.baseColor, activeClothes: petData.activeClothes, activeAcc: petData.activeAcc, level: petData.level, bg: petData.activeBg, furniture: petData.furniture, petPattern: petData.petPattern, petPatternColor: petData.petPatternColor }, guest: null, ts: Date.now(), minigame: null, trade: null };
   database.ref(`anabul_rooms/${anabulRoomCode}`).set(init).then(() => { database.ref(`anabul_rooms/${anabulRoomCode}`).onDisconnect().remove(); enterAnabulRoom(); }).catch(e => { alert("Gagal: " + e.message); });
 }
 
@@ -2727,19 +2905,19 @@ function joinAnabulRoom() {
   let code = document.getElementById('input-visit-code').value.trim().toUpperCase(); if (!code) { alert("Masukkan kode!"); return; }
   database.ref(`anabul_rooms/${code}`).once('value').then(snap => {
     if (!snap.exists()) { alert("Rumah tidak ditemukan!"); return; } anabulRoomCode = code; anabulIsHost = false;
-    let guestData = { name: petData.name, type: petData.type, baseColor: petData.baseColor, activeClothes: petData.activeClothes, activeAcc: petData.activeAcc, level: petData.level };
+    let guestData = { name: petData.name, type: petData.type, baseColor: petData.baseColor, activeClothes: petData.activeClothes, activeAcc: petData.activeAcc, level: petData.level, petPattern: petData.petPattern, petPatternColor: petData.petPatternColor };
     database.ref(`anabul_rooms/${anabulRoomCode}/guest`).set(guestData).then(() => { database.ref(`anabul_rooms/${anabulRoomCode}/guest`).onDisconnect().remove(); enterAnabulRoom(); });
   }).catch(e => { alert("Gagal Connect: " + e.message); });
 }
 
 function enterAnabulRoom() {
   document.getElementById('screen-multiplayer').classList.remove('active'); setupRoomStyle(); updatePetRender('pet-size', petData, false); document.getElementById('room').style.display = 'flex'; document.getElementById('game-ui').classList.add('active'); document.getElementById('room-code-display').style.display = 'block'; document.getElementById('visit-code-text').innerText = anabulRoomCode; goToRoom('kitchen'); updateUI(); clearInterval(gameInterval); gameInterval = setInterval(gameTick, 3000);
-  if(anabulRoomRef) anabulRoomRef.off();
+  if (anabulRoomRef) anabulRoomRef.off();
   anabulRoomRef = database.ref(`anabul_rooms/${anabulRoomCode}`);
   anabulRoomRef.on('value', snap => {
     if (!snap.exists()) { quitAnabulGame(); alert("Room ditutup."); return; }
     let data = snap.val(); let otherPet = anabulIsHost ? data.guest : data.host; let gWrap = document.getElementById('guest-wrapper');
-    if (otherPet && otherPet.name) { gWrap.style.display = 'flex'; document.getElementById('guest-name').innerText = otherPet.name + ` (Lv.${otherPet.level || 1})`; updatePetRender('guest-size', { type: otherPet.type || 'cat', baseColor: otherPet.baseColor || '#fff', activeClothes: otherPet.activeClothes || 'none', activeAcc: otherPet.activeAcc || 'none', level: otherPet.level || 1 }, false); } else { gWrap.style.display = 'none'; }
+    if (otherPet && otherPet.name) { gWrap.style.display = 'flex'; document.getElementById('guest-name').innerText = otherPet.name + ` (Lv.${otherPet.level || 1})`; updatePetRender('guest-size', { type: otherPet.type || 'cat', baseColor: otherPet.baseColor || '#fff', activeClothes: otherPet.activeClothes || 'none', activeAcc: otherPet.activeAcc || 'none', level: otherPet.level || 1, petPattern: otherPet.petPattern || 'none', petPatternColor: otherPet.petPatternColor || '#ff7675' }, false); } else { gWrap.style.display = 'none'; }
     if (!anabulIsHost && data.host) { let hostBgItem = allShopItems.bg.find(b => b.id === data.host.bg); if (hostBgItem) { document.getElementById('room-wallpaper').style = hostBgItem.css; } if (data.host.furniture) { renderFurnitureRoom(data.host.furniture); let ctrls = document.getElementById('furniture-controls'); if (ctrls) ctrls.style.display = 'none'; } } else if (anabulIsHost) { renderFurnitureRoom(); }
     if (data.minigame) listenRedLightGreenLight(data.minigame);
     if (data.trade) listenTradeSystem(data.trade);
@@ -2755,7 +2933,7 @@ function quitAnabulGame() {
 }
 
 // ============================================================
-// NEW FEATURE: SAKRAL ENGINE - RARE ITEM TRADING VIA FIREBASE
+// TRADE SYSTEM
 // ============================================================
 function openTradeModal(category, itemId) {
   let item = allShopItems[category].find(i => i.id === itemId); let hargaTawaran = prompt(`Mau jual ${item.name} ini dengan harga berapa koin?`, item.cost); if (!hargaTawaran || isNaN(hargaTawaran) || hargaTawaran <= 0) return alert("Harga tidak valid!");
@@ -2775,44 +2953,468 @@ function listenTradeSystem(tradeData) {
 }
 
 // ============================================================
-// MINIGAMES PROCEDURAL ENGINE (SOLO & MULTIPLAYER)
+// MINIGAMES ENGINE - ENHANCED
 // ============================================================
 let mgState = {};
-function closeMiniGame() { document.getElementById('minigame-modal').classList.remove('active'); if (mgState.pianoInterval) clearInterval(mgState.pianoInterval); if (anabulRoomCode && mgState.isRedLightRunning) { database.ref(`anabul_rooms/${anabulRoomCode}/minigame`).remove(); } }
+
+function closeMiniGame() {
+  document.getElementById('minigame-modal').classList.remove('active');
+  if (mgState.pianoInterval) clearInterval(mgState.pianoInterval);
+  if (mgState.beatInterval) clearInterval(mgState.beatInterval);
+  if (mgState.audioContext) { try { mgState.audioContext.close(); } catch(e){} mgState.audioContext = null; }
+  if (mgState.audioSource) { try { mgState.audioSource.stop(); } catch(e){} mgState.audioSource = null; }
+  if (anabulRoomCode && mgState.isRedLightRunning) { database.ref(`anabul_rooms/${anabulRoomCode}/minigame`).remove(); }
+  if (mgState.racingInterval) clearInterval(mgState.racingInterval);
+  mgState = {};
+}
+
 function mgReward(coins, xp) { petData.coins += coins; gainXP(xp); createFloatingText(`+${coins}🪙 +${xp}XP`, "center"); }
 
+// Helper: render pet SVG small for minigame scenes
+function getMgPetSvg(size, extraClass) {
+  return `<div style="width:${size}px;height:${size}px;display:inline-block;" class="${extraClass||''}">${getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, petData.petPattern||'none', petData.petPatternColor||'#ff7675')}</div>`;
+}
+function getMgGuestSvg(size, guestData) {
+  let gd = guestData || { type:'cat', baseColor:'#ccc', activeClothes:'none', petPattern:'none', petPatternColor:'#ff7675' };
+  return `<div style="width:${size}px;height:${size}px;display:inline-block;">${getPetSvgString(gd.type||'cat', gd.baseColor||'#ccc', gd.activeClothes||'none', false, gd.petPattern||'none', gd.petPatternColor||'#ff7675')}</div>`;
+}
+
 function openMiniGame(type) {
-  let box = document.getElementById('minigame-content'); mgState = { type, step: 0, clicks: 0 }; let html = ''; let hasGuest = document.getElementById('guest-wrapper') && document.getElementById('guest-wrapper').style.display === 'flex';
-  if (type === 'mancing') { html = `<div class="minigame-title">🎣 MANCING IKAN</div><div class="minigame-subtitle">Tarik pas ikan kena kail!</div><div class="mg-result" id="mg-result">Tunggu...</div><button class="mg-btn btn-blue" style="width:100%; height:80px; font-size:24px;" onclick="mgAction('mancing')">TARIK KAIL!</button>`; setTimeout(() => { if (document.getElementById('mg-result')) document.getElementById('mg-result').innerText = "IKAN MAKAN! TARIK!"; mgState.ready = true; }, 1500 + Math.random() * 2000); } 
-  else if (type === 'lari-solo') { html = `<div class="minigame-title">🏃 LOMPAT RINTANGAN</div><div class="minigame-subtitle">Tap tombol lompat berkali-kali!</div><div class="mg-result" id="mg-result">Skor: 0</div><button class="mg-btn btn-green" style="width:100%; height:80px; font-size:24px;" onclick="mgAction('lari-solo')">LOMPAT!</button>`; }
-  else if (type === 'piano') { html = `<div class="minigame-title">🎹 PIANO TILES ANABUL</div><div class="minigame-subtitle">Klik Kotak HITAM saat turun kebawah!</div><div class="mg-result" id="mg-result">Skor Piano: 0</div><div id="piano-board" style="width:100%; height:200px; background:#dfe6e9; position:relative; overflow:hidden; border:2px solid #2d3436; border-radius:8px;"></div>`; setTimeout(() => startPianoEngine(), 300); }
-  else if (type === 'squid') { if (!hasGuest) return alert("Mode Multi! Ajak teman visit rumahmu dulu!"); html = `<div class="minigame-title">🟢 RED LIGHT GREEN LIGHT 🔴</div><div class="minigame-subtitle">Maju pas HIJAU. Tekan MAJU pas MERAH = ELEMINASI!</div><div id="squid-light" style="width:100%; padding:15px; font-weight:bold; font-size:24px; text-align:center; background:#ccc; color:#000; border-radius:8px; margin-bottom:10px;">MENUNGGU SERVER...</div><div class="mg-result" id="mg-result">Jarak: 0m / 50m</div><button class="mg-btn btn-blue" id="squid-move-btn" style="width:100%; height:70px; font-size:20px;" onclick="mgAction('squid-step')">MAJU 🏃‍♂️</button>`; setTimeout(() => startRedLightGreenLightEngine(), 200); }
-  else if (type === 'lomba-lari') { if (!hasGuest) return alert("Mode Multi! Ajak teman visit rumahmu dulu!"); html = `<div class="minigame-title">🏁 LOMBA LARI</div><div class="minigame-subtitle">Adu cepat tap tombol vs Teman!</div><div class="mg-result" id="mg-result">Lari: 0m</div><button class="mg-btn btn-red" style="width:100%; height:80px; font-size:24px;" onclick="mgAction('lomba-lari')">LARI!</button>`; }
-  box.innerHTML = html + `<button class="mg-btn btn-red" style="width:90%; margin-top:10px;" onclick="closeMiniGame()">SELESAI</button>`; document.getElementById('minigame-modal').classList.add('active');
+  let box = document.getElementById('minigame-content'); mgState = { type, step: 0, clicks: 0 }; let html = '';
+  let hasGuest = document.getElementById('guest-wrapper') && document.getElementById('guest-wrapper').style.display === 'flex';
+
+  // ---- MANCING (FISHING WITH VISUAL) ----
+  if (type === 'mancing') {
+    html = `
+    <div class="minigame-title">🎣 MANCING IKAN</div>
+    <div style="position:relative;width:100%;height:220px;background:linear-gradient(180deg,#87CEEB 0%,#87CEEB 50%,#1a6fa0 50%,#0a4a70 100%);border-radius:12px;overflow:hidden;margin-bottom:8px;">
+      <!-- clouds -->
+      <div style="position:absolute;top:10px;left:10%;width:60px;height:20px;background:#fff;border-radius:20px;opacity:0.8;"></div>
+      <div style="position:absolute;top:8px;left:55%;width:50px;height:18px;background:#fff;border-radius:20px;opacity:0.7;"></div>
+      <!-- dock -->
+      <div style="position:absolute;bottom:50%;left:10px;width:60px;height:10px;background:#8B4513;border-radius:4px;"></div>
+      <div style="position:absolute;bottom:calc(50% + 10px);left:25px;width:8px;height:30px;background:#8B4513;border-radius:4px;"></div>
+      <!-- pet fishing on dock -->
+      <div id="mg-pet-fish" style="position:absolute;bottom:50%;left:5px;width:55px;height:55px;">${getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, petData.petPattern||'none', petData.petPatternColor||'#ff7675')}</div>
+      <!-- fishing line -->
+      <svg id="fish-line-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;">
+        <line id="fish-line" x1="40" y1="110" x2="150" y2="160" stroke="#555" stroke-width="1.5"/>
+        <circle id="fish-bobber" cx="150" cy="160" r="5" fill="#e74c3c"/>
+      </svg>
+      <!-- fish -->
+      <div id="mg-fish" style="position:absolute;font-size:28px;bottom:15%;left:55%;transition:all 0.3s;">🐟</div>
+      <!-- big fish reward -->
+      <div id="mg-big-fish" style="position:absolute;font-size:40px;bottom:20%;left:40%;display:none;">🐠</div>
+      <!-- water bubbles -->
+      <div id="fish-bubbles" style="position:absolute;bottom:55%;width:100%;display:flex;justify-content:space-around;font-size:14px;opacity:0.6;">🫧🫧🫧🫧</div>
+    </div>
+    <div class="mg-result" id="mg-result" style="font-weight:bold;margin-bottom:8px;">Tunggu ikan makan kail... 🎣</div>
+    <button class="mg-btn btn-blue" style="width:100%;height:65px;font-size:20px;" onclick="mgAction('mancing')">TARIK KAIL! 🎣</button>
+    `;
+    setTimeout(() => {
+      if (!document.getElementById('mg-result')) return;
+      document.getElementById('mg-result').innerText = "IKAN MAKAN! TARIK SEKARANG! 🎣";
+      document.getElementById('mg-result').style.color = "#00b894";
+      // bobber animation
+      let bobber = document.getElementById('fish-bobber');
+      if (bobber) { bobber.setAttribute('cy', '165'); }
+      mgState.ready = true;
+    }, 1500 + Math.random() * 2000);
+  }
+
+  // ---- LARI SOLO (PLATFORMER STYLE) ----
+  else if (type === 'lari-solo') {
+    html = `
+    <div class="minigame-title">🏃 LOMPAT RINTANGAN</div>
+    <div style="position:relative;width:100%;height:160px;background:linear-gradient(180deg,#87CEEB 60%,#5D9E3B 60%,#4a8a2e 100%);border-radius:12px;overflow:hidden;margin-bottom:8px;">
+      <div style="position:absolute;top:12px;left:20%;width:40px;height:15px;background:#fff;border-radius:10px;opacity:0.8;"></div>
+      <div style="position:absolute;top:8px;left:60%;width:55px;height:18px;background:#fff;border-radius:10px;opacity:0.7;"></div>
+      <div id="mg-runner" style="position:absolute;bottom:40%;left:15%;width:50px;height:50px;transition:bottom 0.3s;">${getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, petData.petPattern||'none', petData.petPatternColor||'#ff7675')}</div>
+      <div id="mg-obstacle" style="position:absolute;bottom:38%;left:80%;font-size:32px;transition:left 1s linear;">🌵</div>
+      <div id="mg-score-display" style="position:absolute;top:8px;right:10px;background:rgba(0,0,0,0.4);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:bold;">0</div>
+    </div>
+    <div class="mg-result" id="mg-result">Tap lompat sebelum kena kaktus!</div>
+    <button class="mg-btn btn-green" style="width:100%;height:65px;font-size:22px;" onclick="mgAction('lari-solo')">LOMPAT! 🦘</button>
+    `;
+    setTimeout(() => { startObstacleLoop(); }, 500);
+  }
+
+  // ---- PIANO BEAT (MUSIC FROM GALLERY) ----
+  else if (type === 'piano') {
+    html = `
+    <div class="minigame-title">🎹 PIANO BEATS ANABUL</div>
+    <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;align-items:center;">
+      <label class="mg-btn btn-blue" style="padding:8px 12px;font-size:12px;cursor:pointer;">🎵 Pilih Lagu<input type="file" accept="audio/*" id="piano-music-file" style="display:none" onchange="loadPianoMusic(this)"></label>
+      <span id="piano-song-name" style="font-size:11px;color:#636e72;flex:1;">Belum ada lagu dipilih</span>
+    </div>
+    <div style="position:relative;width:100%;height:30px;background:#2d3436;border-radius:6px;overflow:hidden;margin-bottom:6px;">
+      <div id="piano-beat-bar" style="position:absolute;left:0;top:0;height:100%;width:0%;background:linear-gradient(90deg,#00cec9,#6c5ce7);border-radius:6px;transition:width 0.1s;"></div>
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;font-size:11px;font-weight:bold;" id="piano-beat-label">BEAT</div>
+    </div>
+    <div id="piano-board" style="width:100%;height:200px;background:#2d3436;position:relative;overflow:hidden;border:2px solid #636e72;border-radius:8px;display:flex;">
+      <div style="flex:1;border-right:1px solid #636e72;"></div>
+      <div style="flex:1;border-right:1px solid #636e72;"></div>
+      <div style="flex:1;border-right:1px solid #636e72;"></div>
+      <div style="flex:1;"></div>
+    </div>
+    <div class="mg-result" id="mg-result" style="margin-top:6px;">Skor Piano: 0 | Pilih lagu dulu! 🎵</div>
+    `;
+  }
+
+  // ---- RED LIGHT GREEN LIGHT (SQUID GAME VISUAL) ----
+  else if (type === 'squid') {
+    if (!hasGuest) return alert("Mode Multi! Ajak teman visit rumahmu dulu!");
+    let myPetHtml = getMgPetSvg(50);
+    let guestPetHtml = `<div id="squid-guest-pet" style="width:50px;height:50px;display:inline-block;">${getMgGuestSvg(50)}</div>`;
+    html = `
+    <div class="minigame-title">🟢 RED LIGHT GREEN LIGHT 🔴</div>
+    <!-- SQUID GAME ARENA -->
+    <div style="position:relative;width:100%;height:260px;background:linear-gradient(180deg,#87CEEB 0%,#87CEEB 55%,#8B7355 55%,#7a6145 100%);border-radius:12px;overflow:hidden;margin-bottom:8px;">
+      <!-- Sky elements -->
+      <div style="position:absolute;top:15px;left:15%;font-size:20px;">☁️</div>
+      <div style="position:absolute;top:8px;right:20%;font-size:16px;">☁️</div>
+      <!-- FINISH LINE -->
+      <div style="position:absolute;right:15px;top:0;bottom:45%;width:6px;background:repeating-linear-gradient(180deg,#e74c3c 0,#e74c3c 10px,#fff 10px,#fff 20px);"></div>
+      <div style="position:absolute;right:8px;top:10px;background:#e74c3c;color:#fff;font-size:9px;font-weight:bold;padding:2px 5px;border-radius:4px;">FINISH</div>
+      <!-- Doll (squid game doll) -->
+      <div id="squid-doll" style="position:absolute;right:28px;bottom:44%;font-size:42px;transition:transform 0.3s;">🪆</div>
+      <!-- Ground detail -->
+      <div style="position:absolute;bottom:45%;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,#fff 0,#fff 20px,#e74c3c 20px,#e74c3c 40px);opacity:0.4;"></div>
+      <!-- MY PET -->
+      <div id="squid-my-pet" style="position:absolute;bottom:45%;left:5%;width:50px;height:50px;transition:left 0.5s ease;">${myPetHtml}</div>
+      <!-- GUEST PET -->
+      <div id="squid-guest-pet-wrap" style="position:absolute;bottom:52%;left:8%;width:50px;height:50px;transition:left 0.5s ease;">${guestPetHtml}</div>
+      <!-- LIGHT INDICATOR -->
+      <div id="squid-light" style="position:absolute;top:10px;left:50%;transform:translateX(-50%);width:120px;padding:8px 0;font-weight:bold;font-size:13px;text-align:center;background:#636e72;color:#fff;border-radius:20px;">MENUNGGU...</div>
+      <!-- Distance markers -->
+      <div style="position:absolute;bottom:43%;left:0;right:0;display:flex;justify-content:space-between;padding:0 10px;font-size:9px;color:#636e72;opacity:0.7;">
+        <span>0m</span><span>12m</span><span>25m</span><span>38m</span><span>50m</span>
+      </div>
+    </div>
+    <div class="mg-result" id="mg-result">Jarak: 0m / 50m</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
+      <button class="mg-btn btn-green" id="squid-move-btn" style="height:60px;font-size:18px;" onclick="mgAction('squid-step')">MAJU 🏃</button>
+      <button class="mg-btn btn-red" style="height:60px;font-size:18px;" onclick="mgAction('squid-stop')">BERHENTI ✋</button>
+    </div>
+    `;
+    setTimeout(() => { startRedLightGreenLightEngine(); }, 200);
+    // Listen for guest movement via firebase
+    if (anabulRoomRef) {
+      anabulRoomRef.child('minigame_player').on('value', snap => {
+        if (!snap.exists()) return;
+        let d = snap.val();
+        let guestWrap = document.getElementById('squid-guest-pet-wrap');
+        if (guestWrap && d.guestDist !== undefined) {
+          let leftPct = 8 + (d.guestDist / 50) * 72;
+          guestWrap.style.left = leftPct + '%';
+        }
+      });
+    }
+  }
+
+  // ---- LOMBA LARI RACING (VISUAL) ----
+  else if (type === 'lomba-lari') {
+    if (!hasGuest) return alert("Mode Multi! Ajak teman visit rumahmu dulu!");
+    html = `
+    <div class="minigame-title">🏁 LOMBA LARI vs TEMAN</div>
+    <!-- RACING TRACK -->
+    <div style="position:relative;width:100%;height:220px;background:linear-gradient(180deg,#87CEEB 0%,#87CEEB 45%,#4a8a2e 45%,#5D9E3B 60%,#d4a96a 60%,#c49a55 100%);border-radius:12px;overflow:hidden;margin-bottom:8px;">
+      <!-- Clouds -->
+      <div style="position:absolute;top:8px;left:10%;font-size:18px;">☁️</div>
+      <div style="position:absolute;top:5px;right:15%;font-size:14px;">☁️</div>
+      <!-- Finish line -->
+      <div style="position:absolute;right:20px;top:0;bottom:38%;width:8px;background:repeating-linear-gradient(180deg,#000 0,#000 8px,#fff 8px,#fff 16px);"></div>
+      <div style="position:absolute;right:10px;top:8px;background:#000;color:#fff;font-size:8px;font-weight:bold;padding:2px 4px;border-radius:3px;">🏁FINISH</div>
+      <!-- Track lane markers -->
+      <div style="position:absolute;bottom:40%;left:0;right:0;height:3px;background:rgba(255,255,255,0.5);"></div>
+      <div style="position:absolute;bottom:60%;left:0;right:0;height:3px;background:rgba(255,255,255,0.5);"></div>
+      <!-- MY PET (lower lane) -->
+      <div id="race-my-pet" style="position:absolute;bottom:39%;left:5%;width:55px;height:55px;transition:left 0.2s ease;">${getMgPetSvg(55, 'mg-running')}</div>
+      <!-- GUEST PET (upper lane) -->
+      <div id="race-guest-pet" style="position:absolute;bottom:58%;left:5%;width:50px;height:50px;transition:left 0.5s ease;">${getMgGuestSvg(50)}</div>
+      <!-- Lap counter/scoreboard -->
+      <div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.5);color:#fff;font-size:11px;padding:4px 8px;border-radius:8px;">
+        <span id="race-my-label" style="color:#74b9ff;">Kamu: 0m</span><br>
+        <span id="race-guest-label" style="color:#ff7675;">Teman: 0m</span>
+      </div>
+      <!-- Track number indicators -->
+      <div style="position:absolute;left:4px;bottom:45%;color:#fff;font-size:10px;opacity:0.8;">1</div>
+      <div style="position:absolute;left:4px;bottom:63%;color:#fff;font-size:10px;opacity:0.8;">2</div>
+    </div>
+    <div class="mg-result" id="mg-result">Tap cepat-cepat untuk lari! 🏃</div>
+    <button class="mg-btn btn-red" id="race-run-btn" style="width:100%;height:70px;font-size:24px;" onclick="mgAction('lomba-lari')">🏃 LARI!</button>
+    `;
+    // start guest AI movement
+    setTimeout(() => {
+      mgState.myDist = 0; mgState.guestDist = 0;
+      mgState.racingInterval = setInterval(() => {
+        if (!document.getElementById('race-guest-pet')) { clearInterval(mgState.racingInterval); return; }
+        // Guest moves randomly
+        mgState.guestDist = Math.min(100, mgState.guestDist + (Math.random() * 2.5));
+        let guestPct = 5 + (mgState.guestDist / 100) * 75;
+        let guestEl = document.getElementById('race-guest-pet');
+        if (guestEl) guestEl.style.left = guestPct + '%';
+        let gLabel = document.getElementById('race-guest-label');
+        if (gLabel) gLabel.innerText = `Teman: ${Math.floor(mgState.guestDist)}m`;
+        if (mgState.guestDist >= 100 && !mgState.raceFinished) {
+          mgState.raceFinished = true;
+          document.getElementById('mg-result').innerText = "Teman menang! 😢 Coba lagi!";
+          document.getElementById('mg-result').style.color = "#d63031";
+          let btn = document.getElementById('race-run-btn'); if (btn) btn.disabled = true;
+          mgReward(30, 5);
+          clearInterval(mgState.racingInterval);
+        }
+      }, 300);
+    }, 500);
+  }
+
+  box.innerHTML = html + `<button class="mg-btn btn-red" style="width:90%; margin-top:10px;" onclick="closeMiniGame()">SELESAI</button>`;
+  document.getElementById('minigame-modal').classList.add('active');
 }
 
-function startPianoEngine() {
-  const board = document.getElementById('piano-board'); if (!board) return; mgState.pianoScore = 0;
-  mgState.pianoInterval = setInterval(() => {
-    let tile = document.createElement('div'); let tracks = [0, 25, 50, 75]; let leftPos = tracks[Math.floor(Math.random() * tracks.length)];
-    tile.style.position = 'absolute'; tile.style.width = '25%'; tile.style.height = '40px'; tile.style.background = '#2d3436'; tile.style.left = leftPos + '%'; tile.style.top = '0px'; tile.style.cursor = 'pointer'; tile.style.borderRadius = '4px';
-    tile.onclick = (e) => { e.stopPropagation(); mgState.pianoScore++; document.getElementById('mg-result').innerText = `Skor Piano: ${mgState.pianoScore}`; mgReward(5, 1); tile.remove(); };
-    board.appendChild(tile); let top = 0;
-    let tInt = setInterval(() => { top += 4; tile.style.top = top + 'px'; if (top > 160) { clearInterval(tInt); if (tile.parentNode) { tile.remove(); createFloatingText("Miss! 💥", "center"); } } }, 30);
-  }, 800);
+// ============================================================
+// PIANO MUSIC FROM GALLERY ENGINE
+// ============================================================
+function loadPianoMusic(inputEl) {
+  let file = inputEl.files[0]; if (!file) return;
+  let nameEl = document.getElementById('piano-song-name');
+  if (nameEl) nameEl.innerText = file.name;
+  // Create audio context
+  if (mgState.audioContext) { try { mgState.audioContext.close(); } catch(e){} }
+  if (mgState.pianoInterval) clearInterval(mgState.pianoInterval);
+  if (mgState.beatInterval) clearInterval(mgState.beatInterval);
+
+  mgState.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  mgState.pianoScore = 0;
+  let reader = new FileReader();
+  reader.onload = function(e) {
+    mgState.audioContext.decodeAudioData(e.target.result, function(buffer) {
+      // Analyze beat via script processor
+      let source = mgState.audioContext.createBufferSource();
+      source.buffer = buffer;
+      let analyser = mgState.audioContext.createAnalyser();
+      analyser.fftSize = 256;
+      source.connect(analyser);
+      analyser.connect(mgState.audioContext.destination);
+      source.start(0);
+      mgState.audioSource = source;
+
+      let bufferLength = analyser.frequencyBinCount;
+      let dataArray = new Uint8Array(bufferLength);
+      let lastBeat = 0;
+      let beatThreshold = 180; // beat detection threshold
+
+      // Beat detection loop
+      mgState.beatInterval = setInterval(() => {
+        analyser.getByteFrequencyData(dataArray);
+        // Get bass energy (first ~10% of frequencies = bass)
+        let bassSum = 0;
+        for (let i = 0; i < Math.floor(bufferLength * 0.1); i++) bassSum += dataArray[i];
+        let bassAvg = bassSum / Math.floor(bufferLength * 0.1);
+        // Update beat bar
+        let barEl = document.getElementById('piano-beat-bar');
+        if (barEl) barEl.style.width = Math.min(100, bassAvg / 2.5) + '%';
+        // Beat detected
+        let now = Date.now();
+        if (bassAvg > beatThreshold && now - lastBeat > 300) {
+          lastBeat = now;
+          spawnPianoTileOnBeat();
+        }
+      }, 50);
+
+      // Also fallback: spawn tiles on interval if no beat detected
+      let spawnCount = 0;
+      mgState.pianoInterval = setInterval(() => {
+        spawnCount++;
+        // Fallback tile every 800ms if beat is slow
+        if (spawnCount % 3 === 0) spawnPianoTileOnBeat();
+      }, 800);
+
+      source.onended = () => {
+        if (mgState.beatInterval) clearInterval(mgState.beatInterval);
+        if (mgState.pianoInterval) clearInterval(mgState.pianoInterval);
+        let r = document.getElementById('mg-result');
+        if (r) { r.innerText = `Lagu selesai! Skor Piano Akhir: ${mgState.pianoScore||0} 🎹`; r.style.color="#6c5ce7"; }
+        mgReward((mgState.pianoScore||0) * 5, (mgState.pianoScore||0) * 2);
+      };
+    }, function() { alert("Format audio tidak didukung. Coba file MP3 atau WAV."); });
+  };
+  reader.readAsArrayBuffer(file);
+  document.getElementById('mg-result').innerText = "Skor Piano: 0 | Lagu dimuat, main!";
 }
 
-function startRedLightGreenLightEngine() { mgState.isRedLightRunning = true; mgState.distance = 0; if (anabulIsHost) { mgState.lightCycle = setInterval(() => { if (!mgState.isRedLightRunning) return clearInterval(mgState.lightCycle); let nextLight = Math.random() > 0.45 ? 'GREEN' : 'RED'; database.ref(`anabul_rooms/${anabulRoomCode}/minigame`).set({ state: nextLight, timestamp: Date.now() }); }, 1800); } }
-function listenRedLightGreenLight(mgData) { const lightEl = document.getElementById('squid-light'); if (!lightEl) return; mgState.currentServerLight = mgData.state; lightEl.innerText = mgData.state === 'GREEN' ? '🟢 GREEN LIGHT (MAJU!)' : '🔴 RED LIGHT (BERHENTI!)'; lightEl.style.background = mgData.state === 'GREEN' ? '#00b894' : '#d63031'; lightEl.style.color = '#fff'; }
+function spawnPianoTileOnBeat() {
+  const board = document.getElementById('piano-board'); if (!board) return;
+  let tracks = [0, 25, 50, 75];
+  let leftPos = tracks[Math.floor(Math.random() * tracks.length)];
+  let tile = document.createElement('div');
+  tile.style.position = 'absolute'; tile.style.width = '25%'; tile.style.height = '45px';
+  tile.style.background = `hsl(${Math.random()*360},80%,35%)`; tile.style.left = leftPos + '%';
+  tile.style.top = '0px'; tile.style.cursor = 'pointer'; tile.style.borderRadius = '6px';
+  tile.style.boxShadow = 'inset 0 -4px 8px rgba(0,0,0,0.4)';
+  tile.style.border = '1px solid rgba(255,255,255,0.2)';
+  tile.onclick = (ev) => {
+    ev.stopPropagation(); mgState.pianoScore = (mgState.pianoScore||0) + 1;
+    let r = document.getElementById('mg-result'); if (r) r.innerText = `Skor Piano: ${mgState.pianoScore}`;
+    // Visual feedback
+    tile.style.background = '#00cec9'; tile.style.transform = 'scale(0.9)';
+    setTimeout(() => tile.remove(), 100);
+    // Ripple effect
+    createFloatingText("🎵", "center");
+  };
+  board.appendChild(tile);
+  let top = 0;
+  let speed = 3 + Math.random() * 2;
+  let tInt = setInterval(() => {
+    if (!tile.parentNode) { clearInterval(tInt); return; }
+    top += speed; tile.style.top = top + 'px';
+    if (top > 160) { clearInterval(tInt); if (tile.parentNode) { tile.remove(); } }
+  }, 20);
+}
 
+// ============================================================
+// OBSTACLE RUNNER LOOP
+// ============================================================
+function startObstacleLoop() {
+  if (!document.getElementById('mg-obstacle')) return;
+  mgState.obstaclePos = 85;
+  mgState.isJumping = false;
+  mgState.obstacleInterval = setInterval(() => {
+    if (!document.getElementById('mg-obstacle')) { clearInterval(mgState.obstacleInterval); return; }
+    mgState.obstaclePos -= 2.5;
+    let obs = document.getElementById('mg-obstacle');
+    if (obs) obs.style.left = mgState.obstaclePos + '%';
+    // Collision detection (pet is at ~15%)
+    if (mgState.obstaclePos < 22 && mgState.obstaclePos > 10 && !mgState.isJumping) {
+      // Hit!
+      let r = document.getElementById('mg-result');
+      if (r && !r.innerText.includes('Kena')) { r.innerText = `💥 Kena! Skor: ${mgState.clicks} | Coba lagi!`; r.style.color="#d63031"; }
+    }
+    if (mgState.obstaclePos < -10) {
+      // Passed!
+      mgState.obstaclePos = 88 + Math.random() * 20;
+      mgReward(10, 2);
+    }
+    if (obs) obs.style.left = mgState.obstaclePos + '%';
+  }, 30);
+}
+
+// ============================================================
+// RED LIGHT GREEN LIGHT ENGINE
+// ============================================================
+function startRedLightGreenLightEngine() {
+  mgState.isRedLightRunning = true; mgState.distance = 0; mgState.playerEliminated = false;
+  if (anabulIsHost) {
+    mgState.lightCycle = setInterval(() => {
+      if (!mgState.isRedLightRunning) return clearInterval(mgState.lightCycle);
+      let nextLight = Math.random() > 0.45 ? 'GREEN' : 'RED';
+      database.ref(`anabul_rooms/${anabulRoomCode}/minigame`).set({ state: nextLight, timestamp: Date.now() });
+    }, 1800);
+  }
+}
+
+function listenRedLightGreenLight(mgData) {
+  const lightEl = document.getElementById('squid-light');
+  const dollEl = document.getElementById('squid-doll');
+  if (!lightEl) return;
+  mgState.currentServerLight = mgData.state;
+  if (mgData.state === 'GREEN') {
+    lightEl.innerText = '🟢 GREEN LIGHT — MAJU!';
+    lightEl.style.background = '#00b894'; lightEl.style.color = '#fff';
+    if (dollEl) dollEl.style.transform = 'scaleX(-1)'; // doll looks away
+    lightEl.style.boxShadow = '0 0 20px #00b894';
+  } else {
+    lightEl.innerText = '🔴 RED LIGHT — BERHENTI!';
+    lightEl.style.background = '#d63031'; lightEl.style.color = '#fff';
+    if (dollEl) dollEl.style.transform = 'scaleX(1)'; // doll looks at players
+    lightEl.style.boxShadow = '0 0 20px #d63031';
+  }
+}
+
+// ============================================================
+// mgAction UNIFIED HANDLER
+// ============================================================
 function mgAction(game, arg) {
   let r = document.getElementById('mg-result'); if (!r) return;
-  if (game === 'mancing') { if (mgState.ready) { r.innerText = "DAPAT IKAN BESAR! 🎉"; r.style.color = "#00b894"; mgReward(150, 15); mgState.ready = false; } else { r.innerText = "Terlalu cepat kail putus! 😢"; r.style.color = "#d63031"; mgReward(5, 1); } } 
-  else if (game === 'lari-solo') { mgState.clicks++; r.innerText = `Skor Lompat: ${mgState.clicks}`; if (mgState.clicks % 10 === 0) mgReward(10, 2); } 
-  else if (game === 'lomba-lari') { mgState.clicks++; let teman = Math.floor(Math.random() * (mgState.clicks + 2)); r.innerText = `Kamu: ${mgState.clicks}m | Teman: ${teman}m`; if (mgState.clicks >= 20) { r.innerText = "KAMU MENANG! 🏆"; mgReward(200, 20); document.querySelector('.btn-red').disabled = true; } }
-  else if (game === 'squid-step') { if (!mgState.isRedLightRunning) return; if (mgState.currentServerLight === 'RED') { r.innerText = "💥 KAMU BERGERAK SAAT RED LIGHT! ELEMINASI!!"; r.style.color = "#d63031"; mgState.isRedLightRunning = false; document.getElementById('squid-move-btn').disabled = true; mgReward(0, 0); } else { mgState.distance += 2; r.innerText = `Jarak: ${mgState.distance}m / 50m`; if (mgState.distance >= 50) { r.innerText = "🏁 GOAL!! KAMU BERHASIL FINISH! 🎉"; r.style.color = "#00b894"; mgState.isRedLightRunning = false; document.getElementById('squid-move-btn').disabled = true; mgReward(300, 30); } } }
+
+  if (game === 'mancing') {
+    if (mgState.ready) {
+      r.innerText = "DAPAT IKAN BESAR! 🎉"; r.style.color = "#00b894";
+      let bigFish = document.getElementById('mg-big-fish'); if (bigFish) { bigFish.style.display = 'block'; setTimeout(() => { if (bigFish) bigFish.style.display = 'none'; }, 2000); }
+      let fish = document.getElementById('mg-fish'); if (fish) { fish.style.bottom = '40%'; fish.style.fontSize = '36px'; setTimeout(() => { if(fish) { fish.style.bottom='15%'; fish.style.fontSize='28px'; } }, 1500); }
+      mgReward(150, 15); mgState.ready = false;
+      setTimeout(() => {
+        if (!document.getElementById('mg-result')) return;
+        r.innerText = "Tunggu ikan berikutnya..."; r.style.color = "";
+        setTimeout(() => { if (!document.getElementById('mg-result')) return; r.innerText = "IKAN MAKAN LAGI! TARIK!"; r.style.color="#00b894"; mgState.ready = true; }, 2000 + Math.random() * 3000); }, 1500);
+    } else { r.innerText = "Terlalu cepat, tali putus! 😢"; r.style.color = "#d63031"; mgReward(5, 1); }
+  }
+
+  else if (game === 'lari-solo') {
+    mgState.clicks++;
+    let scoreEl = document.getElementById('mg-score-display'); if (scoreEl) scoreEl.innerText = mgState.clicks;
+    r.innerText = `Lompat: ${mgState.clicks}`;
+    // Trigger jump
+    let runner = document.getElementById('mg-runner');
+    if (runner && !mgState.isJumping) {
+      mgState.isJumping = true; runner.style.bottom = '60%';
+      setTimeout(() => { if (runner) runner.style.bottom = '40%'; mgState.isJumping = false; }, 400);
+    }
+    if (mgState.clicks % 10 === 0) mgReward(10, 2);
+  }
+
+  else if (game === 'lomba-lari') {
+    if (mgState.raceFinished) return;
+    mgState.myDist = (mgState.myDist || 0) + 2.5;
+    let myPct = 5 + (mgState.myDist / 100) * 75;
+    let myEl = document.getElementById('race-my-pet'); if (myEl) myEl.style.left = Math.min(82, myPct) + '%';
+    let myLabel = document.getElementById('race-my-label'); if (myLabel) myLabel.innerText = `Kamu: ${Math.floor(mgState.myDist)}m`;
+    r.innerText = `Kamu: ${Math.floor(mgState.myDist)}m | Teman: ${Math.floor(mgState.guestDist||0)}m`;
+    // Share distance to firebase if multiplayer
+    if (anabulRoomCode) { database.ref(`anabul_rooms/${anabulRoomCode}/minigame_player/${anabulIsHost?'host':'guest'}`).set({ dist: mgState.myDist }); }
+    if (mgState.myDist >= 100 && !mgState.raceFinished) {
+      mgState.raceFinished = true;
+      r.innerText = "🏆 KAMU MENANG! Luar biasa!"; r.style.color = "#00b894";
+      let btn = document.getElementById('race-run-btn'); if (btn) btn.disabled = true;
+      mgReward(200, 20);
+      clearInterval(mgState.racingInterval);
+    }
+  }
+
+  else if (game === 'squid-step') {
+    if (!mgState.isRedLightRunning || mgState.playerEliminated) return;
+    if (mgState.currentServerLight === 'RED') {
+      mgState.playerEliminated = true;
+      r.innerText = "💥 KAMU BERGERAK DI RED LIGHT! ELEMINASI!"; r.style.color = "#d63031";
+      let myPet = document.getElementById('squid-my-pet');
+      if (myPet) { myPet.style.filter = 'grayscale(1) opacity(0.4)'; myPet.style.transform = 'rotate(90deg)'; }
+      let btn = document.getElementById('squid-move-btn'); if (btn) btn.disabled = true;
+      mgReward(0, 0); mgState.isRedLightRunning = false;
+    } else {
+      mgState.distance = (mgState.distance || 0) + 2;
+      r.innerText = `Jarak: ${mgState.distance}m / 50m`;
+      let myPct = 5 + (mgState.distance / 50) * 75;
+      let myPet = document.getElementById('squid-my-pet'); if (myPet) myPet.style.left = Math.min(82, myPct) + '%';
+      // Share to firebase
+      if (anabulRoomCode) { database.ref(`anabul_rooms/${anabulRoomCode}/minigame_player`).update({ [`${anabulIsHost?'host':'guest'}Dist`]: mgState.distance }); }
+      if (mgState.distance >= 50) {
+        r.innerText = "🏁 GOAL!! SELAMAT FINISH! 🎉"; r.style.color = "#00b894";
+        mgState.isRedLightRunning = false;
+        let btn = document.getElementById('squid-move-btn'); if (btn) btn.disabled = true;
+        mgReward(300, 30);
+      }
+    }
+  }
+
+  else if (game === 'squid-stop') {
+    // Show stop animation
+    createFloatingText("✋ STOP!", "center");
+  }
 }
 
+// ============================================================
+// GUIDE
+// ============================================================
 function openGuide() { let g = document.getElementById('guide-modal'); if (g) g.classList.add('active'); }
 function closeGuide() { let g = document.getElementById('guide-modal'); if (g) g.classList.remove('active'); }
 </script>
