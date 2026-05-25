@@ -1244,6 +1244,9 @@
 <!-- ANABUL APP -->
 <div id="anabul-app" style="display:none; position: relative; overflow: hidden; width: 100%; height: 100%; font-family: 'Nunito', 'Comic Sans MS', sans-serif; background-color: #fdf0a6; background-image: radial-gradient(#fcd116 20%, transparent 20%), radial-gradient(#fcd116 20%, transparent 20%); background-size: 40px 40px; background-position: 0 0, 20px 20px;">
 
+  <!-- ============================================================ -->
+  <!-- SCREEN HOME                                                   -->
+  <!-- ============================================================ -->
   <div id="screen-home" class="screen active">
     <div style="text-align: center; margin-top: 10vh;">
       <h1 class="title-main">261 ANABUL</h1>
@@ -1260,6 +1263,9 @@
     </div>
   </div>
 
+  <!-- ============================================================ -->
+  <!-- SCREEN MULTIPLAYER                                            -->
+  <!-- ============================================================ -->
   <div id="screen-multiplayer" class="screen">
     <div class="kawaii-panel" style="margin-top: 15vh;">
       <h2 style="margin-bottom:15px; font-size:22px; color:#ff6b81; font-weight:800;">VISIT TEMEN</h2>
@@ -1273,17 +1279,15 @@
     </div>
   </div>
 
+  <!-- ============================================================ -->
+  <!-- SCREEN SHOP                                                   -->
+  <!-- ============================================================ -->
   <div id="screen-shop" class="screen">
     <div class="kawaii-panel" id="shop-wrapper" style="padding:20px; max-height:90vh; overflow-y:auto; margin-top:5vh;">
       <h2 style="margin-bottom:5px; color:#ff6b81; font-weight:800;">TOKO ANABUL</h2>
       <div class="coin-display" style="margin-bottom:15px; align-self:center;">KOIN: <span id="shop-coins">0</span></div>
-      <div id="shop-preview-area">
-        <h3>FITTING ROOM</h3>
-        <p style="font-size:10px; color:#ff9a9e; font-weight:bold; margin-bottom:8px;">Coba baju sebelum beli yuk!</p>
-        <div id="shop-preview-render"></div>
-        <div id="preview-item-name" style="font-size:13px; font-weight:800; color:#ff6b81; margin-top:8px; min-height:18px;">Pilih item di bawah</div>
-        <button id="btn-buy-preview" class="btn-kawaii btn-green" style="margin-top:10px; display:none; padding:8px 15px; font-size:14px; width:100%;">BELI SEKARANG: KOIN <span id="preview-price">0</span></button>
-      </div>
+
+      <!-- Katalog tabs -->
       <p style="font-size:13px; color:#ff6b81; font-weight:800; margin-bottom:10px;">Katalog Tersedia:</p>
       <div class="shop-tabs">
         <div class="shop-tab active" onclick="switchShop('clothes',event)">Baju</div>
@@ -1297,14 +1301,18 @@
       <div class="shop-items" id="shop-furniture" style="display:none;"></div>
       <div class="shop-items" id="shop-skin" style="display:none;"></div>
       <div class="shop-items" id="shop-bath" style="display:none;"></div>
+
       <button class="btn-kawaii btn-red" style="margin-top:15px;" onclick="document.getElementById('screen-shop').classList.remove('active'); if(document.getElementById('room').style.display === 'none' || document.getElementById('room').style.display === '') { showAnabulScreen('screen-home'); }">TUTUP TOKO</button>
     </div>
   </div>
 
+  <!-- ============================================================ -->
+  <!-- SCREEN INVENTORY                                              -->
+  <!-- ============================================================ -->
   <div id="screen-inventory" class="screen">
     <div class="kawaii-panel" id="inventory-wrapper" style="padding:20px; max-height:90vh; overflow-y:auto; margin-top:5vh;">
       <h2 style="margin-bottom:5px; color:#ff6b81; font-weight:800;">TAS ANABUL</h2>
-      <p style="font-size:12px; color:#ff9a9e; font-weight:bold; margin-bottom:10px;">(Barang & Rare Item kamu)</p>
+      <p style="font-size:12px; color:#ff9a9e; font-weight:bold; margin-bottom:10px;">(Barang dan Rare Item kamu)</p>
       <div class="shop-tabs">
         <div class="shop-tab active" onclick="switchInventory('clothes',event)">Baju</div>
         <div class="shop-tab" onclick="switchInventory('bg',event)">Latar</div>
@@ -1321,7 +1329,9 @@
     </div>
   </div>
 
-  <!-- SCREEN SELECT: BUAT ANABUL (updated with pattern + custom color pickers) -->
+  <!-- ============================================================ -->
+  <!-- SCREEN SELECT: BUAT ANABUL                                    -->
+  <!-- ============================================================ -->
   <div id="screen-select" class="screen">
     <div class="kawaii-panel" style="margin-top:5vh; padding:15px;">
       <h2 style="margin-bottom:5px; text-align:center; color:#ff6b81; font-weight:800;">BUAT ANABUL</h2>
@@ -1335,19 +1345,16 @@
         <div class="pet-card" onclick="selectPet('bear',this)"><span>BERUANG</span></div>
       </div>
 
-      <!-- 2. PILIH WARNA BADAN (free color picker) -->
+      <!-- 2. PILIH WARNA BADAN -->
       <h3 style="margin-top:8px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">2. WARNA BADAN</h3>
       <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:6px;">
-        <!-- Preset swatches -->
         <div class="color-swatch" onclick="selectPetColor('#ffffff',this)" style="width:30px;height:30px;border-radius:50%;background:#ffffff;border:3px solid #ffb8c6;cursor:pointer;transform:scale(1.2);"></div>
         <div class="color-swatch" onclick="selectPetColor('#fdcb6e',this)" style="width:30px;height:30px;border-radius:50%;background:#fdcb6e;border:3px solid #ffb8c6;cursor:pointer;"></div>
         <div class="color-swatch" onclick="selectPetColor('#fab1a0',this)" style="width:30px;height:30px;border-radius:50%;background:#fab1a0;border:3px solid #ffb8c6;cursor:pointer;"></div>
         <div class="color-swatch" onclick="selectPetColor('#a29bfe',this)" style="width:30px;height:30px;border-radius:50%;background:#a29bfe;border:3px solid #ffb8c6;cursor:pointer;"></div>
         <div class="color-swatch" onclick="selectPetColor('#2d3436',this)" style="width:30px;height:30px;border-radius:50%;background:#2d3436;border:3px solid #ffb8c6;cursor:pointer;"></div>
         <div class="color-swatch" onclick="selectPetColor('#74b9ff',this)" style="width:30px;height:30px;border-radius:50%;background:#74b9ff;border:3px solid #ffb8c6;cursor:pointer;"></div>
-        <!-- Free color picker -->
         <label style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:#ff6b81;cursor:pointer;">
-          
           <input type="color" id="custom-color-pick" value="#ffffff" onchange="tempColor=this.value; updatePreview();" style="width:30px;height:30px;border-radius:50%;border:3px solid #ffb8c6;cursor:pointer;padding:0;">
         </label>
       </div>
@@ -1356,58 +1363,68 @@
       <h3 style="margin-top:8px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">3. PILIH MOTIF</h3>
       <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:6px;" id="pattern-picker-select">
         <div class="pet-card selected" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('none',this)"><span style="font-size:10px;">Polos</span></div>
-        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('stripes',this)"><span style="font-size:10px;"> Belang</span></div>
-        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('spots',this)"><span style="font-size:10px;"> Bintik</span></div>
-        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('zigzag',this)"><span style="font-size:10px;"> Zigzag</span></div>
-        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('hearts',this)"><span style="font-size:10px;">  Hati</span></div>
-        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('stars',this)"><span style="font-size:10px;"> Bintang</span></div>
-        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('diamonds',this)"><span style="font-size:10px;"> Berlian</span></div>
-        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('waves',this)"><span style="font-size:10px;"> Ombak</span></div>
-        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('galaxy',this)"><span style="font-size:10px;"> Galaxy</span></div>
-        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('tribal',this)"><span style="font-size:10px;"> Tribal</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('stripes',this)"><span style="font-size:10px;">Belang</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('spots',this)"><span style="font-size:10px;">Bintik</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('zigzag',this)"><span style="font-size:10px;">Zigzag</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('hearts',this)"><span style="font-size:10px;">Hati</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('stars',this)"><span style="font-size:10px;">Bintang</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('diamonds',this)"><span style="font-size:10px;">Berlian</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('waves',this)"><span style="font-size:10px;">Ombak</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('galaxy',this)"><span style="font-size:10px;">Galaxy</span></div>
+        <div class="pet-card" style="padding:5px 8px;min-width:60px;text-align:center;" onclick="selectPatternFromCard('tribal',this)"><span style="font-size:10px;">Tribal</span></div>
       </div>
 
       <!-- 4. WARNA MOTIF -->
       <h3 style="margin-top:4px; margin-bottom:5px; font-size:12px; color:#ff6b81; font-weight:800;">4. WARNA MOTIF</h3>
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
         <label style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:#ff6b81;cursor:pointer;">
-           Pilih Warna:
+          Pilih Warna:
           <input type="color" id="pattern-color-pick" value="#ff7675" onchange="tempPatternColor=this.value; updatePreview();" style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;cursor:pointer;padding:0;">
         </label>
-        <div style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;" id="pattern-color-preview" style="background:#ff7675;"></div>
+        <div style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;background:#ff7675;" id="pattern-color-preview"></div>
       </div>
 
-      <!-- PREVIEW -->
+      <!-- PREVIEW PET -->
       <div id="preview-container" style="width:130px; height:130px; margin:0 auto 12px auto; border:4px dashed #ffb8c6; border-radius:20px; background:#fff0f5; display:flex; align-items:center; justify-content:center;"></div>
 
       <!-- NAMA -->
       <input type="text" id="input-pet-name" class="input-kawaii" placeholder="NAMA ANABUL..." maxlength="10">
-      <button class="btn-kawaii btn-pink" onclick="startAnabulGame()" style="margin-top:10px;">MASUK KAMAR </button>
+      <button class="btn-kawaii btn-pink" onclick="startAnabulGame()" style="margin-top:10px;">MASUK KAMAR</button>
     </div>
   </div>
 
-  <!-- ROOM -->
+  <!-- ============================================================ -->
+  <!-- ROOM                                                          -->
+  <!-- ============================================================ -->
   <div class="room-container" id="room" style="display:none; position:relative; width:100%; height:100%;">
+
+    <!-- Wallpaper layer -->
     <div class="wallpaper bg-default" id="room-wallpaper" style="position:absolute; width:100%; height:100%; z-index:0;"></div>
+
+    <!-- Wall album (foto di dinding) — diisi oleh renderWallAlbum() -->
+    <div id="room-wall-album" style="position:absolute; top:0; left:0; width:100%; height:50%; z-index:4; pointer-events:auto; display:none;"></div>
+
+    <!-- Wall decor area -->
     <div id="room-wall-decor" style="position:absolute; top:10%; left:5%; width:90%; height:40%; z-index:1; pointer-events:none; display:flex; justify-content:space-between;"></div>
+
+    <!-- Shower head -->
     <div class="shower-head" id="shower-head" style="z-index:4; display:none;"></div>
+
+    <!-- Floor -->
     <div class="floor floor-default" id="room-floor" style="position:absolute; bottom:0; width:100%; height:30%; z-index:2;">
       <div class="rug" id="room-rug" style="position:absolute; bottom:10%; left:50%; transform:translateX(-50%); z-index:2;"></div>
     </div>
+
+    <!-- Furniture left — inline edit/remove buttons diinjeksi oleh renderFurnitureRoom() -->
     <div id="room-furniture-left" style="position:absolute; bottom:25%; left:5%; z-index:3;"></div>
+
+    <!-- Furniture right -->
     <div id="room-furniture-right" style="position:absolute; bottom:25%; right:5%; z-index:3;"></div>
-    <div id="furniture-controls" style="position:absolute; top:15%; right:5%; z-index:50; display:none; flex-direction:column; gap:10px;">
-      <div style="background:#fff; border:3px solid #ffb8c6; border-radius:10px; padding:5px; text-align:center;">
-        <div style="font-size:10px; font-weight:bold; margin-bottom:5px; color:#ff6b81;">KIRI</div>
-        <button onclick="scaleFurniture('left', 0.1)" style="background:#1dd1a1; border:none; color:#fff; border-radius:5px; width:25px; font-weight:bold;">+</button>
-        <button onclick="scaleFurniture('left', -0.1)" style="background:#ff7675; border:none; color:#fff; border-radius:5px; width:25px; font-weight:bold;">-</button>
-      </div>
-      <div style="background:#fff; border:3px solid #ffb8c6; border-radius:10px; padding:5px; text-align:center;">
-        <div style="font-size:10px; font-weight:bold; margin-bottom:5px; color:#ff6b81;">KANAN</div>
-        <button onclick="scaleFurniture('right', 0.1)" style="background:#1dd1a1; border:none; color:#fff; border-radius:5px; width:25px; font-weight:bold;">+</button>
-        <button onclick="scaleFurniture('right', -0.1)" style="background:#ff7675; border:none; color:#fff; border-radius:5px; width:25px; font-weight:bold;">-</button>
-      </div>
-    </div>
+
+    <!-- Legacy furniture controls (disembunyikan, kontrol kini inline di furniture) -->
+    <div id="furniture-controls" style="display:none;"></div>
+
+    <!-- Guest pet -->
     <div class="guest-pet-wrapper" id="guest-wrapper" style="z-index:5; display:none;">
       <div class="guest-name" id="guest-name" style="background:#fff; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:bold; border:2px solid #ffb8c6; color:#ff6b81; position:absolute; top:-20px; left:50%; transform:translateX(-50%);">GUEST</div>
       <div class="size-container" id="guest-size">
@@ -1415,6 +1432,8 @@
         <div id="guest-render"></div>
       </div>
     </div>
+
+    <!-- Main pet -->
     <div class="pet-wrapper" id="wrapper-1" style="z-index:6; display:flex; justify-content:center; align-items:flex-end; position:absolute; bottom:20%; width:100%;">
       <div class="size-container" id="pet-size" style="position:relative;">
         <svg class="acc-svg acc-active" id="acc-layer" viewBox="0 0 100 100" style="position:absolute; width:100%; height:100%; z-index:2; pointer-events:none;"></svg>
@@ -1424,59 +1443,97 @@
         </svg>
       </div>
     </div>
+
+    <!-- Foreground layer -->
     <div id="room-foreground" style="position:absolute; bottom:0; left:0; width:100%; height:10%; z-index:7; pointer-events:none;"></div>
   </div>
 
-  <!-- GAME UI / HUD -->
+  <!-- ============================================================ -->
+  <!-- GAME UI / HUD                                                 -->
+  <!-- ============================================================ -->
   <div class="ui-layer" id="game-ui">
     <div>
+      <!-- HUD TOP -->
       <div class="hud-top">
         <div class="hud-header">
           <div class="pet-name-ui" id="ui-name" style="background:#fff; padding:5px 12px; border-radius:15px; border:2px dashed #ffb8c6;">NAMA</div>
           <div class="level-badge">LV.<span id="ui-level">1</span></div>
           <div class="coin-display">KOIN: <span id="ui-coins">500</span></div>
         </div>
+
+        <!-- STATUS BARS -->
         <div class="status-bars">
           <div class="bar-row">
+            <!-- Food bar -->
             <div class="bar-wrap">
-              <svg class="bar-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#ff7675"/><path d="M12 8 L12 16 M8 12 L16 12" stroke="#fff" stroke-width="2"/></svg>
+              <svg class="bar-icon-svg" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8" fill="#ff7675"/>
+                <path d="M12 8 L12 16 M8 12 L16 12" stroke="#fff" stroke-width="2"/>
+              </svg>
               <div class="bar-fill fill-food" id="bar-food"></div>
             </div>
+            <!-- Clean bar -->
             <div class="bar-wrap">
-              <svg class="bar-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#74b9ff"/><circle cx="10" cy="10" r="2" fill="#fff"/></svg>
+              <svg class="bar-icon-svg" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8" fill="#74b9ff"/>
+                <circle cx="10" cy="10" r="2" fill="#fff"/>
+              </svg>
               <div class="bar-fill fill-clean" id="bar-clean"></div>
             </div>
           </div>
           <div class="bar-row">
+            <!-- Energy bar -->
             <div class="bar-wrap">
-              <svg class="bar-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#a29bfe"/><path d="M12 6 L14 12 L18 12 L12 18 L10 12 L6 12 Z" fill="#fff"/></svg>
+              <svg class="bar-icon-svg" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8" fill="#a29bfe"/>
+                <path d="M12 6 L14 12 L18 12 L12 18 L10 12 L6 12 Z" fill="#fff"/>
+              </svg>
               <div class="bar-fill fill-energy" id="bar-energy"></div>
             </div>
+            <!-- XP bar -->
             <div class="bar-wrap">
               <span style="position:absolute;left:25px;font-size:10px;font-weight:bold;z-index:2;color:#fff;text-shadow:1px 1px 0 #d63031;">XP</span>
               <div class="bar-fill fill-xp" id="bar-xp"></div>
             </div>
           </div>
+          <!-- Growth bar (ukuran pet) -->
+          <div class="bar-row">
+            <div class="bar-wrap" style="width:100%;">
+              <span style="position:absolute;left:25px;font-size:9px;font-weight:bold;z-index:2;color:#fff;text-shadow:1px 1px 0 #00796b;white-space:nowrap;">BESAR</span>
+              <div class="bar-fill" id="bar-growth" style="background:linear-gradient(90deg,#00b894,#55efc4);height:100%;width:0%;border-radius:inherit;transition:width 0.5s;"></div>
+            </div>
+          </div>
         </div>
+
+        <!-- Room code display (multiplayer) -->
         <div id="room-code-display" style="text-align:center;font-weight:800;font-size:14px;margin-top:8px;display:none;color:#ff6b81;">
           KODE: <span id="visit-code-text" style="color:#ff9f43; background:#fff; padding:2px 8px; border-radius:10px; border:2px dashed #ff9f43;"></span>
         </div>
       </div>
 
+      <!-- INTERACTIVE PANELS -->
       <div class="room-panels-container">
+
         <!-- DAPUR -->
         <div class="interactive-panel active" id="panel-kitchen">
-          <!-- diisi oleh initMakanan() -->
+          <!-- diisi oleh initMakanan() — 3 makanan + 1 minuman + 1 obat -->
         </div>
 
         <!-- MANDI -->
         <div class="interactive-panel" id="panel-bathroom">
           <div class="item-card" onclick="toggleShower()">
-            <svg viewBox="0 0 24 24" width="35" height="35"><path d="M12 4 L12 10 M8 12 V16 M12 12 V18 M16 12 V16" stroke="#74b9ff" stroke-width="2" stroke-linecap="round"/><ellipse cx="12" cy="10" rx="6" ry="2" fill="#b2bec3"/></svg>
+            <svg viewBox="0 0 24 24" width="35" height="35">
+              <path d="M12 4 L12 10 M8 12 V16 M12 12 V18 M16 12 V16" stroke="#74b9ff" stroke-width="2" stroke-linecap="round"/>
+              <ellipse cx="12" cy="10" rx="6" ry="2" fill="#b2bec3"/>
+            </svg>
             <span style="font-size:10px;font-weight:800;color:#ff6b81;">SHOWER</span>
           </div>
           <div class="item-card" onclick="toggleSoap()">
-            <svg viewBox="0 0 24 24" width="35" height="35"><ellipse cx="12" cy="12" rx="8" ry="5" fill="#ff9ff3"/><circle cx="8" cy="8" r="2" fill="#fff" opacity="0.8"/><circle cx="16" cy="6" r="1.5" fill="#fff" opacity="0.8"/></svg>
+            <svg viewBox="0 0 24 24" width="35" height="35">
+              <ellipse cx="12" cy="12" rx="8" ry="5" fill="#ff9ff3"/>
+              <circle cx="8" cy="8" r="2" fill="#fff" opacity="0.8"/>
+              <circle cx="16" cy="6" r="1.5" fill="#fff" opacity="0.8"/>
+            </svg>
             <span style="font-size:10px;font-weight:800;color:#ff6b81;">SABUN</span>
           </div>
         </div>
@@ -1484,27 +1541,47 @@
         <!-- MAIN -->
         <div class="interactive-panel" id="panel-play">
           <div class="item-card" onclick="openMiniGame('mancing')">
-            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 22 L10 2 M10 2 Q18 6 18 14 M18 14 Q16 16 14 14" fill="none" stroke="#2d3436" stroke-width="2"/><circle cx="14" cy="14" r="3" fill="#ff7675"/></svg>
+            <svg viewBox="0 0 24 24" width="30" height="30">
+              <path d="M4 22 L10 2 M10 2 Q18 6 18 14 M18 14 Q16 16 14 14" fill="none" stroke="#2d3436" stroke-width="2"/>
+              <circle cx="14" cy="14" r="3" fill="#ff7675"/>
+            </svg>
             <span style="font-size:9px;font-weight:800;color:#ff6b81;">MANCING</span>
           </div>
           <div class="item-card" onclick="openMiniGame('lari-solo')">
-            <svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="8" fill="#1dd1a1" stroke="#2d3436" stroke-width="2"/><path d="M8 12 L16 12 M12 8 L12 16" stroke="#fff" stroke-width="2"/></svg>
+            <svg viewBox="0 0 24 24" width="30" height="30">
+              <circle cx="12" cy="12" r="8" fill="#1dd1a1" stroke="#2d3436" stroke-width="2"/>
+              <path d="M8 12 L16 12 M12 8 L12 16" stroke="#fff" stroke-width="2"/>
+            </svg>
             <span style="font-size:9px;font-weight:800;color:#ff6b81;">LOMPAT</span>
           </div>
           <div class="item-card" onclick="openMiniGame('piano')">
-            <svg viewBox="0 0 24 24" width="30" height="30"><rect x="3" y="6" width="18" height="14" rx="3" fill="#ff9ff3"/><rect x="5" y="6" width="3" height="8" rx="1" fill="#fff"/><rect x="10" y="6" width="3" height="8" rx="1" fill="#fff"/><rect x="15" y="6" width="3" height="8" rx="1" fill="#fff"/></svg>
-            <span style="font-size:9px;font-weight:800;color:#ff6b81;">PIANO </span>
+            <svg viewBox="0 0 24 24" width="30" height="30">
+              <rect x="3" y="6" width="18" height="14" rx="3" fill="#ff9ff3"/>
+              <rect x="5" y="6" width="3" height="8" rx="1" fill="#fff"/>
+              <rect x="10" y="6" width="3" height="8" rx="1" fill="#fff"/>
+              <rect x="15" y="6" width="3" height="8" rx="1" fill="#fff"/>
+            </svg>
+            <span style="font-size:9px;font-weight:800;color:#ff6b81;">PIANO</span>
           </div>
           <div class="item-card" onclick="openMiniGame('lomba-lari')">
-            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M4 16 L20 16 M4 8 L20 8" stroke="#ff7675" stroke-width="3" stroke-dasharray="4"/><polygon points="18,12 22,12 20,8" fill="#ff7675"/></svg>
+            <svg viewBox="0 0 24 24" width="30" height="30">
+              <path d="M4 16 L20 16 M4 8 L20 8" stroke="#ff7675" stroke-width="3" stroke-dasharray="4"/>
+              <polygon points="18,12 22,12 20,8" fill="#ff7675"/>
+            </svg>
             <span style="font-size:9px;font-weight:800;color:#ff6b81;">LARI (M)</span>
           </div>
           <div class="item-card" onclick="openMiniGame('squid')">
-            <svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="8" fill="#ff6b6b"/><rect x="9" y="9" width="6" height="6" fill="#fff" rx="1"/></svg>
-            <span style="font-size:9px;font-weight:800;color:#ff6b81;">RED LIGHT </span>
+            <svg viewBox="0 0 24 24" width="30" height="30">
+              <circle cx="12" cy="12" r="8" fill="#ff6b6b"/>
+              <rect x="9" y="9" width="6" height="6" fill="#fff" rx="1"/>
+            </svg>
+            <span style="font-size:9px;font-weight:800;color:#ff6b81;">RED LIGHT</span>
           </div>
           <div class="item-card" onclick="playPet()">
-            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 4 Q16 4 16 10 Q16 16 12 16 Q8 16 8 10 Q8 4 12 4" fill="#feca57"/><circle cx="12" cy="20" r="2" fill="#ff6b81"/></svg>
+            <svg viewBox="0 0 24 24" width="30" height="30">
+              <path d="M12 4 Q16 4 16 10 Q16 16 12 16 Q8 16 8 10 Q8 4 12 4" fill="#feca57"/>
+              <circle cx="12" cy="20" r="2" fill="#ff6b81"/>
+            </svg>
             <span style="font-size:9px;font-weight:800;color:#ff6b81;">ELUS</span>
           </div>
         </div>
@@ -1512,81 +1589,125 @@
         <!-- TIDUR -->
         <div class="interactive-panel" id="panel-bedroom">
           <div class="item-card" onclick="toggleSleep()">
-            <svg viewBox="0 0 24 24" width="35" height="35"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 01-4.4 2.26 5.4 5.4 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" fill="#f1c40f"/></svg>
+            <svg viewBox="0 0 24 24" width="35" height="35">
+              <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 01-4.4 2.26 5.4 5.4 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" fill="#f1c40f"/>
+            </svg>
             <span style="font-size:10px;font-weight:800;color:#ff6b81;">TIDUR</span>
           </div>
           <div class="item-card" onclick="generateInventoryUI(); document.getElementById('screen-inventory').classList.add('active');">
-            <svg viewBox="0 0 24 24" width="35" height="35"><path d="M4 6h16v2H4zm2 2h12v12H6z" fill="#ff9ff3"/><rect x="8" y="10" width="8" height="4" fill="#fff" rx="2"/></svg>
+            <svg viewBox="0 0 24 24" width="35" height="35">
+              <path d="M4 6h16v2H4zm2 2h12v12H6z" fill="#ff9ff3"/>
+              <rect x="8" y="10" width="8" height="4" fill="#fff" rx="2"/>
+            </svg>
             <span style="font-size:10px;font-weight:800;color:#ff6b81;">LEMARI</span>
           </div>
           <div class="item-card" onclick="generateShopUI(); document.getElementById('screen-shop').classList.add('active');">
-            <svg viewBox="0 0 24 24" width="35" height="35"><circle cx="12" cy="12" r="10" fill="#feca57"/><text x="12" y="17" font-size="14" text-anchor="middle" fill="#fff" font-weight="bold">$</text></svg>
+            <svg viewBox="0 0 24 24" width="35" height="35">
+              <circle cx="12" cy="12" r="10" fill="#feca57"/>
+              <text x="12" y="17" font-size="14" text-anchor="middle" fill="#fff" font-weight="bold">$</text>
+            </svg>
             <span style="font-size:10px;font-weight:800;color:#ff6b81;">TOKO</span>
           </div>
-          <!-- GANTI MOTIF di kamar -->
+          <!-- GANTI MOTIF -->
           <div class="item-card" onclick="document.getElementById('motif-modal').classList.add('active'); buildMotifModal();">
-            <svg viewBox="0 0 24 24" width="35" height="35"><circle cx="12" cy="12" r="9" fill="#a29bfe"/><circle cx="9" cy="9" r="2" fill="#fff" opacity="0.7"/><circle cx="15" cy="9" r="2" fill="#fff" opacity="0.7"/><circle cx="12" cy="15" r="2" fill="#fff" opacity="0.7"/></svg>
+            <svg viewBox="0 0 24 24" width="35" height="35">
+              <circle cx="12" cy="12" r="9" fill="#a29bfe"/>
+              <circle cx="9" cy="9" r="2" fill="#fff" opacity="0.7"/>
+              <circle cx="15" cy="9" r="2" fill="#fff" opacity="0.7"/>
+              <circle cx="12" cy="15" r="2" fill="#fff" opacity="0.7"/>
+            </svg>
             <span style="font-size:10px;font-weight:800;color:#ff6b81;">GANTI MOTIF</span>
           </div>
         </div>
-      </div>
+
+      </div><!-- end room-panels-container -->
     </div>
 
     <!-- HUD BOTTOM NAV -->
     <div class="hud-bottom">
       <button class="nav-btn active" id="nav-btn-kitchen" onclick="goToRoom('kitchen')">
-        <svg viewBox="0 0 40 40"><rect x="5" y="20" width="30" height="15" rx="5" fill="#ff7675" stroke="#fff" stroke-width="2"/><ellipse cx="13" cy="20" rx="5" ry="3" fill="#fdcb6e"/><ellipse cx="27" cy="20" rx="5" ry="3" fill="#fdcb6e"/><rect x="18" y="10" width="4" height="10" rx="2" fill="#ffeaa7"/></svg>
+        <svg viewBox="0 0 40 40">
+          <rect x="5" y="20" width="30" height="15" rx="5" fill="#ff7675" stroke="#fff" stroke-width="2"/>
+          <ellipse cx="13" cy="20" rx="5" ry="3" fill="#fdcb6e"/>
+          <ellipse cx="27" cy="20" rx="5" ry="3" fill="#fdcb6e"/>
+          <rect x="18" y="10" width="4" height="10" rx="2" fill="#ffeaa7"/>
+        </svg>
         <span>DAPUR</span>
       </button>
       <button class="nav-btn" id="nav-btn-bathroom" onclick="goToRoom('bathroom')">
-        <svg viewBox="0 0 40 40"><rect x="8" y="8" width="24" height="20" rx="8" fill="#74b9ff" stroke="#fff" stroke-width="2"/><ellipse cx="20" cy="28" rx="10" ry="5" fill="#74b9ff"/><circle cx="14" cy="18" r="3" fill="white" opacity="0.9"/><circle cx="26" cy="15" r="2" fill="white" opacity="0.9"/></svg>
+        <svg viewBox="0 0 40 40">
+          <rect x="8" y="8" width="24" height="20" rx="8" fill="#74b9ff" stroke="#fff" stroke-width="2"/>
+          <ellipse cx="20" cy="28" rx="10" ry="5" fill="#74b9ff"/>
+          <circle cx="14" cy="18" r="3" fill="white" opacity="0.9"/>
+          <circle cx="26" cy="15" r="2" fill="white" opacity="0.9"/>
+        </svg>
         <span>MANDI</span>
       </button>
       <button class="nav-btn" id="nav-btn-play" onclick="goToRoom('play')">
-        <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="#1dd1a1" stroke="#fff" stroke-width="2"/><path d="M16 14 L16 26 L26 20 Z" fill="#fff"/></svg>
+        <svg viewBox="0 0 40 40">
+          <circle cx="20" cy="20" r="14" fill="#1dd1a1" stroke="#fff" stroke-width="2"/>
+          <path d="M16 14 L16 26 L26 20 Z" fill="#fff"/>
+        </svg>
         <span>MAIN</span>
       </button>
       <button class="nav-btn" id="nav-btn-bedroom" onclick="goToRoom('bedroom')">
-        <svg viewBox="0 0 40 40"><rect x="5" y="18" width="30" height="16" rx="6" fill="#a29bfe" stroke="#fff" stroke-width="2"/><rect x="5" y="14" width="14" height="8" rx="4" fill="#ff9ff3"/><rect x="21" y="14" width="14" height="8" rx="4" fill="#ff9ff3"/></svg>
+        <svg viewBox="0 0 40 40">
+          <rect x="5" y="18" width="30" height="16" rx="6" fill="#a29bfe" stroke="#fff" stroke-width="2"/>
+          <rect x="5" y="14" width="14" height="8" rx="4" fill="#ff9ff3"/>
+          <rect x="21" y="14" width="14" height="8" rx="4" fill="#ff9ff3"/>
+        </svg>
         <span>TIDUR</span>
       </button>
       <button class="nav-btn" onclick="quitAnabulGame()" style="opacity:1;">
-        <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="#ff6b81" stroke="#fff" stroke-width="2"/><path d="M14 14 L26 26 M26 14 L14 26" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 40 40">
+          <circle cx="20" cy="20" r="14" fill="#ff6b81" stroke="#fff" stroke-width="2"/>
+          <path d="M14 14 L26 26 M26 14 L14 26" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+        </svg>
         <span style="color:#ff6b81;">KELUAR</span>
       </button>
     </div>
-  </div>
+  </div><!-- end game-ui -->
 
-  <!-- MINIGAME MODAL -->
+  <!-- ============================================================ -->
+  <!-- MINIGAME MODAL                                                -->
+  <!-- ============================================================ -->
   <div class="minigame-modal" id="minigame-modal">
     <div class="minigame-box" id="minigame-content"></div>
   </div>
 
-  <!-- GUIDE MODAL -->
+  <!-- ============================================================ -->
+  <!-- GUIDE MODAL                                                   -->
+  <!-- ============================================================ -->
   <div class="guide-modal" id="guide-modal">
     <div class="guide-box">
       <div class="guide-title" style="color:#ff6b81; font-weight:800; font-size:18px; margin-bottom:15px;">PANDUAN MERAWAT</div>
       <div style="font-size:12px; color:#ff6b81; text-align:left; max-height:50vh; overflow-y:auto;">
-        <h3 style="color:#f368e0; margin-bottom:5px;">MAKANAN & KEBERSIHAN</h3>
-        <p style="margin-bottom:10px;">Beri makan agar anabul tidak sakit. Mandikan dengan sabun agar tetap wangi dan bersih!</p>
-        <h3 style="color:#f368e0; margin-bottom:5px;">MOTIF & WARNA PET</h3>
-        <p style="margin-bottom:10px;">Saat buat pet, pilih motif dan warna bebas. Di kamar tidur, klik <b>GANTI MOTIF</b> untuk mengubah motif sewaktu-waktu!</p>
-        <h3 style="color:#f368e0; margin-bottom:5px;">DEKORASI & FITTING ROOM</h3>
-        <p style="margin-bottom:10px;">Beli Perabotan di Toko! Gunakan fitur <b>FITTING ROOM</b> untuk mencoba Baju dan Aksesoris sebelum beli.</p>
-        <h3 style="color:#f368e0; margin-bottom:5px;">PIANO 🎵</h3>
-        <p style="margin-bottom:10px;">Di Piano, kamu bisa <b>pilih lagu dari galeri HP</b>! Beat tile akan muncul mengikuti irama musikmu.</p>
-        <h3 style="color:#f368e0; margin-bottom:5px;">RED LIGHT GREEN LIGHT 🦑</h3>
+        <h3 style="color:#f368e0; margin-bottom:5px;">MAKANAN DAN KEBERSIHAN</h3>
+        <p style="margin-bottom:10px;">Beri makan agar anabul tidak sakit. Mandikan dengan sabun agar tetap wangi dan bersih! Jika terlalu lama ditinggal, pet akan kotor dan sakit sendiri.</p>
+        <h3 style="color:#f368e0; margin-bottom:5px;">TUMBUH BESAR</h3>
+        <p style="margin-bottom:10px;">Rawat pet dengan rutin memberi makan, mandi, dan bermain. Pet akan perlahan membesar! Lihat bar BESAR di atas. Jika ditinggal lama, ukurannya bisa menyusut.</p>
+        <h3 style="color:#f368e0; margin-bottom:5px;">MOTIF DAN WARNA PET</h3>
+        <p style="margin-bottom:10px;">Saat buat pet, pilih motif dan warna bebas. Di kamar tidur, klik GANTI MOTIF untuk mengubah motif sewaktu-waktu!</p>
+        <h3 style="color:#f368e0; margin-bottom:5px;">PREVIEW SEBELUM BELI</h3>
+        <p style="margin-bottom:10px;">Setiap item baju dan aksesoris di toko punya tombol PREVIEW. Tap untuk melihat tampilan di petmu sebelum membeli!</p>
+        <h3 style="color:#f368e0; margin-bottom:5px;">DEKORASI DAN FOTO</h3>
+        <p style="margin-bottom:10px;">Beli perabotan di Toko. Album Foto bisa menampilkan foto dari galeri HP yang terpasang langsung di dinding kamar! Gunakan tombol + - dan x untuk mengatur ukuran dan menghapus.</p>
+        <h3 style="color:#f368e0; margin-bottom:5px;">PIANO</h3>
+        <p style="margin-bottom:10px;">Di Piano, kamu bisa pilih lagu dari galeri HP! Beat tile akan muncul mengikuti irama musikmu. Tap tile sebelum keluar batas bawah.</p>
+        <h3 style="color:#f368e0; margin-bottom:5px;">RED LIGHT GREEN LIGHT</h3>
         <p style="margin-bottom:10px;">Mainkan bareng teman! Boneka akan berputar. Maju saat HIJAU, berhenti saat MERAH atau ELIMINASI!</p>
-        <h3 style="color:#f368e0; margin-bottom:5px;">RARE ITEMS & MINI GAMES</h3>
+        <h3 style="color:#f368e0; margin-bottom:5px;">RARE ITEMS DAN MINI GAMES</h3>
         <p style="margin-bottom:10px;">Mainkan Mini Games untuk mendapatkan koin dan XP. Item RARE tersedia di toko dengan level tertentu!</p>
-        <h3 style="color:#f368e0; margin-bottom:5px;">MABAR / VISIT TEMEN</h3>
+        <h3 style="color:#f368e0; margin-bottom:5px;">MABAR DAN VISIT TEMEN</h3>
         <p>Bagikan Kode Rumahmu ke teman untuk main bareng secara real-time. Pamerkan kamarmu dan main lomba lari!</p>
       </div>
-      <button class="btn-kawaii btn-pink" onclick="closeGuide()" style="margin-top:15px; width:100%;">MENGERTI!</button>
+      <button class="btn-kawaii btn-pink" onclick="closeGuide()" style="margin-top:15px; width:100%;">MENGERTI</button>
     </div>
   </div>
 
-  <!-- CROP MODAL -->
+  <!-- ============================================================ -->
+  <!-- CROP MODAL                                                    -->
+  <!-- ============================================================ -->
   <div class="crop-modal" id="crop-modal">
     <div class="crop-box">
       <h3 style="margin-bottom:10px; color:#ff6b81; font-weight:800;">CROP FOTO ALBUM</h3>
@@ -1603,7 +1724,9 @@
     </div>
   </div>
 
-  <!-- FURNITURE POSITION MODAL -->
+  <!-- ============================================================ -->
+  <!-- FURNITURE POSITION MODAL                                      -->
+  <!-- ============================================================ -->
   <div class="minigame-modal" id="furniture-pos-modal">
     <div class="minigame-box">
       <h3 style="color:#ff6b81; font-weight:800;">TARUH DIMANA?</h3>
@@ -1616,29 +1739,34 @@
     </div>
   </div>
 
-  <!-- MOTIF MODAL (ganti motif dari kamar) -->
+  <!-- ============================================================ -->
+  <!-- MOTIF MODAL (ganti motif dari kamar)                          -->
+  <!-- ============================================================ -->
   <div class="minigame-modal" id="motif-modal">
     <div class="minigame-box" style="max-height:85vh; overflow-y:auto;">
-      <h3 style="color:#ff6b81; font-weight:800; margin-bottom:8px;">🎨 GANTI MOTIF PET</h3>
+      <h3 style="color:#ff6b81; font-weight:800; margin-bottom:8px;">GANTI MOTIF PET</h3>
       <p style="font-size:11px; color:#ff9a9e; font-weight:bold; margin-bottom:10px;">Pilih motif dan warna, lalu tekan TERAPKAN.</p>
-      <!-- Pattern grid -->
-      <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px;" id="motif-modal-grid">
-        <!-- filled by buildMotifModal() -->
-      </div>
+
+      <!-- Pattern grid — diisi oleh buildMotifModal() -->
+      <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px;" id="motif-modal-grid"></div>
+
       <!-- Color picker -->
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-        <label style="font-size:11px; font-weight:800; color:#ff6b81;">🎨 Warna Motif:</label>
-        <input type="color" id="motif-color-pick" value="#ff7675" onchange="document.getElementById('motif-color-preview').style.background=this.value;" style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;cursor:pointer;padding:0;">
+        <label style="font-size:11px; font-weight:800; color:#ff6b81;">Warna Motif:</label>
+        <input type="color" id="motif-color-pick" value="#ff7675"
+          onchange="document.getElementById('motif-color-preview').style.background=this.value; updateMotifPreview();"
+          style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;cursor:pointer;padding:0;">
         <div id="motif-color-preview" style="width:35px;height:35px;border-radius:10px;border:3px solid #ffb8c6;background:#ff7675;"></div>
       </div>
-      <!-- Preview -->
-      <div id="motif-preview-container" style="width:100px;height:100px;margin:0 auto 10px auto;border:3px dashed #ffb8c6;border-radius:15px;background:#fff0f5;display:flex;align-items:center;justify-content:center;"></div>
-      <button class="btn-kawaii btn-pink" onclick="applyMotifFromModal()" style="width:100%;">TERAPKAN ✨</button>
+
+      <!-- Preview pet dalam motif modal -->
+      <div id="motif-preview-container" style="width:110px;height:110px;margin:0 auto 10px auto;border:3px dashed #ffb8c6;border-radius:15px;background:#fff0f5;display:flex;align-items:center;justify-content:center;overflow:hidden;"></div>
+
+      <button class="btn-kawaii btn-pink" onclick="applyMotifFromModal()" style="width:100%;">TERAPKAN</button>
       <button class="btn-kawaii btn-red" onclick="document.getElementById('motif-modal').classList.remove('active')" style="width:100%; margin-top:8px;">BATAL</button>
     </div>
   </div>
 
-  <!-- Hidden file inputs -->
   <input type="file" id="album-upload" accept="image/png, image/jpeg" style="display:none;" onchange="handleAlbumFile(event)">
 
 </div>
@@ -2638,22 +2766,60 @@ function selectPatternFromCard(patternId, el) {
   updatePreview();
 }
 
-// Build isi motif modal (dipanggil saat buka motif-modal dari kamar)
+// ---- selectPatternFromCard (digunakan di screen-select) ----
+function selectPatternFromCard(patternId, el) {
+  tempPattern = patternId;
+  // Update highlight di screen-select
+  document.querySelectorAll('#pattern-picker-select .pet-card').forEach(c => c.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  updatePreview();
+}
+
+// ---- buildMotifModal: bangun grid pilihan motif di motif-modal ----
 function buildMotifModal() {
-  let grid = document.getElementById('motif-modal-grid');
+  const grid = document.getElementById('motif-modal-grid');
   if (!grid) return;
-  // Set color picker to current
-  let cp = document.getElementById('motif-color-pick');
-  if (cp) { cp.value = petData.petPatternColor || '#ff7675'; document.getElementById('motif-color-preview').style.background = cp.value; }
-  // Build cards
-  let labels = { none:'Polos', stripes:' Belang', spots:' Bintik', zigzag:' Zigzag', hearts:'  Hati', stars:' Bintang', diamonds:' Berlian', waves:' Ombak', galaxy:' Galaxy', tribal:' Tribal' };
-  grid.innerHTML = petPatterns.map(p =>
-    `<div class="pet-card ${(petData.petPattern||'none') === p.id ? 'selected' : ''}" 
-      style="padding:5px 8px;min-width:60px;text-align:center;" 
-      onclick="selectMotifCard('${p.id}', this)">
-      <span style="font-size:10px;">${labels[p.id]||p.id}</span>
-    </div>`
-  ).join('');
+  // Sinkronkan warna dengan petData saat ini
+  let colorEl = document.getElementById('motif-color-pick');
+  if (colorEl && petData.petPatternColor) colorEl.value = petData.petPatternColor;
+  let previewColor = document.getElementById('motif-color-preview');
+  if (previewColor && petData.petPatternColor) previewColor.style.background = petData.petPatternColor;
+
+  grid.innerHTML = petPatterns.map(p => `
+    <div
+      onclick="selectMotifFromModal('${p.id}', this)"
+      style="
+        padding:5px 9px;
+        font-size:10px;
+        font-weight:800;
+        cursor:pointer;
+        border-radius:8px;
+        border:2px solid ${(petData.petPattern || 'none') === p.id ? '#e84393' : '#dfe6e9'};
+        background:${(petData.petPattern || 'none') === p.id ? '#fff0f9' : '#f5f6fa'};
+        color:#2d3436;
+        transition:all 0.15s;
+      "
+    >${p.name}</div>
+  `).join('');
+
+  // Tampilkan preview awal
+  updateMotifPreview();
+}
+
+// Simpan pilihan sementara di motif modal
+let tempMotifPattern = null;
+
+function selectMotifFromModal(patternId, el) {
+  tempMotifPattern = patternId;
+  // Update highlight
+  document.querySelectorAll('#motif-modal-grid div').forEach(d => {
+    d.style.borderColor = '#dfe6e9';
+    d.style.background = '#f5f6fa';
+  });
+  if (el) {
+    el.style.borderColor = '#e84393';
+    el.style.background = '#fff0f9';
+  }
   updateMotifPreview();
 }
 
@@ -2666,30 +2832,28 @@ function selectMotifCard(id, el) {
 }
 
 function updateMotifPreview() {
-  let cont = document.getElementById('motif-preview-container'); if (!cont) return;
-  let mid = tempMotifId !== null ? tempMotifId : (petData.petPattern || 'none');
-  let col = document.getElementById('motif-color-pick'); let mc = col ? col.value : (petData.petPatternColor || '#ff7675');
-  cont.innerHTML = getPetSvgString(petData.type, petData.baseColor, petData.activeClothes, false, mid, mc);
+  const cont = document.getElementById('motif-preview-container');
+  if (!cont) return;
+  let colorEl = document.getElementById('motif-color-pick');
+  let chosenPattern = tempMotifPattern !== null ? tempMotifPattern : (petData.petPattern || 'none');
+  let chosenColor = colorEl ? colorEl.value : (petData.petPatternColor || '#ff7675');
+  cont.innerHTML = getPetSvgString(
+    petData.type,
+    petData.baseColor,
+    petData.activeClothes,
+    false,
+    chosenPattern,
+    chosenColor
+  );
 }
 
-function applyMotifFromModal() {
-  let col = document.getElementById('motif-color-pick');
-  if (tempMotifId !== null) petData.petPattern = tempMotifId;
-  if (col) petData.petPatternColor = col.value;
-  savePetData();
-  updatePetRender('pet-size', petData, isSleeping);
-  document.getElementById('motif-modal').classList.remove('active');
-  createFloatingText("Motif diterapkan! ", "center");
-  tempMotifId = null;
-}
-
-function applyPatternToPet() {
-  let colorEl = document.getElementById('pattern-color-pick');
-  petData.petPattern = tempPattern || 'none';
-  petData.petPatternColor = colorEl ? colorEl.value : '#ff7675';
-  savePetData();
-  updatePetRender('pet-size', petData, isSleeping);
-  createFloatingText("Motif diterapkan!", "center");
+// ---- selectPatternFromCard (digunakan di screen-select) ----
+function selectPatternFromCard(patternId, el) {
+  tempPattern = patternId;
+  // Update highlight di screen-select
+  document.querySelectorAll('#pattern-picker-select .pet-card').forEach(c => c.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  updatePreview();
 }
 
 // ============================================================
