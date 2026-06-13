@@ -1301,7 +1301,6 @@ function syncBilliardOnline(data) {
     let rawBalls = Array.isArray(data.balls) ? data.balls : Object.values(data.balls);
     serverBalls = rawBalls.map((b, i) => {
       if (!b) return null;
-      // Kalau nilainya hilang/undefined/NaN, paksa jadi angka aman (0)
       return {
         id: b.id !== undefined ? Number(b.id) : i,
         x: isNaN(b.x) || b.x === null ? (BIL_W / 2) : Number(b.x),
@@ -1319,12 +1318,9 @@ function syncBilliardOnline(data) {
   // 5. Update array bola HANYA jika tidak ada tembakan yang lagi jalan
   if (!bilShooting && !isMoving) {
     if (serverBalls.length >= 16) {
-        bilBalls = serverBalls; // Pake data server yang udah di-filter
+        bilBalls = serverBalls; 
     } else {
-        // Kalau server kosong (awal mulai game), generate bola baru!
         if (!bilBalls || bilBalls.length < 16) bilBalls = initBilBalls();
-        
-        // Host bertugas melempar formasi awal ini ke Firebase agar musuh ikutan liat
         if (typeof isHost !== 'undefined' && isHost && typeof database !== 'undefined') {
             database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls });
         }
@@ -1332,7 +1328,7 @@ function syncBilliardOnline(data) {
     updateBilUI();
   }
 
-  // 6. Sinkronisasi efek tembakan (biar gerakannya akurat)
+  // 6. Sinkronisasi efek tembakan
   if (data.shot && data.shot.id !== bilLastShotId) {
     bilLastShotId = data.shot.id;
     if (bilState.turn !== myColor && bilBalls[0]) { 
@@ -1352,14 +1348,6 @@ function syncBilliardOnline(data) {
 
   // 8. Render papannya!
   bilDraw();
-}
-    
-    if(!bilShooting && !data.state.moving) {
-      bilBalls = data.balls; updateBilUI();
-    }
-    
-    if(bilState.winners.length > 0) typeof showEndLeaderboard !== 'undefined' && showEndLeaderboard(bilState.winners, bilNames, gameConfigs.billiard);
-  }
 }
 
 function updateBilUI() {
@@ -1652,4 +1640,4 @@ mainLoop();
 
 </script>
 </body>
-  </html>
+        </html>
