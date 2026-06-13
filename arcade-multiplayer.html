@@ -330,6 +330,11 @@
         <div class="game-card" onclick="myGlobalName=checkNameAuth(); if(myGlobalName){ activeGame='billiard'; showScreen('billiard-hub'); }" style="border-color:#ffeb3b;color:#ffeb3b;"><span class="game-icon-emoji">⚈</span><div class="game-card-title">BILLIARD 261</div></div>
       </div>
       <p class="dev-tag">𝟒𝐍𝐓𝟏𝐃𝟎𝟔𝟔𝟔𝐌𝟒</p>
+      
+      <!-- Tombol Buka Playlist -->
+      <button class="game-btn" style="font-size:12px; padding:8px 15px; margin-top:10px; width:auto; border-color:#00d2ff; color:#00d2ff;" onclick="document.getElementById('playlist-modal').style.display='flex'">
+        BUKA PLAYLIST
+      </button>
     </div>
 
     <div id="ludo-hub" class="game-screen">
@@ -348,7 +353,7 @@
     </div>
     <div id="ludo-rules" class="game-screen">
       <div class="rules-card" style="border-color:#ff4757;">
-        <h2>ATURAN LUDO</h2><ul><li>Lempar dadu dan dapatkan angka <span>6</span> untuk mengeluarkan pion.</li><li>Angka <span>6</span> memberikan giliran ekstra melempar dadu.</li><li>Injak pion lawan untuk memakannya.</li><li>Area bersimbol Bintang (⭐) adalah zona aman.</li><li>Bawa keempat pion ke tengah untuk menang.</li></ul>
+        <h2>ATURAN LUDO</h2><ul><li>Lempar dadu dan dapatkan angka <span>6</span> untuk mengeluarkan pion.</li><li>Angka <span>6</span> memberikan giliran ekstra melempar dadu.</li><li>Injak pion lawan untuk memakannya.</li><li>Area bersimbol Bintang adalah zona aman.</li><li>Bawa keempat pion ke tengah untuk menang.</li></ul>
       </div>
       <button class="game-btn" onclick="showScreen('ludo-hub')" style="border-color:#888;color:#888;">KEMBALI</button>
     </div>
@@ -440,8 +445,8 @@
     <!-- BILLIARD HUB & RULES -->
     <div id="billiard-hub" class="game-screen">
       <div class="bg-anim-layer">
-        <span class="float-icon bil-glow" style="left:15%; animation-delay: 0s; font-size:90px;">🎱</span>
-        <span class="float-icon bil-glow" style="right:15%; animation-delay: 6s; font-size:110px;">🎱</span>
+        <span class="float-icon bil-glow" style="left:15%; animation-delay: 0s; font-size:90px;">⚈</span>
+        <span class="float-icon bil-glow" style="right:15%; animation-delay: 6s; font-size:110px;">⚈</span>
       </div>
       <h1 class="splash-title" style="color:#ffeb3b;">BILLIARD 261</h1>
       <p class="splash-sub">Sodok Bola, Tunjukkan Skillmu!</p>
@@ -508,6 +513,7 @@
       </div>
     </div>
 
+    <!-- OFFLINE SETUPS -->
     <div id="ludo-offline-setup" class="game-screen">
       <div class="overlay-box">
         <h2 style="color:#ff4757;margin-top:0;margin-bottom:10px;">LUDO LOKAL</h2>
@@ -572,62 +578,24 @@
       </div>
     </div>
     
-        <div id="billiard-offline-setup" class="game-screen">
+    <div id="billiard-offline-setup" class="game-screen">
       <div class="overlay-box">
         <h2 style="color:#ffeb3b; margin-top:0; margin-bottom:10px;">BILLIARD LOKAL</h2>
-        
-        <!-- Tema Papan Dipindah Ke Sini -->
         <select id="bil-theme" class="ludo-dropdown" style="border-color:#fff;">
           <option value="0">Tema Meja Hitam</option>
           <option value="1">Tema Meja Hijau</option>
           <option value="2">Tema Meja Biru</option>
         </select>
-
         <select id="bil-off-mode" class="ludo-dropdown" style="margin-top:10px;">
           <option value="bot">1 VS Bot AI</option>
           <option value="pvp">1 VS 1 (PVP 1 HP)</option>
         </select>
-        
         <button class="game-btn" style="width:100%; border-color:#ffeb3b; color:#ffeb3b; margin-top:15px;" onclick="startBilliardOffline()">GAS MAIN</button>
         <button class="game-btn" onclick="showScreen('billiard-hub')" style="width:100%; border-color:#555; color:#888; margin-top:10px;">KEMBALI</button>
       </div>
     </div>
 
-    <div id="billiard-game-screen" class="game-screen">
-      <div class="bil-hud-top">
-        <div class="bil-player-box">
-          <span class="bil-player-name" id="bil-name-p1">P1</span>
-          <span class="bil-score-num" id="bil-score-p1">0</span>
-          <div class="bil-ball-rack" id="bil-rack-p1"></div>
-        </div>
-        <div class="bil-center-info">
-          <div class="bil-title">BILLIARD 261</div>
-          <div class="bil-turn-badge" id="bil-turn-badge">GILIRAN LU</div>
-          <div id="bil-status-msg" style="font-size:10px; color:#ccc; margin-top:5px;">P1: BEBAS | P2: BEBAS</div>
-        </div>
-        <div class="bil-player-box">
-          <span class="bil-player-name" id="bil-name-p2" style="color:#ff0055;">P2</span>
-          <span class="bil-score-num" id="bil-score-p2">0</span>
-          <div class="bil-ball-rack" id="bil-rack-p2"></div>
-        </div>
-      </div>
-      
-      <div class="bil-table-wrapper">
-        <button class="bil-leave-btn" onclick="leaveRoom()">EXIT</button>
-        <!-- Tombol Theme di sini sudah dihapus -->
-        <div class="bil-rail-outer" id="bil-rail">
-          <canvas id="bil-canvas" width="400" height="800"></canvas>
-        </div>
-      </div>
-      
-      <div class="bil-hud-bottom">
-        <div class="bil-power-display">
-          <span style="font-family:'Orbitron'; font-size:12px; font-weight:bold; color:#fff;">POWER</span>
-          <div class="bil-power-bg"><div class="bil-power-fill" id="bil-power-bar"></div></div>
-        </div>
-      </div>
-      </div>
-
+    <!-- IN-GAME SCREENS -->
     <div id="ludo-game-screen" class="game-screen">
       <div class="ludo-top-panel">
         <div class="ludo-info-box"><div id="ludo-turn-info" style="color:#ff4757;">MERAH</div><div id="ludo-log-msg">Bersiap...</div></div>
@@ -731,6 +699,7 @@
   </div>
 </div>
 
+<!-- MODAL OVERLAYS -->
 <div class="dom-overlay" id="dom-m-end">
   <div class="dom-modal">
     <h2 id="dom-me-title">MATCH OVER</h2>
@@ -754,6 +723,77 @@
 </div>
 
 <div id="dom-toast"></div>
+
+<div class="dom-overlay" id="playlist-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.8); position:fixed; top:0; left:0; width:100%; height:100%;">
+  <div class="dom-modal" style="background:#111; border:2px solid #00d2ff; width:90%; max-width:400px; max-height:80vh; overflow-y:auto; padding:20px; border-radius:8px; text-align:center;">
+    
+    <h2 style="color:#00d2ff; margin-top:0; letter-spacing:2px;">MUSIC PLAYLIST</h2>
+    <p style="color:#ccc; font-size:12px; margin-bottom:15px;">Pilih lagu untuk menemani permainan</p>
+    
+    <div class="playlist-container" style="display:flex; flex-direction:column; gap:8px; text-align:left;">
+      
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Avenged Sevenfold - So far Away</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/dhu2yx.m4a')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Avenged Sevenfold - A Little of piece heaven</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/og4rvm.mp3')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Одного</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/xx5xzv.m4a')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Ace Base - Happy Nation</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/q8oang.m4a')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Ajimat - My Gang</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/kkq8de.mp3')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Bruno Mars - Lazy Song</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/yqt5r3.mp3')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Avenged Sevenfold - Dear God</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/uvp6e8.mp3')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Pompei</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/522vr9.mp3')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Owl city - Fire flies</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/6gzf66.mp3')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+      <div class="playlist-item" style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; border-radius:5px; border:1px solid #333;">
+        <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Lagu faii</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/814s8b.mp3')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+      
+      <div class="playlist-title" style="color:#fff; font-weight:bold; font-size:14px;">Heatwafes</div>
+        <button class="playlist-play-btn" onclick="toggleGameMusic(this, 'https://files.catbox.moe/6gzf66.mp3')" style="background:#00d2ff; color:#000; border:none; padding:5px 10px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:10px; width:60px;">PLAY</button>
+      </div>
+
+    </div>
+
+    <button class="game-btn" style="margin-top:20px; width:100%; border-color:#ff4757; color:#ff4757;" onclick="document.getElementById('playlist-modal').style.display='none'">
+      TUTUP
+    </button>
+    
+  </div>
+</div> 
 
 <script>
 const firebaseConfig = { apiKey:"AIzaSyBpa1Ml5i0j5Jzs4eQrHKKIuo3FoB7JWrE", authDomain:"clx---14.firebaseapp.com", databaseURL:"https://clx---14-default-rtdb.asia-southeast1.firebasedatabase.app", projectId:"clx---14", storageBucket:"clx---14.firebasestorage.app", messagingSenderId:"368765694470", appId:"1:368765694470:web:90ef6dbccc7aa5a4adc987" };
@@ -1146,7 +1186,7 @@ function domToast(msg) { const el = document.getElementById('dom-toast'); el.tex
 
 
 // ============================================================
-// BILLIARD PRO (Arcade Embedded) - REVISION FIXED
+// BILLIARD PRO (Arcade Embedded) - FINAL FIX V3
 // ============================================================
 let audioCtx = null;
 function initAudio() {
@@ -1220,20 +1260,25 @@ const TABLE_THEMES = [
 const STICK_THEMES = ['#ffeb3b', '#d4a373', '#00d2ff'];
 
 const bilCanvas = document.getElementById('bil-canvas');
-bilCanvas.style.touchAction = 'none'; // FIX: Mencegah scroll layar saat bidik
 const bilCtx = bilCanvas.getContext('2d');
 const BIL_W = 400; const BIL_H = 800; 
 const BIL_R = 12; const BIL_FRIC = 0.985; const BIL_MIN_S = 0.08; const BIL_MAX_P = 22; const BIL_PR = 22;
 const BIL_POCKETS = [ {x: 18, y: 18}, {x: BIL_W-18, y: 18}, {x: 18, y: BIL_H/2}, {x: BIL_W-18, y: BIL_H/2}, {x: 18, y: BIL_H-18}, {x: BIL_W-18, y: BIL_H-18} ];
 const BIL_COLORS = ['#ffffff', '#f1c40f', '#2980b9', '#c0392b', '#8e44ad', '#d35400', '#27ae60', '#800000', '#111111', '#f1c40f', '#2980b9', '#c0392b', '#8e44ad', '#d35400', '#27ae60', '#800000'];
 
-let bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[] };
+let bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[], ballInHand: false };
 let bilBalls = [];
 let bilMode = 'pvp'; 
 let bilTbl = 0, bilStk = 0;
-let bilShooting = false, bilPlacingCue = false, bilMouseStart = null, bilMouseNow = null, bilMouseDown = false;
+let bilShooting = false, bilMouseStart = null, bilMouseNow = null, bilMouseDown = false;
 let bilPrevPocketed = [], bilWait = 0, bilNames = {p1:'PLAYER 1', p2:'PLAYER 2'};
 let bilLastShotId = null;
+
+// FUNGSI BARU BUAT NGECEK IDENTITAS (Biar Gak Crash Sama myColor Ludo)
+function getMyBilPlayer() {
+  if (typeof isOnline === 'undefined' || !isOnline) return 'p1';
+  return (typeof isHost !== 'undefined' && isHost) ? 'p1' : 'p2';
+}
 
 function toggleBilTheme() {
   bilTbl = (bilTbl + 1) % 3; bilStk = (bilStk + 1) % 3;
@@ -1257,7 +1302,7 @@ function initBilBalls() {
 
 function startBilliardOffline() {
   if (typeof isOnline !== 'undefined') isOnline = false; activeGame = 'billiard';
-  bilMode = document.getElementById('bil-off-mode') ? document.getElementById('bil-off-mode').value : 'pvp';
+  bilMode = document.getElementById('bil-off-mode').value;
   
   let themeVal = document.getElementById('bil-theme');
   bilTbl = themeVal ? parseInt(themeVal.value) : 0;
@@ -1270,17 +1315,19 @@ function startBilliardOffline() {
   document.getElementById('bil-name-p2').innerText = bilNames.p2;
   document.getElementById('bil-name-p2').style.color = bilMode === 'bot' ? '#ff0055' : '#00d2ff';
   
-  bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[] };
-  bilBalls = initBilBalls(); bilShooting = false; bilPlacingCue = false; bilWait = 0; bilPrevPocketed = [];
+  bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[], ballInHand: false };
+  bilBalls = initBilBalls(); bilShooting = false; bilWait = 0; bilPrevPocketed = [];
   
   updateBilUI();
-  if (typeof showScreen !== 'undefined') showScreen('billiard-game-screen');
+  showScreen('billiard-game-screen');
 }
 
 function syncBilliardOnline(data) {
   activeGame = 'billiard'; 
+
   if (!document.getElementById('billiard-game-screen').classList.contains('active')) {
     if (typeof showScreen !== 'undefined') showScreen('billiard-game-screen');
+    else document.getElementById('billiard-game-screen').classList.add('active');
   }
 
   bilMode = 'online'; 
@@ -1288,7 +1335,7 @@ function syncBilliardOnline(data) {
   document.getElementById('bil-name-p1').innerText = bilNames.p1 || 'P1';
   document.getElementById('bil-name-p2').innerText = bilNames.p2 || 'P2';
   
-  bilState = data.state || { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[] };
+  bilState = data.state || { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[], ballInHand: false };
   let isMoving = data.state && data.state.moving;
 
   let serverBalls = [];
@@ -1310,8 +1357,7 @@ function syncBilliardOnline(data) {
     }).filter(b => b !== null);
   }
 
-  // Jangan timpa bola putih kalau sedang mode peletakan tangan
-  if (!bilShooting && !isMoving && (!bilPlacingCue || bilState.turn !== myColor)) {
+  if (!bilShooting && !isMoving) {
     if (serverBalls.length >= 16) {
         bilBalls = serverBalls; 
     } else {
@@ -1323,14 +1369,15 @@ function syncBilliardOnline(data) {
     updateBilUI();
   }
 
+  // Cek player buat eksekusi shot dari server
+  let myP = getMyBilPlayer();
   if (data.shot && data.shot.id !== bilLastShotId) {
     bilLastShotId = data.shot.id;
-    if (bilState.turn !== myColor && bilBalls[0]) { 
+    if (bilState.turn !== myP && bilBalls[0]) { 
        bilBalls[0].vx = isNaN(data.shot.vx) ? 0 : Number(data.shot.vx); 
        bilBalls[0].vy = isNaN(data.shot.vy) ? 0 : Number(data.shot.vy);
        playSound('hit', 1); 
        bilShooting = true;
-       bilPlacingCue = false;
     }
   }
 
@@ -1339,6 +1386,8 @@ function syncBilliardOnline(data) {
         showEndLeaderboard(bilState.winners, bilNames, typeof gameConfigs !== 'undefined' ? gameConfigs.billiard : null);
     }
   }
+
+  bilDraw();
 }
 
 function updateBilUI() {
@@ -1346,7 +1395,9 @@ function updateBilUI() {
   document.getElementById('bil-score-p2').innerText = bilState.p2Score;
   
   let badge = document.getElementById('bil-turn-badge');
-  let isMy = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myColor) : (bilState.turn === 'p1');
+  let myP = getMyBilPlayer();
+  let isMy = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilState.turn === 'p1');
+  
   if(isMy) { badge.innerText = "GILIRAN LU"; badge.className = "bil-turn-badge"; }
   else { badge.innerText = bilMode==='bot' ? "GILIRAN BOT" : "GILIRAN P2"; badge.className = "bil-turn-badge bot-turn"; }
   
@@ -1423,19 +1474,26 @@ function bilDraw() {
   bilCtx.strokeStyle = thm.headString; bilCtx.lineWidth = 2; bilCtx.beginPath(); bilCtx.moveTo(10, BIL_H*0.75); bilCtx.lineTo(BIL_W-10, BIL_H*0.75); bilCtx.stroke();
   for (let p of BIL_POCKETS) { bilCtx.beginPath(); bilCtx.arc(p.x, p.y, BIL_PR, 0, Math.PI*2); bilCtx.fillStyle = thm.pocket; bilCtx.fill(); bilCtx.strokeStyle = thm.rail; bilCtx.lineWidth = 2; bilCtx.stroke(); }
 
-  let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myColor) : (bilMode==='pvp' || bilState.turn === 'p1');
+  let myP = getMyBilPlayer();
+  let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilMode==='pvp' || bilState.turn === 'p1');
   
-  if (bilPlacingCue && isMyTurn) {
-    bilCtx.save();
-    bilCtx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    bilCtx.fillRect(0, BIL_H/2 - 30, BIL_W, 60);
-    bilCtx.fillStyle = '#ffeb3b';
-    bilCtx.font = 'bold 15px Arial';
-    bilCtx.textAlign = 'center';
-    bilCtx.textBaseline = 'middle';
-    bilCtx.fillText('GESER BOLA PUTIH & KLIK UNTUK MAIN', BIL_W/2, BIL_H/2);
-    bilCtx.restore();
-  } else if (bilMouseDown && bilMouseStart && bilMouseNow && isMyTurn && !bilShooting) {
+  // UI Petunjuk Kalau Bola Masuk
+  if (bilState.ballInHand) {
+      bilCtx.save();
+      bilCtx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      bilCtx.fillRect(12, BIL_H * 0.75 - BIL_R - 5, BIL_W - 24, BIL_R * 2 + 10); // Highlight area geser
+      if (isMyTurn) {
+          bilCtx.translate(BIL_W/2, BIL_H/2);
+          bilCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+          bilCtx.font = 'bold 16px Arial';
+          bilCtx.textAlign = 'center';
+          bilCtx.fillText('GESER BOLA PUTIH & LEPAS', 0, 80);
+      }
+      bilCtx.restore();
+  }
+
+  // Gambar Arah Panah & Stick
+  if (bilMouseDown && bilMouseStart && bilMouseNow && isMyTurn && !bilShooting && !bilState.ballInHand) {
     const cue = bilBalls[0]; 
     if (cue && !cue.inTray) {
       const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx + dy*dy);
@@ -1457,6 +1515,7 @@ function bilDraw() {
     }
   }
 
+  // Gambar Bola
   for (let b of bilBalls) {
     if (b.inTray) continue;
     bilCtx.beginPath(); bilCtx.arc(b.x+3, b.y+3, b.r, 0, Math.PI*2); bilCtx.fillStyle = 'rgba(0,0,0,0.6)'; bilCtx.fill();
@@ -1478,16 +1537,14 @@ function bilOnShotComplete() {
   bilPrevPocketed = [...nowPocketed];
 
   if (cueBall && cueBall.inTray) {
-    cueBall.inTray = false; cueBall.x = BIL_W / 2; cueBall.y = BIL_H * 0.75; cueBall.vx = 0; cueBall.vy = 0;
+    cueBall.inTray = false; 
+    cueBall.x = BIL_W / 2; 
+    cueBall.y = BIL_H * 0.75; 
+    cueBall.vx = 0; 
+    cueBall.vy = 0;
+    
+    bilState.ballInHand = true; // AKTIFKAN FITUR GESER BOLA
     bilState.turn = bilState.turn === 'p1' ? 'p2' : 'p1';
-    
-    // Aktifkan peletakan bola putih kecuali jika yang main adalah Bot
-    if ((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn === 'p2') {
-        bilPlacingCue = false;
-    } else {
-        bilPlacingCue = true;
-    }
-    
     bilUpdateStateAfterShot(); return;
   }
 
@@ -1534,7 +1591,7 @@ function bilUpdateStateAfterShot() {
   document.getElementById('bil-power-bar').style.width = '0%';
   updateBilUI();
   
-  if ((typeof isOnline !== 'undefined' && isOnline) && (bilState.turn !== myColor || bilState.winners.length > 0)) {
+  if (typeof isOnline !== 'undefined' && isOnline) {
      if (typeof database !== 'undefined') database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls, state: bilState });
   }
 
@@ -1578,49 +1635,64 @@ function bilBotShoot() {
   setTimeout(() => {
     if(bilState.winners.length > 0) return;
     bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
+    
+    // Bot naruh bola putih random kalau ballInHand
+    if(bilState.ballInHand) {
+       cueBall.x = (BIL_W/2) + ((Math.random()-0.5)*100);
+       bilState.ballInHand = false;
+    }
+    
     cueBall.vx = bestShot.vx; cueBall.vy = bestShot.vy; playSound('hit', 1); bilShooting = true;
   }, 800);
 }
 
-// FIX MOUSE POS UNTUK MENCEGAH BUG TOUCH SCREEN
 function bilGetMousePos(evt) {
-  const rect = bilCanvas.getBoundingClientRect(); 
-  let clientX = evt.clientX, clientY = evt.clientY;
-  if (evt.touches && evt.touches.length > 0) { 
-    clientX = evt.touches[0].clientX; clientY = evt.touches[0].clientY; 
-  } else if (evt.changedTouches && evt.changedTouches.length > 0) {
-    clientX = evt.changedTouches[0].clientX; clientY = evt.changedTouches[0].clientY;
-  }
+  const rect = bilCanvas.getBoundingClientRect(); let clientX = evt.clientX, clientY = evt.clientY;
+  if (evt.touches && evt.touches.length > 0) { clientX = evt.touches[0].clientX; clientY = evt.touches[0].clientY; }
   return { x: (clientX - rect.left) * (BIL_W / rect.width), y: (clientY - rect.top) * (BIL_H / rect.height) };
 }
 
-// EVENTS UNTUK MOUSE
+// LOGIKA INPUT MOUSE & TOUCH FIX 
 bilCanvas.addEventListener('mousedown', e => { 
+  let myP = getMyBilPlayer();
+  let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilMode==='pvp' || bilState.turn === 'p1');
+  if (!isMyTurn || bilShooting || bilState.winners.length) return; 
+  
   initAudio(); 
-  if (bilState.winners.length) return;
-  // Jika sedang peletakan bola putih
-  if (bilPlacingCue) {
-      bilPlacingCue = false; // Kunci posisi
-      if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls });
-      return;
+  bilMouseDown = true; 
+  let pos = bilGetMousePos(e);
+  
+  if (bilState.ballInHand) {
+     bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x)); // Update posisi geser
+  } else {
+     bilMouseStart = pos; bilMouseNow = { ...bilMouseStart }; 
   }
-  if(((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn==='p2') || bilShooting) return; 
-  if((typeof isOnline !== 'undefined' && isOnline) && bilState.turn !== myColor) return; 
-  bilMouseDown = true; bilMouseStart = bilGetMousePos(e); bilMouseNow = { ...bilMouseStart }; 
 });
 
 window.addEventListener('mousemove', e => { 
-  if (bilPlacingCue) {
+  if (bilMouseDown) {
       let pos = bilGetMousePos(e);
-      if (bilBalls[0] && !bilBalls[0].inTray) bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x)); // Batas meja
-  } else if (bilMouseDown) {
-      bilMouseNow = bilGetMousePos(e); 
+      if (bilState.ballInHand) {
+         bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
+      } else {
+         bilMouseNow = pos;
+      }
   }
 });
 
 window.addEventListener('mouseup', e => {
-  if (!bilMouseDown || bilShooting || bilState.winners.length || bilPlacingCue) return; 
-  bilMouseDown = false; const cue = bilBalls[0]; if (!cue || cue.inTray) return;
+  if (!bilMouseDown || bilShooting || bilState.winners.length) return; 
+  bilMouseDown = false; 
+  
+  if (bilState.ballInHand) {
+     bilState.ballInHand = false; // Ngunci Posisi!
+     if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') {
+         database.ref(`billiard_rooms/${roomCode}`).update({'state/ballInHand': false, 'balls': bilBalls});
+     }
+     return; // Jangan nembak dulu
+  }
+  
+  const cue = bilBalls[0]; if (!cue || cue.inTray) return;
   const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist < 10) { bilMouseStart = null; return; }
   const power = Math.min(dist / 4, BIL_MAX_P); bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
   const vx = (dx/dist) * power; const vy = (dy/dist) * power;
@@ -1636,35 +1708,49 @@ window.addEventListener('mouseup', e => {
   cue.vx = vx; cue.vy = vy; playSound('hit', power/BIL_MAX_P); bilShooting = true; bilMouseStart = null; document.getElementById('bil-power-bar').style.width = '0%';
 });
 
-// EVENTS UNTUK TOUCH DEVICE (HP)
+// TOUCH SCREEN (SAMA KAYAK MOUSE)
 bilCanvas.addEventListener('touchstart', (e) => { 
+  e.preventDefault(); 
+  let myP = getMyBilPlayer();
+  let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilMode==='pvp' || bilState.turn === 'p1');
+  if (!isMyTurn || bilShooting || bilState.winners.length) return; 
+  
   initAudio(); 
-  if (bilState.winners.length) return;
-  // Jika sedang peletakan bola putih
-  if (bilPlacingCue) {
-      let pos = bilGetMousePos(e);
-      if (bilBalls[0] && !bilBalls[0].inTray) bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
-      bilPlacingCue = false; // Kunci posisi
-      if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls });
-      return;
+  bilMouseDown = true; 
+  let pos = bilGetMousePos(e);
+  
+  if (bilState.ballInHand) {
+     bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
+  } else {
+     bilMouseStart = pos; bilMouseNow = { ...bilMouseStart }; 
   }
-  if(((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn==='p2') || bilShooting) return; 
-  if((typeof isOnline !== 'undefined' && isOnline) && bilState.turn !== myColor) return; 
-  bilMouseDown = true; bilMouseStart = bilGetMousePos(e); bilMouseNow = { ...bilMouseStart }; 
 }, { passive: false });
 
 window.addEventListener('touchmove', (e) => { 
-  if (bilPlacingCue) {
+  if(bilMouseDown && e.target === bilCanvas) e.preventDefault(); 
+  if (bilMouseDown) {
       let pos = bilGetMousePos(e);
-      if (bilBalls[0] && !bilBalls[0].inTray) bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
-  } else if (bilMouseDown) {
-      bilMouseNow = bilGetMousePos(e); 
-  } 
+      if (bilState.ballInHand) {
+         bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
+      } else {
+         bilMouseNow = pos;
+      }
+  }
 }, { passive: false });
 
 window.addEventListener('touchend', e => {
-  if (!bilMouseDown || bilShooting || bilState.winners.length || bilPlacingCue) return; 
-  bilMouseDown = false; const cue = bilBalls[0]; if (!cue || cue.inTray) return;
+  if (!bilMouseDown || bilShooting || bilState.winners.length) return; 
+  bilMouseDown = false; 
+  
+  if (bilState.ballInHand) {
+     bilState.ballInHand = false; // Ngunci Posisi!
+     if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') {
+         database.ref(`billiard_rooms/${roomCode}`).update({'state/ballInHand': false, 'balls': bilBalls});
+     }
+     return; // Jangan nembak dulu
+  }
+  
+  const cue = bilBalls[0]; if (!cue || cue.inTray) return;
   const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist < 10) { bilMouseStart = null; return; }
   const power = Math.min(dist / 4, BIL_MAX_P); bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
   const vx = (dx/dist) * power; const vy = (dy/dist) * power;
@@ -1702,6 +1788,52 @@ function mainLoop() {
 // Menjalankan loop
 mainLoop();
 
+let currentGameAudio = null;
+  let activePlayButton = null;
+
+  function toggleGameMusic(btnElement, url) {
+    // Jika tombol yang sama ditekan lagi (maka Pause / Play)
+    if (currentGameAudio && currentGameAudio.src === url) {
+      if (currentGameAudio.paused) {
+        currentGameAudio.play();
+        btnElement.innerText = "PAUSE";
+        btnElement.style.background = "#ff4757"; // Ubah ke merah saat pause bisa ditekan
+        btnElement.style.color = "#fff";
+      } else {
+        currentGameAudio.pause();
+        btnElement.innerText = "PLAY";
+        btnElement.style.background = "#00d2ff"; // Kembalikan ke biru
+        btnElement.style.color = "#000";
+      }
+    } else {
+      // Jika memutar lagu baru
+      
+      // Matikan audio lama jika ada
+      if (currentGameAudio) {
+        currentGameAudio.pause();
+        // Reset warna dan text tombol sebelumnya
+        if (activePlayButton) {
+          activePlayButton.innerText = "PLAY";
+          activePlayButton.style.background = "#00d2ff";
+          activePlayButton.style.color = "#000";
+        }
+      }
+
+      // Mulai audio baru
+      currentGameAudio = new Audio(url);
+      currentGameAudio.loop = true; // Set lagu untuk diputar terus menerus (looping) di background
+      currentGameAudio.play().catch(e => alert("Auto-play diblokir oleh browser. Silakan tap Play kembali."));
+      
+      // Update tampilan tombol yang ditekan
+      btnElement.innerText = "PAUSE";
+      btnElement.style.background = "#ff4757"; 
+      btnElement.style.color = "#fff";
+      
+      // Simpan referensi tombol yang sedang aktif
+      activePlayButton = btnElement;
+    }
+  }
+
 </script>
 </body>
-  </html>
+        </html>
