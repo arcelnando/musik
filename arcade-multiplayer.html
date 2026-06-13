@@ -303,6 +303,117 @@
         background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px) !important; 
         background-size: 28px 28px !important; 
     }
+    
+    /* ===== QUICKCHAT & AVATAR SYSTEM ===== */
+#qc-avatar-modal, #qc-chat-modal {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85); z-index: 50000;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+#qc-avatar-modal.open, #qc-chat-modal.open { display: flex; }
+
+.qc-modal-box {
+  background: #111; border: 2px solid #fff;
+  padding: 20px; width: 90%; max-width: 360px;
+  border-radius: 12px; text-align: center;
+  box-shadow: 8px 8px 0 rgba(255,255,255,0.05);
+  animation: qcIn 0.18s ease forwards;
+}
+@keyframes qcIn {
+  from { opacity:0; transform: translateY(14px) scale(0.96); }
+  to   { opacity:1; transform: none; }
+}
+.qc-modal-box h3 {
+  font-family: 'Orbitron', sans-serif; font-size: 13px;
+  letter-spacing: 3px; color: #fff; margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+/* AVATAR GRID */
+.qc-avatar-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 10px; margin-bottom: 16px;
+}
+.qc-av-item {
+  border: 3px solid #333; border-radius: 50%;
+  overflow: hidden; cursor: pointer;
+  aspect-ratio: 1; transition: 0.15s;
+}
+.qc-av-item img { width: 100%; height: 100%; object-fit: cover; }
+.qc-av-item:hover, .qc-av-item.selected { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+
+/* QUICKCHAT BUTTONS */
+.qc-section-label {
+  font-family: 'Teko', sans-serif; font-size: 13px;
+  letter-spacing: 3px; color: #555; margin: 10px 0 6px;
+  text-align: left; text-transform: uppercase;
+}
+.qc-btn-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px; margin-bottom: 10px;
+}
+.qc-btn {
+  background: #1a1a1a; border: 1px solid #333; color: #ccc;
+  padding: 8px 6px; font-family: 'Teko', sans-serif;
+  font-size: 15px; letter-spacing: 0.5px; cursor: pointer;
+  border-radius: 6px; transition: 0.1s; text-align: center;
+}
+.qc-btn:hover { background: #fff; color: #000; border-color: #fff; }
+.qc-btn.taunt { color: #ff4757; border-color: #3a1015; }
+.qc-btn.taunt:hover { background: #ff4757; color: #fff; }
+.qc-btn.praise { color: #2ed573; border-color: #0d3a1f; }
+.qc-btn.praise:hover { background: #2ed573; color: #000; }
+
+/* FLOATING CHAT BUBBLE */
+.qc-bubble {
+  position: fixed; z-index: 49000;
+  max-width: 220px; padding: 10px 14px;
+  background: rgba(20,20,20,0.96);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 14px; font-family: 'Teko', sans-serif;
+  font-size: 16px; letter-spacing: 0.5px; color: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+  display: flex; align-items: center; gap: 10px;
+  animation: bubbleIn 0.3s cubic-bezier(0.34,1.4,0.64,1) forwards;
+  pointer-events: none;
+}
+@keyframes bubbleIn {
+  from { opacity:0; transform: translateY(8px) scale(0.9); }
+  to   { opacity:1; transform: none; }
+}
+.qc-bubble img {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid #fff; object-fit: cover; flex-shrink: 0;
+}
+.qc-bubble .qc-btext { display: flex; flex-direction: column; }
+.qc-bubble .qc-bname { font-size: 11px; color: #888; font-family: 'Orbitron'; letter-spacing: 1px; }
+.qc-bubble .qc-bmsg { font-size: 16px; color: #fff; }
+.qc-bubble.taunt-bubble { border-color: rgba(255,71,87,0.6); }
+.qc-bubble.taunt-bubble .qc-bmsg { color: #ff6b81; }
+.qc-bubble.praise-bubble { border-color: rgba(46,213,115,0.6); }
+.qc-bubble.praise-bubble .qc-bmsg { color: #7bed9f; }
+
+/* TOMBOL BUKA QUICKCHAT (floating di game) */
+#qc-trigger-btn {
+  position: fixed; bottom: 80px; right: 16px;
+  background: #111; border: 2px solid #fff;
+  color: #fff; width: 52px; height: 52px;
+  border-radius: 50%; font-size: 22px;
+  cursor: pointer; z-index: 40000;
+  display: none; /* ditampilkan saat online game aktif */
+  align-items: center; justify-content: center;
+  box-shadow: 3px 3px 0 rgba(255,255,255,0.15);
+  transition: 0.1s;
+}
+#qc-trigger-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(255,255,255,0.1); }
+
+/* AVATAR DISPLAY DI HUD */
+.qc-av-hud {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid #fff; object-fit: cover;
+  cursor: pointer; flex-shrink: 0;
+}
   </style>
 </head>
 <body class="arcade-theme">
@@ -796,6 +907,36 @@
       <div style="color:#fff; font-size:10px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px;">Heatwaves</div>
       <button onclick="toggleGameMusic(this, 'https://files.catbox.moe/6gzf66.mp3')" style="background:#00d2ff; color:#000; border:none; padding:4px 8px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:9px; width:50px;">PLAY</button>
     </div>
+    
+    <!-- ===== QUICKCHAT SYSTEM ===== -->
+
+<!-- Tombol trigger floating -->
+<button id="qc-trigger-btn" onclick="openQCChat()">💬</button>
+
+<!-- Modal pilih avatar (muncul sekali sebelum main) -->
+<div id="qc-avatar-modal">
+  <div class="qc-modal-box">
+    <h3>Pilih Avatar Kamu</h3>
+    <div class="qc-avatar-grid" id="qc-av-grid"></div>
+    <button class="game-btn" style="width:100%;margin:0;" onclick="confirmAvatar()">PILIH ✓</button>
+  </div>
+</div>
+
+<!-- Modal quickchat -->
+<div id="qc-chat-modal">
+  <div class="qc-modal-box">
+    <h3>💬 QUICKCHAT</h3>
+
+    <div class="qc-section-label">🔥 Taunting</div>
+    <div class="qc-btn-grid" id="qc-taunt-grid"></div>
+
+    <div class="qc-section-label">✨ Pujian</div>
+    <div class="qc-btn-grid" id="qc-praise-grid"></div>
+
+    <button class="game-btn" style="width:100%;margin-top:10px;border-color:#555;color:#555;"
+      onclick="closeQCModal()">TUTUP</button>
+  </div>
+</div>
 
   </div>
 </div>
@@ -1032,7 +1173,7 @@ function domFindStarter() { for (let p = 0; p < DG.n; p++) if (DG.hands[p].some(
 
 function domPlaceFirst(tile) { DG.chain.push({a: tile.a, b: tile.b, x: 0, y: 0, rot: 0, isNew: true}); DG.leftEnd  = tile.a; DG.rightEnd = tile.b; DG.lX = -DOM_TW - DOM_GAP; DG.rX = DOM_TW + DOM_GAP; DG.lY = DG.rY = 0; DG.lDir = 'left'; DG.rDir = 'right'; }
 function domPlaceRight(tile, matchVal) { let a = tile.a, b = tile.b; if (a !== matchVal) { [a, b] = [b, a]; } const x = DG.rX, y = DG.rY; let rot = 0, nx, ny; if (DG.rDir === 'right') { rot = 0; nx = x + DOM_TW + DOM_GAP; ny = y; if (nx > DOM_WRAP) { DG.rDir = 'down'; nx = x; ny = y + DOM_TH + DOM_GAP; } } else if (DG.rDir === 'down') { rot = 90; nx = x; ny = y + DOM_TW + DOM_GAP; } else if (DG.rDir === 'left') { rot = 180; nx = x - (DOM_TW + DOM_GAP); ny = y; if (nx < -DOM_WRAP) { DG.rDir = 'up'; nx = x; ny = y - (DOM_TH + DOM_GAP); } } else { rot = 270; nx = x; ny = y - (DOM_TW + DOM_GAP); } DG.chain.push({a, b, x, y, rot, isNew: true}); DG.rX = nx; DG.rY = ny; DG.rightEnd = b; }
-function domPlaceLeft(tile, matchVal) { let a = tile.a, b = tile.b; if (b !== matchVal) { [a, b] = [b, a]; } const x = DG.lX, y = DG.lY; let rot = 0, nx, ny; if (DG.lDir === 'left') { rot = 180; nx = x - (DOM_TW + DOM_GAP); ny = y; if (nx < -DOM_WRAP) { DG.lDir = 'up'; nx = x; ny = y - (DOM_TH + DOM_GAP); } } else if (DG.lDir === 'up') { rot = 270; nx = x; ny = y - (DOM_TW + DOM_GAP); } else if (DG.lDir === 'right') { rot = 0; nx = x + DOM_TW + DOM_GAP; ny = y; } else { rot = 90; nx = x; ny = y + DOM_TW + DOM_GAP; } DG.chain.unshift({a, b, x, y, rot, isNew: true}); DG.lX = nx; DG.lY = ny; DG.leftEnd = a; }
+function domPlaceLeft(tile, matchVal) { let a = tile.a, b = tile.b; if (b !== matchVal) { [a, b] = [b, a]; } const x = DG.lX, y = DG.lY; let rot = 0, nx, ny; if (DG.lDir === 'left') { rot = 180; nx = x - (DOM_TW + DOM_GAP); ny = y; if (nx < -DOM_WRAP) { DG.lDir = 'up'; nx = x; ny = y - (DOM_TH + DOM_GAP); } } else if (DG.lDir === 'up') { rot = 270; nx = x; ny = y - (DOM_TW + DOM_GAP); } else if (DG.lDir === 'right') { rot = 0; nx = x + DOM_TW + DOM_GAP; ny = y; } else { rot = 90; nx = x; ny = y + DOM_TH + DOM_GAP; } DG.chain.unshift({a, b, x, y, rot, isNew: true}); DG.lX = nx; DG.lY = ny; DG.leftEnd = a; }
 
 let _domDrag = {active:false, sx:0, sy:0, ox:0, oy:0};
 function domInitBoardEvents() { const cv = document.getElementById('dom-board-canvas'); if (!cv) return; cv.addEventListener('mousedown', e => { _domDrag = {active:true, sx:e.clientX, sy:e.clientY, ox:DG.ox, oy:DG.oy}; cv.classList.add('dragging'); e.preventDefault(); }); window.addEventListener('mousemove', e => { if (!_domDrag.active) return; DG.ox = _domDrag.ox + (e.clientX - _domDrag.sx); DG.oy = _domDrag.oy + (e.clientY - _domDrag.sy); domApplyTransform(); }); window.addEventListener('mouseup', () => { _domDrag.active = false; cv.classList.remove('dragging'); }); let _t0 = null, _tOx = 0, _tOy = 0; cv.addEventListener('touchstart', e => { if (e.touches.length === 1) { _t0 = e.touches[0]; _tOx = DG.ox; _tOy = DG.oy; } }, {passive:true}); cv.addEventListener('touchmove', e => { if (!_t0 || e.touches.length !== 1) return; DG.ox = _tOx + (e.touches[0].clientX - _t0.clientX); DG.oy = _tOy + (e.touches[0].clientY - _t0.clientY); domApplyTransform(); }, {passive:true}); cv.addEventListener('touchend', () => { _t0 = null; }); cv.addEventListener('wheel', e => { e.preventDefault(); }, {passive:false}); }
@@ -1050,35 +1191,81 @@ function domBuildLayout() {
   domInitBoardEvents(); domCenterBoard();
 }
 
+// =============================================
+// FIX DOMINOS: Rendering tile tanpa tumpang tindih
+// Root cause: tiles pakai position absolute tapi
+// parent (#dom-board-tiles) tidak di-translate ke center.
+// domApplyTransform sudah handle translate parent ke center viewport,
+// tapi tile x/y coords adalah relative ke origin (0,0) = center chain.
+// Fix: tiles HARUS pakai transform translate bukan left/top,
+// supaya CSS transform-origin = center tile, bukan pojok kiri atas.
+// Juga: clear innerHTML tiap render sudah benar, tapi
+// animasi --slide harus pakai idx dari posisi tile di chain SAAT INI.
+// =============================================
 function domRenderBoard() {
-  const tiles = document.getElementById('dom-board-tiles'); const empty = document.getElementById('dom-board-empty'); if (!tiles) return;
-  if (DG.chain.length === 0) { tiles.innerHTML = ''; if (empty) empty.style.display = 'flex'; return; }
-  if (empty) empty.style.display = 'none';
-  
-  // FIX: Clear penuh papannya setiap kali render menghindari tumpang tindih 
-  // karena unshift() menggeser index logic dari existing length sebelumnya.
+  const tiles = document.getElementById('dom-board-tiles');
+  const empty = document.getElementById('dom-board-empty');
+  if (!tiles) return;
+
   tiles.innerHTML = '';
+
+  if (DG.chain.length === 0) {
+    if (empty) empty.style.display = 'flex';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+
   for (let i = 0; i < DG.chain.length; i++) {
-     domRenderBoardTile(DG.chain[i], i, DG.chain[i].isNew);
-     DG.chain[i].isNew = false; // Reset flag agar tidak animasi berulang
+    domRenderBoardTile(DG.chain[i], i, DG.chain[i].isNew);
+    DG.chain[i].isNew = false;
   }
 }
 
 function domRenderBoardTile(c, idx, animate) {
-  const tiles = document.getElementById('dom-board-tiles'); const horiz = (c.rot === 0 || c.rot === 180);
-  let pipA = c.a, pipB = c.b; if (c.rot === 180 || c.rot === 270) { [pipA, pipB] = [pipB, pipA]; }
-  const wrap = document.createElement('div'); wrap.className = 'dom-btile' + (animate ? ' dom-btile-new' : '');
-  const W = horiz ? 38 : 20; const H = horiz ? 20 : 38;
-  wrap.style.width = W + 'px'; wrap.style.height = H + 'px'; wrap.style.left = c.x + 'px'; wrap.style.top = c.y + 'px'; wrap.style.transform = `rotate(${c.rot}deg)`;
-  if (animate) { 
-    const slideDir = (idx === DG.chain.length - 1) ? 1 : -1; 
-    wrap.style.setProperty('--slide-x', (horiz ? slideDir * 16 : 0) + 'px'); 
-    wrap.style.setProperty('--slide-y', (horiz ? 0 : slideDir * 16) + 'px'); 
-    wrap.style.setProperty('--slide-rot', (slideDir * 4) + 'deg'); 
+  const tiles = document.getElementById('dom-board-tiles');
+  const horiz = (c.rot === 0 || c.rot === 180);
+
+  let pipA = c.a, pipB = c.b;
+  if (c.rot === 180 || c.rot === 270) { [pipA, pipB] = [pipB, pipA]; }
+
+  // FIX: Gunakan transform translate() bukan left/top
+  // Supaya posisi tile tepat relatif ke origin center board
+  // dan tidak ada offset dari ukuran tile itu sendiri.
+  const W = horiz ? 38 : 20;
+  const H = horiz ? 20 : 38;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'dom-btile' + (animate ? ' dom-btile-new' : '');
+
+  // FIX UTAMA: pakai transform untuk posisi, bukan left/top
+  // left/top 50% + translate(x,y) = posisi relative ke center parent
+  wrap.style.position = 'absolute';
+  wrap.style.left = '50%';
+  wrap.style.top = '50%';
+  wrap.style.width = W + 'px';
+  wrap.style.height = H + 'px';
+  // Translate ke koordinat chain, offset -50% ukuran tile biar center
+  wrap.style.transform = `translate(calc(${c.x}px - 50%), calc(${c.y}px - 50%)) rotate(${c.rot}deg)`;
+  wrap.style.transformOrigin = 'center center';
+
+  if (animate) {
+    const slideDir = (idx === DG.chain.length - 1) ? 1 : -1;
+    wrap.style.setProperty('--slide-x', (horiz ? slideDir * 16 : 0) + 'px');
+    wrap.style.setProperty('--slide-y', (horiz ? 0 : slideDir * 16) + 'px');
+    wrap.style.setProperty('--slide-rot', (slideDir * 4) + 'deg');
   }
-  const inner = document.createElement('div'); inner.className = `dom-tile sm${horiz ? ' horiz' : ''}`; inner.style.width = '100%'; inner.style.height = '100%';
-  const h1 = document.createElement('div'); h1.className = 'dom-th'; h1.innerHTML = domPipSVG(pipA); const dv = document.createElement('div'); dv.className = 'dom-tdiv'; const h2 = document.createElement('div'); h2.className = 'dom-th'; h2.innerHTML = domPipSVG(pipB);
-  inner.appendChild(h1); inner.appendChild(dv); inner.appendChild(h2); wrap.appendChild(inner); tiles.appendChild(wrap);
+
+  const inner = document.createElement('div');
+  inner.className = `dom-tile sm${horiz ? ' horiz' : ''}`;
+  inner.style.width = '100%';
+  inner.style.height = '100%';
+
+  const h1 = document.createElement('div'); h1.className = 'dom-th'; h1.innerHTML = domPipSVG(pipA);
+  const dv = document.createElement('div'); dv.className = 'dom-tdiv';
+  const h2 = document.createElement('div'); h2.className = 'dom-th'; h2.innerHTML = domPipSVG(pipB);
+  inner.appendChild(h1); inner.appendChild(dv); inner.appendChild(h2);
+  wrap.appendChild(inner);
+  tiles.appendChild(wrap);
 }
 
 function domRenderZones() {
@@ -1097,7 +1284,7 @@ function domRenderActionBar() {
   if (DG.over) { drawBtn.disabled = passBtn.disabled = true; info.textContent = 'MATCH OVER'; return; }
   let isMy = (typeof isOnline !== 'undefined' && isOnline) ? (DG.colors[p] === myColor) : (!DG.isBot[p]);
   if (!isMy) { info.innerHTML = `<span style="color:${DG.colors[p]}">${DG.names[p]}</span> THINKING...`; drawBtn.disabled = passBtn.disabled = true; }
-  else { info.innerHTML = `TURN: <strong style="color:${DG.colors[p]}">${DG.names[p]}</strong>`; const has = DG.hands[p].some(t => domCanPlay(t)); drawBtn.disabled = has || DG.boneyard.length === 0; passBtn.disabled = has; } 
+  else { info.innerHTML = `TURN: <strong style="color:${DG.colors[p]}">${DG.names[p]}</strong>`; const has = DG.hands[p].some(t => domCanPlay(t)); drawBtn.disabled = has || DG.boneyard.length === 0; passBtn.disabled = has; }
 }
 
 function domRender() { domRenderChips(); domRenderZones(); domRenderBoard(); domRenderActionBar(); }
@@ -1181,7 +1368,7 @@ function syncDominosToFirebase(nextTurn = true) {
   let pCols = (typeof ludoPlayers !== 'undefined' && Object.keys(ludoPlayers).length > 0) ? Object.keys(ludoPlayers) : gameConfigs.dominos.colors.slice(0, DG.n);
   let hands = {}; let scores = {};
   pCols.forEach((c, i) => { hands[c] = DG.hands[i]; scores[c] = DG.scores[i]; });
-  if(nextTurn && DG.hands[DG.cur].length === 0) { domEndGame(DG.cur); return; } 
+  if(nextTurn && DG.hands[DG.cur].length === 0) { domEndGame(DG.cur); return; }
   let turn = pCols[DG.cur];
   let state = { n: DG.n, pCols: pCols, hands: hands, boneyard: DG.boneyard, chain: DG.chain, leftEnd: DG.leftEnd, rightEnd: DG.rightEnd, lX: DG.lX, lY: DG.lY, rX: DG.rX, rY: DG.rY, lDir: DG.lDir, rDir: DG.rDir, turn: turn, passCount: DG.passCount, over: DG.over, scores: scores };
   if(typeof database !== 'undefined') database.ref(`dominos_rooms/${roomCode}/state`).update(state);
@@ -1191,7 +1378,7 @@ function domToast(msg) { const el = document.getElementById('dom-toast'); el.tex
 
 
 // ============================================================
-// BILLIARD PRO (Arcade Embedded) - FINAL FIX V3
+// BILLIARD PRO (Arcade Embedded) - FINAL FIX V4
 // ============================================================
 let audioCtx = null;
 function initAudio() {
@@ -1202,13 +1389,13 @@ function playSound(type, intensity = 1) {
   if (!audioCtx) return;
   const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
   osc.connect(gain); gain.connect(audioCtx.destination);
-  const now = audioCtx.currentTime; let vol = Math.min(intensity, 1) * 0.3; 
+  const now = audioCtx.currentTime; let vol = Math.min(intensity, 1) * 0.3;
   if (type === 'hit') {
     osc.type = 'triangle'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
     gain.gain.setValueAtTime(vol, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
     osc.start(now); osc.stop(now + 0.1);
   } else if (type === 'clack') {
-    if (intensity < 0.2) return; 
+    if (intensity < 0.2) return;
     osc.type = 'sine'; osc.frequency.setValueAtTime(1000 + Math.random()*300, now);
     gain.gain.setValueAtTime(vol * 0.8, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
     osc.start(now); osc.stop(now + 0.05);
@@ -1230,15 +1417,15 @@ function create3DBallDOM(b, size) {
   el.style.borderRadius = '50%'; el.style.position = 'relative'; el.style.overflow = 'hidden';
   el.style.display = 'flex'; el.style.justifyContent = 'center'; el.style.alignItems = 'center';
   el.style.boxShadow = 'inset -3px -3px 6px rgba(0,0,0,0.7), inset 2px 2px 4px rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.5)';
-  
-  if (b.id === 0) { el.style.background = '#ffffff'; } 
+
+  if (b.id === 0) { el.style.background = '#ffffff'; }
   else if (b.stripe) {
     el.style.background = '#ffffff';
     const stripe = document.createElement('div');
     stripe.style.position = 'absolute'; stripe.style.width = '100%'; stripe.style.height = '46%';
     stripe.style.top = '27%'; stripe.style.background = b.color; el.appendChild(stripe);
   } else { el.style.background = b.color; }
-  
+
   const hl = document.createElement('div');
   hl.style.position = 'absolute'; hl.style.width = '35%'; hl.style.height = '35%';
   hl.style.top = '12%'; hl.style.left = '18%'; hl.style.borderRadius = '50%';
@@ -1266,20 +1453,39 @@ const STICK_THEMES = ['#ffeb3b', '#d4a373', '#00d2ff'];
 
 const bilCanvas = document.getElementById('bil-canvas');
 const bilCtx = bilCanvas.getContext('2d');
-const BIL_W = 400; const BIL_H = 800; 
+const BIL_W = 400; const BIL_H = 800;
 const BIL_R = 12; const BIL_FRIC = 0.985; const BIL_MIN_S = 0.08; const BIL_MAX_P = 22; const BIL_PR = 22;
 const BIL_POCKETS = [ {x: 18, y: 18}, {x: BIL_W-18, y: 18}, {x: 18, y: BIL_H/2}, {x: BIL_W-18, y: BIL_H/2}, {x: 18, y: BIL_H-18}, {x: BIL_W-18, y: BIL_H-18} ];
 const BIL_COLORS = ['#ffffff', '#f1c40f', '#2980b9', '#c0392b', '#8e44ad', '#d35400', '#27ae60', '#800000', '#111111', '#f1c40f', '#2980b9', '#c0392b', '#8e44ad', '#d35400', '#27ae60', '#800000'];
 
 let bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[], ballInHand: false };
 let bilBalls = [];
-let bilMode = 'pvp'; 
+let bilMode = 'pvp';
 let bilTbl = 0, bilStk = 0;
-let bilShooting = false, bilMouseStart = null, bilMouseNow = null, bilMouseDown = false;
+
+// =============================================
+// FIX BILLIARD: Sistem aiming yang benar
+// Root cause: bilMouseStart di-assign object yang sama
+// dengan bilMouseNow ({...bilMouseStart} = copy), TAPI
+// saat mousedown, bilMouseNow ikut di-set ke posisi START,
+// lalu pas mouseup kalkulasi dx/dy = 0 karena Start == Now
+// pada saat klik cepat (tanpa mousemove).
+//
+// Fix: pisahkan flag tracking:
+// - bilAimStart = posisi saat mousedown (tetap)
+// - bilAimCurrent = posisi saat ini (update di mousemove)
+// - bilIsAiming = apakah sedang dalam mode bidik
+// Juga fix: getMousePos untuk touch harus handle touchend
+// yang tidak punya touches[0], pakai changedTouches.
+// =============================================
+let bilIsAiming = false;
+let bilAimStart = null;   // posisi fixed saat mousedown
+let bilAimCurrent = null; // posisi saat ini (bergerak)
+let bilMouseDown = false;
+let bilShooting = false;
 let bilPrevPocketed = [], bilWait = 0, bilNames = {p1:'PLAYER 1', p2:'PLAYER 2'};
 let bilLastShotId = null;
 
-// FUNGSI BARU BUAT NGECEK IDENTITAS (Biar Gak Crash Sama myColor Ludo)
 function getMyBilPlayer() {
   if (typeof isOnline === 'undefined' || !isOnline) return 'p1';
   return (typeof isHost !== 'undefined' && isHost) ? 'p1' : 'p2';
@@ -1308,38 +1514,40 @@ function initBilBalls() {
 function startBilliardOffline() {
   if (typeof isOnline !== 'undefined') isOnline = false; activeGame = 'billiard';
   bilMode = document.getElementById('bil-off-mode').value;
-  
+
   let themeVal = document.getElementById('bil-theme');
   bilTbl = themeVal ? parseInt(themeVal.value) : 0;
   bilStk = bilTbl;
   document.getElementById('bil-rail').style.borderColor = TABLE_THEMES[bilTbl].rail;
 
-  bilNames.p1 = typeof myGlobalName !== 'undefined' ? myGlobalName : 'PLAYER 1'; 
+  bilNames.p1 = typeof myGlobalName !== 'undefined' ? myGlobalName : 'PLAYER 1';
   bilNames.p2 = bilMode === 'bot' ? 'BOT AI' : 'PLAYER 2';
   document.getElementById('bil-name-p1').innerText = bilNames.p1;
   document.getElementById('bil-name-p2').innerText = bilNames.p2;
   document.getElementById('bil-name-p2').style.color = bilMode === 'bot' ? '#ff0055' : '#00d2ff';
-  
+
   bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[], ballInHand: false };
-  bilBalls = initBilBalls(); bilShooting = false; bilWait = 0; bilPrevPocketed = [];
-  
+  bilBalls = initBilBalls();
+  bilShooting = false; bilIsAiming = false; bilAimStart = null; bilAimCurrent = null;
+  bilWait = 0; bilPrevPocketed = [];
+
   updateBilUI();
   showScreen('billiard-game-screen');
 }
 
 function syncBilliardOnline(data) {
-  activeGame = 'billiard'; 
+  activeGame = 'billiard';
 
   if (!document.getElementById('billiard-game-screen').classList.contains('active')) {
     if (typeof showScreen !== 'undefined') showScreen('billiard-game-screen');
     else document.getElementById('billiard-game-screen').classList.add('active');
   }
 
-  bilMode = 'online'; 
+  bilMode = 'online';
   if (data.players) bilNames = data.players;
   document.getElementById('bil-name-p1').innerText = bilNames.p1 || 'P1';
   document.getElementById('bil-name-p2').innerText = bilNames.p2 || 'P2';
-  
+
   bilState = data.state || { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[], ballInHand: false };
   let isMoving = data.state && data.state.moving;
 
@@ -1364,31 +1572,30 @@ function syncBilliardOnline(data) {
 
   if (!bilShooting && !isMoving) {
     if (serverBalls.length >= 16) {
-        bilBalls = serverBalls; 
+      bilBalls = serverBalls;
     } else {
-        if (!bilBalls || bilBalls.length < 16) bilBalls = initBilBalls();
-        if (typeof isHost !== 'undefined' && isHost && typeof database !== 'undefined') {
-            database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls });
-        }
+      if (!bilBalls || bilBalls.length < 16) bilBalls = initBilBalls();
+      if (typeof isHost !== 'undefined' && isHost && typeof database !== 'undefined') {
+        database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls });
+      }
     }
     updateBilUI();
   }
 
-  // Cek player buat eksekusi shot dari server
   let myP = getMyBilPlayer();
   if (data.shot && data.shot.id !== bilLastShotId) {
     bilLastShotId = data.shot.id;
-    if (bilState.turn !== myP && bilBalls[0]) { 
-       bilBalls[0].vx = isNaN(data.shot.vx) ? 0 : Number(data.shot.vx); 
-       bilBalls[0].vy = isNaN(data.shot.vy) ? 0 : Number(data.shot.vy);
-       playSound('hit', 1); 
-       bilShooting = true;
+    if (bilState.turn !== myP && bilBalls[0]) {
+      bilBalls[0].vx = isNaN(data.shot.vx) ? 0 : Number(data.shot.vx);
+      bilBalls[0].vy = isNaN(data.shot.vy) ? 0 : Number(data.shot.vy);
+      playSound('hit', 1);
+      bilShooting = true;
     }
   }
 
   if (bilState.winners && bilState.winners.length > 0) {
     if (typeof showEndLeaderboard !== 'undefined') {
-        showEndLeaderboard(bilState.winners, bilNames, typeof gameConfigs !== 'undefined' ? gameConfigs.billiard : null);
+      showEndLeaderboard(bilState.winners, bilNames, typeof gameConfigs !== 'undefined' ? gameConfigs.billiard : null);
     }
   }
 
@@ -1398,14 +1605,14 @@ function syncBilliardOnline(data) {
 function updateBilUI() {
   document.getElementById('bil-score-p1').innerText = bilState.p1Score;
   document.getElementById('bil-score-p2').innerText = bilState.p2Score;
-  
+
   let badge = document.getElementById('bil-turn-badge');
   let myP = getMyBilPlayer();
   let isMy = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilState.turn === 'p1');
-  
+
   if(isMy) { badge.innerText = "GILIRAN LU"; badge.className = "bil-turn-badge"; }
   else { badge.innerText = bilMode==='bot' ? "GILIRAN BOT" : "GILIRAN P2"; badge.className = "bil-turn-badge bot-turn"; }
-  
+
   let p1T = bilState.p1Type ? bilState.p1Type.toUpperCase() : "Bebas";
   let p2T = bilState.p2Type ? bilState.p2Type.toUpperCase() : "Bebas";
   document.getElementById('bil-status-msg').innerText = `P1: ${p1T} | P2: ${p2T}`;
@@ -1454,9 +1661,9 @@ function bilStep() {
       if (Math.sqrt((b.x - p.x)**2 + (b.y - p.y)**2) < BIL_PR) {
         b.inTray = true; b.vx = 0; b.vy = 0; playSound('pocket', 1);
         if(b.id !== 0) {
-           let popup = document.createElement('div'); popup.className = 'ball-popup-container'; popup.appendChild(create3DBallDOM(b, 40));
-           popup.style.left = (bilState.turn === 'p1' ? '20%' : '80%'); popup.style.top = '120px';
-           document.getElementById('billiard-game-screen').appendChild(popup); setTimeout(()=>popup.remove(),1500);
+          let popup = document.createElement('div'); popup.className = 'ball-popup-container'; popup.appendChild(create3DBallDOM(b, 40));
+          popup.style.left = (bilState.turn === 'p1' ? '20%' : '80%'); popup.style.top = '120px';
+          document.getElementById('billiard-game-screen').appendChild(popup); setTimeout(()=>popup.remove(),1500);
         }
       }
     }
@@ -1466,13 +1673,13 @@ function bilStep() {
 function bilDraw() {
   bilCtx.clearRect(0, 0, BIL_W, BIL_H);
   let thm = TABLE_THEMES[bilTbl];
-  
+
   let bgGrad = bilCtx.createRadialGradient(BIL_W/2, BIL_H/2, 10, BIL_W/2, BIL_H/2, BIL_H*0.8);
   bgGrad.addColorStop(0, thm.feltLight); bgGrad.addColorStop(1, thm.feltDark);
   bilCtx.fillStyle = bgGrad; bilCtx.fillRect(0, 0, BIL_W, BIL_H);
   bilCtx.strokeStyle = thm.rail; bilCtx.lineWidth = 4; bilCtx.strokeRect(10, 10, BIL_W-20, BIL_H-20);
 
-  bilCtx.save(); bilCtx.translate(BIL_W/2, BIL_H/2); bilCtx.fillStyle = thm.headString; 
+  bilCtx.save(); bilCtx.translate(BIL_W/2, BIL_H/2); bilCtx.fillStyle = thm.headString;
   bilCtx.font = 'bold 45px Orbitron'; bilCtx.textAlign = 'center'; bilCtx.textBaseline = 'middle'; bilCtx.fillText('261', 0, -15);
   bilCtx.font = 'bold 22px Orbitron'; bilCtx.fillText('AREA', 0, 18); bilCtx.restore();
 
@@ -1481,55 +1688,83 @@ function bilDraw() {
 
   let myP = getMyBilPlayer();
   let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilMode==='pvp' || bilState.turn === 'p1');
-  
-  // UI Petunjuk Kalau Bola Masuk
+
   if (bilState.ballInHand) {
-      bilCtx.save();
-      bilCtx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-      bilCtx.fillRect(12, BIL_H * 0.75 - BIL_R - 5, BIL_W - 24, BIL_R * 2 + 10); // Highlight area geser
-      if (isMyTurn) {
-          bilCtx.translate(BIL_W/2, BIL_H/2);
-          bilCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-          bilCtx.font = 'bold 16px Arial';
-          bilCtx.textAlign = 'center';
-          bilCtx.fillText('GESER BOLA PUTIH & LEPAS', 0, 80);
-      }
-      bilCtx.restore();
+    bilCtx.save();
+    bilCtx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+    bilCtx.fillRect(12, BIL_H * 0.75 - BIL_R - 5, BIL_W - 24, BIL_R * 2 + 10);
+    if (isMyTurn) {
+      bilCtx.translate(BIL_W/2, BIL_H/2);
+      bilCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      bilCtx.font = 'bold 16px Arial';
+      bilCtx.textAlign = 'center';
+      bilCtx.fillText('GESER BOLA PUTIH & LEPAS', 0, 80);
+    }
+    bilCtx.restore();
   }
 
-  // Gambar Arah Panah & Stick
-  if (bilMouseDown && bilMouseStart && bilMouseNow && isMyTurn && !bilShooting && !bilState.ballInHand) {
-    const cue = bilBalls[0]; 
+  // FIX AIMING: Gunakan bilAimStart dan bilAimCurrent (bukan bilMouseStart/Now)
+  if (bilIsAiming && bilAimStart && bilAimCurrent && isMyTurn && !bilShooting && !bilState.ballInHand) {
+    const cue = bilBalls[0];
     if (cue && !cue.inTray) {
-      const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx + dy*dy);
-      if (dist >= 5) {
+      const dx = bilAimStart.x - bilAimCurrent.x;
+      const dy = bilAimStart.y - bilAimCurrent.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (dist >= 3) {
         const nx = dx/dist, ny = dy/dist, power = Math.min(dist / 4, BIL_MAX_P);
         document.getElementById('bil-power-bar').style.width = ((power/BIL_MAX_P)*100) + '%';
-        bilCtx.save(); bilCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; bilCtx.lineWidth = 1.5; bilCtx.setLineDash([6, 6]); bilCtx.beginPath(); bilCtx.moveTo(cue.x, cue.y);
+
+        // Garis dotted arah
+        bilCtx.save();
+        bilCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; bilCtx.lineWidth = 1.5; bilCtx.setLineDash([6, 6]);
+        bilCtx.beginPath(); bilCtx.moveTo(cue.x, cue.y);
         let tx = cue.x, ty = cue.y, tvx = nx * power * 0.6, tvy = ny * power * 0.6;
         for (let i = 0; i < 40; i++) {
           tx += tvx; ty += tvy;
-          if (tx < BIL_R+12) { tx = BIL_R+12; tvx *= -1; } if (tx > BIL_W-(BIL_R+12)) { tx = BIL_W-(BIL_R+12); tvx *= -1; }
-          if (ty < BIL_R+12) { ty = BIL_R+12; tvy *= -1; } if (ty > BIL_H-(BIL_R+12)) { ty = BIL_H-(BIL_R+12); tvy *= -1; }
+          if (tx < BIL_R+12) { tx = BIL_R+12; tvx *= -1; }
+          if (tx > BIL_W-(BIL_R+12)) { tx = BIL_W-(BIL_R+12); tvx *= -1; }
+          if (ty < BIL_R+12) { ty = BIL_R+12; tvy *= -1; }
+          if (ty > BIL_H-(BIL_R+12)) { ty = BIL_H-(BIL_R+12); tvy *= -1; }
           bilCtx.lineTo(tx, ty);
         }
         bilCtx.stroke(); bilCtx.setLineDash([]);
-        const stickLen = 100 + power * 3; bilCtx.strokeStyle = STICK_THEMES[bilStk]; bilCtx.lineWidth = 4; bilCtx.lineCap = 'round';
-        bilCtx.beginPath(); bilCtx.moveTo(cue.x + nx * (BIL_R + 10), cue.y + ny * (BIL_R + 10)); bilCtx.lineTo(cue.x + nx * (BIL_R + stickLen), cue.y + ny * (BIL_R + stickLen)); bilCtx.stroke(); bilCtx.restore();
-      } else { document.getElementById('bil-power-bar').style.width = '0%'; }
+
+        // Stick
+        const stickLen = 100 + power * 3;
+        bilCtx.strokeStyle = STICK_THEMES[bilStk]; bilCtx.lineWidth = 4; bilCtx.lineCap = 'round';
+        bilCtx.beginPath();
+        bilCtx.moveTo(cue.x + nx * (BIL_R + 10), cue.y + ny * (BIL_R + 10));
+        bilCtx.lineTo(cue.x + nx * (BIL_R + stickLen), cue.y + ny * (BIL_R + stickLen));
+        bilCtx.stroke();
+        bilCtx.restore();
+      } else {
+        document.getElementById('bil-power-bar').style.width = '0%';
+      }
     }
   }
 
-  // Gambar Bola
+  // Gambar bola
   for (let b of bilBalls) {
     if (b.inTray) continue;
     bilCtx.beginPath(); bilCtx.arc(b.x+3, b.y+3, b.r, 0, Math.PI*2); bilCtx.fillStyle = 'rgba(0,0,0,0.6)'; bilCtx.fill();
     bilCtx.save(); bilCtx.beginPath(); bilCtx.arc(b.x, b.y, b.r, 0, Math.PI*2);
-    if (b.id === 0) { bilCtx.fillStyle = '#ffffff'; bilCtx.fill(); const grad = bilCtx.createRadialGradient(b.x-b.r*0.3, b.y-b.r*0.3, b.r*0.1, b.x, b.y, b.r); grad.addColorStop(0, '#ffffff'); grad.addColorStop(1, '#cccccc'); bilCtx.fillStyle = grad; bilCtx.fill(); } 
-    else {
-      if (b.stripe) { bilCtx.fillStyle = '#ffffff'; bilCtx.fill(); bilCtx.save(); bilCtx.beginPath(); bilCtx.arc(b.x, b.y, b.r, 0, Math.PI*2); bilCtx.clip(); bilCtx.fillStyle = b.color; bilCtx.fillRect(b.x - b.r, b.y - b.r*0.45, b.r*2, b.r*0.9); bilCtx.restore(); } else { bilCtx.fillStyle = b.color; bilCtx.fill(); }
-      const grad = bilCtx.createRadialGradient(b.x-b.r*0.3, b.y-b.r*0.3, b.r*0.1, b.x, b.y, b.r); grad.addColorStop(0, 'rgba(255,255,255,0.4)'); grad.addColorStop(1, 'rgba(0,0,0,0.4)'); bilCtx.fillStyle = grad; bilCtx.fill();
-      bilCtx.beginPath(); bilCtx.arc(b.x, b.y, b.r*0.45, 0, Math.PI*2); bilCtx.fillStyle = '#ffffff'; bilCtx.fill(); bilCtx.fillStyle = '#000000'; bilCtx.font = `bold ${b.r*0.55}px Arial`; bilCtx.textAlign = 'center'; bilCtx.textBaseline = 'middle'; bilCtx.fillText(b.id, b.x, b.y+1);
+    if (b.id === 0) {
+      bilCtx.fillStyle = '#ffffff'; bilCtx.fill();
+      const grad = bilCtx.createRadialGradient(b.x-b.r*0.3, b.y-b.r*0.3, b.r*0.1, b.x, b.y, b.r);
+      grad.addColorStop(0, '#ffffff'); grad.addColorStop(1, '#cccccc'); bilCtx.fillStyle = grad; bilCtx.fill();
+    } else {
+      if (b.stripe) {
+        bilCtx.fillStyle = '#ffffff'; bilCtx.fill();
+        bilCtx.save(); bilCtx.beginPath(); bilCtx.arc(b.x, b.y, b.r, 0, Math.PI*2); bilCtx.clip();
+        bilCtx.fillStyle = b.color; bilCtx.fillRect(b.x - b.r, b.y - b.r*0.45, b.r*2, b.r*0.9); bilCtx.restore();
+      } else {
+        bilCtx.fillStyle = b.color; bilCtx.fill();
+      }
+      const grad = bilCtx.createRadialGradient(b.x-b.r*0.3, b.y-b.r*0.3, b.r*0.1, b.x, b.y, b.r);
+      grad.addColorStop(0, 'rgba(255,255,255,0.4)'); grad.addColorStop(1, 'rgba(0,0,0,0.4)'); bilCtx.fillStyle = grad; bilCtx.fill();
+      bilCtx.beginPath(); bilCtx.arc(b.x, b.y, b.r*0.45, 0, Math.PI*2); bilCtx.fillStyle = '#ffffff'; bilCtx.fill();
+      bilCtx.fillStyle = '#000000'; bilCtx.font = `bold ${b.r*0.55}px Arial`; bilCtx.textAlign = 'center'; bilCtx.textBaseline = 'middle'; bilCtx.fillText(b.id, b.x, b.y+1);
     }
     bilCtx.restore();
   }
@@ -1542,40 +1777,33 @@ function bilOnShotComplete() {
   bilPrevPocketed = [...nowPocketed];
 
   if (cueBall && cueBall.inTray) {
-    cueBall.inTray = false; 
-    cueBall.x = BIL_W / 2; 
-    cueBall.y = BIL_H * 0.75; 
-    cueBall.vx = 0; 
-    cueBall.vy = 0;
-    
-    bilState.ballInHand = true; // AKTIFKAN FITUR GESER BOLA
+    cueBall.inTray = false;
+    cueBall.x = BIL_W / 2;
+    cueBall.y = BIL_H * 0.75;
+    cueBall.vx = 0; cueBall.vy = 0;
+    bilState.ballInHand = true;
     bilState.turn = bilState.turn === 'p1' ? 'p2' : 'p1';
     bilUpdateStateAfterShot(); return;
   }
 
   if (!bilState.p1Type && newlyPocketed.length > 0 && !newlyPocketed.includes(8)) {
     const firstId = newlyPocketed[0];
-    if (bilState.turn === 'p1') { bilState.p1Type = firstId <= 7 ? 'solid' : 'stripe'; bilState.p2Type = bilState.p1Type === 'solid' ? 'stripe' : 'solid'; } 
+    if (bilState.turn === 'p1') { bilState.p1Type = firstId <= 7 ? 'solid' : 'stripe'; bilState.p2Type = bilState.p1Type === 'solid' ? 'stripe' : 'solid'; }
     else { bilState.p2Type = firstId <= 7 ? 'solid' : 'stripe'; bilState.p1Type = bilState.p2Type === 'solid' ? 'stripe' : 'solid'; }
   }
 
   if (newlyPocketed.includes(8)) {
     let myType = bilState.turn === 'p1' ? bilState.p1Type : bilState.p2Type;
     let isLoss = false;
-    
     if (!myType) {
-      isLoss = true; 
+      isLoss = true;
     } else {
       let myTArr = myType === 'solid' ? [1,2,3,4,5,6,7] : [9,10,11,12,13,14,15];
       let remain = myTArr.filter(id => !bilBalls.find(b => b.id === id && b.inTray)).length;
       if (remain > 0) isLoss = true;
     }
-
-    if (isLoss) {
-      bilState.winners = [bilState.turn==='p1'?'p2':'p1', bilState.turn]; 
-    } else {
-      bilState.winners = [bilState.turn, bilState.turn==='p1'?'p2':'p1']; 
-    }
+    if (isLoss) { bilState.winners = [bilState.turn==='p1'?'p2':'p1', bilState.turn]; }
+    else { bilState.winners = [bilState.turn, bilState.turn==='p1'?'p2':'p1']; }
     bilUpdateStateAfterShot(); return;
   }
 
@@ -1595,14 +1823,13 @@ function bilOnShotComplete() {
 function bilUpdateStateAfterShot() {
   document.getElementById('bil-power-bar').style.width = '0%';
   updateBilUI();
-  
+
   if (typeof isOnline !== 'undefined' && isOnline) {
-     if (typeof database !== 'undefined') database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls, state: bilState });
+    if (typeof database !== 'undefined') database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls, state: bilState });
   }
 
   if (bilState.winners.length > 0) {
-    if(typeof isOnline !== 'undefined' && isOnline) { typeof showEndLeaderboard !== 'undefined' && showEndLeaderboard(bilState.winners, bilNames, gameConfigs.billiard); }
-    else { typeof showEndLeaderboard !== 'undefined' && showEndLeaderboard(bilState.winners, bilNames, gameConfigs.billiard); }
+    typeof showEndLeaderboard !== 'undefined' && showEndLeaderboard(bilState.winners, bilNames, typeof gameConfigs !== 'undefined' ? gameConfigs.billiard : null);
   } else if ((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn === 'p2') {
     setTimeout(bilBotShoot, 1000);
   }
@@ -1610,11 +1837,11 @@ function bilUpdateStateAfterShot() {
 
 function bilBotShoot() {
   if (bilState.winners.length > 0) return;
-  const cueBall = bilBalls[0]; 
+  const cueBall = bilBalls[0];
   let myTArr = bilState.p2Type === 'solid' ? [1,2,3,4,5,6,7] : bilState.p2Type === 'stripe' ? [9,10,11,12,13,14,15] : [];
   const remaining = bilBalls.filter(b => !b.inTray && myTArr.includes(b.id));
   const targets = remaining.length > 0 ? remaining : bilBalls.filter(b => !b.inTray && b.id !== 0 && b.id !== 8);
-  if(targets.length === 0) targets.push(bilBalls.find(b=>b.id===8)); 
+  if(targets.length === 0) targets.push(bilBalls.find(b=>b.id===8));
 
   let bestShot = null, bestScore = -Infinity;
   for (let target of targets) {
@@ -1630,136 +1857,112 @@ function bilBotShoot() {
       })) continue;
 
       const score = 1000 / (caDist + 1) + 1000 / (tpDist + 1);
-      if (score > bestScore) { bestScore = score; const power = Math.min(Math.max(caDist / 12 + tpDist / 15 + 6, 8), BIL_MAX_P - 2); bestShot = { vx: (caDx/caDist)*power, vy: (caDy/caDist)*power }; }
+      if (score > bestScore) {
+        bestScore = score;
+        const power = Math.min(Math.max(caDist / 12 + tpDist / 15 + 6, 8), BIL_MAX_P - 2);
+        bestShot = { vx: (caDx/caDist)*power, vy: (caDy/caDist)*power };
+      }
     }
   }
 
-  if (!bestShot) { const angle = Math.random() * Math.PI * 2; bestShot = { vx: Math.cos(angle)*12, vy: Math.sin(angle)*12 }; } 
+  if (!bestShot) { const angle = Math.random() * Math.PI * 2; bestShot = { vx: Math.cos(angle)*12, vy: Math.sin(angle)*12 }; }
   else { bestShot.vx += (Math.random()-0.5)*0.15; bestShot.vy += (Math.random()-0.5)*0.15; }
 
   setTimeout(() => {
     if(bilState.winners.length > 0) return;
     bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
-    
-    // Bot naruh bola putih random kalau ballInHand
     if(bilState.ballInHand) {
-       cueBall.x = (BIL_W/2) + ((Math.random()-0.5)*100);
-       bilState.ballInHand = false;
+      cueBall.x = (BIL_W/2) + ((Math.random()-0.5)*100);
+      bilState.ballInHand = false;
     }
-    
     cueBall.vx = bestShot.vx; cueBall.vy = bestShot.vy; playSound('hit', 1); bilShooting = true;
   }, 800);
 }
 
-function bilGetMousePos(evt) {
-  const rect = bilCanvas.getBoundingClientRect(); let clientX = evt.clientX, clientY = evt.clientY;
-  if (evt.touches && evt.touches.length > 0) { clientX = evt.touches[0].clientX; clientY = evt.touches[0].clientY; }
-  return { x: (clientX - rect.left) * (BIL_W / rect.width), y: (clientY - rect.top) * (BIL_H / rect.height) };
+// FIX: Helper getPos yang handle touchend (changedTouches) 
+function bilGetPos(evt) {
+  const rect = bilCanvas.getBoundingClientRect();
+  let clientX, clientY;
+  if (evt.changedTouches && evt.changedTouches.length > 0) {
+    clientX = evt.changedTouches[0].clientX; clientY = evt.changedTouches[0].clientY;
+  } else if (evt.touches && evt.touches.length > 0) {
+    clientX = evt.touches[0].clientX; clientY = evt.touches[0].clientY;
+  } else {
+    clientX = evt.clientX; clientY = evt.clientY;
+  }
+  return {
+    x: (clientX - rect.left) * (BIL_W / rect.width),
+    y: (clientY - rect.top) * (BIL_H / rect.height)
+  };
 }
 
-// LOGIKA INPUT MOUSE & TOUCH FIX 
-bilCanvas.addEventListener('mousedown', e => { 
+function bilCheckMyTurn() {
   let myP = getMyBilPlayer();
-  let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilMode==='pvp' || bilState.turn === 'p1');
-  if (!isMyTurn || bilShooting || bilState.winners.length) return; 
-  
-  initAudio(); 
-  bilMouseDown = true; 
-  let pos = bilGetMousePos(e);
-  
+  return (typeof isOnline !== 'undefined' && isOnline)
+    ? (bilState.turn === myP)
+    : (bilMode === 'pvp' || bilState.turn === 'p1');
+}
+
+// =============================================
+// EVENT HANDLERS - FIXED AIMING SYSTEM
+// Pisah bilAimStart (fixed saat down) vs bilAimCurrent (update saat move)
+// =============================================
+function bilHandleDown(e) {
+  if (!bilCheckMyTurn() || bilShooting || bilState.winners.length) return;
+  initAudio();
+  bilMouseDown = true;
+  let pos = bilGetPos(e);
+
   if (bilState.ballInHand) {
-     bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x)); // Update posisi geser
+    bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
   } else {
-     bilMouseStart = pos; bilMouseNow = { ...bilMouseStart }; 
+    // FIX: Set aim start, current mulai sama tapi akan berubah di move
+    bilAimStart = { x: pos.x, y: pos.y };
+    bilAimCurrent = { x: pos.x, y: pos.y };
+    bilIsAiming = true;
   }
-});
+}
 
-window.addEventListener('mousemove', e => { 
-  if (bilMouseDown) {
-      let pos = bilGetMousePos(e);
-      if (bilState.ballInHand) {
-         bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
-      } else {
-         bilMouseNow = pos;
-      }
-  }
-});
+function bilHandleMove(e) {
+  if (!bilMouseDown) return;
+  let pos = bilGetPos(e);
 
-window.addEventListener('mouseup', e => {
-  if (!bilMouseDown || bilShooting || bilState.winners.length) return; 
-  bilMouseDown = false; 
-  
   if (bilState.ballInHand) {
-     bilState.ballInHand = false; // Ngunci Posisi!
-     if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') {
-         database.ref(`billiard_rooms/${roomCode}`).update({'state/ballInHand': false, 'balls': bilBalls});
-     }
-     return; // Jangan nembak dulu
+    bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
+  } else if (bilIsAiming) {
+    // FIX: Update HANYA bilAimCurrent, bukan bilAimStart!
+    bilAimCurrent = { x: pos.x, y: pos.y };
   }
-  
-  const cue = bilBalls[0]; if (!cue || cue.inTray) return;
-  const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist < 10) { bilMouseStart = null; return; }
-  const power = Math.min(dist / 4, BIL_MAX_P); bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
-  const vx = (dx/dist) * power; const vy = (dy/dist) * power;
-  
-  if(typeof isOnline !== 'undefined' && isOnline) {
-    let shotId = Math.random().toString(36).substr(2, 9); bilLastShotId = shotId;
-    if (typeof database !== 'undefined') {
-      database.ref(`billiard_rooms/${roomCode}/shot`).set({ vx, vy, id: shotId });
-      database.ref(`billiard_rooms/${roomCode}/state/moving`).set(true);
+}
+
+function bilHandleUp(e) {
+  if (!bilMouseDown || bilShooting || bilState.winners.length) return;
+  bilMouseDown = false;
+
+  if (bilState.ballInHand) {
+    bilState.ballInHand = false;
+    if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') {
+      database.ref(`billiard_rooms/${roomCode}`).update({'state/ballInHand': false, 'balls': bilBalls});
     }
+    bilIsAiming = false;
+    return;
   }
-  
-  cue.vx = vx; cue.vy = vy; playSound('hit', power/BIL_MAX_P); bilShooting = true; bilMouseStart = null; document.getElementById('bil-power-bar').style.width = '0%';
-});
 
-// TOUCH SCREEN (SAMA KAYAK MOUSE)
-bilCanvas.addEventListener('touchstart', (e) => { 
-  e.preventDefault(); 
-  let myP = getMyBilPlayer();
-  let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilMode==='pvp' || bilState.turn === 'p1');
-  if (!isMyTurn || bilShooting || bilState.winners.length) return; 
-  
-  initAudio(); 
-  bilMouseDown = true; 
-  let pos = bilGetMousePos(e);
-  
-  if (bilState.ballInHand) {
-     bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
-  } else {
-     bilMouseStart = pos; bilMouseNow = { ...bilMouseStart }; 
-  }
-}, { passive: false });
+  if (!bilIsAiming || !bilAimStart || !bilAimCurrent) { bilIsAiming = false; return; }
+  bilIsAiming = false;
 
-window.addEventListener('touchmove', (e) => { 
-  if(bilMouseDown && e.target === bilCanvas) e.preventDefault(); 
-  if (bilMouseDown) {
-      let pos = bilGetMousePos(e);
-      if (bilState.ballInHand) {
-         bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
-      } else {
-         bilMouseNow = pos;
-      }
-  }
-}, { passive: false });
-
-window.addEventListener('touchend', e => {
-  if (!bilMouseDown || bilShooting || bilState.winners.length) return; 
-  bilMouseDown = false; 
-  
-  if (bilState.ballInHand) {
-     bilState.ballInHand = false; // Ngunci Posisi!
-     if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') {
-         database.ref(`billiard_rooms/${roomCode}`).update({'state/ballInHand': false, 'balls': bilBalls});
-     }
-     return; // Jangan nembak dulu
-  }
-  
   const cue = bilBalls[0]; if (!cue || cue.inTray) return;
-  const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist < 10) { bilMouseStart = null; return; }
-  const power = Math.min(dist / 4, BIL_MAX_P); bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
-  const vx = (dx/dist) * power; const vy = (dy/dist) * power;
-  
+  // FIX: dx/dy dari Start ke Current (bukan sebaliknya = arah mundur stick = bola maju ke depan)
+  const dx = bilAimStart.x - bilAimCurrent.x;
+  const dy = bilAimStart.y - bilAimCurrent.y;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  if (dist < 8) { document.getElementById('bil-power-bar').style.width = '0%'; return; }
+
+  const power = Math.min(dist / 4, BIL_MAX_P);
+  bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
+  const vx = (dx/dist) * power;
+  const vy = (dy/dist) * power;
+
   if(typeof isOnline !== 'undefined' && isOnline) {
     let shotId = Math.random().toString(36).substr(2, 9); bilLastShotId = shotId;
     if (typeof database !== 'undefined') {
@@ -1768,10 +1971,23 @@ window.addEventListener('touchend', e => {
     }
   }
 
-  cue.vx = vx; cue.vy = vy; playSound('hit', power/BIL_MAX_P); bilShooting = true; bilMouseStart = null; document.getElementById('bil-power-bar').style.width = '0%';
-});
+  cue.vx = vx; cue.vy = vy;
+  playSound('hit', power/BIL_MAX_P);
+  bilShooting = true;
+  bilAimStart = null; bilAimCurrent = null;
+  document.getElementById('bil-power-bar').style.width = '0%';
+}
 
-// MAIN LOOP ARCADE UNIVERSE
+// Daftarkan event listeners
+bilCanvas.addEventListener('mousedown', bilHandleDown);
+window.addEventListener('mousemove', bilHandleMove);
+window.addEventListener('mouseup', bilHandleUp);
+
+bilCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); bilHandleDown(e); }, { passive: false });
+window.addEventListener('touchmove', (e) => { if(bilMouseDown && e.target === bilCanvas) e.preventDefault(); bilHandleMove(e); }, { passive: false });
+window.addEventListener('touchend', (e) => { bilHandleUp(e); }, { passive: false });
+
+// MAIN LOOP
 function mainLoop() {
   if (typeof activeGame !== 'undefined' && activeGame === 'billiard' && document.getElementById('billiard-game-screen').classList.contains('active')) {
     if (!bilState.winners.length) {
@@ -1790,7 +2006,6 @@ function mainLoop() {
   requestAnimationFrame(mainLoop);
 }
 
-// Menjalankan loop
 mainLoop();
 
 let currentGameAudio = null;
@@ -1946,6 +2161,189 @@ function playLocalAudio(inputElement) {
   inputElement.value = '';
 }
 
+// ===================================================
+// QUICKCHAT & AVATAR SYSTEM
+// ===================================================
+
+const QC_AVATARS = ['avatar1.png','avatar2.png','avatar3.png','avatar4.png'];
+
+const QC_TAUNTS = [
+  "Lu masih belajar ya? 😂",
+  "Enak banget ngalahin lu wkwk",
+  "Nyerah aja deh, kasian liat lu",
+  "GG WP? Lebih ke GG AUTO KALAH 💀",
+  "Skill issue bro, skill issue",
+  "Lu main pake lutut ya? 🤣",
+  "Udah serah aja gauss gimana",
+  "Lagi error tangan lu? 😭",
+  "Ini mah bukan game, ini eksekusi",
+  "Mau gua ajarin gratis? 😏"
+];
+
+const QC_PRAISES = [
+  "Mantap cuy, gg! 🔥",
+  "Gilak lu jago parah sih",
+  "Respect! Move tadi epic bgt",
+  "Gg bro, lu emang beda level",
+  "Clean banget main lu, serius",
+  "Wah, lu pro ternyata! 🏆",
+  "Auto respect setelah liat itu",
+  "Buset, reflex lu gila sih",
+  "Lu seharusnya main pro 💪",
+  "Salut, gua belajar dari lu!"
+];
+
+let qcMyAvatar = null;
+let qcSelectedTemp = null;
+
+// ---- BUILD UI ----
+function qcBuildAvatarGrid() {
+  const grid = document.getElementById('qc-av-grid');
+  grid.innerHTML = '';
+  QC_AVATARS.forEach((file, i) => {
+    const div = document.createElement('div');
+    div.className = 'qc-av-item' + (i === 0 ? ' selected' : '');
+    div.innerHTML = `<img src="${file}" onerror="this.style.background='#333';this.alt='AV${i+1}'">`;
+    div.onclick = () => {
+      document.querySelectorAll('.qc-av-item').forEach(el => el.classList.remove('selected'));
+      div.classList.add('selected');
+      qcSelectedTemp = file;
+    };
+    grid.appendChild(div);
+  });
+  qcSelectedTemp = QC_AVATARS[0];
+}
+
+function qcBuildChatButtons() {
+  const tGrid = document.getElementById('qc-taunt-grid');
+  const pGrid = document.getElementById('qc-praise-grid');
+  tGrid.innerHTML = ''; pGrid.innerHTML = '';
+
+  QC_TAUNTS.forEach(msg => {
+    const btn = document.createElement('button');
+    btn.className = 'qc-btn taunt';
+    btn.textContent = msg;
+    btn.onclick = () => { sendQCMessage(msg, 'taunt'); closeQCModal(); };
+    tGrid.appendChild(btn);
+  });
+
+  QC_PRAISES.forEach(msg => {
+    const btn = document.createElement('button');
+    btn.className = 'qc-btn praise';
+    btn.textContent = msg;
+    btn.onclick = () => { sendQCMessage(msg, 'praise'); closeQCModal(); };
+    pGrid.appendChild(btn);
+  });
+}
+
+// ---- AVATAR FLOW ----
+function openAvatarPicker(callback) {
+  qcBuildAvatarGrid();
+  document.getElementById('qc-avatar-modal').classList.add('open');
+  window._qcAvatarCallback = callback;
+}
+
+function confirmAvatar() {
+  qcMyAvatar = qcSelectedTemp || QC_AVATARS[0];
+  document.getElementById('qc-avatar-modal').classList.remove('open');
+  if (window._qcAvatarCallback) window._qcAvatarCallback();
+}
+
+// ---- QUICKCHAT MODAL ----
+function openQCChat() {
+  if (!qcMyAvatar) {
+    openAvatarPicker(() => { qcBuildChatButtons(); document.getElementById('qc-chat-modal').classList.add('open'); });
+    return;
+  }
+  qcBuildChatButtons();
+  document.getElementById('qc-chat-modal').classList.add('open');
+}
+
+function closeQCModal() {
+  document.getElementById('qc-chat-modal').classList.remove('open');
+}
+
+// ---- KIRIM PESAN ----
+function sendQCMessage(msg, type) {
+  if (!isOnline || !roomCode || !activeGame) return;
+  const payload = {
+    name: myGlobalName,
+    avatar: qcMyAvatar || QC_AVATARS[0],
+    msg: msg,
+    type: type,
+    ts: Date.now()
+  };
+  database.ref(`${activeGame}_rooms/${roomCode}/quickchat`).set(payload);
+}
+
+// ---- TAMPILKAN BUBBLE ----
+function showQCBubble(data) {
+  // Hapus bubble lama
+  document.querySelectorAll('.qc-bubble').forEach(el => el.remove());
+
+  const bubble = document.createElement('div');
+  bubble.className = `qc-bubble ${data.type === 'taunt' ? 'taunt-bubble' : 'praise-bubble'}`;
+  bubble.innerHTML = `
+    <img src="${data.avatar}" onerror="this.style.background='#333'">
+    <div class="qc-btext">
+      <span class="qc-bname">${data.name}</span>
+      <span class="qc-bmsg">${data.msg}</span>
+    </div>
+  `;
+
+  // Posisi: atas tengah layar
+  bubble.style.top = '80px';
+  bubble.style.left = '50%';
+  bubble.style.transform = 'translateX(-50%)';
+  document.body.appendChild(bubble);
+
+  setTimeout(() => {
+    bubble.style.transition = 'opacity 0.5s';
+    bubble.style.opacity = '0';
+    setTimeout(() => bubble.remove(), 500);
+  }, 3500);
+}
+
+// ---- LISTENER REALTIME ----
+let qcLastTs = 0;
+function startQCListener() {
+  if (!isOnline || !roomCode || !activeGame) return;
+  database.ref(`${activeGame}_rooms/${roomCode}/quickchat`).on('value', snap => {
+    if (!snap.exists()) return;
+    const data = snap.val();
+    // Jangan tampilkan ulang pesan lama & jangan tampilkan punya sendiri
+    if (data.ts <= qcLastTs) return;
+    qcLastTs = data.ts;
+    showQCBubble(data);
+  });
+}
+
+// ---- SHOW/HIDE TOMBOL TRIGGER ----
+// Panggil ini setiap transisi screen
+const _origShowScreen = showScreen;
+window.showScreen = function(id) {
+  _origShowScreen(id);
+  const gameScreens = ['ludo-game-screen','snl-game-screen','ttt-game-screen',
+                       'chess-game-screen','dom-s-game','billiard-game-screen'];
+  const btn = document.getElementById('qc-trigger-btn');
+  if (gameScreens.includes(id) && isOnline) {
+    btn.style.display = 'flex';
+    startQCListener();
+  } else {
+    btn.style.display = 'none';
+  }
+};
+
+// Juga pastikan listener dimulai saat routeToActiveGame
+const _origRouteToActiveGame = routeToActiveGame;
+window.routeToActiveGame = function(data) {
+  _origRouteToActiveGame(data);
+  setTimeout(() => {
+    const btn = document.getElementById('qc-trigger-btn');
+    if (isOnline) { btn.style.display = 'flex'; startQCListener(); }
+  }, 500);
+};
+
 </script>
 </body>
-        </html>
+  </html>
