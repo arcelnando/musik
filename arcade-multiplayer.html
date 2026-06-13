@@ -1146,7 +1146,7 @@ function domToast(msg) { const el = document.getElementById('dom-toast'); el.tex
 
 
 // ============================================================
-// BILLIARD PRO (Arcade Embedded)
+// BILLIARD PRO (Arcade Embedded) - REVISION FIXED
 // ============================================================
 let audioCtx = null;
 function initAudio() {
@@ -1220,6 +1220,7 @@ const TABLE_THEMES = [
 const STICK_THEMES = ['#ffeb3b', '#d4a373', '#00d2ff'];
 
 const bilCanvas = document.getElementById('bil-canvas');
+bilCanvas.style.touchAction = 'none'; // FIX: Mencegah scroll layar saat bidik
 const bilCtx = bilCanvas.getContext('2d');
 const BIL_W = 400; const BIL_H = 800; 
 const BIL_R = 12; const BIL_FRIC = 0.985; const BIL_MIN_S = 0.08; const BIL_MAX_P = 22; const BIL_PR = 22;
@@ -1230,7 +1231,7 @@ let bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winn
 let bilBalls = [];
 let bilMode = 'pvp'; 
 let bilTbl = 0, bilStk = 0;
-let bilShooting = false, bilMouseStart = null, bilMouseNow = null, bilMouseDown = false;
+let bilShooting = false, bilPlacingCue = false, bilMouseStart = null, bilMouseNow = null, bilMouseDown = false;
 let bilPrevPocketed = [], bilWait = 0, bilNames = {p1:'PLAYER 1', p2:'PLAYER 2'};
 let bilLastShotId = null;
 
@@ -1256,7 +1257,7 @@ function initBilBalls() {
 
 function startBilliardOffline() {
   if (typeof isOnline !== 'undefined') isOnline = false; activeGame = 'billiard';
-  bilMode = document.getElementById('bil-off-mode').value;
+  bilMode = document.getElementById('bil-off-mode') ? document.getElementById('bil-off-mode').value : 'pvp';
   
   let themeVal = document.getElementById('bil-theme');
   bilTbl = themeVal ? parseInt(themeVal.value) : 0;
@@ -1270,23 +1271,18 @@ function startBilliardOffline() {
   document.getElementById('bil-name-p2').style.color = bilMode === 'bot' ? '#ff0055' : '#00d2ff';
   
   bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[] };
-  bilBalls = initBilBalls(); bilShooting = false; bilWait = 0; bilPrevPocketed = [];
+  bilBalls = initBilBalls(); bilShooting = false; bilPlacingCue = false; bilWait = 0; bilPrevPocketed = [];
   
   updateBilUI();
-  showScreen('billiard-game-screen');
+  if (typeof showScreen !== 'undefined') showScreen('billiard-game-screen');
 }
 
 function syncBilliardOnline(data) {
-  // 1. Paksa mainLoop jalan
   activeGame = 'billiard'; 
-
-  // 2. Tampilkan layar game
   if (!document.getElementById('billiard-game-screen').classList.contains('active')) {
     if (typeof showScreen !== 'undefined') showScreen('billiard-game-screen');
-    else document.getElementById('billiard-game-screen').classList.add('active');
   }
 
-  // 3. UI Player
   bilMode = 'online'; 
   if (data.players) bilNames = data.players;
   document.getElementById('bil-name-p1').innerText = bilNames.p1 || 'P1';
@@ -1295,7 +1291,6 @@ function syncBilliardOnline(data) {
   bilState = data.state || { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[] };
   let isMoving = data.state && data.state.moving;
 
-  // 4. SANITASI EKSTREM: Selamatkan bola dari wabah 'NaN' (Not a Number) Firebase
   let serverBalls = [];
   if (data.balls) {
     let rawBalls = Array.isArray(data.balls) ? data.balls : Object.values(data.balls);
@@ -1315,8 +1310,8 @@ function syncBilliardOnline(data) {
     }).filter(b => b !== null);
   }
 
-  // 5. Update array bola HANYA jika tidak ada tembakan yang lagi jalan
-  if (!bilShooting && !isMoving) {
+  // Jangan timpa bola putih kalau sedang mode peletakan tangan
+  if (!bilShooting && !isMoving && (!bilPlacingCue || bilState.turn !== myColor)) {
     if (serverBalls.length >= 16) {
         bilBalls = serverBalls; 
     } else {
@@ -1328,7 +1323,6 @@ function syncBilliardOnline(data) {
     updateBilUI();
   }
 
-  // 6. Sinkronisasi efek tembakan
   if (data.shot && data.shot.id !== bilLastShotId) {
     bilLastShotId = data.shot.id;
     if (bilState.turn !== myColor && bilBalls[0]) { 
@@ -1336,18 +1330,15 @@ function syncBilliardOnline(data) {
        bilBalls[0].vy = isNaN(data.shot.vy) ? 0 : Number(data.shot.vy);
        playSound('hit', 1); 
        bilShooting = true;
+       bilPlacingCue = false;
     }
   }
 
-  // 7. Cek Game Over
   if (bilState.winners && bilState.winners.length > 0) {
     if (typeof showEndLeaderboard !== 'undefined') {
         showEndLeaderboard(bilState.winners, bilNames, typeof gameConfigs !== 'undefined' ? gameConfigs.billiard : null);
     }
   }
-
-  // 8. Render papannya!
-  bilDraw();
 }
 
 function updateBilUI() {
@@ -1433,7 +1424,18 @@ function bilDraw() {
   for (let p of BIL_POCKETS) { bilCtx.beginPath(); bilCtx.arc(p.x, p.y, BIL_PR, 0, Math.PI*2); bilCtx.fillStyle = thm.pocket; bilCtx.fill(); bilCtx.strokeStyle = thm.rail; bilCtx.lineWidth = 2; bilCtx.stroke(); }
 
   let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myColor) : (bilMode==='pvp' || bilState.turn === 'p1');
-  if (bilMouseDown && bilMouseStart && bilMouseNow && isMyTurn && !bilShooting) {
+  
+  if (bilPlacingCue && isMyTurn) {
+    bilCtx.save();
+    bilCtx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    bilCtx.fillRect(0, BIL_H/2 - 30, BIL_W, 60);
+    bilCtx.fillStyle = '#ffeb3b';
+    bilCtx.font = 'bold 15px Arial';
+    bilCtx.textAlign = 'center';
+    bilCtx.textBaseline = 'middle';
+    bilCtx.fillText('GESER BOLA PUTIH & KLIK UNTUK MAIN', BIL_W/2, BIL_H/2);
+    bilCtx.restore();
+  } else if (bilMouseDown && bilMouseStart && bilMouseNow && isMyTurn && !bilShooting) {
     const cue = bilBalls[0]; 
     if (cue && !cue.inTray) {
       const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx + dy*dy);
@@ -1478,6 +1480,14 @@ function bilOnShotComplete() {
   if (cueBall && cueBall.inTray) {
     cueBall.inTray = false; cueBall.x = BIL_W / 2; cueBall.y = BIL_H * 0.75; cueBall.vx = 0; cueBall.vy = 0;
     bilState.turn = bilState.turn === 'p1' ? 'p2' : 'p1';
+    
+    // Aktifkan peletakan bola putih kecuali jika yang main adalah Bot
+    if ((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn === 'p2') {
+        bilPlacingCue = false;
+    } else {
+        bilPlacingCue = true;
+    }
+    
     bilUpdateStateAfterShot(); return;
   }
 
@@ -1572,16 +1582,45 @@ function bilBotShoot() {
   }, 800);
 }
 
+// FIX MOUSE POS UNTUK MENCEGAH BUG TOUCH SCREEN
 function bilGetMousePos(evt) {
-  const rect = bilCanvas.getBoundingClientRect(); let clientX = evt.clientX, clientY = evt.clientY;
-  if (evt.touches && evt.touches.length > 0) { clientX = evt.touches[0].clientX; clientY = evt.touches[0].clientY; }
+  const rect = bilCanvas.getBoundingClientRect(); 
+  let clientX = evt.clientX, clientY = evt.clientY;
+  if (evt.touches && evt.touches.length > 0) { 
+    clientX = evt.touches[0].clientX; clientY = evt.touches[0].clientY; 
+  } else if (evt.changedTouches && evt.changedTouches.length > 0) {
+    clientX = evt.changedTouches[0].clientX; clientY = evt.changedTouches[0].clientY;
+  }
   return { x: (clientX - rect.left) * (BIL_W / rect.width), y: (clientY - rect.top) * (BIL_H / rect.height) };
 }
 
-bilCanvas.addEventListener('mousedown', e => { initAudio(); if(((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn==='p2') || bilShooting || bilState.winners.length) return; if((typeof isOnline !== 'undefined' && isOnline) && bilState.turn !== myColor) return; bilMouseDown = true; bilMouseStart = bilGetMousePos(e); bilMouseNow = { ...bilMouseStart }; });
-window.addEventListener('mousemove', e => { if (bilMouseDown) bilMouseNow = bilGetMousePos(e); });
+// EVENTS UNTUK MOUSE
+bilCanvas.addEventListener('mousedown', e => { 
+  initAudio(); 
+  if (bilState.winners.length) return;
+  // Jika sedang peletakan bola putih
+  if (bilPlacingCue) {
+      bilPlacingCue = false; // Kunci posisi
+      if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls });
+      return;
+  }
+  if(((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn==='p2') || bilShooting) return; 
+  if((typeof isOnline !== 'undefined' && isOnline) && bilState.turn !== myColor) return; 
+  bilMouseDown = true; bilMouseStart = bilGetMousePos(e); bilMouseNow = { ...bilMouseStart }; 
+});
+
+window.addEventListener('mousemove', e => { 
+  if (bilPlacingCue) {
+      let pos = bilGetMousePos(e);
+      if (bilBalls[0] && !bilBalls[0].inTray) bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x)); // Batas meja
+  } else if (bilMouseDown) {
+      bilMouseNow = bilGetMousePos(e); 
+  }
+});
+
 window.addEventListener('mouseup', e => {
-  if (!bilMouseDown || bilShooting || bilState.winners.length) return; bilMouseDown = false; const cue = bilBalls[0]; if (!cue || cue.inTray) return;
+  if (!bilMouseDown || bilShooting || bilState.winners.length || bilPlacingCue) return; 
+  bilMouseDown = false; const cue = bilBalls[0]; if (!cue || cue.inTray) return;
   const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist < 10) { bilMouseStart = null; return; }
   const power = Math.min(dist / 4, BIL_MAX_P); bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
   const vx = (dx/dist) * power; const vy = (dy/dist) * power;
@@ -1597,10 +1636,35 @@ window.addEventListener('mouseup', e => {
   cue.vx = vx; cue.vy = vy; playSound('hit', power/BIL_MAX_P); bilShooting = true; bilMouseStart = null; document.getElementById('bil-power-bar').style.width = '0%';
 });
 
-bilCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); initAudio(); if(((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn==='p2') || bilShooting || bilState.winners.length) return; if((typeof isOnline !== 'undefined' && isOnline) && bilState.turn !== myColor) return; bilMouseDown = true; bilMouseStart = bilGetMousePos(e); bilMouseNow = { ...bilMouseStart }; }, { passive: false });
-window.addEventListener('touchmove', (e) => { if(bilMouseDown && e.target === bilCanvas) e.preventDefault(); if (bilMouseDown) bilMouseNow = bilGetMousePos(e); }, { passive: false });
+// EVENTS UNTUK TOUCH DEVICE (HP)
+bilCanvas.addEventListener('touchstart', (e) => { 
+  initAudio(); 
+  if (bilState.winners.length) return;
+  // Jika sedang peletakan bola putih
+  if (bilPlacingCue) {
+      let pos = bilGetMousePos(e);
+      if (bilBalls[0] && !bilBalls[0].inTray) bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
+      bilPlacingCue = false; // Kunci posisi
+      if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls });
+      return;
+  }
+  if(((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn==='p2') || bilShooting) return; 
+  if((typeof isOnline !== 'undefined' && isOnline) && bilState.turn !== myColor) return; 
+  bilMouseDown = true; bilMouseStart = bilGetMousePos(e); bilMouseNow = { ...bilMouseStart }; 
+}, { passive: false });
+
+window.addEventListener('touchmove', (e) => { 
+  if (bilPlacingCue) {
+      let pos = bilGetMousePos(e);
+      if (bilBalls[0] && !bilBalls[0].inTray) bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x));
+  } else if (bilMouseDown) {
+      bilMouseNow = bilGetMousePos(e); 
+  } 
+}, { passive: false });
+
 window.addEventListener('touchend', e => {
-  if (!bilMouseDown || bilShooting || bilState.winners.length) return; bilMouseDown = false; const cue = bilBalls[0]; if (!cue || cue.inTray) return;
+  if (!bilMouseDown || bilShooting || bilState.winners.length || bilPlacingCue) return; 
+  bilMouseDown = false; const cue = bilBalls[0]; if (!cue || cue.inTray) return;
   const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist < 10) { bilMouseStart = null; return; }
   const power = Math.min(dist / 4, BIL_MAX_P); bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
   const vx = (dx/dist) * power; const vy = (dy/dist) * power;
@@ -1640,4 +1704,4 @@ mainLoop();
 
 </script>
 </body>
-        </html>
+  </html>
