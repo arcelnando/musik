@@ -1277,29 +1277,82 @@ function startBilliardOffline() {
 }
 
 function syncBilliardOnline(data) {
-  // FIX: Kita tambahkan activeGame ke 'billiard' supaya trigger mainLoop jalan di mode online
+  // 1. Paksa mainLoop jalan
   activeGame = 'billiard'; 
+
+  // 2. Tampilkan layar game
+  if (!document.getElementById('billiard-game-screen').classList.contains('active')) {
+    if (typeof showScreen !== 'undefined') showScreen('billiard-game-screen');
+    else document.getElementById('billiard-game-screen').classList.add('active');
+  }
+
+  // 3. UI Player
+  bilMode = 'online'; 
+  if (data.players) bilNames = data.players;
+  document.getElementById('bil-name-p1').innerText = bilNames.p1 || 'P1';
+  document.getElementById('bil-name-p2').innerText = bilNames.p2 || 'P2';
   
-  if (document.getElementById('universal-lobby').classList.contains('active')) {
-    bilMode = 'online'; bilNames = data.players;
-    document.getElementById('bil-name-p1').innerText = bilNames.p1 || 'P1';
-    document.getElementById('bil-name-p2').innerText = bilNames.p2 || 'P2';
-    document.getElementById('bil-name-p2').style.color = '#ff0055';
-    bilState = data.state; bilBalls = data.balls; bilShooting = false;
-    updateBilUI(); showScreen('billiard-game-screen');
-  } else if (document.getElementById('billiard-game-screen').classList.contains('active')) {
-    let curP = Object.keys(data.players || {});
-    if(curP.length < 2 && !bilState.winners.length) { alert("Lawan kabur!"); typeof leaveRoom !== 'undefined' && leaveRoom(); return; }
-    
-    bilState = data.state;
-    
-    if(data.shot && data.shot.id !== bilLastShotId) {
-      bilLastShotId = data.shot.id;
-      if(bilState.turn !== myColor) { 
-         bilBalls[0].vx = data.shot.vx; bilBalls[0].vy = data.shot.vy;
-         playSound('hit', 1); bilShooting = true;
-      }
+  bilState = data.state || { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[] };
+  let isMoving = data.state && data.state.moving;
+
+  // 4. SANITASI EKSTREM: Selamatkan bola dari wabah 'NaN' (Not a Number) Firebase
+  let serverBalls = [];
+  if (data.balls) {
+    let rawBalls = Array.isArray(data.balls) ? data.balls : Object.values(data.balls);
+    serverBalls = rawBalls.map((b, i) => {
+      if (!b) return null;
+      // Kalau nilainya hilang/undefined/NaN, paksa jadi angka aman (0)
+      return {
+        id: b.id !== undefined ? Number(b.id) : i,
+        x: isNaN(b.x) || b.x === null ? (BIL_W / 2) : Number(b.x),
+        y: isNaN(b.y) || b.y === null ? (BIL_H / 2) : Number(b.y),
+        vx: isNaN(b.vx) || b.vx === null ? 0 : Number(b.vx),
+        vy: isNaN(b.vy) || b.vy === null ? 0 : Number(b.vy),
+        r: isNaN(b.r) || b.r === null ? BIL_R : Number(b.r),
+        color: b.color || '#ffffff',
+        stripe: !!b.stripe,
+        inTray: !!b.inTray
+      };
+    }).filter(b => b !== null);
+  }
+
+  // 5. Update array bola HANYA jika tidak ada tembakan yang lagi jalan
+  if (!bilShooting && !isMoving) {
+    if (serverBalls.length >= 16) {
+        bilBalls = serverBalls; // Pake data server yang udah di-filter
+    } else {
+        // Kalau server kosong (awal mulai game), generate bola baru!
+        if (!bilBalls || bilBalls.length < 16) bilBalls = initBilBalls();
+        
+        // Host bertugas melempar formasi awal ini ke Firebase agar musuh ikutan liat
+        if (typeof isHost !== 'undefined' && isHost && typeof database !== 'undefined') {
+            database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls });
+        }
     }
+    updateBilUI();
+  }
+
+  // 6. Sinkronisasi efek tembakan (biar gerakannya akurat)
+  if (data.shot && data.shot.id !== bilLastShotId) {
+    bilLastShotId = data.shot.id;
+    if (bilState.turn !== myColor && bilBalls[0]) { 
+       bilBalls[0].vx = isNaN(data.shot.vx) ? 0 : Number(data.shot.vx); 
+       bilBalls[0].vy = isNaN(data.shot.vy) ? 0 : Number(data.shot.vy);
+       playSound('hit', 1); 
+       bilShooting = true;
+    }
+  }
+
+  // 7. Cek Game Over
+  if (bilState.winners && bilState.winners.length > 0) {
+    if (typeof showEndLeaderboard !== 'undefined') {
+        showEndLeaderboard(bilState.winners, bilNames, typeof gameConfigs !== 'undefined' ? gameConfigs.billiard : null);
+    }
+  }
+
+  // 8. Render papannya!
+  bilDraw();
+}
     
     if(!bilShooting && !data.state.moving) {
       bilBalls = data.balls; updateBilUI();
