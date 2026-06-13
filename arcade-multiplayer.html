@@ -53,6 +53,7 @@
     .ttt-glow { filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.4)); color: rgba(0, 210, 255, 0.2); }
     .chess-glow { filter: drop-shadow(0 0 15px rgba(225, 177, 44, 0.4)); color: rgba(225, 177, 44, 0.2); }
     .dom-glow-icon { filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4)); color: rgba(255, 255, 255, 0.2); }
+    .bil-glow { filter: drop-shadow(0 0 15px rgba(255, 235, 59, 0.4)); color: rgba(255, 235, 59, 0.2); }
 
     /* GAMES COMMON UI */
     .ludo-dropdown{width:100%;padding:10px;margin:0 auto 10px auto;display:block;border-radius:4px;font-size:14px;font-weight:bold;background:#111;color:white;border:2px solid #555;outline:none;}
@@ -77,6 +78,35 @@
     .lb-name{flex-grow:1;text-transform:uppercase;padding-left:15px;text-align:left;color:#fff;letter-spacing:1px;}
     .lobby-player-list{text-align:left;background:#111;padding:10px;border-radius:8px;border:2px solid #444;width:100%;margin-bottom:15px;font-family:'Teko',sans-serif;font-size:18px;}
     .lobby-player-item{padding:5px 0;border-bottom:1px solid #333;display:flex;justify-content:space-between;letter-spacing:1px;}
+    
+    /* ================== BILLIARD UI ================== */
+  #billiard-game-screen { padding: 5px; background-image: radial-gradient(#222 1px, transparent 1px); background-size: 30px 30px; justify-content: space-between;}
+  .bil-hud-top { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 500px; background: #111; border: 2px solid #fff; padding: 10px; border-radius: 8px; z-index: 10; margin-bottom: 5px; min-height: 70px; }
+  .bil-player-box { display: flex; flex-direction: column; align-items: center; width: 30%; }
+  .bil-player-name { font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #fff; text-transform: uppercase; text-align: center; }
+  .bil-score-num { font-family: 'Teko', sans-serif; font-size: 26px; line-height: 1; font-weight: bold; color: #fff; }
+  .bil-ball-rack { display: flex; gap: 3px; margin-top: 4px; flex-wrap: wrap; justify-content: center; min-height: 18px; }
+  
+  .bil-center-info { display: flex; flex-direction: column; align-items: center; width: 35%; text-align: center; }
+  .bil-title { font-size: 14px; font-weight: 900; letter-spacing: 2px; color: #fff; margin-bottom: 5px; text-shadow: 2px 2px 0 #000; }
+  .bil-turn-badge { background: #fff; color: #000; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; letter-spacing: 1px; transition: 0.3s; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+  
+  .bil-table-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 500px; position: relative; overflow: hidden; padding: 0; }
+  .bil-rail-outer { background: #1a1a1a; border-radius: 12px; border: 4px solid #fff; padding: 8px; box-shadow: 4px 4px 0 rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; height: 100%; max-height: 70vh; aspect-ratio: 400 / 860; transition: 0.3s; position: relative; }
+  #bil-canvas { display: block; width: 100%; height: 100%; border-radius: 4px; cursor: crosshair; touch-action: none; }
+  
+  .bil-hud-bottom { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; max-width: 500px; background: #111; border: 2px solid #fff; padding: 10px; border-radius: 8px; margin-top: 5px; z-index: 10; gap: 8px; text-align: center; }
+  .bil-status { font-family: 'Teko', sans-serif; font-size: 16px; color: #ccc; letter-spacing: 1px; width: 100%; line-height: 1.1; }
+  .bil-power-display { display: flex; align-items: center; width: 100%; gap: 10px; }
+  .bil-power-bg { background: #000; border: 1px solid #fff; border-radius: 4px; height: 12px; flex: 1; overflow: hidden; }
+  .bil-power-fill { height: 100%; width: 0%; transition: width 0.05s; background: #fff; }
+  
+  .bil-theme-btn { background: transparent; border: 1px solid #fff; color: #fff; padding: 4px 10px; font-family: 'Orbitron'; font-size: 10px; border-radius: 4px; cursor: pointer; position: absolute; top: 5px; right: 5px; z-index: 20; background: rgba(0,0,0,0.5); }
+  .bil-leave-btn { background: transparent; border: 1px solid #ff4757; color: #ff4757; padding: 4px 10px; font-family: 'Orbitron'; font-size: 10px; border-radius: 4px; cursor: pointer; position: absolute; top: 5px; left: 5px; z-index: 20; background: rgba(0,0,0,0.5); }
+
+  /* 3D BALL POPUP */
+  .ball-popup-container { position: absolute; z-index: 1000; pointer-events: none; animation: popUpFade 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8)); transform: translate(-50%, -50%); }
+  @keyframes popUpFade { 0% { opacity: 0; transform: translate(-50%, 20px) scale(0.5); } 15% { opacity: 1; transform: translate(-50%, 0px) scale(1.2); } 80% { opacity: 1; transform: translate(-50%, -20px) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50px) scale(0.8); } }
 
     /* LUDO BOARD */
     .board-container{width:100%;padding-top:100%;position:relative;background-color:#111;background-image:url('papan.png');background-size:cover;background-position:center;border:4px solid #fff;border-radius:8px;box-shadow:8px 8px 0px rgba(0,0,0,0.8);overflow:hidden;}
@@ -265,6 +295,7 @@
     #ttt-hub, #ttt-offline-setup, #ttt-game-screen { background: linear-gradient(180deg, #081114 0%, #050505 100%) !important; }
     #chess-hub, #chess-offline-setup, #chess-game-screen { background: linear-gradient(180deg, #141108 0%, #050505 100%) !important; }
     #dom-hub, #dom-s-setup { background: linear-gradient(180deg, #141414 0%, #050505 100%) !important; }
+    #billiard-hub, #billiard-rules, #billiard-offline-setup, #billiard-game-screen { background: linear-gradient(180deg, #141408 0%, #050505 100%) !important; }
     
     /* Khusus Dominos board */
     #dom-s-game { 
@@ -278,7 +309,6 @@
 
 <div id="arcade-app" style="display:block;">
   
-  <!-- --- SPLASH SCREEN CLEAN & MINIMALIST --- -->
   <div class="welcome-splash">
     <h1>ARCADE</h1>
     <p>261 AREA</p>
@@ -297,6 +327,7 @@
         <div class="game-card" onclick="myGlobalName=checkNameAuth(); if(myGlobalName){ activeGame='ttt'; showScreen('ttt-hub'); }" style="border-color:#00d2ff;color:#00d2ff;"><span class="game-icon-emoji" style="letter-spacing:-3px;">༝༚</span><div class="game-card-title">TIC TAC TOE</div></div>
         <div class="game-card" onclick="myGlobalName=checkNameAuth(); if(myGlobalName){ activeGame='chess'; showScreen('chess-hub'); }" style="border-color:#e1b12c;color:#e1b12c;"><span class="game-icon-emoji">♘</span><div class="game-card-title">CATUR MASTER</div></div>
         <div class="game-card" onclick="myGlobalName=checkNameAuth(); if(myGlobalName){ activeGame='dominos'; showScreen('dom-hub'); }" style="border-color:#ffffff;color:#ffffff;"><span class="game-icon-emoji">🁅</span><div class="game-card-title" style="margin-top:5px;">DOMINOS 261</div></div>
+        <div class="game-card" onclick="myGlobalName=checkNameAuth(); if(myGlobalName){ activeGame='billiard'; showScreen('billiard-hub'); }" style="border-color:#ffeb3b;color:#ffeb3b;"><span class="game-icon-emoji">⚈</span><div class="game-card-title">BILLIARD 261</div></div>
       </div>
       <p class="dev-tag">𝟒𝐍𝐓𝟏𝐃𝟎𝟔𝟔𝟔𝐌𝟒</p>
     </div>
@@ -406,6 +437,56 @@
       <button class="game-btn" onclick="showScreen('dom-hub')" style="border-color:#888;color:#888;">KEMBALI</button>
     </div>
 
+    <!-- BILLIARD HUB & RULES -->
+    <div id="billiard-hub" class="game-screen">
+      <div class="bg-anim-layer">
+        <span class="float-icon bil-glow" style="left:15%; animation-delay: 0s; font-size:90px;">🎱</span>
+        <span class="float-icon bil-glow" style="right:15%; animation-delay: 6s; font-size:110px;">🎱</span>
+      </div>
+      <h1 class="splash-title" style="color:#ffeb3b;">BILLIARD 261</h1>
+      <p class="splash-sub">Sodok Bola, Tunjukkan Skillmu!</p>
+      <button class="game-btn" style="border-color:#ffeb3b;color:#ffeb3b;" onclick="quickMatch()">MAIN ONLINE (AUTO)</button>
+      <button class="game-btn" style="border-color:#fff;color:#fff;" onclick="openOfflineSetup()">MABAR LOKAL / AI</button>
+      <button class="game-btn" style="border-color:#00d2ff;color:#00d2ff;" onclick="showScreen('billiard-rules')">CARA MAIN</button>
+      <div style="display:flex;gap:10px;margin-top:15px;width:80%;max-width:300px;position:relative;z-index:10;">
+        <button class="game-btn" style="width:100%;margin:0;" onclick="createPrivateRoom()">BUAT ROOM</button>
+        <button class="game-btn" style="width:100%;margin:0;" onclick="joinPrivateRoom()">GABUNG</button>
+      </div>
+      <input type="text" id="private-room-code-billiard" class="game-input-name" placeholder="KODE ROOM" style="margin-top:10px;width:80%;max-width:300px;margin-bottom:0;" oninput="document.getElementById('private-room-code').value = this.value">
+      <button class="game-btn" style="border-color:#555;color:#555;margin-top:20px;" onclick="showScreen('main-hub-menu')">KEMBALI</button>
+    </div>
+
+    <div id="billiard-rules" class="game-screen">
+      <div class="rules-card" style="border-color:#ffeb3b;">
+        <h2>ATURAN BILLIARD 261</h2>
+        <ul>
+          <li>Pukul bola putih (cue ball) untuk memasukkan bola target.</li>
+          <li>Pemain pertama yang memasukkan bola akan menentukan jenis bolanya (Solid/Stripes).</li>
+          <li>Masukkan semua bola milikmu, lalu akhiri dengan memasukkan bola <span>8 (Hitam)</span> ke dalam lubang untuk menang.</li>
+          <li>Jika bola putih atau bola 8 masuk sebelum waktunya, kamu dianggap kalah/foul.</li>
+        </ul>
+      </div>
+      <button class="game-btn" onclick="showScreen('billiard-hub')" style="border-color:#888;color:#888;">KEMBALI</button>
+    </div>
+    
+    <div id="universal-hub" class="game-screen">
+      <div class="overlay-box" id="hub-box">
+        <h2 id="hub-title" style="margin-top:0; font-size:28px;">GAME TITLE</h2>
+        <p id="hub-desc" style="font-family:'Teko'; font-size:18px; color:#ccc; margin-bottom:20px;">Deskripsi.</p>
+        <button class="game-btn" style="width:100%; border-color:#ffeb3b; color:#ffeb3b;" onclick="quickMatch()">AUTO MATCH (SERVER)</button>
+        <hr style="border:1px solid #333; margin:20px 0;">
+        <p style="font-size:14px; font-weight:bold; margin-bottom:10px; color:#fff;">PRIVATE ROOM</p>
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+          <button class="game-btn" style="width:50%; margin:0;" onclick="createPrivateRoom()">BUAT ROOM</button>
+          <button class="game-btn" style="width:50%; margin:0;" onclick="joinPrivateRoom()">GABUNG</button>
+        </div>
+        <input type="text" id="private-room-code" class="game-input-name" placeholder="MASUKAN KODE" style="width:100%; letter-spacing:3px; margin-bottom:0;">
+        <hr style="border:1px solid #333; margin:20px 0;">
+        <button class="game-btn" style="width:100%; border-color:#aaa; color:#aaa;" onclick="openOfflineSetup()">MABAR LOKAL (1 HP)</button>
+        <button class="game-btn" onclick="showScreen('main-hub-menu')" style="margin-top:15px; width:100%; border-color:#555; color:#555;">KEMBALI</button>
+      </div>
+    </div>
+
     <div id="universal-lobby" class="game-screen">
       <div class="overlay-box">
         <h2 id="lobby-title" style="margin-top:0;margin-bottom:5px;">ROOM LOBBY</h2>
@@ -438,6 +519,7 @@
         <button class="game-btn" onclick="showScreen('ludo-hub')" style="width:100%;border-color:#555;color:#888;">KEMBALI</button>
       </div>
     </div>
+    
     <div id="snl-offline-setup" class="game-screen">
       <div class="overlay-box">
         <h2 style="color:#2ed573;margin-top:0;margin-bottom:10px;">ULAR TANGGA LOKAL</h2>
@@ -452,6 +534,7 @@
         <button class="game-btn" onclick="showScreen('snl-hub')" style="width:100%;border-color:#555;color:#888;">KEMBALI</button>
       </div>
     </div>
+    
     <div id="ttt-offline-setup" class="game-screen">
       <div class="overlay-box">
         <h2 style="color:#00d2ff;margin-top:0;margin-bottom:10px;">TTT LOKAL</h2>
@@ -460,6 +543,7 @@
         <button class="game-btn" onclick="showScreen('ttt-hub')" style="width:100%;border-color:#555;color:#888;">KEMBALI</button>
       </div>
     </div>
+    
     <div id="chess-offline-setup" class="game-screen">
       <div class="overlay-box">
         <h2 style="color:#e1b12c;margin-top:0;margin-bottom:10px;">CATUR LOKAL</h2>
@@ -469,6 +553,7 @@
         <button class="game-btn" onclick="showScreen('chess-hub')" style="width:100%;border-color:#555;color:#888;">KEMBALI</button>
       </div>
     </div>
+    
     <div id="dom-s-setup" class="game-screen">
       <div class="dom-card">
         <h2>DOMINOS SETUP</h2>
@@ -486,6 +571,62 @@
         </div>
       </div>
     </div>
+    
+        <div id="billiard-offline-setup" class="game-screen">
+      <div class="overlay-box">
+        <h2 style="color:#ffeb3b; margin-top:0; margin-bottom:10px;">BILLIARD LOKAL</h2>
+        
+        <!-- Tema Papan Dipindah Ke Sini -->
+        <select id="bil-theme" class="ludo-dropdown" style="border-color:#fff;">
+          <option value="0">Tema Meja Hitam</option>
+          <option value="1">Tema Meja Hijau</option>
+          <option value="2">Tema Meja Biru</option>
+        </select>
+
+        <select id="bil-off-mode" class="ludo-dropdown" style="margin-top:10px;">
+          <option value="bot">1 VS Bot AI</option>
+          <option value="pvp">1 VS 1 (PVP 1 HP)</option>
+        </select>
+        
+        <button class="game-btn" style="width:100%; border-color:#ffeb3b; color:#ffeb3b; margin-top:15px;" onclick="startBilliardOffline()">GAS MAIN</button>
+        <button class="game-btn" onclick="showScreen('billiard-hub')" style="width:100%; border-color:#555; color:#888; margin-top:10px;">KEMBALI</button>
+      </div>
+    </div>
+
+    <div id="billiard-game-screen" class="game-screen">
+      <div class="bil-hud-top">
+        <div class="bil-player-box">
+          <span class="bil-player-name" id="bil-name-p1">P1</span>
+          <span class="bil-score-num" id="bil-score-p1">0</span>
+          <div class="bil-ball-rack" id="bil-rack-p1"></div>
+        </div>
+        <div class="bil-center-info">
+          <div class="bil-title">BILLIARD 261</div>
+          <div class="bil-turn-badge" id="bil-turn-badge">GILIRAN LU</div>
+          <div id="bil-status-msg" style="font-size:10px; color:#ccc; margin-top:5px;">P1: BEBAS | P2: BEBAS</div>
+        </div>
+        <div class="bil-player-box">
+          <span class="bil-player-name" id="bil-name-p2" style="color:#ff0055;">P2</span>
+          <span class="bil-score-num" id="bil-score-p2">0</span>
+          <div class="bil-ball-rack" id="bil-rack-p2"></div>
+        </div>
+      </div>
+      
+      <div class="bil-table-wrapper">
+        <button class="bil-leave-btn" onclick="leaveRoom()">EXIT</button>
+        <!-- Tombol Theme di sini sudah dihapus -->
+        <div class="bil-rail-outer" id="bil-rail">
+          <canvas id="bil-canvas" width="400" height="800"></canvas>
+        </div>
+      </div>
+      
+      <div class="bil-hud-bottom">
+        <div class="bil-power-display">
+          <span style="font-family:'Orbitron'; font-size:12px; font-weight:bold; color:#fff;">POWER</span>
+          <div class="bil-power-bg"><div class="bil-power-fill" id="bil-power-bar"></div></div>
+        </div>
+      </div>
+      </div>
 
     <div id="ludo-game-screen" class="game-screen">
       <div class="ludo-top-panel">
@@ -498,6 +639,7 @@
         <div id="ludo-badge" style="background:#1a1a1a;border:2px solid #fff;border-radius:8px;padding:10px 15px;font-weight:bold;font-size:12px;display:flex;align-items:center;flex-grow:1;justify-content:center;">MODE OFFLINE</div>
       </div>
     </div>
+    
     <div id="snl-game-screen" class="game-screen">
       <div class="ludo-top-panel">
         <div class="ludo-info-box"><div id="snl-turn-info" style="color:#ff6b6b;">MERAH</div><div id="snl-log-msg">Bersiap...</div></div>
@@ -509,6 +651,7 @@
         <div id="snl-badge" style="background:#1a1a1a;border:2px solid #fff;border-radius:8px;padding:10px 15px;font-weight:bold;font-size:12px;display:flex;align-items:center;flex-grow:1;justify-content:center;">MODE OFFLINE</div>
       </div>
     </div>
+    
     <div id="ttt-game-screen" class="game-screen">
       <div class="overlay-box" style="width:95%;max-width:400px;padding:20px;">
         <div class="ttt-score"><span id="ttt-name-x" style="color:#ff0055;">P1 (X): 0</span><span id="ttt-name-o" style="color:#00d2ff;">P2 (O): 0</span></div>
@@ -520,6 +663,7 @@
         </div>
       </div>
     </div>
+    
     <div id="chess-game-screen" class="game-screen">
       <div class="ludo-top-panel" style="margin-bottom:10px;"><div class="ludo-info-box"><div id="chess-turn-info" style="color:#fff;font-size:18px;">GILIRAN: PUTIH</div><div id="chess-log-msg">Catur Master Ready</div></div></div>
       <div class="chess-container"><div class="chess-board" id="chess-board-wrapper"><div class="chess-grid" id="chess-grid-cells"></div></div></div>
@@ -528,6 +672,7 @@
         <div id="chess-badge" style="background:#1a1a1a;border:2px solid #fff;border-radius:8px;padding:10px 15px;font-weight:bold;font-size:12px;display:flex;align-items:center;flex-grow:1;justify-content:center;">MODE LOKAL</div>
       </div>
     </div>
+    
     <div id="dom-s-game" class="game-screen">
       <div class="dom-topbar">
         <span class="dom-t-logo">DOM<span style="color:#555;">261</span></span>
@@ -545,6 +690,41 @@
           <button class="dom-abtn dom-abtn-pass" id="dom-btn-pass" onclick="domHumanPass()" disabled>LEWATI (PASS)</button>
         </div>
         <span class="dom-by-info" id="dom-by-info"></span>
+      </div>
+    </div>
+
+    <div id="billiard-game-screen" class="game-screen">
+      <div class="bil-hud-top">
+        <div class="bil-player-box">
+          <span class="bil-player-name" id="bil-name-p1">P1</span>
+          <span class="bil-score-num" id="bil-score-p1">0</span>
+          <div class="bil-ball-rack" id="bil-rack-p1"></div>
+        </div>
+        <div class="bil-center-info">
+          <div class="bil-title">BILLIARD 261</div>
+          <div class="bil-turn-badge" id="bil-turn-badge">GILIRAN LU</div>
+          <div id="bil-status-msg" style="font-size:10px; color:#ccc; margin-top:5px;">P1: BEBAS | P2: BEBAS</div>
+        </div>
+        <div class="bil-player-box">
+          <span class="bil-player-name" id="bil-name-p2" style="color:#ff0055;">P2</span>
+          <span class="bil-score-num" id="bil-score-p2">0</span>
+          <div class="bil-ball-rack" id="bil-rack-p2"></div>
+        </div>
+      </div>
+      
+      <div class="bil-table-wrapper">
+        <button class="bil-leave-btn" onclick="leaveRoom()">EXIT</button>
+        <button class="bil-theme-btn" onclick="toggleBilTheme()">THEME</button>
+        <div class="bil-rail-outer" id="bil-rail">
+          <canvas id="bil-canvas" width="400" height="800"></canvas>
+        </div>
+      </div>
+      
+      <div class="bil-hud-bottom">
+        <div class="bil-power-display">
+          <span style="font-family:'Orbitron'; font-size:12px; font-weight:bold; color:#fff;">POWER</span>
+          <div class="bil-power-bg"><div class="bil-power-fill" id="bil-power-bar"></div></div>
+        </div>
       </div>
     </div>
 
@@ -603,7 +783,8 @@ const gameConfigs={
   snl:{title:"ULAR TANGGA",color:"#2ed573",max:5,colors:['red','blue','green','yellow','purple'],colorNames:{red:'MERAH',blue:'BIRU',green:'HIJAU',yellow:'KUNING',purple:'UNGU'},hex:{red:'#ff6b6b',blue:'#4facfe',green:'#55efc4',yellow:'#fdcb6e',purple:'#9b59b6'}},
   ttt:{title:"TIC TAC TOE",color:"#00d2ff",max:2,colors:['X','O'],colorNames:{X:'PLAYER X',O:'PLAYER O'},hex:{X:'#ff0055',O:'#00d2ff'}},
   chess:{title:"CATUR MASTER",color:"#e1b12c",max:2,colors:['w','b'],colorNames:{w:'PUTIH',b:'HITAM'},hex:{w:'#ffffff',b:'#444444'}},
-  dominos:{title:"DOMINOS 261",color:"#ffffff",max:4,colors:['p1','p2','p3','p4'],colorNames:{p1:'P1',p2:'P2',p3:'P3',p4:'P4'},hex:{p1:'#ffffff',p2:'#888',p3:'#444',p4:'#bbb'}}
+  dominos:{title:"DOMINOS 261",color:"#ffffff",max:4,colors:['p1','p2','p3','p4'],colorNames:{p1:'P1',p2:'P2',p3:'P3',p4:'P4'},hex:{p1:'#ffffff',p2:'#888',p3:'#444',p4:'#bbb'}},
+  billiard:{title:"BILLIARD 261",color:"#ffeb3b",max:2,colors:['p1','p2'],colorNames:{p1:'PLAYER 1',p2:'PLAYER 2'},hex:{p1:'#ffffff',p2:'#ff0055'}}
 };
 
 function openOfflineSetup(){
@@ -643,7 +824,8 @@ function createRoomLogic(roomType){
   if(activeGame==='snl'){ init.config={board:"default",snake:"default"}; init.state={turn:'red',dice:0,hasRolled:false,moving:false,winners:[]}; init.board={red:{pos:0}}; init.layoutIdx=Math.floor(Math.random()*snlLayouts.length); }
   if(activeGame==='ttt'){init.board=['','','','','','','','',''];init.turn='X';init.scores={X:0,O:0};}
   if(activeGame==='chess'){init.fen="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";init.turn='w';init.theme='c-theme-bw';}
-  if(activeGame==='dominos'){init.scores={};} // Will be built fully when Start is pressed
+  if(activeGame==='dominos'){init.scores={};} 
+  if(activeGame==='billiard'){init.state={p1Score:0,p2Score:0,turn:'p1',p1Type:null,p2Type:null,winners:[]};init.balls=initBilBalls();}
   database.ref(`${activeGame}_rooms/${roomCode}`).set(init).then(()=>{ database.ref(`${activeGame}_rooms/${roomCode}`).onDisconnect().remove(); enterLobbyUI(); });
 }
 
@@ -713,6 +895,7 @@ function routeToActiveGame(data){
   if(activeGame==='ttt') syncTTTOnline(data);
   if(activeGame==='chess') syncChessOnline(data);
   if(activeGame==='dominos') syncDominosOnline(data);
+  if(activeGame==='billiard') syncBilliardOnline(data);
 }
 
 function showEndLeaderboard(winnersList,namesMap,conf){
@@ -858,7 +1041,7 @@ function domRenderActionBar() {
   if (DG.over) { drawBtn.disabled = passBtn.disabled = true; info.textContent = 'MATCH OVER'; return; }
   let isMy = isOnline ? (DG.colors[p] === myColor) : (!DG.isBot[p]);
   if (!isMy) { info.innerHTML = `<span style="color:${DG.colors[p]}">${DG.names[p]}</span> THINKING...`; drawBtn.disabled = passBtn.disabled = true; }
-  else { info.innerHTML = `TURN: <strong style="color:${DG.colors[p]}">${DG.names[p]}</strong>`; const has = DG.hands[p].some(t => domCanPlay(t)); drawBtn.disabled = has || DG.boneyard.length === 0; passBtn.disabled = has; } // PASS is enabled if `has` is false, regardless of boneyard, allowing skip.
+  else { info.innerHTML = `TURN: <strong style="color:${DG.colors[p]}">${DG.names[p]}</strong>`; const has = DG.hands[p].some(t => domCanPlay(t)); drawBtn.disabled = has || DG.boneyard.length === 0; passBtn.disabled = has; } 
 }
 
 function domRender() { domRenderChips(); domRenderZones(); domRenderBoard(); domRenderActionBar(); }
@@ -917,7 +1100,6 @@ function syncDominosOnline(data) {
   } else if (document.getElementById('dom-s-game').classList.contains('active')) {
     domOnlineToDG(data); domRender();
     if(DG.over && !document.getElementById('dom-m-end').classList.contains('open')) {
-       // Restore endgame UI
        const res = Array.from({length:DG.n},(_,p)=>({name:DG.names[p],color:DG.colors[p],pip:domPipSum(DG.hands[p])})); res.sort((a,b) => a.pip - b.pip);
        document.getElementById('dom-me-title').textContent = 'MATCH OVER'; document.getElementById('dom-me-msg').textContent = "Pemenang telah ditentukan.";
        const rl = document.getElementById('dom-me-results'); rl.innerHTML = ''; res.forEach((r, i) => { const row = document.createElement('div'); row.className = 'dom-r-row'; row.innerHTML = `<span class="dom-r-rank">#${i+1}</span><span class="dom-r-name" style="color:${r.color}">${r.name}</span><span class="dom-r-pip">${r.pip} PIP</span>`; rl.appendChild(row); });
@@ -941,16 +1123,465 @@ function domOnlineToDG(data) {
 
 function syncDominosToFirebase(nextTurn = true) {
   let pCols = Object.keys(ludoPlayers).length > 0 ? Object.keys(ludoPlayers) : gameConfigs.dominos.colors.slice(0, DG.n);
-  // Reconstruct state
   let hands = {}; let scores = {};
   pCols.forEach((c, i) => { hands[c] = DG.hands[i]; scores[c] = DG.scores[i]; });
-  if(nextTurn && DG.hands[DG.cur].length === 0) { domEndGame(DG.cur); return; } // handle win
+  if(nextTurn && DG.hands[DG.cur].length === 0) { domEndGame(DG.cur); return; } 
   let turn = pCols[DG.cur];
   let state = { n: DG.n, pCols: pCols, hands: hands, boneyard: DG.boneyard, chain: DG.chain, leftEnd: DG.leftEnd, rightEnd: DG.rightEnd, lX: DG.lX, lY: DG.lY, rX: DG.rX, rY: DG.rY, lDir: DG.lDir, rDir: DG.rDir, turn: turn, passCount: DG.passCount, over: DG.over, scores: scores };
   database.ref(`dominos_rooms/${roomCode}/state`).update(state);
 }
 
 function domToast(msg) { const el = document.getElementById('dom-toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 2000); }
+
+// ============================================================
+// BILLIARD PRO (Arcade Embedded)
+// ============================================================
+let audioCtx = null;
+function initAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+function playSound(type, intensity = 1) {
+  if (!audioCtx) return;
+  const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  const now = audioCtx.currentTime; let vol = Math.min(intensity, 1) * 0.3; 
+  if (type === 'hit') {
+    osc.type = 'triangle'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
+    gain.gain.setValueAtTime(vol, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+    osc.start(now); osc.stop(now + 0.1);
+  } else if (type === 'clack') {
+    if (intensity < 0.2) return; 
+    osc.type = 'sine'; osc.frequency.setValueAtTime(1000 + Math.random()*300, now);
+    gain.gain.setValueAtTime(vol * 0.8, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+    osc.start(now); osc.stop(now + 0.05);
+  } else if (type === 'wall') {
+    if (intensity < 0.2) return;
+    osc.type = 'square'; osc.frequency.setValueAtTime(100, now);
+    gain.gain.setValueAtTime(vol * 0.4, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+    osc.start(now); osc.stop(now + 0.1);
+  } else if (type === 'pocket') {
+    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.3);
+    gain.gain.setValueAtTime(vol, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+    osc.start(now); osc.stop(now + 0.3);
+  }
+}
+
+function create3DBallDOM(b, size) {
+  const el = document.createElement('div');
+  el.style.width = size + 'px'; el.style.height = size + 'px';
+  el.style.borderRadius = '50%'; el.style.position = 'relative'; el.style.overflow = 'hidden';
+  el.style.display = 'flex'; el.style.justifyContent = 'center'; el.style.alignItems = 'center';
+  el.style.boxShadow = 'inset -3px -3px 6px rgba(0,0,0,0.7), inset 2px 2px 4px rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.5)';
+  
+  if (b.id === 0) { el.style.background = '#ffffff'; } 
+  else if (b.stripe) {
+    el.style.background = '#ffffff';
+    const stripe = document.createElement('div');
+    stripe.style.position = 'absolute'; stripe.style.width = '100%'; stripe.style.height = '46%';
+    stripe.style.top = '27%'; stripe.style.background = b.color; el.appendChild(stripe);
+  } else { el.style.background = b.color; }
+  
+  const hl = document.createElement('div');
+  hl.style.position = 'absolute'; hl.style.width = '35%'; hl.style.height = '35%';
+  hl.style.top = '12%'; hl.style.left = '18%'; hl.style.borderRadius = '50%';
+  hl.style.background = 'radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 70%)';
+  hl.style.zIndex = '2'; el.appendChild(hl);
+
+  if (b.id !== 0) {
+    const numBg = document.createElement('div');
+    numBg.style.width = (size * 0.45) + 'px'; numBg.style.height = (size * 0.45) + 'px';
+    numBg.style.background = '#ffffff'; numBg.style.borderRadius = '50%';
+    numBg.style.display = 'flex'; numBg.style.justifyContent = 'center'; numBg.style.alignItems = 'center';
+    numBg.style.zIndex = '3'; numBg.style.color = '#000000';
+    numBg.style.fontWeight = 'bold'; numBg.style.fontFamily = 'Arial'; numBg.style.fontSize = (size * 0.28) + 'px';
+    numBg.innerText = b.id; el.appendChild(numBg);
+  }
+  return el;
+}
+
+const TABLE_THEMES = [
+  { feltLight: '#333333', feltDark: '#111111', rail: '#ffffff', headString: 'rgba(255,255,255,0.2)', pocket: '#000000' },
+  { feltLight: '#0e5c31', feltDark: '#072b17', rail: '#cda46f', headString: 'rgba(255,255,255,0.3)', pocket: '#03140a' },
+  { feltLight: '#002244', feltDark: '#000a14', rail: '#00d2ff', headString: 'rgba(0,210,255,0.3)', pocket: '#000205' }
+];
+const STICK_THEMES = ['#ffeb3b', '#d4a373', '#00d2ff'];
+
+const bilCanvas = document.getElementById('bil-canvas');
+const bilCtx = bilCanvas.getContext('2d');
+const BIL_W = 400; const BIL_H = 800; 
+const BIL_R = 12; const BIL_FRIC = 0.985; const BIL_MIN_S = 0.08; const BIL_MAX_P = 22; const BIL_PR = 22;
+const BIL_POCKETS = [ {x: 18, y: 18}, {x: BIL_W-18, y: 18}, {x: 18, y: BIL_H/2}, {x: BIL_W-18, y: BIL_H/2}, {x: 18, y: BIL_H-18}, {x: BIL_W-18, y: BIL_H-18} ];
+const BIL_COLORS = ['#ffffff', '#f1c40f', '#2980b9', '#c0392b', '#8e44ad', '#d35400', '#27ae60', '#800000', '#111111', '#f1c40f', '#2980b9', '#c0392b', '#8e44ad', '#d35400', '#27ae60', '#800000'];
+
+let bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[] };
+let bilBalls = [];
+let bilMode = 'pvp'; 
+let bilTbl = 0, bilStk = 0;
+let bilShooting = false, bilMouseStart = null, bilMouseNow = null, bilMouseDown = false;
+let bilPrevPocketed = [], bilWait = 0, bilNames = {p1:'PLAYER 1', p2:'PLAYER 2'};
+let bilLastShotId = null;
+
+function toggleBilTheme() {
+  bilTbl = (bilTbl + 1) % 3; bilStk = (bilStk + 1) % 3;
+  document.getElementById('bil-rail').style.borderColor = TABLE_THEMES[bilTbl].rail;
+}
+
+function initBilBalls() {
+  let arr = [{ id: 0, x: BIL_W/2, y: BIL_H*0.75, vx: 0, vy: 0, r: BIL_R, color: '#ffffff', stripe: false, inTray: false }];
+  const rack = [8,1,9,2,10,3,11,4,12,5,13,6,14,7,15];
+  const startX = BIL_W/2; const startY = BIL_H*0.25; const sp = BIL_R*2.05;
+  let i = 0;
+  for (let row = 0; row < 5; row++) {
+    for (let col = 0; col <= row; col++) {
+      const bx = startX - row*sp*0.5 + col*sp; const by = startY - row*sp*Math.cos(Math.PI/6);
+      const num = rack[i++];
+      arr.push({ id: num, x: bx, y: by, vx: 0, vy: 0, r: BIL_R, color: BIL_COLORS[num], stripe: num >= 9, inTray: false });
+    }
+  }
+  return arr;
+}
+
+function startBilliardOffline() {
+  isOnline = false; activeGame = 'billiard';
+  bilMode = document.getElementById('bil-off-mode').value;
+  
+  // Ambil data tema dari dropdown di luar
+  let themeVal = document.getElementById('bil-theme');
+  bilTbl = themeVal ? parseInt(themeVal.value) : 0;
+  bilStk = bilTbl;
+  document.getElementById('bil-rail').style.borderColor = TABLE_THEMES[bilTbl].rail;
+
+  bilNames.p1 = myGlobalName; bilNames.p2 = bilMode === 'bot' ? 'BOT AI' : 'PLAYER 2';
+  document.getElementById('bil-name-p1').innerText = bilNames.p1;
+  document.getElementById('bil-name-p2').innerText = bilNames.p2;
+  document.getElementById('bil-name-p2').style.color = bilMode === 'bot' ? '#ff0055' : '#00d2ff';
+  
+  bilState = { p1Score:0, p2Score:0, turn:'p1', p1Type:null, p2Type:null, winners:[] };
+  bilBalls = initBilBalls(); bilShooting = false; bilWait = 0; bilPrevPocketed = [];
+  
+  updateBilUI();
+  showScreen('billiard-game-screen');
+}
+
+function syncBilliardOnline(data) {
+  if (document.getElementById('universal-lobby').classList.contains('active')) {
+    bilMode = 'online'; bilNames = data.players;
+    document.getElementById('bil-name-p1').innerText = bilNames.p1 || 'P1';
+    document.getElementById('bil-name-p2').innerText = bilNames.p2 || 'P2';
+    document.getElementById('bil-name-p2').style.color = '#ff0055';
+    bilState = data.state; bilBalls = data.balls; bilShooting = false;
+    updateBilUI(); showScreen('billiard-game-screen');
+  } else if (document.getElementById('billiard-game-screen').classList.contains('active')) {
+    let curP = Object.keys(data.players || {});
+    if(curP.length < 2 && !bilState.winners.length) { alert("Lawan kabur!"); leaveRoom(); return; }
+    
+    bilState = data.state;
+    
+    if(data.shot && data.shot.id !== bilLastShotId) {
+      bilLastShotId = data.shot.id;
+      if(bilState.turn !== myColor) { 
+         bilBalls[0].vx = data.shot.vx; bilBalls[0].vy = data.shot.vy;
+         playSound('hit', 1); bilShooting = true;
+      }
+    }
+    
+    if(!bilShooting && !data.state.moving) {
+      bilBalls = data.balls; updateBilUI();
+    }
+    
+    if(bilState.winners.length > 0) showEndLeaderboard(bilState.winners, bilNames, gameConfigs.billiard);
+  }
+}
+
+function updateBilUI() {
+  document.getElementById('bil-score-p1').innerText = bilState.p1Score;
+  document.getElementById('bil-score-p2').innerText = bilState.p2Score;
+  
+  let badge = document.getElementById('bil-turn-badge');
+  let isMy = isOnline ? (bilState.turn === myColor) : (bilState.turn === 'p1');
+  if(isMy) { badge.innerText = "GILIRAN LU"; badge.className = "bil-turn-badge"; }
+  else { badge.innerText = bilMode==='bot' ? "GILIRAN BOT" : "GILIRAN P2"; badge.className = "bil-turn-badge bot-turn"; }
+  
+  let p1T = bilState.p1Type ? bilState.p1Type.toUpperCase() : "Bebas";
+  let p2T = bilState.p2Type ? bilState.p2Type.toUpperCase() : "Bebas";
+  document.getElementById('bil-status-msg').innerText = `P1: ${p1T} | P2: ${p2T}`;
+
+  const pRack = document.getElementById('bil-rack-p1'); const bRack = document.getElementById('bil-rack-p2');
+  pRack.innerHTML = ''; bRack.innerHTML = '';
+  const p1B = bilState.p1Type === 'solid' ? [1,2,3,4,5,6,7] : bilState.p1Type === 'stripe' ? [9,10,11,12,13,14,15] : [];
+  const p2B = bilState.p2Type === 'solid' ? [1,2,3,4,5,6,7] : bilState.p2Type === 'stripe' ? [9,10,11,12,13,14,15] : [];
+
+  const pocketedBalls = bilBalls.filter(b => b.inTray && b.id !== 0 && b.id !== 8);
+  pocketedBalls.filter(b => p1B.includes(b.id)).forEach(b => pRack.appendChild(create3DBallDOM(b, 16)));
+  pocketedBalls.filter(b => p2B.includes(b.id)).forEach(b => bRack.appendChild(create3DBallDOM(b, 16)));
+}
+
+function bilAllStopped() { return bilBalls.every(b => b.inTray || (Math.abs(b.vx) < BIL_MIN_S && Math.abs(b.vy) < BIL_MIN_S)); }
+
+function bilStep() {
+  for (let b of bilBalls) {
+    if (b.inTray) continue;
+    b.x += b.vx; b.y += b.vy; b.vx *= BIL_FRIC; b.vy *= BIL_FRIC;
+    if (Math.abs(b.vx) < BIL_MIN_S) b.vx = 0; if (Math.abs(b.vy) < BIL_MIN_S) b.vy = 0;
+
+    if (b.x - b.r < 12) { b.x = b.r + 12; b.vx *= -0.8; playSound('wall', Math.abs(b.vx)); }
+    if (b.x + b.r > BIL_W-12) { b.x = BIL_W - b.r - 12; b.vx *= -0.8; playSound('wall', Math.abs(b.vx)); }
+    if (b.y - b.r < 12) { b.y = b.r + 12; b.vy *= -0.8; playSound('wall', Math.abs(b.vy)); }
+    if (b.y + b.r > BIL_H-12) { b.y = BIL_H - b.r - 12; b.vy *= -0.8; playSound('wall', Math.abs(b.vy)); }
+  }
+
+  for (let i = 0; i < bilBalls.length; i++) {
+    for (let j = i+1; j < bilBalls.length; j++) {
+      const a = bilBalls[i], b = bilBalls[j];
+      if (a.inTray || b.inTray) continue;
+      const dx = b.x - a.x, dy = b.y - a.y, dist = Math.sqrt(dx*dx + dy*dy), minD = a.r + b.r;
+      if (dist < minD && dist > 0) {
+        const nx = dx/dist, ny = dy/dist, overlap = minD - dist;
+        a.x -= nx*overlap/2; a.y -= ny*overlap/2; b.x += nx*overlap/2; b.y += ny*overlap/2;
+        const dvx = a.vx - b.vx, dvy = a.vy - b.vy, dot = dvx*nx + dvy*ny;
+        if (dot > 0) { playSound('clack', dot); a.vx -= dot*nx; a.vy -= dot*ny; b.vx += dot*nx; b.vy += dot*ny; }
+      }
+    }
+  }
+
+  for (let b of bilBalls) {
+    if (b.inTray) continue;
+    for (let p of BIL_POCKETS) {
+      if (Math.sqrt((b.x - p.x)**2 + (b.y - p.y)**2) < BIL_PR) {
+        b.inTray = true; b.vx = 0; b.vy = 0; playSound('pocket', 1);
+        if(b.id !== 0) {
+           let popup = document.createElement('div'); popup.className = 'ball-popup-container'; popup.appendChild(create3DBallDOM(b, 40));
+           popup.style.left = (bilState.turn === 'p1' ? '20%' : '80%'); popup.style.top = '120px';
+           document.getElementById('billiard-game-screen').appendChild(popup); setTimeout(()=>popup.remove(),1500);
+        }
+      }
+    }
+  }
+}
+
+function bilDraw() {
+  bilCtx.clearRect(0, 0, BIL_W, BIL_H);
+  let thm = TABLE_THEMES[bilTbl];
+  
+  let bgGrad = bilCtx.createRadialGradient(BIL_W/2, BIL_H/2, 10, BIL_W/2, BIL_H/2, BIL_H*0.8);
+  bgGrad.addColorStop(0, thm.feltLight); bgGrad.addColorStop(1, thm.feltDark);
+  bilCtx.fillStyle = bgGrad; bilCtx.fillRect(0, 0, BIL_W, BIL_H);
+  bilCtx.strokeStyle = thm.rail; bilCtx.lineWidth = 4; bilCtx.strokeRect(10, 10, BIL_W-20, BIL_H-20);
+
+  bilCtx.save(); bilCtx.translate(BIL_W/2, BIL_H/2); bilCtx.fillStyle = thm.headString; 
+  bilCtx.font = 'bold 45px Orbitron'; bilCtx.textAlign = 'center'; bilCtx.textBaseline = 'middle'; bilCtx.fillText('261', 0, -15);
+  bilCtx.font = 'bold 22px Orbitron'; bilCtx.fillText('AREA', 0, 18); bilCtx.restore();
+
+  bilCtx.strokeStyle = thm.headString; bilCtx.lineWidth = 2; bilCtx.beginPath(); bilCtx.moveTo(10, BIL_H*0.75); bilCtx.lineTo(BIL_W-10, BIL_H*0.75); bilCtx.stroke();
+  for (let p of BIL_POCKETS) { bilCtx.beginPath(); bilCtx.arc(p.x, p.y, BIL_PR, 0, Math.PI*2); bilCtx.fillStyle = thm.pocket; bilCtx.fill(); bilCtx.strokeStyle = thm.rail; bilCtx.lineWidth = 2; bilCtx.stroke(); }
+
+  let isMyTurn = isOnline ? (bilState.turn === myColor) : (bilMode==='pvp' || bilState.turn === 'p1');
+  if (bilMouseDown && bilMouseStart && bilMouseNow && isMyTurn && !bilShooting) {
+    const cue = bilBalls[0]; 
+    if (cue && !cue.inTray) {
+      const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist >= 5) {
+        const nx = dx/dist, ny = dy/dist, power = Math.min(dist / 4, BIL_MAX_P);
+        document.getElementById('bil-power-bar').style.width = ((power/BIL_MAX_P)*100) + '%';
+        bilCtx.save(); bilCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; bilCtx.lineWidth = 1.5; bilCtx.setLineDash([6, 6]); bilCtx.beginPath(); bilCtx.moveTo(cue.x, cue.y);
+        let tx = cue.x, ty = cue.y, tvx = nx * power * 0.6, tvy = ny * power * 0.6;
+        for (let i = 0; i < 40; i++) {
+          tx += tvx; ty += tvy;
+          if (tx < BIL_R+12) { tx = BIL_R+12; tvx *= -1; } if (tx > BIL_W-(BIL_R+12)) { tx = BIL_W-(BIL_R+12); tvx *= -1; }
+          if (ty < BIL_R+12) { ty = BIL_R+12; tvy *= -1; } if (ty > BIL_H-(BIL_R+12)) { ty = BIL_H-(BIL_R+12); tvy *= -1; }
+          bilCtx.lineTo(tx, ty);
+        }
+        bilCtx.stroke(); bilCtx.setLineDash([]);
+        const stickLen = 100 + power * 3; bilCtx.strokeStyle = STICK_THEMES[bilStk]; bilCtx.lineWidth = 4; bilCtx.lineCap = 'round';
+        bilCtx.beginPath(); bilCtx.moveTo(cue.x + nx * (BIL_R + 10), cue.y + ny * (BIL_R + 10)); bilCtx.lineTo(cue.x + nx * (BIL_R + stickLen), cue.y + ny * (BIL_R + stickLen)); bilCtx.stroke(); bilCtx.restore();
+      } else { document.getElementById('bil-power-bar').style.width = '0%'; }
+    }
+  }
+
+  for (let b of bilBalls) {
+    if (b.inTray) continue;
+    bilCtx.beginPath(); bilCtx.arc(b.x+3, b.y+3, b.r, 0, Math.PI*2); bilCtx.fillStyle = 'rgba(0,0,0,0.6)'; bilCtx.fill();
+    bilCtx.save(); bilCtx.beginPath(); bilCtx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+    if (b.id === 0) { bilCtx.fillStyle = '#ffffff'; bilCtx.fill(); const grad = bilCtx.createRadialGradient(b.x-b.r*0.3, b.y-b.r*0.3, b.r*0.1, b.x, b.y, b.r); grad.addColorStop(0, '#ffffff'); grad.addColorStop(1, '#cccccc'); bilCtx.fillStyle = grad; bilCtx.fill(); } 
+    else {
+      if (b.stripe) { bilCtx.fillStyle = '#ffffff'; bilCtx.fill(); bilCtx.save(); bilCtx.beginPath(); bilCtx.arc(b.x, b.y, b.r, 0, Math.PI*2); bilCtx.clip(); bilCtx.fillStyle = b.color; bilCtx.fillRect(b.x - b.r, b.y - b.r*0.45, b.r*2, b.r*0.9); bilCtx.restore(); } else { bilCtx.fillStyle = b.color; bilCtx.fill(); }
+      const grad = bilCtx.createRadialGradient(b.x-b.r*0.3, b.y-b.r*0.3, b.r*0.1, b.x, b.y, b.r); grad.addColorStop(0, 'rgba(255,255,255,0.4)'); grad.addColorStop(1, 'rgba(0,0,0,0.4)'); bilCtx.fillStyle = grad; bilCtx.fill();
+      bilCtx.beginPath(); bilCtx.arc(b.x, b.y, b.r*0.45, 0, Math.PI*2); bilCtx.fillStyle = '#ffffff'; bilCtx.fill(); bilCtx.fillStyle = '#000000'; bilCtx.font = `bold ${b.r*0.55}px Arial`; bilCtx.textAlign = 'center'; bilCtx.textBaseline = 'middle'; bilCtx.fillText(b.id, b.x, b.y+1);
+    }
+    bilCtx.restore();
+  }
+}
+
+function bilOnShotComplete() {
+  const cueBall = bilBalls[0];
+  const nowPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
+  const newlyPocketed = nowPocketed.filter(id => !bilPrevPocketed.includes(id));
+  bilPrevPocketed = [...nowPocketed];
+
+  if (cueBall && cueBall.inTray) {
+    cueBall.inTray = false; cueBall.x = BIL_W / 2; cueBall.y = BIL_H * 0.75; cueBall.vx = 0; cueBall.vy = 0;
+    bilState.turn = bilState.turn === 'p1' ? 'p2' : 'p1';
+    bilUpdateStateAfterShot(); return;
+  }
+
+  if (!bilState.p1Type && newlyPocketed.length > 0 && !newlyPocketed.includes(8)) {
+    const firstId = newlyPocketed[0];
+    if (bilState.turn === 'p1') { bilState.p1Type = firstId <= 7 ? 'solid' : 'stripe'; bilState.p2Type = bilState.p1Type === 'solid' ? 'stripe' : 'solid'; } 
+    else { bilState.p2Type = firstId <= 7 ? 'solid' : 'stripe'; bilState.p1Type = bilState.p2Type === 'solid' ? 'stripe' : 'solid'; }
+  }
+
+  // FIX BUG BOLA 8: Cek apakah masih ada bola yang harus dimasukkan
+  if (newlyPocketed.includes(8)) {
+    let myType = bilState.turn === 'p1' ? bilState.p1Type : bilState.p2Type;
+    let isLoss = false;
+    
+    // Kalah jika masukin bola hitam tapi jenis bola belum ditentuin, ATAU bolanya masih sisa
+    if (!myType) {
+      isLoss = true; 
+    } else {
+      let myTArr = myType === 'solid' ? [1,2,3,4,5,6,7] : [9,10,11,12,13,14,15];
+      let remain = myTArr.filter(id => !bilBalls.find(b => b.id === id && b.inTray)).length;
+      if (remain > 0) isLoss = true;
+    }
+
+    if (isLoss) {
+      // Lawan yang menang (Kamu foul/kalah)
+      bilState.winners = [bilState.turn==='p1'?'p2':'p1', bilState.turn]; 
+    } else {
+      // Kamu yang menang (Clear)
+      bilState.winners = [bilState.turn, bilState.turn==='p1'?'p2':'p1']; 
+    }
+    bilUpdateStateAfterShot(); return;
+  }
+
+  let myType = bilState.turn === 'p1' ? bilState.p1Type : bilState.p2Type;
+  let myTArr = myType === 'solid' ? [1,2,3,4,5,6,7] : [9,10,11,12,13,14,15];
+  const gotOne = newlyPocketed.some(id => myTArr.includes(id)) || (!bilState.p1Type && newlyPocketed.length > 0);
+
+  let p1TArr = bilState.p1Type === 'solid' ? [1,2,3,4,5,6,7] : bilState.p1Type === 'stripe' ? [9,10,11,12,13,14,15] : [];
+  let p2TArr = bilState.p2Type === 'solid' ? [1,2,3,4,5,6,7] : bilState.p2Type === 'stripe' ? [9,10,11,12,13,14,15] : [];
+  bilState.p1Score = bilBalls.filter(b => b.inTray && p1TArr.includes(b.id)).length;
+  bilState.p2Score = bilBalls.filter(b => b.inTray && p2TArr.includes(b.id)).length;
+
+  if (!gotOne || newlyPocketed.length === 0) bilState.turn = bilState.turn === 'p1' ? 'p2' : 'p1';
+  bilUpdateStateAfterShot();
+}
+
+function bilUpdateStateAfterShot() {
+  document.getElementById('bil-power-bar').style.width = '0%';
+  updateBilUI();
+  
+  if (isOnline && (bilState.turn !== myColor || bilState.winners.length > 0)) {
+     database.ref(`billiard_rooms/${roomCode}`).update({ balls: bilBalls, state: bilState });
+  }
+
+  if (bilState.winners.length > 0) {
+    if(isOnline) showEndLeaderboard(bilState.winners, bilNames, gameConfigs.billiard);
+    else showEndLeaderboard(bilState.winners, bilNames, gameConfigs.billiard);
+  } else if (!isOnline && bilMode === 'bot' && bilState.turn === 'p2') {
+    setTimeout(bilBotShoot, 1000);
+  }
+}
+
+function bilBotShoot() {
+  if (bilState.winners.length > 0) return;
+  const cueBall = bilBalls[0]; 
+  let myTArr = bilState.p2Type === 'solid' ? [1,2,3,4,5,6,7] : bilState.p2Type === 'stripe' ? [9,10,11,12,13,14,15] : [];
+  const remaining = bilBalls.filter(b => !b.inTray && myTArr.includes(b.id));
+  const targets = remaining.length > 0 ? remaining : bilBalls.filter(b => !b.inTray && b.id !== 0 && b.id !== 8);
+  if(targets.length === 0) targets.push(bilBalls.find(b=>b.id===8)); 
+
+  let bestShot = null, bestScore = -Infinity;
+  for (let target of targets) {
+    for (let pocket of BIL_POCKETS) {
+      const tpDx = pocket.x - target.x, tpDy = pocket.y - target.y, tpDist = Math.sqrt(tpDx*tpDx + tpDy*tpDy); if (tpDist < 1) continue;
+      const tpNx = tpDx/tpDist, tpNy = tpDy/tpDist, aimX = target.x - tpNx * BIL_R * 2.05, aimY = target.y - tpNy * BIL_R * 2.05;
+      const caDx = aimX - cueBall.x, caDy = aimY - cueBall.y, caDist = Math.sqrt(caDx*caDx + caDy*caDy); if (caDist < 1) continue;
+
+      if (bilBalls.some(ob => {
+        if (ob.inTray || ob.id === target.id || ob.id === 0) return false;
+        const t2 = ((ob.x - cueBall.x)*caDx + (ob.y - cueBall.y)*caDy) / (caDist*caDist); if (t2 < 0 || t2 > 1) return false;
+        return Math.sqrt((ob.x-(cueBall.x + t2*caDx))**2+(ob.y-(cueBall.y + t2*caDy))**2) < BIL_R * 2.1;
+      })) continue;
+
+      const score = 1000 / (caDist + 1) + 1000 / (tpDist + 1);
+      if (score > bestScore) { bestScore = score; const power = Math.min(Math.max(caDist / 12 + tpDist / 15 + 6, 8), BIL_MAX_P - 2); bestShot = { vx: (caDx/caDist)*power, vy: (caDy/caDist)*power }; }
+    }
+  }
+
+  if (!bestShot) { const angle = Math.random() * Math.PI * 2; bestShot = { vx: Math.cos(angle)*12, vy: Math.sin(angle)*12 }; } 
+  else { bestShot.vx += (Math.random()-0.5)*0.15; bestShot.vy += (Math.random()-0.5)*0.15; }
+
+  setTimeout(() => {
+    if(bilState.winners.length > 0) return;
+    bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
+    cueBall.vx = bestShot.vx; cueBall.vy = bestShot.vy; playSound('hit', 1); bilShooting = true;
+  }, 800);
+}
+
+// Input Handlers
+function bilGetMousePos(evt) {
+  const rect = bilCanvas.getBoundingClientRect(); let clientX = evt.clientX, clientY = evt.clientY;
+  if (evt.touches && evt.touches.length > 0) { clientX = evt.touches[0].clientX; clientY = evt.touches[0].clientY; }
+  return { x: (clientX - rect.left) * (BIL_W / rect.width), y: (clientY - rect.top) * (BIL_H / rect.height) };
+}
+bilCanvas.addEventListener('mousedown', e => { initAudio(); if((!isOnline && bilMode === 'bot' && bilState.turn==='p2') || bilShooting || bilState.winners.length) return; if(isOnline && bilState.turn !== myColor) return; bilMouseDown = true; bilMouseStart = bilGetMousePos(e); bilMouseNow = { ...bilMouseStart }; });
+window.addEventListener('mousemove', e => { if (bilMouseDown) bilMouseNow = bilGetMousePos(e); });
+window.addEventListener('mouseup', e => {
+  if (!bilMouseDown || bilShooting || bilState.winners.length) return; bilMouseDown = false; const cue = bilBalls[0]; if (!cue || cue.inTray) return;
+  const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist < 10) { bilMouseStart = null; return; }
+  const power = Math.min(dist / 4, BIL_MAX_P); bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
+  const vx = (dx/dist) * power; const vy = (dy/dist) * power;
+  
+  if(isOnline) {
+    let shotId = Math.random().toString(36).substr(2, 9); bilLastShotId = shotId;
+    database.ref(`billiard_rooms/${roomCode}/shot`).set({ vx, vy, id: shotId });
+    database.ref(`billiard_rooms/${roomCode}/state/moving`).set(true);
+  }
+  
+  cue.vx = vx; cue.vy = vy; playSound('hit', power/BIL_MAX_P); bilShooting = true; bilMouseStart = null; document.getElementById('bil-power-bar').style.width = '0%';
+});
+
+bilCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); initAudio(); if((!isOnline && bilMode === 'bot' && bilState.turn==='p2') || bilShooting || bilState.winners.length) return; if(isOnline && bilState.turn !== myColor) return; bilMouseDown = true; bilMouseStart = bilGetMousePos(e); bilMouseNow = { ...bilMouseStart }; }, { passive: false });
+window.addEventListener('touchmove', (e) => { if(bilMouseDown && e.target === bilCanvas) e.preventDefault(); if (bilMouseDown) bilMouseNow = bilGetMousePos(e); }, { passive: false });
+window.addEventListener('touchend', e => {
+  if (!bilMouseDown || bilShooting || bilState.winners.length) return; bilMouseDown = false; const cue = bilBalls[0]; if (!cue || cue.inTray) return;
+  const dx = bilMouseStart.x - bilMouseNow.x, dy = bilMouseStart.y - bilMouseNow.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist < 10) { bilMouseStart = null; return; }
+  const power = Math.min(dist / 4, BIL_MAX_P); bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
+  const vx = (dx/dist) * power; const vy = (dy/dist) * power;
+  
+  if(isOnline) {
+    let shotId = Math.random().toString(36).substr(2, 9); bilLastShotId = shotId;
+    database.ref(`billiard_rooms/${roomCode}/shot`).set({ vx, vy, id: shotId });
+    database.ref(`billiard_rooms/${roomCode}/state/moving`).set(true);
+  }
+
+  cue.vx = vx; cue.vy = vy; playSound('hit', power/BIL_MAX_P); bilShooting = true; bilMouseStart = null; document.getElementById('bil-power-bar').style.width = '0%';
+});
+
+// MAIN LOOP ARCADE UNIVERSE
+function mainLoop() {
+  if (activeGame === 'billiard' && document.getElementById('billiard-game-screen').classList.contains('active')) {
+    if (!bilState.winners.length) {
+      const wasMoving = !bilAllStopped();
+      if (bilShooting || wasMoving) {
+        bilStep();
+        if (bilAllStopped() && bilShooting) { bilShooting = false; bilWait = 20; }
+      }
+      if (bilWait > 0) {
+        bilWait--;
+        if (bilWait === 0) bilOnShotComplete();
+      }
+    }
+    bilDraw();
+  }
+  requestAnimationFrame(mainLoop);
+}
+
+// Menjalankan loop agar canvas langsung kerender
+mainLoop();
+
 </script>
 </body>
-</html>
+  </html>
