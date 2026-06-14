@@ -931,16 +931,7 @@
 </div>
 
 <!-- TOMBOL FLOATING CHAT TRANSPARAN -->
-<button id="btn-quick-chat" style="display:none; position:fixed; bottom:20px; left:20px; width:55px; height:55px; border-radius:50%; background:rgba(0, 210, 255, 0.15); color:#fff; border:1px solid rgba(0, 210, 255, 0.5); font-size:24px; z-index:99990; cursor:pointer; box-shadow:0 8px 32px rgba(0,0,0,0.5); padding:0; align-items:center; justify-content:center; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);" onclick="document.getElementById('quick-chat-modal').style.display='flex'">💬</button>
-
-<!-- MODAL QUICK CHAT KACA TRANSPARAN -->
 <div class="dom-overlay" id="quick-chat-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);">
-  <div class="dom-modal" style="background:rgba(20, 20, 20, 0.4); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(0, 210, 255, 0.3); width:95%; max-width:450px; padding:25px 15px; border-radius:16px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.6);">
-    <h2 style="color:#00d2ff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:2px; text-shadow:0 0 10px rgba(0,210,255,0.4);">QUICK CHAT</h2>
-    
-    <div style="display:flex; gap:12px;">
-      
-      <div class="dom-overlay" id="quick-chat-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);">
   <div class="dom-modal" style="background:rgba(20, 20, 20, 0.25); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(255, 255, 255, 0.15); width:95%; max-width:450px; padding:25px 15px; border-radius:16px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
     <h2 style="color:#00d2ff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:2px; text-shadow:0 2px 5px rgba(0,0,0,0.5);">QUICK CHAT</h2>
     
@@ -976,14 +967,17 @@
   </div>
 </div>
 
+<!-- MODAL PENGATURAN (SUPER TRANSPARAN & ESTETIK) -->
 <div class="dom-overlay" id="settings-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);">
   <div class="dom-modal" style="background:rgba(20, 20, 20, 0.25); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(255, 255, 255, 0.15); width:90%; max-width:350px; padding:25px 20px; border-radius:16px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
-    <h2 style="color:#fff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:3px; text-shadow:0 2px 5px rgba(0,0,0,0.5);">⚙️ PENGATURAN</h2>
+    <h2 style="color:#fff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:3px; text-shadow:0 2px 5px rgba(0,0,0,0.5);"> PENGATURAN</h2>
 
+    <!-- Ganti Nickname -->
     <div style="text-align:left; margin-bottom:15px;">
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">NICKNAME:</p>
       <input type="text" id="setting-nickname" class="game-input-name" style="width:100%; margin-bottom:15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:8px; box-shadow:inset 0 2px 4px rgba(0,0,0,0.3); padding:10px; color:#fff;" placeholder="NAMA LU...">
 
+      <!-- Ganti Avatar -->
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">PILIH AVATAR:</p>
       <div class="avatar-container" id="setting-avatar-selector" style="margin-bottom:0; justify-content:flex-start; gap:8px;">
         <img class="avatar-item" src="AVATAR1.jpg" onclick="selectAvatar(this, 'AVATAR1.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
@@ -995,20 +989,16 @@
 
     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
 
+    <!-- Pengaturan Audio -->
     <div style="text-align:left; margin-bottom:20px;">
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:10px; letter-spacing:1px;">VOLUME MUSIK:</p>
       <input type="range" id="setting-volume" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)" style="width:100%; margin-bottom:15px; cursor:pointer; accent-color:#00d2ff;">
       
-      <button class="game-btn" id="btn-mute" style="width:100%; margin:0; font-size:12px; border:1px solid rgba(0,210,255,0.4); background:rgba(0,210,255,0.05); color:#00d2ff; border-radius:8px; box-shadow:none;" onclick="toggleMute()">🔊 BERSUARA</button>
+      <button class="game-btn" id="btn-mute" style="width:100%; margin:0; font-size:12px; border:1px solid rgba(0,210,255,0.4); background:rgba(0,210,255,0.05); color:#00d2ff; border-radius:8px; box-shadow:none;" onclick="toggleMute()"> BERSUARA</button>
     </div>
 
     <button class="game-btn" style="margin-top:10px; width:100%; border:1px solid rgba(46,213,115,0.4); background:rgba(46,213,115,0.1); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="saveSettings()">SIMPAN & TUTUP</button>
   </div>
-</div>
-
-<div id="in-game-avatar-hud" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(20,20,20,0.45); border:1px solid rgba(255,255,255,0.15); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); padding:6px 15px 6px 6px; border-radius:40px; align-items:center; gap:12px; z-index:99000; box-shadow:0 8px 32px rgba(0,0,0,0.5); pointer-events:none;">
-  <img id="hud-avatar" src="" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid #00d2ff; box-shadow:0 0 10px rgba(0,210,255,0.4);">
-  <span id="hud-name" style="color:#fff; font-family:'Orbitron', sans-serif; font-size:12px; font-weight:bold; letter-spacing:1px; text-transform:uppercase; text-shadow:0 2px 4px rgba(0,0,0,0.8);">PLAYER</span>
 </div>
 
 </div>
@@ -2436,4 +2426,4 @@ function playLocalAudio(inputElement) {
 
 </script>
 </body>
-  </html>
+                                                                                                                                                                                                                   </html>
