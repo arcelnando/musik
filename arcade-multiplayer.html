@@ -303,6 +303,117 @@
         background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px) !important; 
         background-size: 28px 28px !important; 
     }
+    
+    /* ===== QUICKCHAT & AVATAR SYSTEM ===== */
+#qc-avatar-modal, #qc-chat-modal {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85); z-index: 50000;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+#qc-avatar-modal.open, #qc-chat-modal.open { display: flex; }
+
+.qc-modal-box {
+  background: #111; border: 2px solid #fff;
+  padding: 20px; width: 90%; max-width: 360px;
+  border-radius: 12px; text-align: center;
+  box-shadow: 8px 8px 0 rgba(255,255,255,0.05);
+  animation: qcIn 0.18s ease forwards;
+}
+@keyframes qcIn {
+  from { opacity:0; transform: translateY(14px) scale(0.96); }
+  to   { opacity:1; transform: none; }
+}
+.qc-modal-box h3 {
+  font-family: 'Orbitron', sans-serif; font-size: 13px;
+  letter-spacing: 3px; color: #fff; margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+/* AVATAR GRID */
+.qc-avatar-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 10px; margin-bottom: 16px;
+}
+.qc-av-item {
+  border: 3px solid #333; border-radius: 50%;
+  overflow: hidden; cursor: pointer;
+  aspect-ratio: 1; transition: 0.15s;
+}
+.qc-av-item img { width: 100%; height: 100%; object-fit: cover; }
+.qc-av-item:hover, .qc-av-item.selected { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+
+/* QUICKCHAT BUTTONS */
+.qc-section-label {
+  font-family: 'Teko', sans-serif; font-size: 13px;
+  letter-spacing: 3px; color: #555; margin: 10px 0 6px;
+  text-align: left; text-transform: uppercase;
+}
+.qc-btn-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px; margin-bottom: 10px;
+}
+.qc-btn {
+  background: #1a1a1a; border: 1px solid #333; color: #ccc;
+  padding: 8px 6px; font-family: 'Teko', sans-serif;
+  font-size: 15px; letter-spacing: 0.5px; cursor: pointer;
+  border-radius: 6px; transition: 0.1s; text-align: center;
+}
+.qc-btn:hover { background: #fff; color: #000; border-color: #fff; }
+.qc-btn.taunt { color: #ff4757; border-color: #3a1015; }
+.qc-btn.taunt:hover { background: #ff4757; color: #fff; }
+.qc-btn.praise { color: #2ed573; border-color: #0d3a1f; }
+.qc-btn.praise:hover { background: #2ed573; color: #000; }
+
+/* FLOATING CHAT BUBBLE */
+.qc-bubble {
+  position: fixed; z-index: 49000;
+  max-width: 220px; padding: 10px 14px;
+  background: rgba(20,20,20,0.96);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 14px; font-family: 'Teko', sans-serif;
+  font-size: 16px; letter-spacing: 0.5px; color: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+  display: flex; align-items: center; gap: 10px;
+  animation: bubbleIn 0.3s cubic-bezier(0.34,1.4,0.64,1) forwards;
+  pointer-events: none;
+}
+@keyframes bubbleIn {
+  from { opacity:0; transform: translateY(8px) scale(0.9); }
+  to   { opacity:1; transform: none; }
+}
+.qc-bubble img {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid #fff; object-fit: cover; flex-shrink: 0;
+}
+.qc-bubble .qc-btext { display: flex; flex-direction: column; }
+.qc-bubble .qc-bname { font-size: 11px; color: #888; font-family: 'Orbitron'; letter-spacing: 1px; }
+.qc-bubble .qc-bmsg { font-size: 16px; color: #fff; }
+.qc-bubble.taunt-bubble { border-color: rgba(255,71,87,0.6); }
+.qc-bubble.taunt-bubble .qc-bmsg { color: #ff6b81; }
+.qc-bubble.praise-bubble { border-color: rgba(46,213,115,0.6); }
+.qc-bubble.praise-bubble .qc-bmsg { color: #7bed9f; }
+
+/* TOMBOL BUKA QUICKCHAT (floating di game) */
+#qc-trigger-btn {
+  position: fixed; bottom: 80px; right: 16px;
+  background: #111; border: 2px solid #fff;
+  color: #fff; width: 52px; height: 52px;
+  border-radius: 50%; font-size: 22px;
+  cursor: pointer; z-index: 40000;
+  display: none; /* ditampilkan saat online game aktif */
+  align-items: center; justify-content: center;
+  box-shadow: 3px 3px 0 rgba(255,255,255,0.15);
+  transition: 0.1s;
+}
+#qc-trigger-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(255,255,255,0.1); }
+
+/* AVATAR DISPLAY DI HUD */
+.qc-av-hud {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid #fff; object-fit: cover;
+  cursor: pointer; flex-shrink: 0;
+}
   </style>
 </head>
 <body class="arcade-theme">
@@ -319,8 +430,7 @@
     <div id="main-hub-menu" class="game-screen active">
       <h1 class="game-h1" style="font-size:3rem;">261 AREA</h1>
       <p class="game-subtitle">MULTIPLAYER ARCADE SERVER</p>
-      <input type="text" id="global-nickname" class="game-input-name" placeholder="NICKNAME LU" style="margin-bottom:30px;">
-      
+
       <div class="game-cards-container">
         <div class="game-card" onclick="myGlobalName=checkNameAuth(); if(myGlobalName){ activeGame='ludo'; showScreen('ludo-hub'); }" style="border-color:#ff4757;color:#ff4757;"><span class="game-icon-emoji">⚄</span><div class="game-card-title">LUDO WARS</div></div>
         <div class="game-card" onclick="myGlobalName=checkNameAuth(); if(myGlobalName){ activeGame='snl'; showScreen('snl-hub'); }" style="border-color:#2ed573;color:#2ed573;"><span class="game-icon-emoji">𓆗</span><div class="game-card-title">ULAR TANGGA</div></div>
@@ -331,11 +441,16 @@
       </div>
       <p class="dev-tag">𝟒𝐍𝐓𝟏𝐃𝟎𝟔𝟔𝟔𝐌𝟒</p>
       
-      <!-- Tombol Buka Playlist -->
-      <button class="game-btn" style="font-size:12px; padding:8px 15px; margin-top:10px; width:auto; border-color:#00d2ff; color:#00d2ff;" onclick="document.getElementById('playlist-modal').style.display='flex'">
+            <!-- Tombol Buka Playlist -->
+      <button class="game-btn" style="font-size:12px; padding:8px 15px; margin-top:10px; width:auto; border-color:#00d2ff; color:#00d2ff;" onclick="document.getElementById('floating-playlist').style.display='flex'">
         BUKA PLAYLIST
       </button>
-    </div>
+
+      <!-- TOMBOL PENGATURAN AKUN (DIPINDAH KESINI) -->
+      <button class="game-btn" style="font-size:12px; padding:8px 15px; margin-top:10px; width:auto; border-color:#aaa; color:#aaa;" onclick="openSettings()">
+         PENGATURAN AKUN
+      </button>
+      </div>
 
     <div id="ludo-hub" class="game-screen">
       <div class="bg-anim-layer">
@@ -442,7 +557,6 @@
       <button class="game-btn" onclick="showScreen('dom-hub')" style="border-color:#888;color:#888;">KEMBALI</button>
     </div>
 
-    <!-- BILLIARD HUB & RULES -->
     <div id="billiard-hub" class="game-screen">
       <div class="bg-anim-layer">
         <span class="float-icon bil-glow" style="left:15%; animation-delay: 0s; font-size:90px;">⚈</span>
@@ -460,7 +574,6 @@
       <input type="text" id="private-room-code-billiard" class="game-input-name" placeholder="KODE ROOM" style="margin-top:10px;width:80%;max-width:300px;margin-bottom:0;" oninput="document.getElementById('private-room-code').value = this.value">
       <button class="game-btn" style="border-color:#555;color:#555;margin-top:20px;" onclick="showScreen('main-hub-menu')">KEMBALI</button>
     </div>
-
     <div id="billiard-rules" class="game-screen">
       <div class="rules-card" style="border-color:#ffeb3b;">
         <h2>ATURAN BILLIARD 261</h2>
@@ -497,6 +610,15 @@
         <h2 id="lobby-title" style="margin-top:0;margin-bottom:5px;">ROOM LOBBY</h2>
         <h1 id="lobby-code-display" style="color:#ffeb3b;letter-spacing:5px;margin-bottom:20px;">SERVER</h1>
         <div id="lobby-options-area" style="display:none;text-align:left;margin-bottom:15px;background:#111;padding:10px;border-radius:8px;border:2px solid #444;"></div>
+        
+        <div class="chat-box" id="lobby-chat-box" style="display:none;">
+          <div class="chat-messages" id="lobby-chat-msgs"></div>
+          <div class="chat-input-area">
+            <input type="text" id="lobby-chat-input" class="chat-input" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter') sendLobbyChat()">
+            <button class="chat-send-btn" onclick="sendLobbyChat()">KIRIM</button>
+          </div>
+        </div>
+        
         <div class="lobby-player-list" id="lobby-players-list"></div>
         <p id="lobby-status-msg" style="font-family:'Teko';font-size:18px;color:#aaa;margin-bottom:15px;">Menunggu pemain lain...</p>
         <button id="btn-start-game" class="game-btn" style="width:100%;border-color:#0f0;color:#0f0;display:none;" onclick="startGameHost()">START GAME</button>
@@ -513,10 +635,13 @@
       </div>
     </div>
 
-    <!-- OFFLINE SETUPS -->
     <div id="ludo-offline-setup" class="game-screen">
       <div class="overlay-box">
         <h2 style="color:#ff4757;margin-top:0;margin-bottom:10px;">LUDO LOKAL</h2>
+        <select id="ludo-theme-board" class="ludo-dropdown" style="border-color:#fff;margin-bottom:15px;">
+          <option value="default">Papan Default</option>
+          <option value="pink">Papan Pink</option>
+        </select>
         <select id="ludo-off-red" class="ludo-dropdown"><option value="human">P1 (MERAH) - Pemain</option><option value="ai">P1 - Bot AI</option></select>
         <select id="ludo-off-blue" class="ludo-dropdown"><option value="human">P2 (BIRU) - Pemain</option><option value="ai">P2 - Bot AI</option><option value="none">Kosong</option></select>
         <select id="ludo-off-green" class="ludo-dropdown"><option value="ai">P3 (HIJAU) - Bot AI</option><option value="human">P3 - Pemain</option><option value="none">Kosong</option></select>
@@ -595,7 +720,6 @@
       </div>
     </div>
 
-    <!-- IN-GAME SCREENS -->
     <div id="ludo-game-screen" class="game-screen">
       <div class="ludo-top-panel">
         <div class="ludo-info-box"><div id="ludo-turn-info" style="color:#ff4757;">MERAH</div><div id="ludo-log-msg">Bersiap...</div></div>
@@ -699,7 +823,6 @@
   </div>
 </div>
 
-<!-- MODAL OVERLAYS -->
 <div class="dom-overlay" id="dom-m-end">
   <div class="dom-modal">
     <h2 id="dom-me-title">MATCH OVER</h2>
@@ -725,7 +848,6 @@
 <div id="dom-toast"></div>
 
 <div id="floating-playlist" style="display:none; position:fixed; top:20px; right:20px; width:260px; background:rgba(15, 15, 15, 0.65); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid rgba(0, 210, 255, 0.4); border-radius:10px; z-index:99999; box-shadow:0 8px 32px rgba(0,0,0,0.5); overflow:hidden; font-family:'Orbitron', sans-serif;">
-  
   <div id="fp-header" style="background:rgba(0, 210, 255, 0.15); padding:8px 12px; cursor:grab; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0, 210, 255, 0.2); user-select:none;">
     <div style="font-size:11px; font-weight:bold; color:#00d2ff; letter-spacing:1px; pointer-events:none;">⩇⩇:⩇⩇ PLAYLIST 261</div>
     <div style="display:flex; gap:5px;">
@@ -733,7 +855,6 @@
       <button onclick="document.getElementById('floating-playlist').style.display='none'" style="background:transparent; border:none; color:#ff4757; cursor:pointer; font-size:12px; font-weight:bold; padding:2px 5px; outline:none;">X</button>
     </div>
   </div>
-
   <div id="fp-body" style="max-height:220px; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:6px;">
     
     <div class="fp-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(46, 213, 115, 0.15); padding:6px 10px; border-radius:5px; border:1px solid rgba(46, 213, 115, 0.4); margin-bottom: 5px;">
@@ -789,38 +910,219 @@
 
     <div class="fp-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:6px 10px; border-radius:5px; border:1px solid rgba(255,255,255,0.1);">
       <div style="color:#fff; font-size:10px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px;">Lagu Faii</div>
-      <button onclick="toggleGameMusic(this, 'https://files.catbox.moe/814s8b.mp3')" style="background:#00d2ff; color:#000; border:none; padding:4px 8px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:9px; width:50px;">PLAY</button>
+      <button onclick="toggleGameMusic(this, 'https://files.catbox.moe/6gzf66.mp3')" style="background:#00d2ff; color:#000; border:none; padding:4px 8px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:9px; width:50px;">PLAY</button>
     </div>
 
     <div class="fp-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:6px 10px; border-radius:5px; border:1px solid rgba(255,255,255,0.1);">
       <div style="color:#fff; font-size:10px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px;">Heatwaves</div>
-      <button onclick="toggleGameMusic(this, 'https://files.catbox.moe/6gzf66.mp3')" style="background:#00d2ff; color:#000; border:none; padding:4px 8px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:9px; width:50px;">PLAY</button>
+      <button onclick="toggleGameMusic(this, 'https://files.catbox.moe/814s8b.mp3')" style="background:#00d2ff; color:#000; border:none; padding:4px 8px; border-radius:3px; font-weight:bold; cursor:pointer; font-size:9px; width:50px;">PLAY</button>
     </div>
 
   </div>
 </div>
 
+<button id="btn-quick-chat" style="display:none; position:fixed; bottom:20px; left:20px; width:50px; height:50px; border-radius:50%; background:#00d2ff; color:#000; border:2px solid #fff; font-size:24px; z-index:99990; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.5); padding:0; align-items:center; justify-content:center;" onclick="document.getElementById('quick-chat-modal').style.display='flex'">💬</button>
+
+<div class="dom-overlay" id="quick-chat-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.8); position:fixed; top:0; left:0; width:100%; height:100%;">
+  <div class="dom-modal" style="background:#111; border:2px solid #00d2ff; width:90%; max-width:400px; padding:20px; border-radius:8px; text-align:center;">
+    <h2 style="color:#00d2ff; margin-top:0; margin-bottom:15px; font-size:18px;">QUICK CHAT</h2>
+    <div style="display:flex; gap:10px;">
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="color:#2ed573; font-weight:bold; font-size:12px; margin-bottom:5px;">👍 PUJIAN</div>
+        <button class="game-btn" style="width:100%; margin:0; padding:8px; font-size:10px; border-color:#2ed573; color:#2ed573;" onclick="sendQuickChat('GGWP Bang!')">GGWP Bang!</button>
+        <button class="game-btn" style="width:100%; margin:0; padding:8px; font-size:10px; border-color:#2ed573; color:#2ed573;" onclick="sendQuickChat('Nice Try!')">Nice Try!</button>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div style="color:#ff4757; font-weight:bold; font-size:12px; margin-bottom:5px;">👎 TAUNTING</div>
+        <button class="game-btn" style="width:100%; margin:0; padding:8px; font-size:10px; border-color:#ff4757; color:#ff4757;" onclick="sendQuickChat('Cupu lu wkwk')">Cupu lu wkwk</button>
+        <button class="game-btn" style="width:100%; margin:0; padding:8px; font-size:10px; border-color:#ff4757; color:#ff4757;" onclick="sendQuickChat('Mending turu bang')">Mending turu bang</button>
+      </div>
+    </div>
+    <button class="game-btn" style="margin-top:20px; width:100%; border-color:#555; color:#888;" onclick="document.getElementById('quick-chat-modal').style.display='none'">TUTUP</button>
+  </div>
+</div>
+
+<div id="global-chat-toast" style="position:fixed; top:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); border:2px solid #00d2ff; padding:10px 15px; border-radius:8px; z-index:99999; display:none; align-items:center; gap:10px; box-shadow:0 5px 15px rgba(0,0,0,0.5); transition:0.3s; pointer-events:none; width:max-content; max-width:90%;">
+  <img id="gct-ava" src="" style="width:25px; height:25px; border-radius:4px; object-fit:cover;">
+  <div style="font-family:'Orbitron', sans-serif; font-size:12px; color:#fff; display:flex; flex-direction:column; line-height:1.2;">
+    <span id="gct-name" style="font-weight:bold; font-size:10px;"></span>
+    <span id="gct-msg" style="color:#ccc;"></span>
+  </div>
+</div>
+
+<!-- MODAL PENGATURAN (SUPER TRANSPARAN & ESTETIK) -->
+<div class="dom-overlay" id="settings-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);">
+  <div class="dom-modal" style="background:rgba(20, 20, 20, 0.25); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(255, 255, 255, 0.15); width:90%; max-width:350px; padding:25px 20px; border-radius:16px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+    <h2 style="color:#fff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:3px; text-shadow:0 2px 5px rgba(0,0,0,0.5);"> PENGATURAN</h2>
+
+    <!-- Ganti Nickname -->
+    <div style="text-align:left; margin-bottom:15px;">
+      <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">NICKNAME:</p>
+      <input type="text" id="setting-nickname" class="game-input-name" style="width:100%; margin-bottom:15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:8px; box-shadow:inset 0 2px 4px rgba(0,0,0,0.3); padding:10px; color:#fff;" placeholder="NAMA LU...">
+
+      <!-- Ganti Avatar -->
+      <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">PILIH AVATAR:</p>
+      <div class="avatar-container" id="setting-avatar-selector" style="margin-bottom:0; justify-content:flex-start; gap:8px;">
+        <img class="avatar-item" src="AVATAR1.jpg" onclick="selectAvatar(this, 'AVATAR1.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
+        <img class="avatar-item" src="AVATAR2.jpg" onclick="selectAvatar(this, 'AVATAR2.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
+        <img class="avatar-item" src="AVATAR3.jpg" onclick="selectAvatar(this, 'AVATAR3.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
+        <img class="avatar-item" src="AVATAR4.jpg" onclick="selectAvatar(this, 'AVATAR4.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
+      </div>
+    </div>
+
+    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
+
+    <!-- Pengaturan Audio -->
+    <div style="text-align:left; margin-bottom:20px;">
+      <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:10px; letter-spacing:1px;">VOLUME MUSIK:</p>
+      <input type="range" id="setting-volume" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)" style="width:100%; margin-bottom:15px; cursor:pointer; accent-color:#00d2ff;">
+      
+      <button class="game-btn" id="btn-mute" style="width:100%; margin:0; font-size:12px; border:1px solid rgba(0,210,255,0.4); background:rgba(0,210,255,0.05); color:#00d2ff; border-radius:8px; box-shadow:none;" onclick="toggleMute()"> BERSUARA</button>
+    </div>
+
+    <button class="game-btn" style="margin-top:10px; width:100%; border:1px solid rgba(46,213,115,0.4); background:rgba(46,213,115,0.1); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="saveSettings()">SIMPAN & TUTUP</button>
+  </div>
+</div>
+
+</div>
+
 <script>
+// ============================================================
+// 1. INIT & VARIABEL GLOBAL (ANTI CRASH)
+// ============================================================
 const firebaseConfig = { apiKey:"AIzaSyBpa1Ml5i0j5Jzs4eQrHKKIuo3FoB7JWrE", authDomain:"clx---14.firebaseapp.com", databaseURL:"https://clx---14-default-rtdb.asia-southeast1.firebasedatabase.app", projectId:"clx---14", storageBucket:"clx---14.firebasestorage.app", messagingSenderId:"368765694470", appId:"1:368765694470:web:90ef6dbccc7aa5a4adc987" };
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-let myGlobalName="PLAYER", activeGame=null, isOnline=false, roomCode=null, myColor=null, isHost=false, roomRef=null;
+let myGlobalName = "PLAYER", activeGame = null, isOnline = false, roomCode = null, myColor = null, isHost = false, roomRef = null;
+let myAvatar = 'AVATAR1.jpg'; 
+let chatRef = null;
+let currentVolume = 1;
+let isMuted = false;
+let ludoConfig = { board: 'default' };
 
-window.onload = function() {
-  let saved=localStorage.getItem('nickname261');
-  if(saved) document.getElementById('global-nickname').value=saved;
-};
+// >>> PASTIKAN KODE INI ADA DI SINI <<<
+// --- SOUND EFFECTS (DARI GOOGLE PUBLIC API) ---
+const sfxDice = new Audio('https://actions.google.com/sounds/v1/foley/rolling_dice.ogg');
+const sfxStep = new Audio('https://actions.google.com/sounds/v1/cartoon/pop.ogg');
+sfxDice.volume = 0.8;
+sfxStep.volume = 0.5;
 
+// ============================================================
+// 2. WINDOW LOAD (LOAD AVATAR, NAMA, SETTINGS)
+// ============================================================
+window.addEventListener('load', () => {
+  let savedName = localStorage.getItem('nickname261');
+  if(savedName) {
+    myGlobalName = savedName;
+    let dispName = document.getElementById('display-player-name');
+    if(dispName) dispName.innerText = savedName;
+  }
+  let savedAv = localStorage.getItem('avatar261');
+  if(savedAv) {
+    myAvatar = savedAv;
+    let dispAva = document.getElementById('display-player-avatar');
+    if(dispAva) dispAva.src = savedAv;
+  }
+});
+
+// ============================================================
+// 3. SETTINGS & AVATAR LOGIC
+// ============================================================
+function openSettings() {
+  let sn = document.getElementById('setting-nickname');
+  if(sn) sn.value = myGlobalName === "PLAYER" ? "" : myGlobalName;
+  
+  let sv = document.getElementById('setting-volume');
+  if(sv) sv.value = currentVolume;
+  
+  document.querySelectorAll('#setting-avatar-selector .avatar-item').forEach(e => {
+    e.classList.remove('selected');
+    if(e.getAttribute('src') === myAvatar) e.classList.add('selected');
+  });
+  let mod = document.getElementById('settings-modal');
+  if(mod) mod.style.display = 'flex';
+}
+
+function selectAvatar(el, imgUrl) {
+  document.querySelectorAll('#setting-avatar-selector .avatar-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  myAvatar = imgUrl; 
+}
+
+function saveSettings() {
+  let n = document.getElementById('setting-nickname').value.trim().toUpperCase();
+  if(n) {
+    myGlobalName = n;
+    localStorage.setItem('nickname261', n);
+    let dpn = document.getElementById('display-player-name');
+    if(dpn) dpn.innerText = n;
+  }
+  localStorage.setItem('avatar261', myAvatar);
+  let dpa = document.getElementById('display-player-avatar');
+  if(dpa) dpa.src = myAvatar;
+  let mod = document.getElementById('settings-modal');
+  if(mod) mod.style.display = 'none';
+}
+
+function changeVolume(val) {
+  currentVolume = parseFloat(val);
+  if (currentGameAudio) currentGameAudio.volume = currentVolume;
+}
+
+function toggleMute() {
+  isMuted = !isMuted;
+  let btn = document.getElementById('btn-mute');
+  if(!btn) return;
+  if (isMuted) {
+     btn.innerText = " BISU (MUTED)"; btn.style.borderColor = "#ff4757"; btn.style.color = "#ff4757";
+     if (currentGameAudio) currentGameAudio.muted = true;
+  } else {
+     btn.innerText = " BERSUARA (UNMUTE)"; btn.style.borderColor = "#00d2ff"; btn.style.color = "#00d2ff";
+     if (currentGameAudio) currentGameAudio.muted = false;
+  }
+}
+
+function checkNameAuth(){
+  if(myGlobalName === "PLAYER" || !myGlobalName){
+    alert("Buka  PENGATURAN dulu buat masukin NICKNAME!");
+    openSettings();
+    return null;
+  }
+  return myGlobalName;
+}
+
+// ============================================================
+// 4. CHAT LOGIC
+// ============================================================
+function sendLobbyChat() {
+  let inp = document.getElementById('lobby-chat-input');
+  if(!inp) return;
+  let txt = inp.value.trim();
+  if(!txt || !roomCode || !isOnline) return;
+  inp.value = '';
+  database.ref(`${activeGame}_rooms/${roomCode}/chat`).push({
+    name: myGlobalName, avatar: myAvatar, color: gameConfigs[activeGame].hex[myColor] || '#fff', text: txt, timestamp: firebase.database.ServerValue.TIMESTAMP
+  });
+}
+
+function sendQuickChat(text) {
+  let mod = document.getElementById('quick-chat-modal');
+  if(mod) mod.style.display = 'none'; 
+  if(!roomCode || !isOnline) return;
+  database.ref(`${activeGame}_rooms/${roomCode}/chat`).push({
+    name: myGlobalName, avatar: myAvatar, color: gameConfigs[activeGame].hex[myColor] || '#fff', text: text, timestamp: firebase.database.ServerValue.TIMESTAMP
+  });
+}
+
+// ============================================================
+// 5. CORE & FIREBASE
+// ============================================================
 function showScreen(id){
   document.querySelectorAll('.game-screen').forEach(s=>s.classList.remove('active'));
-  if(id) document.getElementById(id).classList.add('active');
+  let sc = document.getElementById(id); if(sc) sc.classList.add('active');
 }
-function checkNameAuth(){
-  let n=document.getElementById('global-nickname').value.trim().toUpperCase();
-  if(!n){alert("Isi NICKNAME dulu untuk main Arcade!");return null;}
-  myGlobalName=n; localStorage.setItem('nickname261',n); return n;
-}
+
 function generateRoomCode(){return Math.random().toString(36).substring(2,8).toUpperCase();}
 
 const gameConfigs={
@@ -834,37 +1136,27 @@ const gameConfigs={
 
 function openOfflineSetup(){
   if(activeGame === 'dominos') {
-    domCFG.players[0].name = myGlobalName;
-    domBuildSetupRows();
-    showScreen('dom-s-setup');
-  } else {
-    showScreen(activeGame+'-offline-setup');
-  }
+    domCFG.players[0].name = myGlobalName; domBuildSetupRows(); showScreen('dom-s-setup');
+  } else { showScreen(activeGame+'-offline-setup'); }
 }
 
 function quickMatch(){
   showScreen('universal-lobby');
-  document.getElementById('lobby-code-display').innerText="MENCARI...";
-  document.getElementById('lobby-status-msg').innerText="Nyari server kosong...";
-  document.getElementById('lobby-options-area').style.display='none';
+  document.getElementById('lobby-code-display').innerText="MENCARI..."; document.getElementById('lobby-status-msg').innerText="Nyari server kosong...";
+  let opt = document.getElementById('lobby-options-area'); if(opt) opt.style.display='none';
   database.ref(activeGame+'_rooms').once('value').then(snap=>{
     let found=null;
-    if(snap.exists()) snap.forEach(child=>{
-      let r=child.val();
-      if(r.status==='waiting'&&r.type==='public'&&r.players){
-        let n=Object.keys(r.players).length;
-        if(n>0&&n<gameConfigs[activeGame].max){found=child.key;return true;}
-      }
-    });
+    if(snap.exists()) snap.forEach(child=>{ let r=child.val(); if(r.status==='waiting'&&r.type==='public'&&r.players){ let n=Object.keys(r.players).length; if(n>0&&n<gameConfigs[activeGame].max){found=child.key;return true;} } });
     if(found) joinRoomLogic(found,false); else createRoomLogic('public');
   });
 }
+
 function createPrivateRoom(){ createRoomLogic('private'); }
-function joinPrivateRoom(){ let c=document.getElementById('private-room-code-'+activeGame) ? document.getElementById('private-room-code-'+activeGame).value.trim().toUpperCase() : document.getElementById('private-room-code').value.trim().toUpperCase(); if(c)joinRoomLogic(c,false); }
+function joinPrivateRoom(){ let inp = document.getElementById('private-room-code-'+activeGame) || document.getElementById('private-room-code'); let c = inp ? inp.value.trim().toUpperCase() : ''; if(c)joinRoomLogic(c,false); }
 
 function createRoomLogic(roomType){
   roomCode=generateRoomCode(); myColor=gameConfigs[activeGame].colors[0]; isHost=true; isOnline=true;
-  let init={status:'waiting',type:roomType,host:myGlobalName,players:{[myColor]:myGlobalName}};
+  let init={status:'waiting',type:roomType,host:myGlobalName,players:{[myColor]:myGlobalName}, avatars:{[myColor]:myAvatar}};
   if(activeGame==='ludo'){init.state={turn:'red',dice:0,hasRolled:false,moving:false,winners:[]};init.board=getLudoDefault();}
   if(activeGame==='snl'){ init.config={board:"default",snake:"default"}; init.state={turn:'red',dice:0,hasRolled:false,moving:false,winners:[]}; init.board={red:{pos:0}}; init.layoutIdx=Math.floor(Math.random()*snlLayouts.length); }
   if(activeGame==='ttt'){init.board=['','','','','','','','',''];init.turn='X';init.scores={X:0,O:0};}
@@ -877,15 +1169,12 @@ function createRoomLogic(roomType){
 function joinRoomLogic(code,isAuto){
   database.ref(`${activeGame}_rooms/${code}`).once('value').then(snap=>{
     if(!snap.exists()){alert("Room ngga ada!");showScreen(activeGame+'-hub');return;}
-    let r=snap.val();
-    if(r.status!=='waiting'||!r.players){alert("Game udah mulai / penuh!");showScreen(activeGame+'-hub');return;}
-    let curNames=Object.values(r.players);
-    if(curNames.includes(myGlobalName)) myGlobalName=myGlobalName+"_"+Math.floor(Math.random()*100);
-    let pCols=Object.keys(r.players);myColor=null;
-    for(let c of gameConfigs[activeGame].colors){if(!pCols.includes(c)){myColor=c;break;}}
+    let r=snap.val(); if(r.status!=='waiting'||!r.players){alert("Game udah mulai / penuh!");showScreen(activeGame+'-hub');return;}
+    let curNames=Object.values(r.players); if(curNames.includes(myGlobalName)) myGlobalName=myGlobalName+"_"+Math.floor(Math.random()*100);
+    let pCols=Object.keys(r.players);myColor=null; for(let c of gameConfigs[activeGame].colors){if(!pCols.includes(c)){myColor=c;break;}}
     if(!myColor){alert("Room Penuh!");showScreen(activeGame+'-hub');return;}
     roomCode=code;isHost=false;isOnline=true;
-    let upd={};upd[`${activeGame}_rooms/${roomCode}/players/${myColor}`]=myGlobalName;
+    let upd={}; upd[`${activeGame}_rooms/${roomCode}/players/${myColor}`]=myGlobalName; upd[`${activeGame}_rooms/${roomCode}/avatars/${myColor}`]=myAvatar;
     if(activeGame==='snl') upd[`${activeGame}_rooms/${roomCode}/board/${myColor}`]={pos:0};
     database.ref().update(upd).then(()=>{ database.ref(`${activeGame}_rooms/${roomCode}/players/${myColor}`).onDisconnect().remove(); enterLobbyUI(); });
   });
@@ -894,47 +1183,58 @@ function joinRoomLogic(code,isAuto){
 function enterLobbyUI(){
   showScreen('universal-lobby'); let c=gameConfigs[activeGame];
   document.getElementById('lobby-title').innerText="ROOM: "+c.title; document.getElementById('lobby-title').style.color=c.color; document.getElementById('lobby-code-display').innerText=roomCode;
+  
+  let chatBox = document.getElementById('lobby-chat-box'); let chatMsgs = document.getElementById('lobby-chat-msgs');
+  if(chatBox) chatBox.style.display = 'flex'; if(chatMsgs) chatMsgs.innerHTML = '';
+  if(chatRef) chatRef.off();
+  chatRef = database.ref(`${activeGame}_rooms/${roomCode}/chat`);
+  chatRef.on('child_added', snap => {
+    let msg = snap.val();
+    if(chatMsgs) {
+      let msgEl = document.createElement('div');
+      msgEl.innerHTML = `<div style="display:flex; gap:8px; margin-bottom:6px; align-items:flex-start;"><img src="${msg.avatar}" style="width:20px; height:20px; border-radius:4px; object-fit:cover; border:1px solid ${msg.color}; flex-shrink:0; margin-top:2px;"><div style="line-height:1.2;"><span style="color:${msg.color}; font-weight:bold;">${msg.name}:</span> <span style="color:#ccc; font-size:14px;">${msg.text}</span></div></div>`;
+      chatMsgs.appendChild(msgEl); chatMsgs.scrollTop = chatMsgs.scrollHeight; 
+    }
+    let uLobby = document.getElementById('universal-lobby');
+    if(uLobby && !uLobby.classList.contains('active')) {
+       let gt = document.getElementById('global-chat-toast');
+       if(gt) {
+         let ava = document.getElementById('gct-ava'); if(ava) ava.src = msg.avatar;
+         let nm = document.getElementById('gct-name'); if(nm){ nm.innerText = msg.name; nm.style.color = msg.color; }
+         let ms = document.getElementById('gct-msg'); if(ms) ms.innerText = msg.text;
+         gt.style.display = 'flex'; clearTimeout(gt._t); gt._t = setTimeout(() => { gt.style.display = 'none'; }, 3000); 
+       }
+    }
+  });
+
   roomRef=database.ref(`${activeGame}_rooms/${roomCode}`);
   roomRef.on('value',snap=>{
     if(!snap.exists()){leaveRoomLokal("Room ditutup.");return;}
-    let data=snap.val();let pList=data.players||{};let pCount=Object.keys(pList).length;
-    let listHTML='';
-    c.colors.forEach(col=>{ let pName=pList[col]; if(pName){let tag=(data.host===pName)?"(HOST)":"";listHTML+=`<div class="lobby-player-item"><span style="color:${c.hex[col]}">${c.colorNames[col]} ${tag}</span><span>${pName}</span></div>`;} else{listHTML+=`<div class="lobby-player-item"><span style="color:#555">${c.colorNames[col]}</span><span style="color:#555">Kosong...</span></div>`;} });
-    document.getElementById('lobby-players-list').innerHTML=listHTML;
-    let btnStart=document.getElementById('btn-start-game');
-    if(isHost){ btnStart.style.display='block'; if(pCount>=2){btnStart.disabled=false;btnStart.innerText="START GAME";document.getElementById('lobby-status-msg').innerText="Pemain cukup, gas mulai!";} else{btnStart.disabled=true;btnStart.innerText="NUNGGU PEMAIN...";document.getElementById('lobby-status-msg').innerText="Min 2 orang...";} } else {btnStart.style.display='none';document.getElementById('lobby-status-msg').innerText="Nunggu Host mulai...";}
+    let data=snap.val();let pList=data.players||{};let pCount=Object.keys(pList).length; let listHTML='';
+    c.colors.forEach(col=>{ 
+      let pName=pList[col]; let pAva = data.avatars ? (data.avatars[col] || 'AVATAR1.jpg') : 'AVATAR1.jpg'; 
+      if(pName){
+        let tag=(data.host===pName)?"(HOST)":"";
+        listHTML+=`<div class="lobby-player-item" style="align-items:center;"><span style="color:${c.hex[col]}">${c.colorNames[col]} ${tag}</span><span style="display:flex; align-items:center; gap:8px;"><img src="${pAva}" style="width:24px; height:24px; border-radius:4px; object-fit:cover; border:1px solid ${c.hex[col]};">${pName}</span></div>`;
+      } else { listHTML+=`<div class="lobby-player-item"><span style="color:#555">${c.colorNames[col]}</span><span style="color:#555">Kosong...</span></div>`; } 
+    });
+    
+    let lpl = document.getElementById('lobby-players-list'); if(lpl) lpl.innerHTML=listHTML;
+    let btnStart=document.getElementById('btn-start-game'); let msgStat=document.getElementById('lobby-status-msg');
+    
+    if(btnStart && msgStat){
+        if(isHost){ 
+          btnStart.style.display='block'; 
+          if(pCount>=2){ btnStart.disabled=false; btnStart.innerText="START GAME"; msgStat.innerText="Pemain cukup, gas mulai!"; } 
+          else { btnStart.disabled=true; btnStart.innerText="NUNGGU PEMAIN..."; msgStat.innerText="Min 2 orang..."; } 
+        } else { btnStart.style.display='none'; msgStat.innerText="Nunggu Host mulai..."; }
+    }
     if(data.status==='playing') routeToActiveGame(data);
   });
 }
 
-function startGameHost(){
-  if(isHost) {
-    if(activeGame === 'dominos') {
-      database.ref(`${activeGame}_rooms/${roomCode}/players`).once('value').then(s => {
-         let pCols = Object.keys(s.val()||{}); let n = pCols.length;
-         let all = []; for(let a=0;a<=6;a++)for(let b=a;b<=6;b++)all.push({a,b});
-         for(let i=all.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
-         let hands = {}; pCols.forEach(c => { hands[c] = []; for(let k=0;k<7;k++) hands[c].push(all.pop()); });
-         let state = { n: n, pCols: pCols, hands: hands, boneyard: all, chain: [], leftEnd: -1, rightEnd: -1, lX: 0, lY: 0, rX: 0, rY: 0, lDir: 'left', rDir: 'right', turn: pCols[0], passCount: 0, over: false, winners: [] };
-         database.ref(`dominos_rooms/${roomCode}/state`).set(state);
-         database.ref(`dominos_rooms/${roomCode}/status`).set('playing');
-      });
-    } else {
-      database.ref(`${activeGame}_rooms/${roomCode}/status`).set('playing');
-    }
-  }
-}
-
-function leaveRoomLokal(msg){ if(msg) alert(msg); if(roomRef) roomRef.off(); isOnline=false;roomCode=null;myColor=null;isHost=false; showScreen('main-hub-menu'); }
-function leaveRoom(){
-  if(isOnline&&roomCode&&myColor){
-    let pRef=database.ref(`${activeGame}_rooms/${roomCode}/players/${myColor}`); pRef.onDisconnect().cancel();
-    pRef.remove().then(()=>{ database.ref(`${activeGame}_rooms/${roomCode}/players`).once('value',s=>{ if(!s.exists()||Object.keys(s.val()||{}).length===0) database.ref(`${activeGame}_rooms/${roomCode}`).remove(); }); });
-    if(isHost){database.ref(`${activeGame}_rooms/${roomCode}`).onDisconnect().cancel();database.ref(`${activeGame}_rooms/${roomCode}`).remove();}
-  } leaveRoomLokal(null);
-}
-
 function routeToActiveGame(data){
+  let qcBtn = document.getElementById('btn-quick-chat'); if(qcBtn) qcBtn.style.display = 'flex'; 
   if(activeGame==='ludo') syncLudoOnline(data);
   if(activeGame==='snl') syncSnLOnline(data);
   if(activeGame==='ttt') syncTTTOnline(data);
@@ -943,15 +1243,43 @@ function routeToActiveGame(data){
   if(activeGame==='billiard') syncBilliardOnline(data);
 }
 
+function startGameHost(){
+  if(isHost) {
+    if(activeGame === 'dominos') {
+      database.ref(`${activeGame}_rooms/${roomCode}/players`).once('value').then(s => {
+         let pCols = Object.keys(s.val()||{}); let n = pCols.length; let all = []; for(let a=0;a<=6;a++)for(let b=a;b<=6;b++)all.push({a,b});
+         for(let i=all.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+         let hands = {}; pCols.forEach(c => { hands[c] = []; for(let k=0;k<7;k++) hands[c].push(all.pop()); });
+         let state = { n: n, pCols: pCols, hands: hands, boneyard: all, chain: [], leftEnd: -1, rightEnd: -1, lX: 0, lY: 0, rX: 0, rY: 0, lDir: 'left', rDir: 'right', turn: pCols[0], passCount: 0, over: false, winners: [] };
+         database.ref(`dominos_rooms/${roomCode}/state`).set(state); database.ref(`dominos_rooms/${roomCode}/status`).set('playing');
+      });
+    } else { database.ref(`${activeGame}_rooms/${roomCode}/status`).set('playing'); }
+  }
+}
+
+function leaveRoomLokal(msg){ 
+  if(msg) alert(msg); if(roomRef) roomRef.off(); if(chatRef) chatRef.off(); 
+  isOnline=false; roomCode=null; myColor=null; isHost=false; 
+  let qcBtn = document.getElementById('btn-quick-chat'); if(qcBtn) qcBtn.style.display = 'none'; 
+  showScreen('main-hub-menu'); 
+}
+
+function leaveRoom(){
+  if(isOnline&&roomCode&&myColor){
+    let pRef=database.ref(`${activeGame}_rooms/${roomCode}/players/${myColor}`); pRef.onDisconnect().cancel();
+    pRef.remove().then(()=>{ database.ref(`${activeGame}_rooms/${roomCode}/players`).once('value',s=>{ if(!s.exists()||Object.keys(s.val()||{}).length===0) database.ref(`${activeGame}_rooms/${roomCode}`).remove(); }); });
+    if(isHost){database.ref(`${activeGame}_rooms/${roomCode}`).onDisconnect().cancel();database.ref(`${activeGame}_rooms/${roomCode}`).remove();}
+  } leaveRoomLokal(null);
+}
+
 function showEndLeaderboard(winnersList,namesMap,conf){
   let html='';
   winnersList.forEach((col,i)=>{
-    let pName=namesMap[col]||conf.colorNames[col]||"PEMAIN";
-    let medal=i===0?"🥇":(i===1?"🥈":(i===2?"🥉":"💀"));
+    let pName=namesMap[col]||conf.colorNames[col]||"PEMAIN"; let medal=i===0?"🥇":(i===1?"🥈":(i===2?"🥉":"💀"));
     let rc=(i===0)?"#ffd700":(i===winnersList.length-1?"#ff4757":"#ccc");
     html+=`<div class="lb-item-elegant" style="--rank-color:${conf.hex[col]};"><span class="lb-rank">${medal}</span><span class="lb-name" style="color:${rc};">${pName}</span></div>`;
   });
-  document.getElementById('leaderboard-list').innerHTML=html; showScreen('leaderboard-screen');
+  let ll = document.getElementById('leaderboard-list'); if(ll) ll.innerHTML=html; showScreen('leaderboard-screen');
 }
 
 // ===================================== LUDO =====================================
@@ -960,16 +1288,103 @@ const ludoPathCoords=[{x:6,y:13},{x:6,y:12},{x:6,y:11},{x:6,y:10},{x:6,y:9},{x:5
 const ludoHomePaths={red:[{x:7,y:13},{x:7,y:12},{x:7,y:11},{x:7,y:10},{x:7,y:9}],skull:[{x:1,y:7},{x:2,y:7},{x:3,y:7},{x:4,y:7},{x:5,y:7}],green:[{x:7,y:1},{x:7,y:2},{x:7,y:3},{x:7,y:4},{x:7,y:5}],blue:[{x:13,y:7},{x:12,y:7},{x:11,y:7},{x:10,y:7},{x:9,y:7}]};
 const ludoSafeZones=[0,8,13,21,26,34,39,47];
 function getLudoDefault(){return{red:{startIdx:0,endIdx:50,tokens:[{id:'r1',status:'base',pos:-1},{id:'r2',status:'base',pos:-1},{id:'r3',status:'base',pos:-1},{id:'r4',status:'base',pos:-1}]},blue:{startIdx:39,endIdx:37,tokens:[{id:'b1',status:'base',pos:-1},{id:'b2',status:'base',pos:-1},{id:'b3',status:'base',pos:-1},{id:'b4',status:'base',pos:-1}]},green:{startIdx:26,endIdx:24,tokens:[{id:'g1',status:'base',pos:-1},{id:'g2',status:'base',pos:-1},{id:'g3',status:'base',pos:-1},{id:'g4',status:'base',pos:-1}]},skull:{startIdx:13,endIdx:11,tokens:[{id:'s1',status:'base',pos:-1},{id:'s2',status:'base',pos:-1},{id:'s3',status:'base',pos:-1},{id:'s4',status:'base',pos:-1}]}};}
-function startLudoOffline(){ isOnline=false;activeGame='ludo'; ludoTypes={red:document.getElementById('ludo-off-red').value,blue:document.getElementById('ludo-off-blue').value,green:document.getElementById('ludo-off-green').value,skull:document.getElementById('ludo-off-skull').value}; ludoNames={red:ludoTypes.red==='ai'?"BOT MERAH":"PLAYER 1",blue:ludoTypes.blue==='ai'?"BOT BIRU":"PLAYER 2",green:ludoTypes.green==='ai'?"BOT HIJAU":"PLAYER 3",skull:ludoTypes.skull==='ai'?"BOT ABU":"PLAYER 4"}; if(Object.values(ludoTypes).filter(v=>v!=='none').length<2){alert("Minimal 2 pemain!");return;} ludoPlayers=getLudoDefault(); let st='red';for(let c of gameConfigs.ludo.colors){if(ludoTypes[c]!=='none'){st=c;break;}} ludoGameState={turn:st,dice:0,hasRolled:false,moving:false,winners:[]}; document.getElementById('ludo-badge').innerText="MODE LOKAL/OFFLINE"; initLudoBoardHTML();initLudoTokensHTML();showScreen('ludo-game-screen');updateLudoUI(); if(ludoTypes[ludoGameState.turn]==='ai')setTimeout(rollLudoDice,1000); }
-function syncLudoOnline(data){ if(document.getElementById('universal-lobby').classList.contains('active')){ ludoPlayers=data.board;ludoGameState=data.state; ludoTypes={red:'none',blue:'none',green:'none',skull:'none'};Object.keys(data.players).forEach(c=>ludoTypes[c]='human');ludoNames=data.players; document.getElementById('ludo-badge').innerText="WARNA LU: "+myColor.toUpperCase(); document.getElementById('ludo-badge').style.color=gameConfigs.ludo.hex[myColor]; initLudoBoardHTML();initLudoTokensHTML();showScreen('ludo-game-screen');updateLudoUI(); } else if(document.getElementById('ludo-game-screen').classList.contains('active')){ let curP=Object.keys(data.players||{}); Object.keys(ludoTypes).forEach(c=>{if(ludoTypes[c]==='human'&&!curP.includes(c)){ludoTypes[c]='none';if(ludoPlayers[c])ludoPlayers[c].tokens.forEach(t=>{t.status='base';t.pos=-1;});}}); let ac=Object.keys(ludoTypes).filter(c=>ludoTypes[c]!=='none').length; if(ac<2){if(isHost)database.ref(`ludo_rooms/${roomCode}/status`).set('finished');alert("Pemain lain keluar!");leaveRoom();return;} ludoGameState=data.state;if(!ludoGameState.winners)ludoGameState.winners=[]; if(!(ludoGameState.turn===myColor&&ludoGameState.moving)){ludoPlayers=data.board;renderLudoTokens();}updateLudoUI(); if(ludoGameState.winners.length>=ac-1&&ac>1)showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo); } }
+
+function startLudoOffline(){ 
+  isOnline=false; activeGame='ludo'; 
+  
+  // Fitur Ludo Papan Pink
+  let ludoTheme = document.getElementById('ludo-theme-board');
+  ludoConfig.board = ludoTheme ? ludoTheme.value : 'default';
+  let bgLudo = ludoConfig.board === 'pink' ? 'papanludo_pink.png' : 'papan.png';
+  let mbc = document.getElementById('main-board-container');
+  if(mbc) mbc.style.backgroundImage = `url('${bgLudo}')`;
+  
+  ludoTypes={red:document.getElementById('ludo-off-red').value,blue:document.getElementById('ludo-off-blue').value,green:document.getElementById('ludo-off-green').value,skull:document.getElementById('ludo-off-skull').value}; 
+  ludoNames={red:ludoTypes.red==='ai'?"BOT MERAH":"PLAYER 1",blue:ludoTypes.blue==='ai'?"BOT BIRU":"PLAYER 2",green:ludoTypes.green==='ai'?"BOT HIJAU":"PLAYER 3",skull:ludoTypes.skull==='ai'?"BOT ABU":"PLAYER 4"}; 
+  if(Object.values(ludoTypes).filter(v=>v!=='none').length<2){alert("Minimal 2 pemain!");return;} 
+  ludoPlayers=getLudoDefault(); let st='red';for(let c of gameConfigs.ludo.colors){if(ludoTypes[c]!=='none'){st=c;break;}} 
+  ludoGameState={turn:st,dice:0,hasRolled:false,moving:false,winners:[]}; 
+  document.getElementById('ludo-badge').innerText="MODE LOKAL/OFFLINE"; initLudoBoardHTML();initLudoTokensHTML();showScreen('ludo-game-screen');updateLudoUI(); 
+  if(ludoTypes[ludoGameState.turn]==='ai')setTimeout(rollLudoDice,1000); 
+}
+
+function syncLudoOnline(data){ 
+  if(document.getElementById('universal-lobby').classList.contains('active')){ 
+    ludoPlayers=data.board;ludoGameState=data.state; 
+    ludoTypes={red:'none',blue:'none',green:'none',skull:'none'};Object.keys(data.players).forEach(c=>ludoTypes[c]='human');ludoNames=data.players; 
+    document.getElementById('ludo-badge').innerText="WARNA LU: "+myColor.toUpperCase(); document.getElementById('ludo-badge').style.color=gameConfigs.ludo.hex[myColor]; 
+    initLudoBoardHTML();initLudoTokensHTML();showScreen('ludo-game-screen');updateLudoUI(); 
+  } else if(document.getElementById('ludo-game-screen').classList.contains('active')){ 
+    let curP=Object.keys(data.players||{}); Object.keys(ludoTypes).forEach(c=>{if(ludoTypes[c]==='human'&&!curP.includes(c)){ludoTypes[c]='none';if(ludoPlayers[c])ludoPlayers[c].tokens.forEach(t=>{t.status='base';t.pos=-1;});}}); 
+    let ac=Object.keys(ludoTypes).filter(c=>ludoTypes[c]!=='none').length; 
+    if(ac<2){if(isHost)database.ref(`ludo_rooms/${roomCode}/status`).set('finished');alert("Pemain lain keluar!");leaveRoom();return;} 
+    ludoGameState=data.state;if(!ludoGameState.winners)ludoGameState.winners=[]; 
+    if(!(ludoGameState.turn===myColor&&ludoGameState.moving)){ludoPlayers=data.board;renderLudoTokens();}updateLudoUI(); 
+    if(ludoGameState.winners.length>=ac-1&&ac>1)showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo); 
+  } 
+}
 function initLudoBoardHTML(){ let g=''; for(let y=0;y<15;y++){for(let x=0;x<15;x++){ let cl='cell';let st=`grid-row:${y+1};grid-column:${x+1};`; if(y===7&&x>=1&&x<=5)cl+=' path-skull';if(x===7&&y>=1&&y<=5)cl+=' path-tech'; if(y===7&&x>=9&&x<=13)cl+=' path-japan';if(x===7&&y>=9&&y<=13)cl+=' path-red'; let iS=x<6&&y<6;let iT=x>8&&y<6;let iR=x<6&&y>8;let iJ=x>8&&y>8;let iC=x>5&&x<9&&y>5&&y<9; if(!iS&&!iT&&!iR&&!iJ&&!iC){let safe=ludoSafeZones.some(idx=>ludoPathCoords[idx]&&ludoPathCoords[idx].x===x&&ludoPathCoords[idx].y===y);g+=`<div class="${cl}" style="${st}">${safe?`<span style="font-size:18px;opacity:0.85;">⭐</span>`:''}</div>`;} }} g+=`<div class="base base-skull" style="grid-area:1/1/7/7;"><div class="inner-box"><div class="slot" id="skull-slot-0"></div><div class="slot" id="skull-slot-1"></div><div class="slot" id="skull-slot-2"></div><div class="slot" id="skull-slot-3"></div></div></div><div class="base base-tech" style="grid-area:1/10/7/16;"><div class="inner-box"><div class="slot" id="green-slot-0"></div><div class="slot" id="green-slot-1"></div><div class="slot" id="green-slot-2"></div><div class="slot" id="green-slot-3"></div></div></div><div class="base base-red" style="grid-area:10/1/16/7;"><div class="inner-box"><div class="slot" id="red-slot-0"></div><div class="slot" id="red-slot-1"></div><div class="slot" id="red-slot-2"></div><div class="slot" id="red-slot-3"></div></div></div><div class="base base-japan" style="grid-area:10/10/16/16;"><div class="inner-box"><div class="slot" id="blue-slot-0"></div><div class="slot" id="blue-slot-1"></div><div class="slot" id="blue-slot-2"></div><div class="slot" id="blue-slot-3"></div></div></div><div class="center-arena"><span>261</span><br><span>AREA</span></div>`; document.getElementById('ludo-board').innerHTML=g; }
 function initLudoTokensHTML(){ let l=document.getElementById('ludo-tokens');l.innerHTML=''; Object.keys(ludoPlayers).forEach(col=>{if(ludoTypes[col]==='none')return;ludoPlayers[col].tokens.forEach(t=>{let d=document.createElement('div');d.className=`token ${col}`;d.id=t.id;d.onclick=()=>onLudoTokenClick(col,t.id);l.appendChild(d);});});renderLudoTokens(); }
 function renderLudoTokens(){ let l=document.getElementById('ludo-tokens');let groups={};let fc={red:0,blue:0,green:0,skull:0}; Object.keys(ludoPlayers).forEach(col=>{ if(ludoTypes[col]==='none'){ludoPlayers[col].tokens.forEach(t=>{let e=document.getElementById(t.id);if(e)e.style.display='none';});return;} ludoPlayers[col].tokens.forEach((t,i)=>{ let e=document.getElementById(t.id);if(!e)return; e.style.display='flex';if(t.status==='finish'){e.innerHTML='👑';e.style.fontSize='24px';}else{e.innerHTML='';} if(t.status==='base'){let sl=document.getElementById(`${col}-slot-${i}`);if(sl&&e.parentElement!==sl)sl.appendChild(e);e.style.position='relative';e.style.width='75%';e.style.height='75%';e.style.left='0';e.style.top='0';e.style.transform='translate(0,0) scale(1)';} else if(t.status==='finish'){if(e.parentElement!==l)l.appendChild(e);e.style.position='absolute';e.style.width='6.5%';e.style.height='6.5%';let fi=fc[col];fc[col]++;let bx=7,by=7;if(col==='red'){bx=6.7;by=7.7;}if(col==='blue'){bx=7.7;by=6.7;}if(col==='green'){bx=6.7;by=5.7;}if(col==='skull'){bx=5.7;by=6.7;}e.style.left=`calc(${bx+(fi%2)*0.4} * (100% / 15))`;e.style.top=`calc(${by+Math.floor(fi/2)*0.4} * (100% / 15))`;e.style.transform='translate(0%,0%) scale(0.75)';} else{if(e.parentElement!==l)l.appendChild(e);e.style.position='absolute';e.style.width='6.5%';e.style.height='6.5%';let key=`${t.status}-${t.pos}`;if(!groups[key])groups[key]=[];groups[key].push({el:e,col,t});} }); }); Object.keys(groups).forEach(key=>{ let items=groups[key];let count=items.length; items.forEach((item,index)=>{ let tx,ty;if(item.t.status==='perimeter'){tx=ludoPathCoords[item.t.pos].x;ty=ludoPathCoords[item.t.pos].y;}else{tx=ludoHomePaths[item.col][item.t.pos].x;ty=ludoHomePaths[item.col][item.t.pos].y;} item.el.style.left=`calc(${tx} * (100% / 15))`;item.el.style.top=`calc(${ty} * (100% / 15))`; if(count===1)item.el.style.transform='translate(0%,0%) scale(1)'; else if(count===2){if(index===0)item.el.style.transform='translate(-20%,0%) scale(0.85)';else item.el.style.transform='translate(20%,0%) scale(0.85)';} else if(count===3){if(index===0)item.el.style.transform='translate(-20%,-15%) scale(0.7)';else if(index===1)item.el.style.transform='translate(20%,-15%) scale(0.7)';else item.el.style.transform='translate(0%,15%) scale(0.7)';} else{if(index===0)item.el.style.transform='translate(-20%,-20%) scale(0.6)';else if(index===1)item.el.style.transform='translate(20%,-20%) scale(0.6)';else if(index===2)item.el.style.transform='translate(-20%,20%) scale(0.6)';else item.el.style.transform='translate(20%,20%) scale(0.6)';} }); }); }
 function updateLudoUI(){ let tc=ludoGameState.turn;let btn=document.getElementById('ludo-dice');let log=document.getElementById('ludo-log-msg'); document.getElementById('ludo-turn-info').innerText=`${ludoNames[tc]||gameConfigs.ludo.colorNames[tc]} (${gameConfigs.ludo.colorNames[tc]})`; document.getElementById('ludo-turn-info').style.color=gameConfigs.ludo.hex[tc]; btn.innerText=ludoGameState.dice>0?ludoGameState.dice:'🎲'; let isMy=isOnline?(tc===myColor):(ludoTypes[tc]==='human'); if(isMy){if(!ludoGameState.hasRolled&&!ludoGameState.moving){btn.disabled=false;log.innerText="Giliran! Lempar dadu.";}else{btn.disabled=true;log.innerText="Jalan...";highlightLudoTokens(tc);}} else{btn.disabled=true;log.innerText=(ludoTypes[tc]==='ai')?"Bot mikir...":"Nunggu...";document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active'));} }
 function highlightLudoTokens(color){ document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); let canMove=false;let movable=[]; ludoPlayers[color].tokens.forEach(t=>{let ok=false;if(t.status==='base'&&ludoGameState.dice===6)ok=true;if(t.status==='perimeter')ok=true;if(t.status==='home'&&(t.pos+ludoGameState.dice<=5))ok=true;if(ok){canMove=true;movable.push(t.id);let e=document.getElementById(t.id);if(e)e.classList.add('token-active');}}); if(!canMove){document.getElementById('ludo-log-msg').innerText="Ga bisa gerak!";setTimeout(()=>{let nt=color;let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}if(isOnline&&myColor===color){database.ref(`ludo_rooms/${roomCode}/state`).update({turn:nt,dice:0,hasRolled:false,moving:false});}else if(!isOnline){ludoGameState.turn=nt;ludoGameState.dice=0;ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[nt]==='ai')setTimeout(rollLudoDice,1000);}},1000);} return movable; }
-function rollLudoDice(){ if(ludoGameState.hasRolled||ludoGameState.moving)return; document.getElementById('ludo-dice').disabled=true;let rng=Math.floor(Math.random()*6)+1; if(isOnline){database.ref(`ludo_rooms/${roomCode}/state`).update({dice:rng,hasRolled:true});} else{let c=0;let a=setInterval(()=>{document.getElementById('ludo-dice').innerText=Math.floor(Math.random()*6)+1;c++;if(c>8){clearInterval(a);ludoGameState.dice=rng;ludoGameState.hasRolled=true;updateLudoUI();if(ludoTypes[ludoGameState.turn]==='ai')setTimeout(()=>{let mv=highlightLudoTokens(ludoGameState.turn);if(mv.length>0){let bt=mv.find(id=>ludoPlayers[ludoGameState.turn].tokens.find(t=>t.id===id).status==='base');let ch=bt||mv[Math.floor(Math.random()*mv.length)];executeLudoMove(ludoGameState.turn,ch);}},800);}},50);} }
-async function onLudoTokenClick(color,id){ if(ludoGameState.moving||!ludoGameState.hasRolled)return; if(isOnline&&(ludoGameState.turn!==myColor||color!==myColor))return; if(!isOnline&&(ludoGameState.turn!==color||ludoTypes[color]!=='human'))return; let e=document.getElementById(id);if(!e.classList.contains('token-active'))return; executeLudoMove(color,id); }
-async function executeLudoMove(color,id){ ludoGameState.moving=true;document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); if(isOnline)database.ref(`ludo_rooms/${roomCode}/state`).update({moving:true}); let t=ludoPlayers[color].tokens.find(x=>x.id===id);let steps=ludoGameState.dice;let gotKill=false;let isFinish=false; if(t.status==='base'){t.status='perimeter';t.pos=ludoPlayers[color].startIdx;renderLudoTokens();await new Promise(r=>setTimeout(r,400));} else{for(let i=0;i<steps;i++){if(t.status==='perimeter'){if(t.pos===ludoPlayers[color].endIdx){t.status='home';t.pos=0;}else{t.pos=(t.pos+1)%52;}}else if(t.status==='home'){t.pos++;if(t.pos===5)t.status='finish';}renderLudoTokens();await new Promise(r=>setTimeout(r,200));if(t.status==='finish'){isFinish=true;break;}}} let killed=[]; if(t.status==='perimeter'&&!ludoSafeZones.includes(t.pos)){Object.keys(ludoPlayers).forEach(ec=>{if(ec!==color&&ludoTypes[ec]!=='none'){ludoPlayers[ec].tokens.forEach(et=>{if(et.status==='perimeter'&&et.pos===t.pos)killed.push(et);});}});} if(killed.length>0){gotKill=true;killed.forEach(et=>{et.status='base';et.pos=-1;});renderLudoTokens();await new Promise(r=>setTimeout(r,400));} let isWinner=ludoPlayers[color].tokens.filter(tk=>tk.status==='finish').length===4; if(!ludoGameState.winners)ludoGameState.winners=[]; if(isWinner&&!ludoGameState.winners.includes(color))ludoGameState.winners.push(color); let ac=Object.keys(ludoTypes).filter(c=>ludoTypes[c]!=='none').length; if(ludoGameState.winners.length>=ac-1){ Object.keys(ludoTypes).forEach(c=>{if(ludoTypes[c]!=='none'&&!ludoGameState.winners.includes(c))ludoGameState.winners.push(c);}); if(isOnline&&myColor===color)database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/moving`]:false}); else if(!isOnline)showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo);return; } if(isOnline){if(myColor===color){let nt=color;if(!isFinish&&!gotKill&&steps!==6){let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}}database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/turn`]:nt,[`ludo_rooms/${roomCode}/state/dice`]:0,[`ludo_rooms/${roomCode}/state/hasRolled`]:false,[`ludo_rooms/${roomCode}/state/moving`]:false});}} else{ludoGameState.moving=false;if(isFinish||gotKill||steps===6){ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[color]==='ai')setTimeout(rollLudoDice,800);}else{let nt=color;let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}ludoGameState.turn=nt;ludoGameState.dice=0;ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[nt]==='ai')setTimeout(rollLudoDice,1000);}} }
+function rollLudoDice(){ 
+  if(ludoGameState.hasRolled||ludoGameState.moving)return; 
+  document.getElementById('ludo-dice').disabled=true;
+  let rng=Math.floor(Math.random()*6)+1; 
+  
+  // 🔊 MAINKAN SUARA DADU
+  if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
+
+  if(isOnline){
+    database.ref(`ludo_rooms/${roomCode}/state`).update({dice:rng,hasRolled:true});
+  } else{
+    let c=0;
+    let a=setInterval(()=>{
+      document.getElementById('ludo-dice').innerText=Math.floor(Math.random()*6)+1;
+      c++;
+      if(c>8){
+        clearInterval(a);ludoGameState.dice=rng;ludoGameState.hasRolled=true;updateLudoUI();
+        if(ludoTypes[ludoGameState.turn]==='ai')setTimeout(()=>{
+          let mv=highlightLudoTokens(ludoGameState.turn);
+          if(mv.length>0){let bt=mv.find(id=>ludoPlayers[ludoGameState.turn].tokens.find(t=>t.id===id).status==='base');let ch=bt||mv[Math.floor(Math.random()*mv.length)];executeLudoMove(ludoGameState.turn,ch);}
+        },800);
+      }
+    },50);
+  } 
+}
+
+async function executeLudoMove(color,id){ 
+  ludoGameState.moving=true;document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); 
+  if(isOnline)database.ref(`ludo_rooms/${roomCode}/state`).update({moving:true}); 
+  let t=ludoPlayers[color].tokens.find(x=>x.id===id);let steps=ludoGameState.dice;let gotKill=false;let isFinish=false; 
+  
+  if(t.status==='base'){
+    t.status='perimeter';t.pos=ludoPlayers[color].startIdx;renderLudoTokens();
+    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA KELUAR KANDANG
+    await new Promise(r=>setTimeout(r,400));
+  } else{
+    for(let i=0;i<steps;i++){
+      if(t.status==='perimeter'){
+        if(t.pos===ludoPlayers[color].endIdx){t.status='home';t.pos=0;}else{t.pos=(t.pos+1)%52;}
+      }else if(t.status==='home'){
+        t.pos++;if(t.pos===5)t.status='finish';
+      }
+      renderLudoTokens();
+      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA LANGKAH
+      await new Promise(r=>setTimeout(r,200));
+      if(t.status==='finish'){isFinish=true;break;}
+    }
+  } 
+  
+  let killed=[]; if(t.status==='perimeter'&&!ludoSafeZones.includes(t.pos)){Object.keys(ludoPlayers).forEach(ec=>{if(ec!==color&&ludoTypes[ec]!=='none'){ludoPlayers[ec].tokens.forEach(et=>{if(et.status==='perimeter'&&et.pos===t.pos)killed.push(et);});}});} 
+  if(killed.length>0){gotKill=true;killed.forEach(et=>{et.status='base';et.pos=-1;});renderLudoTokens();await new Promise(r=>setTimeout(r,400));} 
+  let isWinner=ludoPlayers[color].tokens.filter(tk=>tk.status==='finish').length===4; if(!ludoGameState.winners)ludoGameState.winners=[]; 
+  if(isWinner&&!ludoGameState.winners.includes(color))ludoGameState.winners.push(color); let ac=Object.keys(ludoTypes).filter(c=>ludoTypes[c]!=='none').length; 
+  if(ludoGameState.winners.length>=ac-1){ Object.keys(ludoTypes).forEach(c=>{if(ludoTypes[c]!=='none'&&!ludoGameState.winners.includes(c))ludoGameState.winners.push(c);}); if(isOnline&&myColor===color)database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/moving`]:false}); else if(!isOnline)showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo);return; } 
+  if(isOnline){if(myColor===color){let nt=color;if(!isFinish&&!gotKill&&steps!==6){let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}}database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/turn`]:nt,[`ludo_rooms/${roomCode}/state/dice`]:0,[`ludo_rooms/${roomCode}/state/hasRolled`]:false,[`ludo_rooms/${roomCode}/state/moving`]:false});}} 
+  else{ludoGameState.moving=false;if(isFinish||gotKill||steps===6){ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[color]==='ai')setTimeout(rollLudoDice,800);}else{let nt=color;let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}ludoGameState.turn=nt;ludoGameState.dice=0;ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[nt]==='ai')setTimeout(rollLudoDice,1000);}} 
+}
 
 // ===================================== ULAR TANGGA =====================================
 const snlLayouts=[{4:14,9:31,20:38,28:84,40:59,51:67,63:81,71:91,17:7,54:34,62:19,64:60,87:24,93:73,95:75,99:78},{2:23,8:34,20:77,32:68,41:79,74:88,82:98,29:9,38:15,47:26,53:33,62:37,86:54,92:70,97:25}];
@@ -982,8 +1397,67 @@ function renderSnLPawns(){ const c=document.getElementById('snl-token-layer');if
 function updateSnLUI(){ let tc=snlGameState.turn;let btn=document.getElementById('snl-dice');let log=document.getElementById('snl-log-msg'); document.getElementById('snl-turn-info').innerText=`${snlNames[tc]||gameConfigs.snl.colorNames[tc]}`; document.getElementById('snl-turn-info').style.color=gameConfigs.snl.hex[tc]; btn.innerText=snlGameState.dice>0?snlGameState.dice:'🎲'; let isMy=isOnline?(tc===myColor):(snlTypes[tc]==='human'); if(isMy){if(!snlGameState.hasRolled&&!snlGameState.moving){btn.disabled=false;log.innerText="Giliran! Lempar dadu.";}else{btn.disabled=true;log.innerText="Jalan...";}} else{btn.disabled=true;log.innerText=(snlTypes[tc]==='ai')?"Bot mikir...":"Nunggu...";} }
 function startSnLOffline(){ isOnline=false;activeGame='snl'; snlConfig={board:document.getElementById('snl-theme-board').value,snake:document.getElementById('snl-theme-snake').value}; snlTypes={red:document.getElementById('snl-off-red').value,blue:document.getElementById('snl-off-blue').value,green:document.getElementById('snl-off-green').value,yellow:document.getElementById('snl-off-yellow').value,purple:document.getElementById('snl-off-purple').value}; snlNames={red:snlTypes.red==='ai'?"BOT 1":"PLAYER 1",blue:snlTypes.blue==='ai'?"BOT 2":"PLAYER 2",green:snlTypes.green==='ai'?"BOT 3":"PLAYER 3",yellow:snlTypes.yellow==='ai'?"BOT 4":"PLAYER 4",purple:snlTypes.purple==='ai'?"BOT 5":"PLAYER 5"}; if(Object.values(snlTypes).filter(v=>v!=='none').length<2){alert("Minimal 2 pemain!");return;} snlPlayers={};gameConfigs.snl.colors.forEach(c=>{if(snlTypes[c]!=='none')snlPlayers[c]={pos:0};}); let st='red';for(let c of gameConfigs.snl.colors){if(snlTypes[c]!=='none'){st=c;break;}} snlActiveLayout=snlLayouts[Math.floor(Math.random()*snlLayouts.length)]; let bg=snlConfig.board==='pink'?"papan_ular_pink.png":"papan_ular.png"; document.getElementById('snl-main-container').style.backgroundImage=`url('${bg}')`; snlGameState={turn:st,dice:0,hasRolled:false,moving:false,winners:[]}; document.getElementById('snl-badge').innerText="MODE LOKAL/OFFLINE"; initSnLBoardHTML(); setTimeout(()=>{showScreen('snl-game-screen');drawVisualSnL();renderSnLPawns();updateSnLUI();if(snlTypes[snlGameState.turn]==='ai')setTimeout(rollSnLDice,1000);},100); }
 function syncSnLOnline(data){ if(document.getElementById('universal-lobby').classList.contains('active')){ snlActiveLayout=snlLayouts[data.layoutIdx||0]; snlConfig=data.config||{board:'default',snake:'default'}; let bg=snlConfig.board==='pink'?"papan_ular_pink.png":"papan_ular.png"; document.getElementById('snl-main-container').style.backgroundImage=`url('${bg}')`; snlPlayers=data.board;snlGameState=data.state; snlTypes={red:'none',blue:'none',green:'none',yellow:'none',purple:'none'}; Object.keys(data.players).forEach(c=>snlTypes[c]='human');snlNames=data.players; document.getElementById('snl-badge').innerText="WARNA LU: "+myColor.toUpperCase(); document.getElementById('snl-badge').style.color=gameConfigs.snl.hex[myColor]; initSnLBoardHTML(); setTimeout(()=>{showScreen('snl-game-screen');drawVisualSnL();renderSnLPawns();updateSnLUI();},100); } else if(document.getElementById('snl-game-screen').classList.contains('active')){ let curP=Object.keys(data.players||{}); Object.keys(snlTypes).forEach(c=>{if(snlTypes[c]==='human'&&!curP.includes(c))snlTypes[c]='none';}); let ac=Object.keys(snlTypes).filter(c=>snlTypes[c]!=='none').length; if(ac<2){if(isHost)database.ref(`snl_rooms/${roomCode}/status`).set('finished');alert("Pemain lain keluar!");leaveRoom();return;} snlGameState=data.state;if(!snlGameState.winners)snlGameState.winners=[]; if(!(snlGameState.turn===myColor&&snlGameState.moving)){snlPlayers=data.board;renderSnLPawns();}updateSnLUI(); if(snlGameState.winners.length>=ac-1&&ac>1)showEndLeaderboard(snlGameState.winners,snlNames,gameConfigs.snl); } }
-function rollSnLDice(){ if(snlGameState.hasRolled||snlGameState.moving)return; document.getElementById('snl-dice').disabled=true;let rng=Math.floor(Math.random()*6)+1; if(isOnline){database.ref(`snl_rooms/${roomCode}/state`).update({dice:rng,hasRolled:true,moving:true});executeSnLMove(snlGameState.turn,rng);} else{let c=0;let a=setInterval(()=>{document.getElementById('snl-dice').innerText=Math.floor(Math.random()*6)+1;c++;if(c>8){clearInterval(a);snlGameState.dice=rng;snlGameState.hasRolled=true;snlGameState.moving=true;updateSnLUI();executeSnLMove(snlGameState.turn,rng);}},50);} }
-async function executeSnLMove(color,dice){ let cp=snlPlayers[color].pos;let tp; if(cp===0){ if(dice===1){document.getElementById('snl-log-msg').innerText="BANGKIT!";tp=1;snlPlayers[color].pos=1;renderSnLPawns();await new Promise(r=>setTimeout(r,600));if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color]});passSnLNextTurn(color);return;} else{document.getElementById('snl-log-msg').innerText="Gagal! Harus angka 1!";setTimeout(()=>{passSnLNextTurn(color);},1000);return;} } else { tp=cp+dice; if(tp>100){document.getElementById('snl-log-msg').innerText=`Kelebihan! Butuh ${100-cp}`;await new Promise(r=>setTimeout(r,1000));passSnLNextTurn(color);return;} } while(cp!==tp){cp++;snlPlayers[color].pos=cp;renderSnLPawns();await new Promise(r=>setTimeout(r,250));} if(snlActiveLayout[cp]){ let isSn=snlActiveLayout[cp]<cp;document.getElementById('snl-log-msg').innerText=isSn?"Ops! Kena Ular 🐍":"Yess! Naik Tangga 🪜!"; await new Promise(r=>setTimeout(r,600));cp=snlActiveLayout[cp];snlPlayers[color].pos=cp;renderSnLPawns();await new Promise(r=>setTimeout(r,500)); } let isWin=cp===100; if(!snlGameState.winners)snlGameState.winners=[]; if(isWin&&!snlGameState.winners.includes(color))snlGameState.winners.push(color); let ac=Object.keys(snlTypes).filter(c=>snlTypes[c]!=='none').length; if(snlGameState.winners.length>=ac-1){ Object.keys(snlTypes).forEach(c=>{if(snlTypes[c]!=='none'&&!snlGameState.winners.includes(c))snlGameState.winners.push(c);}); if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color],[`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners,[`snl_rooms/${roomCode}/state/moving`]:false}); else if(!isOnline)showEndLeaderboard(snlGameState.winners,snlNames,gameConfigs.snl);return; } if(dice===6||isWin){ if(isOnline){if(myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color],[`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners,[`snl_rooms/${roomCode}/state/dice`]:0,[`snl_rooms/${roomCode}/state/hasRolled`]:false,[`snl_rooms/${roomCode}/state/moving`]:false});} else{snlGameState.moving=false;snlGameState.hasRolled=false;updateSnLUI();if(snlTypes[color]==='ai')setTimeout(rollSnLDice,800);} } else { if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color],[`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners}); passSnLNextTurn(color); } }
+function rollSnLDice(){ 
+  if(snlGameState.hasRolled||snlGameState.moving)return; 
+  document.getElementById('snl-dice').disabled=true;
+  let rng=Math.floor(Math.random()*6)+1; 
+  
+  // 🔊 MAINKAN SUARA DADU
+  if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
+
+  if(isOnline){
+    database.ref(`snl_rooms/${roomCode}/state`).update({dice:rng,hasRolled:true,moving:true});executeSnLMove(snlGameState.turn,rng);
+  } else{
+    let c=0;
+    let a=setInterval(()=>{
+      document.getElementById('snl-dice').innerText=Math.floor(Math.random()*6)+1;
+      c++;
+      if(c>8){
+        clearInterval(a);snlGameState.dice=rng;snlGameState.hasRolled=true;snlGameState.moving=true;updateSnLUI();executeSnLMove(snlGameState.turn,rng);
+      }
+    },50);
+  } 
+}
+
+async function executeSnLMove(color,dice){ 
+  let cp=snlPlayers[color].pos;let tp; 
+  if(cp===0){ 
+    if(dice===1){
+      document.getElementById('snl-log-msg').innerText="BANGKIT!";tp=1;snlPlayers[color].pos=1;renderSnLPawns();
+      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA BANGKIT
+      await new Promise(r=>setTimeout(r,600));
+      if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color]});passSnLNextTurn(color);return;
+    } else{
+      document.getElementById('snl-log-msg').innerText="Gagal! Harus angka 1!";setTimeout(()=>{passSnLNextTurn(color);},1000);return;
+    } 
+  } else { 
+    tp=cp+dice; 
+    if(tp>100){document.getElementById('snl-log-msg').innerText=`Kelebihan! Butuh ${100-cp}`;await new Promise(r=>setTimeout(r,1000));passSnLNextTurn(color);return;} 
+  } 
+  
+  while(cp!==tp){
+    cp++;snlPlayers[color].pos=cp;renderSnLPawns();
+    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA LANGKAH
+    await new Promise(r=>setTimeout(r,250));
+  } 
+  
+  if(snlActiveLayout[cp]){ 
+    let isSn=snlActiveLayout[cp]<cp;document.getElementById('snl-log-msg').innerText=isSn?"Ops! Kena Ular 🐍":"Yess! Naik Tangga 🪜!"; 
+    await new Promise(r=>setTimeout(r,600));cp=snlActiveLayout[cp];snlPlayers[color].pos=cp;renderSnLPawns();
+    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA NAIK/TURUN
+    await new Promise(r=>setTimeout(r,500)); 
+  } 
+  
+  let isWin=cp===100; if(!snlGameState.winners)snlGameState.winners=[]; 
+  if(isWin&&!snlGameState.winners.includes(color))snlGameState.winners.push(color); 
+  let ac=Object.keys(snlTypes).filter(c=>snlTypes[c]!=='none').length; 
+  if(snlGameState.winners.length>=ac-1){ Object.keys(snlTypes).forEach(c=>{if(snlTypes[c]!=='none'&&!snlGameState.winners.includes(c))snlGameState.winners.push(c);}); if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color],[`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners,[`snl_rooms/${roomCode}/state/moving`]:false}); else if(!isOnline)showEndLeaderboard(snlGameState.winners,snlNames,gameConfigs.snl);return; } 
+  if(dice===6||isWin){ 
+    if(isOnline){if(myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color],[`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners,[`snl_rooms/${roomCode}/state/dice`]:0,[`snl_rooms/${roomCode}/state/hasRolled`]:false,[`snl_rooms/${roomCode}/state/moving`]:false});} else{snlGameState.moving=false;snlGameState.hasRolled=false;updateSnLUI();if(snlTypes[color]==='ai')setTimeout(rollSnLDice,800);} 
+  } else { 
+    if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color],[`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners}); passSnLNextTurn(color); 
+  } 
+}
 function passSnLNextTurn(color){ let mx=gameConfigs.snl.colors.length;let idx=gameConfigs.snl.colors.indexOf(color);let nt=color; for(let i=1;i<=mx;i++){let n=gameConfigs.snl.colors[(idx+i)%mx];if(snlTypes[n]!=='none'&&!snlGameState.winners.includes(n)){nt=n;break;}} if(isOnline){if(myColor===color)database.ref().update({[`snl_rooms/${roomCode}/state/turn`]:nt,[`snl_rooms/${roomCode}/state/dice`]:0,[`snl_rooms/${roomCode}/state/hasRolled`]:false,[`snl_rooms/${roomCode}/state/moving`]:false});} else{snlGameState.moving=false;snlGameState.turn=nt;snlGameState.dice=0;snlGameState.hasRolled=false;updateSnLUI();if(snlTypes[nt]==='ai')setTimeout(rollSnLDice,1000);} }
 
 // ===================================== TIC TAC TOE =====================================
@@ -1055,12 +1529,10 @@ function domRenderBoard() {
   if (DG.chain.length === 0) { tiles.innerHTML = ''; if (empty) empty.style.display = 'flex'; return; }
   if (empty) empty.style.display = 'none';
   
-  // FIX: Clear penuh papannya setiap kali render menghindari tumpang tindih 
-  // karena unshift() menggeser index logic dari existing length sebelumnya.
   tiles.innerHTML = '';
   for (let i = 0; i < DG.chain.length; i++) {
      domRenderBoardTile(DG.chain[i], i, DG.chain[i].isNew);
-     DG.chain[i].isNew = false; // Reset flag agar tidak animasi berulang
+     DG.chain[i].isNew = false; 
   }
 }
 
@@ -1279,7 +1751,6 @@ let bilShooting = false, bilMouseStart = null, bilMouseNow = null, bilMouseDown 
 let bilPrevPocketed = [], bilWait = 0, bilNames = {p1:'PLAYER 1', p2:'PLAYER 2'};
 let bilLastShotId = null;
 
-// FUNGSI BARU BUAT NGECEK IDENTITAS (Biar Gak Crash Sama myColor Ludo)
 function getMyBilPlayer() {
   if (typeof isOnline === 'undefined' || !isOnline) return 'p1';
   return (typeof isHost !== 'undefined' && isHost) ? 'p1' : 'p2';
@@ -1374,7 +1845,6 @@ function syncBilliardOnline(data) {
     updateBilUI();
   }
 
-  // Cek player buat eksekusi shot dari server
   let myP = getMyBilPlayer();
   if (data.shot && data.shot.id !== bilLastShotId) {
     bilLastShotId = data.shot.id;
@@ -1482,11 +1952,10 @@ function bilDraw() {
   let myP = getMyBilPlayer();
   let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilMode==='pvp' || bilState.turn === 'p1');
   
-  // UI Petunjuk Kalau Bola Masuk
   if (bilState.ballInHand) {
       bilCtx.save();
       bilCtx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-      bilCtx.fillRect(12, BIL_H * 0.75 - BIL_R - 5, BIL_W - 24, BIL_R * 2 + 10); // Highlight area geser
+      bilCtx.fillRect(12, BIL_H * 0.75 - BIL_R - 5, BIL_W - 24, BIL_R * 2 + 10); 
       if (isMyTurn) {
           bilCtx.translate(BIL_W/2, BIL_H/2);
           bilCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
@@ -1497,7 +1966,6 @@ function bilDraw() {
       bilCtx.restore();
   }
 
-  // Gambar Arah Panah & Stick
   if (bilMouseDown && bilMouseStart && bilMouseNow && isMyTurn && !bilShooting && !bilState.ballInHand) {
     const cue = bilBalls[0]; 
     if (cue && !cue.inTray) {
@@ -1520,7 +1988,6 @@ function bilDraw() {
     }
   }
 
-  // Gambar Bola
   for (let b of bilBalls) {
     if (b.inTray) continue;
     bilCtx.beginPath(); bilCtx.arc(b.x+3, b.y+3, b.r, 0, Math.PI*2); bilCtx.fillStyle = 'rgba(0,0,0,0.6)'; bilCtx.fill();
@@ -1548,7 +2015,7 @@ function bilOnShotComplete() {
     cueBall.vx = 0; 
     cueBall.vy = 0;
     
-    bilState.ballInHand = true; // AKTIFKAN FITUR GESER BOLA
+    bilState.ballInHand = true;
     bilState.turn = bilState.turn === 'p1' ? 'p2' : 'p1';
     bilUpdateStateAfterShot(); return;
   }
@@ -1601,8 +2068,7 @@ function bilUpdateStateAfterShot() {
   }
 
   if (bilState.winners.length > 0) {
-    if(typeof isOnline !== 'undefined' && isOnline) { typeof showEndLeaderboard !== 'undefined' && showEndLeaderboard(bilState.winners, bilNames, gameConfigs.billiard); }
-    else { typeof showEndLeaderboard !== 'undefined' && showEndLeaderboard(bilState.winners, bilNames, gameConfigs.billiard); }
+    if(typeof showEndLeaderboard !== 'undefined') showEndLeaderboard(bilState.winners, bilNames, gameConfigs.billiard);
   } else if ((typeof isOnline === 'undefined' || !isOnline) && bilMode === 'bot' && bilState.turn === 'p2') {
     setTimeout(bilBotShoot, 1000);
   }
@@ -1641,7 +2107,6 @@ function bilBotShoot() {
     if(bilState.winners.length > 0) return;
     bilPrevPocketed = bilBalls.filter(b => b.inTray && b.id !== 0).map(b => b.id);
     
-    // Bot naruh bola putih random kalau ballInHand
     if(bilState.ballInHand) {
        cueBall.x = (BIL_W/2) + ((Math.random()-0.5)*100);
        bilState.ballInHand = false;
@@ -1657,7 +2122,6 @@ function bilGetMousePos(evt) {
   return { x: (clientX - rect.left) * (BIL_W / rect.width), y: (clientY - rect.top) * (BIL_H / rect.height) };
 }
 
-// LOGIKA INPUT MOUSE & TOUCH FIX 
 bilCanvas.addEventListener('mousedown', e => { 
   let myP = getMyBilPlayer();
   let isMyTurn = (typeof isOnline !== 'undefined' && isOnline) ? (bilState.turn === myP) : (bilMode==='pvp' || bilState.turn === 'p1');
@@ -1668,7 +2132,7 @@ bilCanvas.addEventListener('mousedown', e => {
   let pos = bilGetMousePos(e);
   
   if (bilState.ballInHand) {
-     bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x)); // Update posisi geser
+     bilBalls[0].x = Math.max(BIL_R + 12, Math.min(BIL_W - BIL_R - 12, pos.x)); 
   } else {
      bilMouseStart = pos; bilMouseNow = { ...bilMouseStart }; 
   }
@@ -1690,11 +2154,11 @@ window.addEventListener('mouseup', e => {
   bilMouseDown = false; 
   
   if (bilState.ballInHand) {
-     bilState.ballInHand = false; // Ngunci Posisi!
+     bilState.ballInHand = false; 
      if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') {
          database.ref(`billiard_rooms/${roomCode}`).update({'state/ballInHand': false, 'balls': bilBalls});
      }
-     return; // Jangan nembak dulu
+     return; 
   }
   
   const cue = bilBalls[0]; if (!cue || cue.inTray) return;
@@ -1713,7 +2177,6 @@ window.addEventListener('mouseup', e => {
   cue.vx = vx; cue.vy = vy; playSound('hit', power/BIL_MAX_P); bilShooting = true; bilMouseStart = null; document.getElementById('bil-power-bar').style.width = '0%';
 });
 
-// TOUCH SCREEN (SAMA KAYAK MOUSE)
 bilCanvas.addEventListener('touchstart', (e) => { 
   e.preventDefault(); 
   let myP = getMyBilPlayer();
@@ -1748,11 +2211,11 @@ window.addEventListener('touchend', e => {
   bilMouseDown = false; 
   
   if (bilState.ballInHand) {
-     bilState.ballInHand = false; // Ngunci Posisi!
+     bilState.ballInHand = false; 
      if(typeof isOnline !== 'undefined' && isOnline && typeof database !== 'undefined') {
          database.ref(`billiard_rooms/${roomCode}`).update({'state/ballInHand': false, 'balls': bilBalls});
      }
-     return; // Jangan nembak dulu
+     return; 
   }
   
   const cue = bilBalls[0]; if (!cue || cue.inTray) return;
@@ -1771,7 +2234,6 @@ window.addEventListener('touchend', e => {
   cue.vx = vx; cue.vy = vy; playSound('hit', power/BIL_MAX_P); bilShooting = true; bilMouseStart = null; document.getElementById('bil-power-bar').style.width = '0%';
 });
 
-// MAIN LOOP ARCADE UNIVERSE
 function mainLoop() {
   if (typeof activeGame !== 'undefined' && activeGame === 'billiard' && document.getElementById('billiard-game-screen').classList.contains('active')) {
     if (!bilState.winners.length) {
@@ -1790,65 +2252,58 @@ function mainLoop() {
   requestAnimationFrame(mainLoop);
 }
 
-// Menjalankan loop
 mainLoop();
 
+// ============================================================
+// 6. MUSIC PLAYLIST 
+// ============================================================
 let currentGameAudio = null;
-  let activePlayButton = null;
+let activePlayButton = null;
 
-  function toggleGameMusic(btnElement, url) {
-    // Jika tombol yang sama ditekan lagi (maka Pause / Play)
-    if (currentGameAudio && currentGameAudio.src === url) {
-      if (currentGameAudio.paused) {
-        currentGameAudio.play();
-        btnElement.innerText = "PAUSE";
-        btnElement.style.background = "#ff4757"; // Ubah ke merah saat pause bisa ditekan
-        btnElement.style.color = "#fff";
-      } else {
-        currentGameAudio.pause();
-        btnElement.innerText = "PLAY";
-        btnElement.style.background = "#00d2ff"; // Kembalikan ke biru
-        btnElement.style.color = "#000";
-      }
-    } else {
-      // Jika memutar lagu baru
-      
-      // Matikan audio lama jika ada
-      if (currentGameAudio) {
-        currentGameAudio.pause();
-        // Reset warna dan text tombol sebelumnya
-        if (activePlayButton) {
-          activePlayButton.innerText = "PLAY";
-          activePlayButton.style.background = "#00d2ff";
-          activePlayButton.style.color = "#000";
-        }
-      }
-
-      // Mulai audio baru
-      currentGameAudio = new Audio(url);
-      currentGameAudio.loop = true; // Set lagu untuk diputar terus menerus (looping) di background
-      currentGameAudio.play().catch(e => alert("Auto-play diblokir oleh browser. Silakan tap Play kembali."));
-      
-      // Update tampilan tombol yang ditekan
+function toggleGameMusic(btnElement, url) {
+  if (currentGameAudio && currentGameAudio.src === url) {
+    if (currentGameAudio.paused) {
+      currentGameAudio.play();
       btnElement.innerText = "PAUSE";
       btnElement.style.background = "#ff4757"; 
       btnElement.style.color = "#fff";
-      
-      // Simpan referensi tombol yang sedang aktif
-      activePlayButton = btnElement;
+    } else {
+      currentGameAudio.pause();
+      btnElement.innerText = "PLAY";
+      btnElement.style.background = "#00d2ff"; 
+      btnElement.style.color = "#000";
     }
+  } else {
+    if (currentGameAudio) {
+      currentGameAudio.pause();
+      if (activePlayButton) {
+        activePlayButton.innerText = "PLAY";
+        activePlayButton.style.background = "#00d2ff";
+        activePlayButton.style.color = "#000";
+      }
+    }
+
+    currentGameAudio = new Audio(url);
+    currentGameAudio.loop = true; 
+    currentGameAudio.play().catch(e => console.log("Audio play blocked."));
+    
+    btnElement.innerText = "PAUSE";
+    btnElement.style.background = "#ff4757"; 
+    btnElement.style.color = "#fff";
+    
+    activePlayButton = btnElement;
   }
-  
-  // --- LOGIKA UNTUK DRAG & MINIMIZE PLAYLIST ---
+}
+
 const fPlaylist = document.getElementById('floating-playlist');
 const fpHeader = document.getElementById('fp-header');
 let isDraggingPlaylist = false;
 let pStartX, pStartY, pInitialX, pInitialY;
 
-// Fungsi Buka Tutup (Minimize/Expand)
 function togglePlaylistSize() {
   const body = document.getElementById('fp-body');
   const btn = document.getElementById('fp-toggle-btn');
+  if(!body || !btn) return;
   if (body.style.display === 'none') {
     body.style.display = 'flex';
     btn.innerText = '—';
@@ -1858,33 +2313,29 @@ function togglePlaylistSize() {
   }
 }
 
-// Update tombol di Hub biar nampilin widget ini
 document.querySelectorAll('.game-btn').forEach(btn => {
   if(btn.innerText.includes('BUKA PLAYLIST')) {
     btn.onclick = function() {
-      fPlaylist.style.display = 'flex';
+      if(fPlaylist) fPlaylist.style.display = 'flex';
     };
   }
 });
 
-// Event Listener buat Drag (Geser) pakai Mouse
-fpHeader.addEventListener('mousedown', dragStart);
-document.addEventListener('mousemove', dragMove);
-document.addEventListener('mouseup', dragEnd);
+if(fpHeader){
+  fpHeader.addEventListener('mousedown', dragStart);
+  document.addEventListener('mousemove', dragMove);
+  document.addEventListener('mouseup', dragEnd);
 
-// Event Listener buat Drag (Geser) pakai Touch screen HP
-fpHeader.addEventListener('touchstart', dragStart, {passive: false});
-document.addEventListener('touchmove', dragMove, {passive: false});
-document.addEventListener('touchend', dragEnd);
+  fpHeader.addEventListener('touchstart', dragStart, {passive: false});
+  document.addEventListener('touchmove', dragMove, {passive: false});
+  document.addEventListener('touchend', dragEnd);
+}
 
 function dragStart(e) {
-  // Kalau klik tombol minimize / close, jangan nge-drag
   if(e.target.tagName.toLowerCase() === 'button') return; 
-  
   isDraggingPlaylist = true;
   fpHeader.style.cursor = 'grabbing';
   let event = e.type.includes('mouse') ? e : e.touches[0];
-  
   pStartX = event.clientX;
   pStartY = event.clientY;
   pInitialX = fPlaylist.offsetLeft;
@@ -1893,35 +2344,29 @@ function dragStart(e) {
 
 function dragMove(e) {
   if (!isDraggingPlaylist) return;
-  // Mencegah layar ikut scroll saat geser playlist di HP
   if (e.type.includes('touch')) e.preventDefault(); 
-  
   let event = e.type.includes('mouse') ? e : e.touches[0];
   let dx = event.clientX - pStartX;
   let dy = event.clientY - pStartY;
   
-  fPlaylist.style.right = 'auto'; // Lepas posisi 'right' karena kita geser pakai 'left'
+  fPlaylist.style.right = 'auto'; 
   fPlaylist.style.left = (pInitialX + dx) + 'px';
   fPlaylist.style.top = (pInitialY + dy) + 'px';
 }
 
 function dragEnd() {
   isDraggingPlaylist = false;
-  fpHeader.style.cursor = 'grab';
+  if(fpHeader) fpHeader.style.cursor = 'grab';
 }
 
-// --- FUNGSI PUTAR LAGU DARI STORAGE LOKAL ---
 function playLocalAudio(inputElement) {
   const file = inputElement.files[0];
-  if (!file) return; // Kalau batal milih file, biarin aja
+  if (!file) return; 
 
-  // Buat URL sementara (Blob) langsung dari file di HP/PC pemain
   const localUrl = URL.createObjectURL(file);
 
-  // Matikan audio yang lagi jalan (kalau ada)
   if (currentGameAudio) {
     currentGameAudio.pause();
-    // Reset tombol playlist lain biar balik jadi "PLAY" biru
     if (activePlayButton) {
       activePlayButton.innerText = "PLAY";
       activePlayButton.style.background = "#00d2ff";
@@ -1929,20 +2374,15 @@ function playLocalAudio(inputElement) {
     }
   }
 
-  // Putar lagu dari storage
   currentGameAudio = new Audio(localUrl);
   currentGameAudio.loop = true;
-  currentGameAudio.play().catch(e => alert("Gagal memutar lagu dari storage."));
+  currentGameAudio.play().catch(e => console.log("Gagal memutar audio lokal."));
 
-  // Ubah tampilan tombol lokal jadi indikator "PLAYING"
   const btn = inputElement.nextElementSibling;
   btn.innerText = "JALAN";
   btn.style.background = "#ffeb3b";
   
-  // Set tombol ini jadi tombol yang aktif sekarang
   activePlayButton = btn;
-
-  // Kosongin input valuenya biar user bisa milih lagu yang sama lagi kalau mau
   inputElement.value = '';
 }
 
