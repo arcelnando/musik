@@ -115,7 +115,9 @@
   width: 100%;
   padding-top: 100%;
   position: relative;
-  background-color: #111;
+  /* Visual Fallback: Akan muncul jika papan.png tidak ada */
+  background-color: #111; 
+  /* Asset Utama */
   background-image: url('papan.png');
   background-size: cover;
   background-position: center;
@@ -124,6 +126,7 @@
   box-shadow: 8px 8px 0px rgba(0,0,0,0.8);
   overflow: hidden;
 }
+
 .grid-layer {
   position: absolute;
   top: 0;
@@ -134,12 +137,14 @@
   grid-template-columns: repeat(15, 1fr);
   grid-template-rows: repeat(15, 1fr);
 }
+
 .cell {
   border: 1px solid rgba(0,0,0,0.1);
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .path-skull { background-color: rgba(116, 125, 140, 0.15); }
 .path-tech { background-color: rgba(46, 213, 115, 0.15); }
 .path-red { background-color: rgba(255, 71, 87, 0.15); }
@@ -154,6 +159,7 @@
   border: 3px solid rgba(17, 17, 17, 0.5);
   position: relative;
 }
+
 .base-skull { background-color: rgba(47, 53, 66, 0.2); }
 .base-tech { background-color: rgba(39, 174, 96, 0.2); }
 .base-red { background-color: rgba(192, 57, 43, 0.2); }
@@ -170,6 +176,7 @@
   grid-gap: 10%;
   border: 2px solid rgba(17, 17, 17, 0.3);
 }
+
 .slot {
   background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
@@ -179,6 +186,7 @@
   align-items: center;
   position: relative;
 }
+
 .center-arena {
   grid-area: 7/7/10/10;
   background-color: rgba(17, 17, 17, 0.2);
@@ -193,6 +201,7 @@
   font-size: 16px;
   font-weight: bold;
 }
+
 .token-layer {
   position: absolute;
   top: 0;
@@ -201,6 +210,7 @@
   height: 100%;
   pointer-events: none;
 }
+
 .token {
   position: absolute;
   transition: all 0.25s linear;
@@ -212,47 +222,64 @@
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  background-color: transparent;
+  
+  /* --- VISUAL FALLBACK BIDAK (Jika Gambar Tidak Ada) --- */
+  border-radius: 50%; /* Membuat bentuk bulat */
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4); /* Efek 3D ringan */
+  
+  /* Pengaturan Gambar Bidak */
   background-size: 100% 100%;
   background-position: center bottom;
   background-repeat: no-repeat;
 }
-.token.red, .snl-p-red { background-image: url('merah.png'); border: none !important; }
-.token.blue, .snl-p-blue { background-image: url('biru.png'); border: none !important; }
-.token.green, .snl-p-green { background-image: url('hijau.png'); border: none !important; }
-.token.skull { background-image: url('abu.png'); border: none !important; }
+
+/* Fallback warna masing-masing bidak + Asset Gambar */
+.token.red, .snl-p-red { 
+  background-color: #ff4757; 
+  background-image: url('merah.png'); 
+}
+.token.blue, .snl-p-blue { 
+  background-color: #1e90ff; 
+  background-image: url('biru.png'); 
+}
+.token.green, .snl-p-green { 
+  background-color: #2ed573; 
+  background-image: url('hijau.png'); 
+}
+.token.skull { 
+  background-color: #747d8c; 
+  background-image: url('abu.png'); 
+}
 
 
 /* =====================================
-   TEMA LUDO CUTE PINK (CSS ONLY)
+   TEMA LUDO CUTE PINK (CSS ONLY / FALLBACK)
 ===================================== */
 .board-container.cute-theme {
-  background-image: none !important;
-  background-color: #ffe4e1 !important; /* Warna baby pink */
+  /* Hapus 'none !important' agar bisa dipasang gambar tema pink kalau ada */
+  background-image: url('papan-cute.png'); 
+  background-color: #ffe4e1 !important; /* Warna baby pink (Fallback) */
   border: 4px solid #ff69b4 !important; /* Hot pink */
   box-shadow: 8px 8px 0px rgba(255, 105, 180, 0.4) !important;
 }
 
-/* Ubah warna kotak-kotak jalannya */
 .cute-theme .cell {
   border: 1px solid #ffb6c1 !important;
   background-color: rgba(255, 240, 245, 0.6) !important;
 }
 
-/* Ubah warna jalur aman (Safe Zones) jadi pastel tembus pandang */
-.cute-theme .path-skull { background-color: rgba(255, 182, 193, 0.7) !important; } /* Pink muda */
-.cute-theme .path-tech { background-color: rgba(173, 216, 230, 0.7) !important; } /* Biru muda */
-.cute-theme .path-red { background-color: rgba(255, 105, 180, 0.7) !important; } /* Pink terang */
-.cute-theme .path-japan { background-color: rgba(221, 160, 221, 0.7) !important; } /* Ungu pastel */
+.cute-theme .path-skull { background-color: rgba(255, 182, 193, 0.7) !important; }
+.cute-theme .path-tech { background-color: rgba(173, 216, 230, 0.7) !important; }
+.cute-theme .path-red { background-color: rgba(255, 105, 180, 0.7) !important; }
+.cute-theme .path-japan { background-color: rgba(221, 160, 221, 0.7) !important; }
 
-/* Ubah warna Markas / Kandang (Bases) */
 .cute-theme .base { border: 3px solid #ff69b4 !important; }
 .cute-theme .base-skull { background-color: rgba(255, 182, 193, 0.8) !important; }
 .cute-theme .base-tech { background-color: rgba(173, 216, 230, 0.8) !important; }
 .cute-theme .base-red { background-color: rgba(255, 105, 180, 0.8) !important; }
 .cute-theme .base-japan { background-color: rgba(221, 160, 221, 0.8) !important; }
 
-/* Ubah desain slot tempat bidak diam */
 .cute-theme .inner-box {
   background: rgba(255, 255, 255, 0.7) !important;
   border: 2px dashed #ff69b4 !important;
@@ -263,13 +290,13 @@
   box-shadow: inset 2px 2px 5px rgba(255, 105, 180, 0.2) !important;
 }
 
-/* Ubah area tengah (Pusat Kemenangan) */
 .cute-theme .center-arena {
   background-color: #ff1493 !important;
   border: 3px solid #fff !important;
   color: #fff !important;
   text-shadow: 1px 1px 2px #000 !important;
 }
+
 
     /* SNL BOARD */
     .snl-pawn { background-size: contain; background-repeat: no-repeat; background-position: center; border: none !important; box-shadow: none !important; }
@@ -2030,38 +2057,174 @@ if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
   } 
 }
 
-async function executeLudoMove(color,id){ 
-  ludoGameState.moving=true;document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); 
-  if(isOnline)database.ref(`ludo_rooms/${roomCode}/state`).update({moving:true}); 
-  let t=ludoPlayers[color].tokens.find(x=>x.id===id);let steps=ludoGameState.dice;let gotKill=false;let isFinish=false; 
+async function executeLudoMove(color, id) { 
+  ludoGameState.moving = true;
+  document.querySelectorAll('.token-active').forEach(e => e.classList.remove('token-active')); 
+  if(isOnline) database.ref(`ludo_rooms/${roomCode}/state`).update({moving: true}); 
   
-  if(t.status==='base'){
-    t.status='perimeter';t.pos=ludoPlayers[color].startIdx;renderLudoTokens();
-    // Pancing browser agar izin audionya kebuka pas user klik dadu
-if (typeof initAudio === 'function') initAudio(); 
-
-if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
-
-    for(let i=0;i<steps;i++){
-      if(t.status==='perimeter'){
-        if(t.pos===ludoPlayers[color].endIdx){t.status='home';t.pos=0;}else{t.pos=(t.pos+1)%52;}
-      }else if(t.status==='home'){
-        t.pos++;if(t.pos===5)t.status='finish';
+  let t = ludoPlayers[color].tokens.find(x => x.id === id);
+  let steps = ludoGameState.dice;
+  let gotKill = false;
+  let isFinish = false; 
+  
+  // 1. CEK JIKA DI DALAM KANDANG
+  if (t.status === 'base') {
+    t.status = 'perimeter';
+    t.pos = ludoPlayers[color].startIdx;
+    renderLudoTokens();
+    
+    // Suara saat keluar kandang (pakai step agar masuk akal)
+    if (typeof initAudio === 'function') initAudio(); 
+    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); }
+    
+    await new Promise(r => setTimeout(r, 400)); // Kasih jeda visual sebentar
+  } 
+  // 2. CEK JIKA SUDAH DI JALAN (PERIMETER / HOME)
+  else {
+    for (let i = 0; i < steps; i++) {
+      if (t.status === 'perimeter') {
+        if (t.pos === ludoPlayers[color].endIdx) {
+          t.status = 'home';
+          t.pos = 0;
+        } else {
+          t.pos = (t.pos + 1) % 52;
+        }
+      } else if (t.status === 'home') {
+        t.pos++;
+        if (t.pos === 5) t.status = 'finish';
       }
       renderLudoTokens();
-      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA LANGKAH
-      await new Promise(r=>setTimeout(r,200));
-      if(t.status==='finish'){isFinish=true;break;}
+      
+      // Suara langkah
+      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } 
+      await new Promise(r => setTimeout(r, 200));
+      
+      if (t.status === 'finish') { isFinish = true; break; }
     }
+  }
+  
+  // 3. LOGIKA MAKAN BIDAK LAIN (KILL)
+  let killed = []; 
+  if (t.status === 'perimeter' && !ludoSafeZones.includes(t.pos)) {
+    Object.keys(ludoPlayers).forEach(ec => {
+      if (ec !== color && ludoTypes[ec] !== 'none') {
+        ludoPlayers[ec].tokens.forEach(et => {
+          if (et.status === 'perimeter' && et.pos === t.pos) killed.push(et);
+        });
+      }
+    });
+  } 
+  if (killed.length > 0) {
+    gotKill = true;
+    killed.forEach(et => { et.status = 'base'; et.pos = -1; });
+    renderLudoTokens();
+    await new Promise(r => setTimeout(r, 400));
   } 
   
-  let killed=[]; if(t.status==='perimeter'&&!ludoSafeZones.includes(t.pos)){Object.keys(ludoPlayers).forEach(ec=>{if(ec!==color&&ludoTypes[ec]!=='none'){ludoPlayers[ec].tokens.forEach(et=>{if(et.status==='perimeter'&&et.pos===t.pos)killed.push(et);});}});} 
-  if(killed.length>0){gotKill=true;killed.forEach(et=>{et.status='base';et.pos=-1;});renderLudoTokens();await new Promise(r=>setTimeout(r,400));} 
-  let isWinner=ludoPlayers[color].tokens.filter(tk=>tk.status==='finish').length===4; if(!ludoGameState.winners)ludoGameState.winners=[]; 
-  if(isWinner&&!ludoGameState.winners.includes(color))ludoGameState.winners.push(color); let ac=Object.keys(ludoTypes).filter(c=>ludoTypes[c]!=='none').length; 
-  if(ludoGameState.winners.length>=ac-1){ Object.keys(ludoTypes).forEach(c=>{if(ludoTypes[c]!=='none'&&!ludoGameState.winners.includes(c))ludoGameState.winners.push(c);}); if(isOnline&&myColor===color)database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/moving`]:false}); else if(!isOnline)showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo);return; } 
-  if(isOnline){if(myColor===color){let nt=color;if(!isFinish&&!gotKill&&steps!==6){let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}}database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/turn`]:nt,[`ludo_rooms/${roomCode}/state/dice`]:0,[`ludo_rooms/${roomCode}/state/hasRolled`]:false,[`ludo_rooms/${roomCode}/state/moving`]:false});}} 
-  else{ludoGameState.moving=false;if(isFinish||gotKill||steps===6){ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[color]==='ai')setTimeout(rollLudoDice,800);}else{let nt=color;let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}ludoGameState.turn=nt;ludoGameState.dice=0;ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[nt]==='ai')setTimeout(rollLudoDice,1000);}} 
+  // 4. CEK PEMENANG
+  let isWinner = ludoPlayers[color].tokens.filter(tk => tk.status === 'finish').length === 4; 
+  if (!ludoGameState.winners) ludoGameState.winners = []; 
+  if (isWinner && !ludoGameState.winners.includes(color)) ludoGameState.winners.push(color); 
+  
+  let ac = Object.keys(ludoTypes).filter(c => ludoTypes[c] !== 'none').length; 
+  if (ludoGameState.winners.length >= ac - 1) { 
+    Object.keys(ludoTypes).forEach(c => {
+      if (ludoTypes[c] !== 'none' && !ludoGameState.winners.includes(c)) ludoGameState.winners.push(c);
+    }); 
+    if (isOnline && myColor === color) {
+      database.ref().update({
+        [`ludo_rooms/${roomCode}/board`]: ludoPlayers,
+        [`ludo_rooms/${roomCode}/state/winners`]: ludoGameState.winners,
+        [`ludo_rooms/${roomCode}/state/moving`]: false
+      });
+    } else if (!isOnline) {
+      showEndLeaderboard(ludoGameState.winners, ludoNames, gameConfigs.ludo);
+    }
+    return; 
+  } 
+  
+  // 5. GANTI GILIRAN ATAU MAIN LAGI (KARENA 6, KILL, ATAU FINISH)
+  if (isOnline) {
+    if (myColor === color) {
+      let nt = color;
+      if (!isFinish && !gotKill && steps !== 6) {
+        let idx = gameConfigs.ludo.colors.indexOf(color);
+        for (let i = 1; i <= 4; i++) {
+          let n = gameConfigs.ludo.colors[(idx + i) % 4];
+          if (ludoTypes[n] !== 'none' && !ludoGameState.winners.includes(n)) { nt = n; break; }
+        }
+      }
+      database.ref().update({
+        [`ludo_rooms/${roomCode}/board`]: ludoPlayers,
+        [`ludo_rooms/${roomCode}/state/winners`]: ludoGameState.winners,
+        [`ludo_rooms/${roomCode}/state/turn`]: nt,
+        [`ludo_rooms/${roomCode}/state/dice`]: 0,
+        [`ludo_rooms/${roomCode}/state/hasRolled`]: false,
+        [`ludo_rooms/${roomCode}/state/moving`]: false
+      });
+    }
+  } else {
+    ludoGameState.moving = false;
+    if (isFinish || gotKill || steps === 6) {
+      ludoGameState.hasRolled = false;
+      updateLudoUI();
+      if (ludoTypes[color] === 'ai') setTimeout(rollLudoDice, 800);
+    } else {
+      let nt = color;
+      let idx = gameConfigs.ludo.colors.indexOf(color);
+      for (let i = 1; i <= 4; i++) {
+        let n = gameConfigs.ludo.colors[(idx + i) % 4];
+        if (ludoTypes[n] !== 'none' && !ludoGameState.winners.includes(n)) { nt = n; break; }
+      }
+      ludoGameState.turn = nt;
+      ludoGameState.dice = 0;
+      ludoGameState.hasRolled = false;
+      updateLudoUI();
+      if (ludoTypes[nt] === 'ai') setTimeout(rollLudoDice, 1000);
+    }
+  } 
+}
+
+// GANTI ATAU TAMBAHKAN FUNGSI INI DI KODE KAMU
+function onLudoTokenClick(color, id) {
+  // 1. Validasi Dasar: Cegah klik liar
+  if (ludoGameState.turn !== color) {
+    console.log("Bukan giliranmu!");
+    return;
+  }
+  if (!ludoGameState.hasRolled) {
+    console.log("Lempar dadu dulu bos!");
+    return;
+  }
+  if (ludoGameState.moving) {
+    console.log("Sabar, bidak lagi jalan...");
+    return;
+  }
+
+  // 2. Cari tau bidak mana yang kamu klik
+  let t = ludoPlayers[color].tokens.find(x => x.id === id);
+  if (!t) return;
+
+  // 3. Validasi Logika: Apakah bidak INI boleh jalan dengan dadu sekarang?
+  let bolehJalan = false;
+  
+  // Kalau di kandang DAN dadu 6, BOLEH JALAN KELUAR
+  if (t.status === 'base' && ludoGameState.dice === 6) bolehJalan = true;
+  
+  // Kalau sudah di area bebas, BOLEH JALAN
+  if (t.status === 'perimeter') bolehJalan = true;
+  
+  // Kalau di area rumah (mau menang), cek apakah langkah dadu ga kelebihan
+  if (t.status === 'home' && (t.pos + ludoGameState.dice <= 5)) bolehJalan = true;
+
+  // 4. Eksekusi!
+  if (bolehJalan) {
+    // Jalankan bidaknya
+    executeLudoMove(color, id);
+  } else {
+    // Kasih tau di console kalau bidak spesifik ini emang ga bisa jalan
+    console.log("Bidak ini ga bisa digerakkan dengan angka " + ludoGameState.dice);
+  }
 }
 
 // ===================================== ULAR TANGGA =====================================
