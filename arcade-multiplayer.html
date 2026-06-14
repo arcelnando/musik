@@ -1472,11 +1472,6 @@ body.theme-colorful .crt::before {
   </div>
 </div>
 
-<div id="in-game-avatar-hud" style="display:none; position:fixed; top:15px; left:15px; background:rgba(20,20,20,0.6); border:1px solid rgba(255,255,255,0.15); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); padding:5px 12px 5px 5px; border-radius:30px; align-items:center; gap:10px; z-index:99000; box-shadow:0 4px 15px rgba(0,0,0,0.5); pointer-events:none;">
-  <img id="hud-avatar" src="" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:2px solid #00d2ff; box-shadow:0 0 10px rgba(0,210,255,0.4);">
-  <span id="hud-name" style="color:#fff; font-family:'Orbitron', sans-serif; font-size:11px; font-weight:bold; letter-spacing:1px; text-transform:uppercase;">PLAYER</span>
-</div>
-
     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
 
 </div>
@@ -1821,6 +1816,13 @@ function startLudoOffline(){
       mbc.style.backgroundImage = "url('papan.png')"; 
     }
   }
+  
+  // Fitur Ludo Papan Pink
+  let ludoTheme = document.getElementById('ludo-theme-board');
+  ludoConfig.board = ludoTheme ? ludoTheme.value : 'default';
+  let bgLudo = ludoConfig.board === 'pink' ? 'papanludo_pink.png' : 'papan.png';
+  let mbc = document.getElementById('main-board-container');
+  if(mbc) mbc.style.backgroundImage = `url('${bgLudo}')`;
   
   ludoTypes={red:document.getElementById('ludo-off-red').value,blue:document.getElementById('ludo-off-blue').value,green:document.getElementById('ludo-off-green').value,skull:document.getElementById('ludo-off-skull').value}; 
   ludoNames={red:ludoTypes.red==='ai'?"BOT MERAH":"PLAYER 1",blue:ludoTypes.blue==='ai'?"BOT BIRU":"PLAYER 2",green:ludoTypes.green==='ai'?"BOT HIJAU":"PLAYER 3",skull:ludoTypes.skull==='ai'?"BOT ABU":"PLAYER 4"}; 
@@ -2930,4 +2932,4 @@ function applyTheme(t) {
 
 </script>
 </body>
-  </html>
+          </html>
