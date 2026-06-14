@@ -1391,85 +1391,102 @@ body.theme-colorful .crt::before {
   </div>
 </div>
 
-<!-- TOMBOL FLOATING CHAT TRANSPARAN -->
-<div class="dom-overlay" id="quick-chat-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);">
-  <div class="dom-modal" style="background:rgba(20, 20, 20, 0.25); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(255, 255, 255, 0.15); width:95%; max-width:450px; padding:25px 15px; border-radius:16px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
-    <h2 style="color:#00d2ff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:2px; text-shadow:0 2px 5px rgba(0,0,0,0.5);">QUICK CHAT</h2>
+<!-- MODAL QUICK CHAT (CLEAN, NO GLOW, CUMA TEKS) -->
+<div class="dom-overlay" id="quick-chat-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);">
+  <div class="dom-modal" style="background:rgba(15, 15, 15, 0.5); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255, 255, 255, 0.1); width:90%; max-width:400px; padding:25px 20px; border-radius:12px; text-align:center; box-shadow:none;">
+    <h2 style="color:#00d2ff; margin-top:0; margin-bottom:20px; font-size:16px; letter-spacing:2px; text-shadow:none;">QUICK CHAT</h2>
     
-    <div style="display:flex; gap:12px;">
-      <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
-        <div style="color:#2ed573; font-weight:bold; font-size:12px; margin-bottom:8px; letter-spacing:1px; text-shadow:1px 1px 2px #000;">👍 PUJIAN</div>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(46, 213, 115, 0.05); border:1px solid rgba(46, 213, 115, 0.3); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('GGWP Bang!')">GGWP Bang!</button>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(46, 213, 115, 0.05); border:1px solid rgba(46, 213, 115, 0.3); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('Nice Try!')">Nice Try!</button>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(46, 213, 115, 0.05); border:1px solid rgba(46, 213, 115, 0.3); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('Jago banget lu!')">Jago banget lu!</button>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(46, 213, 115, 0.05); border:1px solid rgba(46, 213, 115, 0.3); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('Suhu turun gunung')">Suhu turun gunung</button>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(46, 213, 115, 0.05); border:1px solid rgba(46, 213, 115, 0.3); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('Ampun bang jago')">Ampun bang jago</button>
+    <div style="display:flex; gap:20px; text-align:left;">
+      <!-- KOLOM PUJIAN (TEKS AJA) -->
+      <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
+        <div style="color:#2ed573; font-weight:bold; font-size:12px; margin-bottom:5px; letter-spacing:1px; border-bottom:1px solid rgba(46, 213, 115, 0.3); padding-bottom:4px;">👍 PUJIAN</div>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('GGWP Bang!')">GGWP Bang!</span>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('Nice Try!')">Nice Try!</span>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('Jago banget lu!')">Jago banget lu!</span>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('Suhu turun gunung')">Suhu turun gunung</span>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('Ampun bang jago')">Ampun bang jago</span>
       </div>
 
-      <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
-        <div style="color:#ff4757; font-weight:bold; font-size:12px; margin-bottom:8px; letter-spacing:1px; text-shadow:1px 1px 2px #000;">👎 TAUNTING</div>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(255, 71, 87, 0.05); border:1px solid rgba(255, 71, 87, 0.3); color:#ff4757; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('Cupu lu wkwk')">Cupu lu wkwk</button>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(255, 71, 87, 0.05); border:1px solid rgba(255, 71, 87, 0.3); color:#ff4757; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('Mending turu bang')">Mending turu bang</button>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(255, 71, 87, 0.05); border:1px solid rgba(255, 71, 87, 0.3); color:#ff4757; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('EZ BANGET CUI')">EZ BANGET CUI</button>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(255, 71, 87, 0.05); border:1px solid rgba(255, 71, 87, 0.3); color:#ff4757; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('Kena mental dek?')">Kena mental dek?</button>
-        <button class="game-btn" style="width:100%; margin:0; padding:8px 5px; font-size:9px; background:rgba(255, 71, 87, 0.05); border:1px solid rgba(255, 71, 87, 0.3); color:#ff4757; border-radius:8px; box-shadow:none;" onclick="sendQuickChat('Yahh nangis dia')">Yahh nangis dia</button>
+      <!-- KOLOM TAUNTING (TEKS AJA) -->
+      <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
+        <div style="color:#ff4757; font-weight:bold; font-size:12px; margin-bottom:5px; letter-spacing:1px; border-bottom:1px solid rgba(255, 71, 87, 0.3); padding-bottom:4px;">👎 TAUNTING</div>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('Cupu lu wkwk')">Cupu lu wkwk</span>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('Mending turu bang')">Mending turu bang</span>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('EZ BANGET CUI')">EZ BANGET CUI</span>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('Kena mental dek?')">Kena mental dek?</span>
+        <span style="cursor:pointer; color:#ccc; font-size:11px; transition:0.2s;" onclick="sendQuickChat('Yahh nangis dia')">Yahh nangis dia</span>
       </div>
     </div>
 
-    <button class="game-btn" style="margin-top:20px; width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); color:#aaa; border-radius:8px; box-shadow:none;" onclick="document.getElementById('quick-chat-modal').style.display='none'">TUTUP</button>
+    <button class="game-btn" style="margin-top:25px; width:100%; background:transparent; border:1px solid rgba(255,255,255,0.2); color:#aaa; border-radius:6px; box-shadow:none;" onclick="document.getElementById('quick-chat-modal').style.display='none'">TUTUP</button>
   </div>
 </div>
 
-<div id="global-chat-toast" style="position:fixed; top:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); border:2px solid #00d2ff; padding:10px 15px; border-radius:8px; z-index:99999; display:none; align-items:center; gap:10px; box-shadow:0 5px 15px rgba(0,0,0,0.5); transition:0.3s; pointer-events:none; width:max-content; max-width:90%;">
+<!-- TOAST NOTIFIKASI CHAT (NO GLOW) -->
+<div id="global-chat-toast" style="position:fixed; top:20px; left:50%; transform:translateX(-50%); background:rgba(15,15,15,0.85); border:1px solid rgba(255,255,255,0.1); padding:8px 12px; border-radius:6px; z-index:99999; display:none; align-items:center; gap:10px; box-shadow:none; backdrop-filter:blur(5px); transition:0.3s; pointer-events:none; width:max-content; max-width:90%;">
   <img id="gct-ava" src="" style="width:25px; height:25px; border-radius:4px; object-fit:cover;">
-  <div style="font-family:'Orbitron', sans-serif; font-size:12px; color:#fff; display:flex; flex-direction:column; line-height:1.2;">
-    <span id="gct-name" style="font-weight:bold; font-size:10px;"></span>
-    <span id="gct-msg" style="color:#ccc;"></span>
+  <div style="font-family:'Orbitron', sans-serif; font-size:11px; color:#fff; display:flex; flex-direction:column; line-height:1.2;">
+    <span id="gct-name" style="font-weight:normal; font-size:10px;"></span>
+    <span id="gct-msg" style="color:#aaa;"></span>
   </div>
 </div>
 
-<!-- MODAL PENGATURAN -->
-<div class="dom-overlay" id="settings-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);">
-  <div class="dom-modal" id="settings-modal-box" style="background:rgba(20,20,20,0.25); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(255,255,255,0.15); width:90%; max-width:350px; padding:25px 20px; border-radius:16px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
-    <h2 style="color:#fff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:3px; text-shadow:0 2px 5px rgba(0,0,0,0.5);">⚙ PENGATURAN</h2>
+<!-- MODAL PENGATURAN (BISA UPLOAD FOTO SENDIRI & NO GLOW) -->
+<div class="dom-overlay" id="settings-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);">
+  <div class="dom-modal" id="settings-modal-box" style="background:rgba(15,15,15,0.6); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1); width:90%; max-width:350px; padding:20px; border-radius:12px; text-align:center; box-shadow:none;">
+    <h2 style="color:#fff; margin-top:0; margin-bottom:15px; font-size:16px; letter-spacing:2px; text-shadow:none;">⚙ PENGATURAN</h2>
 
     <!-- PILIH TEMA -->
     <div style="text-align:left; margin-bottom:15px;">
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:8px; letter-spacing:1px;">TEMA TAMPILAN:</p>
       <div style="display:flex; gap:8px; justify-content:center;">
-        <button onclick="applyTheme('clean')" style="flex:1; padding:10px 5px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff; font-family:'Orbitron',sans-serif; font-size:9px; cursor:pointer; letter-spacing:1px;"><br>COLORFULL</button>
-        <button onclick="applyTheme('light')" style="flex:1; padding:10px 5px; border-radius:10px; border:1px solid rgba(200,200,255,0.4); background:rgba(240,240,255,0.15); color:#ddf; font-family:'Orbitron',sans-serif; font-size:9px; cursor:pointer; letter-spacing:1px;"><br>LIGHT</button>
-        <button onclick="applyTheme('dark')" style="flex:1; padding:10px 5px; border-radius:10px; border:1px solid rgba(0,210,255,0.5); background:rgba(0,210,255,0.08); color:#00d2ff; font-family:'Orbitron',sans-serif; font-size:9px; cursor:pointer; letter-spacing:1px;"><br>DARK</button>
+        <button onclick="applyTheme('clean')" style="flex:1; padding:8px 5px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:transparent; color:#fff; font-family:'Orbitron',sans-serif; font-size:9px; cursor:pointer; letter-spacing:1px;">COLORFULL</button>
+        <button onclick="applyTheme('light')" style="flex:1; padding:8px 5px; border-radius:6px; border:1px solid rgba(200,200,255,0.2); background:transparent; color:#ddf; font-family:'Orbitron',sans-serif; font-size:9px; cursor:pointer; letter-spacing:1px;">LIGHT</button>
+        <button onclick="applyTheme('dark')" style="flex:1; padding:8px 5px; border-radius:6px; border:1px solid rgba(0,210,255,0.2); background:transparent; color:#00d2ff; font-family:'Orbitron',sans-serif; font-size:9px; cursor:pointer; letter-spacing:1px;">DARK</button>
       </div>
     </div>
     
-    <!-- Pilih Avatar -->
-      <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">PILIH AVATAR:</p>
+    <!-- Pilih Avatar & Upload -->
+    <div style="text-align:left; margin-bottom:15px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+        <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin:0; letter-spacing:1px;">AVATAR LU:</p>
+        <button onclick="document.getElementById('custom-avatar-upload').click()" style="background:transparent; border:1px solid #00d2ff; color:#00d2ff; font-family:'Orbitron',sans-serif; font-size:9px; padding:4px 8px; border-radius:4px; cursor:pointer;">+ UPLOAD FOTO</button>
+        <input type="file" id="custom-avatar-upload" accept="image/*" style="display:none;" onchange="uploadCustomAvatar(this)">
+      </div>
       <div class="avatar-container" id="setting-avatar-selector" style="margin-bottom:0; justify-content:flex-start; gap:8px;">
-        <img class="avatar-item" src="AVATAR1.jpg" onclick="selectAvatar(this, 'AVATAR1.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
-        <img class="avatar-item" src="AVATAR2.jpg" onclick="selectAvatar(this, 'AVATAR2.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
-        <img class="avatar-item" src="AVATAR3.jpg" onclick="selectAvatar(this, 'AVATAR3.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
-        <img class="avatar-item" src="AVATAR4.jpg" onclick="selectAvatar(this, 'AVATAR4.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
+        <img class="avatar-item" src="AVATAR1.jpg" onclick="selectAvatar(this, 'AVATAR1.jpg')" style="background:transparent; border:1px solid rgba(255,255,255,0.1); box-shadow:none;">
+        <img class="avatar-item" src="AVATAR2.jpg" onclick="selectAvatar(this, 'AVATAR2.jpg')" style="background:transparent; border:1px solid rgba(255,255,255,0.1); box-shadow:none;">
+        <img class="avatar-item" src="AVATAR3.jpg" onclick="selectAvatar(this, 'AVATAR3.jpg')" style="background:transparent; border:1px solid rgba(255,255,255,0.1); box-shadow:none;">
+        <img class="avatar-item" src="AVATAR4.jpg" onclick="selectAvatar(this, 'AVATAR4.jpg')" style="background:transparent; border:1px solid rgba(255,255,255,0.1); box-shadow:none;">
       </div>
     </div>
 
-    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:15px 0;">
+    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:15px 0;">
+    
     <!-- Ganti Nickname -->
     <div style="text-align:left; margin-bottom:15px;">
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">NICKNAME:</p>
-      <input type="text" id="setting-nickname" class="game-input-name" style="width:100%; margin-bottom:15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:8px; box-shadow:inset 0 2px 4px rgba(0,0,0,0.3); padding:10px; color:#fff;" placeholder="NAMA LU...">
-
-    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:15px 0;">
-
-    <!-- Audio -->
-    <div style="text-align:left; margin-bottom:20px;">
-      <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:10px; letter-spacing:1px;">VOLUME MUSIK:</p>
-      <input type="range" id="setting-volume" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)" style="width:100%; margin-bottom:15px; cursor:pointer; accent-color:#00d2ff;">
-      <button class="game-btn" id="btn-mute" style="width:100%; margin:0; font-size:12px; border:1px solid rgba(0,210,255,0.4); background:rgba(0,210,255,0.05); color:#00d2ff; border-radius:8px; box-shadow:none;" onclick="toggleMute()"> BERSUARA</button>
+      <input type="text" id="setting-nickname" class="game-input-name" style="width:100%; margin-bottom:0; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:6px; box-shadow:none; padding:10px; color:#fff;" placeholder="NAMA LU...">
     </div>
 
-    <button class="game-btn" style="margin-top:10px; width:100%; border:1px solid rgba(46,213,115,0.4); background:rgba(46,213,115,0.1); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="saveSettings()">SIMPAN & TUTUP</button>
+    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:15px 0;">
+
+    <!-- Audio -->
+    <div style="text-align:left; margin-bottom:15px;">
+      <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:10px; letter-spacing:1px;">VOLUME MUSIK:</p>
+      <input type="range" id="setting-volume" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)" style="width:100%; margin-bottom:15px; cursor:pointer; accent-color:#00d2ff;">
+      <button class="game-btn" id="btn-mute" style="width:100%; margin:0; font-size:10px; border:1px solid rgba(0,210,255,0.3); background:transparent; color:#00d2ff; border-radius:6px; box-shadow:none;" onclick="toggleMute()"> BERSUARA</button>
+    </div>
+
+    <button class="game-btn" style="margin-top:10px; width:100%; border:1px solid rgba(46,213,115,0.3); background:transparent; color:#2ed573; border-radius:6px; box-shadow:none;" onclick="saveSettings()">SIMPAN & TUTUP</button>
   </div>
+</div>
+
+<!-- IN-GAME AVATAR HUD (TRANSPARAN, DI BAWAH ROLE/TURN PANEL) -->
+<!-- Top diset 85px biar posisinya ngambang tepat di bawah barisan "Giliran Siapa" -->
+<div id="in-game-avatar-hud" style="display:none; position:fixed; top:85px; left:50%; transform:translateX(-50%); background:transparent; border:none; padding:0; align-items:center; gap:8px; z-index:99000; pointer-events:none; box-shadow:none;">
+  <img id="hud-avatar" src="" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,0.2); box-shadow:none;">
+  <span id="hud-name" style="color:#ccc; font-family:'Orbitron', sans-serif; font-size:10px; font-weight:normal; letter-spacing:1px; text-transform:uppercase; text-shadow:none;">PLAYER</span>
 </div>
 
     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
@@ -1816,13 +1833,6 @@ function startLudoOffline(){
       mbc.style.backgroundImage = "url('papan.png')"; 
     }
   }
-  
-  // Fitur Ludo Papan Pink
-  let ludoTheme = document.getElementById('ludo-theme-board');
-  ludoConfig.board = ludoTheme ? ludoTheme.value : 'default';
-  let bgLudo = ludoConfig.board === 'pink' ? 'papanludo_pink.png' : 'papan.png';
-  let mbc = document.getElementById('main-board-container');
-  if(mbc) mbc.style.backgroundImage = `url('${bgLudo}')`;
   
   ludoTypes={red:document.getElementById('ludo-off-red').value,blue:document.getElementById('ludo-off-blue').value,green:document.getElementById('ludo-off-green').value,skull:document.getElementById('ludo-off-skull').value}; 
   ludoNames={red:ludoTypes.red==='ai'?"BOT MERAH":"PLAYER 1",blue:ludoTypes.blue==='ai'?"BOT BIRU":"PLAYER 2",green:ludoTypes.green==='ai'?"BOT HIJAU":"PLAYER 3",skull:ludoTypes.skull==='ai'?"BOT ABU":"PLAYER 4"}; 
@@ -2930,6 +2940,28 @@ function applyTheme(t) {
   document.body.classList.add('theme-' + saved);
 })();
 
+// FUNGSI BUAT UPLOAD FOTO SENDIRI DARI HP/PC
+function uploadCustomAvatar(input) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64Image = e.target.result;
+    myAvatar = base64Image; // Set foto lu jadi gambar yang diupload
+    
+    // Hilangin kotak hijau "selected" dari avatar bawaan
+    document.querySelectorAll('.avatar-item').forEach(el => el.classList.remove('selected'));
+    
+    // Langsung update tampilan avatar di pengaturan (kalau lu mau liat)
+    let dpa = document.getElementById('display-player-avatar');
+    if(dpa) dpa.src = myAvatar;
+  };
+  
+  // Ubah gambar jadi teks panjang (Base64) biar gampang kesimpen di browser & Firebase
+  reader.readAsDataURL(file);
+}
+
 </script>
 </body>
-          </html>
+  </html>
