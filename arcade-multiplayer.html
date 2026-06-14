@@ -330,18 +330,28 @@
   text-transform: uppercase;
 }
 
-/* AVATAR GRID */
-.qc-avatar-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 10px; margin-bottom: 16px;
+.avatar-container { 
+  display: flex; 
+  gap: 10px; 
+  justify-content: center; 
+  position: relative; 
+  z-index: 10; 
 }
-.qc-av-item {
-  border: 3px solid #333; border-radius: 50%;
-  overflow: hidden; cursor: pointer;
-  aspect-ratio: 1; transition: 0.15s;
+
+.avatar-item { 
+  width: 45px; /* Ini yang maksa foto lu jadi kecil */
+  height: 45px; 
+  object-fit: cover; /* Ini biar fotonya ga gepeng walau dikecilin */
+  border-radius: 8px; 
+  cursor: pointer; 
+  border: 2px solid #555; 
+  transition: 0.2s;
 }
-.qc-av-item img { width: 100%; height: 100%; object-fit: cover; }
-.qc-av-item:hover, .qc-av-item.selected { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+
+.avatar-item.selected { 
+  border-color: #00d2ff; 
+  transform: scale(1.1); 
+}
 
 /* QUICKCHAT BUTTONS */
 .qc-section-label {
@@ -1334,7 +1344,10 @@ function rollLudoDice(){
   let rng=Math.floor(Math.random()*6)+1; 
   
   // 🔊 MAINKAN SUARA DADU
-  if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
+  // Pancing browser agar izin audionya kebuka pas user klik dadu
+if (typeof initAudio === 'function') initAudio(); 
+
+if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
 
   if(isOnline){
     database.ref(`ludo_rooms/${roomCode}/state`).update({dice:rng,hasRolled:true});
@@ -1361,9 +1374,11 @@ async function executeLudoMove(color,id){
   
   if(t.status==='base'){
     t.status='perimeter';t.pos=ludoPlayers[color].startIdx;renderLudoTokens();
-    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA KELUAR KANDANG
-    await new Promise(r=>setTimeout(r,400));
-  } else{
+    // Pancing browser agar izin audionya kebuka pas user klik dadu
+if (typeof initAudio === 'function') initAudio(); 
+
+if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
+
     for(let i=0;i<steps;i++){
       if(t.status==='perimeter'){
         if(t.pos===ludoPlayers[color].endIdx){t.status='home';t.pos=0;}else{t.pos=(t.pos+1)%52;}
@@ -2388,4 +2403,4 @@ function playLocalAudio(inputElement) {
 
 </script>
 </body>
-          </html>
+  </html>
