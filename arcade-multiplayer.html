@@ -976,17 +976,14 @@
   </div>
 </div>
 
-<!-- MODAL PENGATURAN (SUPER TRANSPARAN & ESTETIK) -->
 <div class="dom-overlay" id="settings-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);">
   <div class="dom-modal" style="background:rgba(20, 20, 20, 0.25); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(255, 255, 255, 0.15); width:90%; max-width:350px; padding:25px 20px; border-radius:16px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
-    <h2 style="color:#fff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:3px; text-shadow:0 2px 5px rgba(0,0,0,0.5);"> PENGATURAN</h2>
+    <h2 style="color:#fff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:3px; text-shadow:0 2px 5px rgba(0,0,0,0.5);">⚙️ PENGATURAN</h2>
 
-    <!-- Ganti Nickname -->
     <div style="text-align:left; margin-bottom:15px;">
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">NICKNAME:</p>
       <input type="text" id="setting-nickname" class="game-input-name" style="width:100%; margin-bottom:15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:8px; box-shadow:inset 0 2px 4px rgba(0,0,0,0.3); padding:10px; color:#fff;" placeholder="NAMA LU...">
 
-      <!-- Ganti Avatar -->
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">PILIH AVATAR:</p>
       <div class="avatar-container" id="setting-avatar-selector" style="margin-bottom:0; justify-content:flex-start; gap:8px;">
         <img class="avatar-item" src="AVATAR1.jpg" onclick="selectAvatar(this, 'AVATAR1.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
@@ -998,12 +995,11 @@
 
     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
 
-    <!-- Pengaturan Audio -->
     <div style="text-align:left; margin-bottom:20px;">
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:10px; letter-spacing:1px;">VOLUME MUSIK:</p>
       <input type="range" id="setting-volume" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)" style="width:100%; margin-bottom:15px; cursor:pointer; accent-color:#00d2ff;">
       
-      <button class="game-btn" id="btn-mute" style="width:100%; margin:0; font-size:12px; border:1px solid rgba(0,210,255,0.4); background:rgba(0,210,255,0.05); color:#00d2ff; border-radius:8px; box-shadow:none;" onclick="toggleMute()"> BERSUARA</button>
+      <button class="game-btn" id="btn-mute" style="width:100%; margin:0; font-size:12px; border:1px solid rgba(0,210,255,0.4); background:rgba(0,210,255,0.05); color:#00d2ff; border-radius:8px; box-shadow:none;" onclick="toggleMute()">🔊 BERSUARA</button>
     </div>
 
     <button class="game-btn" style="margin-top:10px; width:100%; border:1px solid rgba(46,213,115,0.4); background:rgba(46,213,115,0.1); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="saveSettings()">SIMPAN & TUTUP</button>
@@ -2440,4 +2436,4 @@ function playLocalAudio(inputElement) {
 
 </script>
 </body>
-        </html>
+  </html>
