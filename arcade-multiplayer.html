@@ -423,6 +423,466 @@
   border: 2px solid #fff; object-fit: cover;
   cursor: pointer; flex-shrink: 0;
 }
+
+/* ============================================
+   THEME SYSTEM — CLEAN / LIGHT / COLORFUL
+   Apply class to <body>: theme-clean (default), theme-light, theme-colorful
+   ============================================ */
+
+/* ---- BASE: semua tema inherit dari ini ---- */
+body.theme-light,
+body.theme-colorful,
+body.theme-clean { transition: background 0.4s, color 0.4s; }
+
+/* ============================================
+   TEMA 1: DARK — hitam total, monokrom
+   ============================================ */
+body.theme-dark .game-screen { background: #000 !important; }
+body.theme-dark #main-hub-menu { background: #000 !important; }
+body.theme-dark #ludo-hub, body.theme-dark #ludo-offline-setup, body.theme-dark #ludo-game-screen { background: #000 !important; }
+body.theme-dark #snl-hub, body.theme-dark #snl-offline-setup, body.theme-dark #snl-game-screen { background: #000 !important; }
+body.theme-dark #ttt-hub, body.theme-dark #ttt-offline-setup, body.theme-dark #ttt-game-screen { background: #000 !important; }
+body.theme-dark #chess-hub, body.theme-dark #chess-offline-setup, body.theme-dark #chess-game-screen { background: #000 !important; }
+body.theme-dark #dom-hub, body.theme-dark #dom-s-setup, body.theme-dark #dom-s-game { background: #000 !important; }
+body.theme-dark #billiard-hub, body.theme-dark #billiard-rules, body.theme-dark #billiard-offline-setup, body.theme-dark #billiard-game-screen { background: #000 !important; }
+
+body.theme-dark .game-h1,
+body.theme-dark .splash-title { color: #fff !important; text-shadow: none !important; filter: none !important; }
+body.theme-dark .game-subtitle,
+body.theme-dark .splash-sub { color: #555 !important; }
+body.theme-dark .dev-tag { color: #333 !important; }
+
+body.theme-dark .game-card {
+  background: #000 !important;
+  border-color: #222 !important;
+  box-shadow: none !important;
+}
+body.theme-dark .game-card:hover { background: #111 !important; border-color: #fff !important; }
+body.theme-dark .game-card-title { color: #fff !important; }
+
+body.theme-dark .overlay-box {
+  background: #000 !important;
+  border-color: #222 !important;
+  box-shadow: none !important;
+}
+body.theme-dark .rules-card {
+  background: #000 !important;
+  border-color: #222 !important;
+  box-shadow: none !important;
+}
+body.theme-dark .rules-card h2 { color: #fff !important; border-color: #222 !important; }
+body.theme-dark .rules-card li { color: #555 !important; }
+body.theme-dark .rules-card li span { color: #fff !important; }
+
+body.theme-dark .dom-card {
+  background: #000 !important;
+  border-color: #222 !important;
+  box-shadow: none !important;
+  color: #fff !important;
+}
+body.theme-dark .dom-card h2 { color: #fff !important; border-color: #222 !important; }
+body.theme-dark .dom-section-label { color: #333 !important; }
+body.theme-dark .dom-cnt-btn { background: #000; border-color: #222; color: #444; }
+body.theme-dark .dom-cnt-btn.on { background: #fff; color: #000; border-color: #fff; box-shadow: none !important; }
+body.theme-dark .dom-prow { background: #000; border-color: #1a1a1a; }
+body.theme-dark .dom-pinput { color: #fff; }
+body.theme-dark .dom-ptoggle { background: #000; }
+
+body.theme-dark .ludo-top-panel {
+  background: #000 !important;
+  border-color: #222 !important;
+  box-shadow: none !important;
+}
+body.theme-dark #ludo-log-msg, body.theme-dark #snl-log-msg { color: #555 !important; }
+
+body.theme-dark .game-btn {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #333 !important;
+  box-shadow: none !important;
+}
+body.theme-dark .game-btn:hover {
+  background: #fff !important;
+  color: #000 !important;
+  border-color: #fff !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+body.theme-dark .game-btn:active { transform: none !important; }
+
+body.theme-dark .game-input-name {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #333 !important;
+  box-shadow: none !important;
+}
+body.theme-dark .game-input-name::placeholder { color: #333 !important; }
+
+body.theme-dark .ludo-dropdown {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #333 !important;
+}
+
+body.theme-dark .chat-box {
+  background: #000 !important;
+  border-color: #222 !important;
+  box-shadow: none !important;
+}
+body.theme-dark .chat-messages::-webkit-scrollbar-thumb { background: #333; }
+
+body.theme-dark .dom-modal {
+  background: #000 !important;
+  border-color: #222 !important;
+  box-shadow: none !important;
+}
+body.theme-dark .dom-modal h2 { color: #fff !important; }
+body.theme-dark .dom-modal p { color: #444 !important; }
+
+body.theme-dark .dom-topbar,
+body.theme-dark .dom-action-bar {
+  background: #000 !important;
+  border-color: #1a1a1a !important;
+}
+body.theme-dark .dom-turn-txt { color: #333 !important; }
+body.theme-dark .dom-turn-txt strong { color: #fff !important; }
+body.theme-dark .dom-tbtn { background: #000; border-color: #222; color: #444; }
+body.theme-dark .dom-tbtn:hover { background: #fff; color: #000; border-color: #fff; }
+body.theme-dark .dom-chip { background: #000; border-color: #222; }
+body.theme-dark .dom-chip.cur { border-color: #fff !important; box-shadow: none !important; }
+body.theme-dark .dom-abtn-draw { background: #000 !important; color: #fff !important; border-color: #fff !important; box-shadow: none !important; }
+body.theme-dark .dom-abtn-draw:hover:not(:disabled) { background: #fff !important; color: #000 !important; }
+body.theme-dark .dom-by-info { color: #222 !important; }
+
+body.theme-dark .ttt-cell {
+  background: #000 !important;
+  border-color: #222 !important;
+  box-shadow: none !important;
+}
+body.theme-dark .ttt-score { color: #555 !important; }
+body.theme-dark .ttt-turn-box { color: #fff !important; }
+
+body.theme-dark .lb-elegant-box {
+  background: #000 !important;
+  box-shadow: none !important;
+  border: 2px solid #222;
+  border-radius: 20px;
+}
+body.theme-dark .lb-title { color: #fff !important; text-shadow: none !important; }
+body.theme-dark .lb-subtitle { color: #444 !important; }
+body.theme-dark .lb-item-elegant { background: #000 !important; box-shadow: none !important; border: 1px solid #1a1a1a; }
+body.theme-dark .lb-name { color: #fff !important; }
+
+body.theme-dark .bil-hud-top,
+body.theme-dark .bil-hud-bottom {
+  background: #000 !important;
+  border-color: #222 !important;
+  box-shadow: none !important;
+}
+body.theme-dark .bil-player-name,
+body.theme-dark .bil-score-num,
+body.theme-dark .bil-title { color: #fff !important; text-shadow: none !important; }
+body.theme-dark .bil-turn-badge { background: #fff !important; color: #000 !important; box-shadow: none !important; }
+
+body.theme-dark .crt::before { background: none !important; }
+
+/* ============================================
+   TEMA 2: LIGHT — frosted glass, putih bersih
+   ============================================ */
+body.theme-light { background: #e8eaf0 !important; }
+
+body.theme-light .game-screen {
+  background: rgba(230,232,245,0.96) !important;
+  color: #111 !important;
+}
+body.theme-light #main-hub-menu {
+  background: linear-gradient(180deg, #dde1f0 0%, #c8cce0 100%) !important;
+}
+body.theme-light #ludo-hub, body.theme-light #ludo-offline-setup, body.theme-light #ludo-game-screen {
+  background: linear-gradient(180deg, #f0dde0 0%, #dcc8ca 100%) !important;
+}
+body.theme-light #snl-hub, body.theme-light #snl-offline-setup, body.theme-light #snl-game-screen {
+  background: linear-gradient(180deg, #ddf0e2 0%, #c8dccb 100%) !important;
+}
+body.theme-light #ttt-hub, body.theme-light #ttt-offline-setup, body.theme-light #ttt-game-screen {
+  background: linear-gradient(180deg, #ddeef5 0%, #c8d8e0 100%) !important;
+}
+body.theme-light #chess-hub, body.theme-light #chess-offline-setup, body.theme-light #chess-game-screen {
+  background: linear-gradient(180deg, #f5f0dd 0%, #e0d8c8 100%) !important;
+}
+body.theme-light #dom-hub, body.theme-light #dom-s-setup, body.theme-light #dom-s-game {
+  background: linear-gradient(180deg, #eaeaea 0%, #d5d5d5 100%) !important;
+}
+body.theme-light #billiard-hub, body.theme-light #billiard-rules,
+body.theme-light #billiard-offline-setup, body.theme-light #billiard-game-screen {
+  background: linear-gradient(180deg, #f5f5dd 0%, #e0e0c8 100%) !important;
+}
+
+/* Teks utama */
+body.theme-light .game-h1,
+body.theme-light .splash-title,
+body.theme-light .game-card-title,
+body.theme-light .rules-card h2,
+body.theme-light .dom-modal h2,
+body.theme-light .lb-title { color: #111 !important; text-shadow: none !important; }
+
+body.theme-light .game-subtitle,
+body.theme-light .splash-sub,
+body.theme-light .rules-card li,
+body.theme-light .dom-modal p { color: #444 !important; }
+
+body.theme-light .dev-tag { color: #aaa !important; }
+
+/* Cards & boxes */
+body.theme-light .game-card {
+  background: rgba(255,255,255,0.7) !important;
+  border-color: rgba(0,0,0,0.2) !important;
+  backdrop-filter: blur(8px);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.1) !important;
+  color: #111 !important;
+}
+body.theme-light .game-card:hover { background: rgba(255,255,255,0.95) !important; }
+
+body.theme-light .overlay-box {
+  background: rgba(255,255,255,0.6) !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  backdrop-filter: blur(12px);
+  color: #111 !important;
+  box-shadow: 8px 8px 0 rgba(0,0,0,0.08) !important;
+}
+body.theme-light .rules-card {
+  background: rgba(255,255,255,0.5) !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  color: #222 !important;
+}
+body.theme-light .dom-card {
+  background: rgba(255,255,255,0.55) !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  color: #111 !important;
+}
+body.theme-light .ludo-top-panel {
+  background: rgba(255,255,255,0.6) !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  backdrop-filter: blur(8px);
+}
+body.theme-light .chat-box {
+  background: rgba(255,255,255,0.5) !important;
+  border-color: rgba(0,0,0,0.15) !important;
+}
+body.theme-light .dom-modal {
+  background: rgba(240,242,255,0.75) !important;
+  border-color: rgba(0,0,0,0.2) !important;
+  backdrop-filter: blur(12px);
+}
+body.theme-light .dom-topbar,
+body.theme-light .dom-action-bar {
+  background: rgba(220,225,240,0.9) !important;
+  border-color: rgba(0,0,0,0.1) !important;
+}
+body.theme-light .dom-turn-txt { color: #444 !important; }
+body.theme-light .dom-turn-txt strong { color: #000 !important; }
+body.theme-light .dom-tbtn { background: rgba(255,255,255,0.5); border-color: rgba(0,0,0,0.2); color: #555; }
+body.theme-light .dom-tbtn:hover { background: #fff; color: #000; }
+body.theme-light .lb-elegant-box {
+  background: radial-gradient(circle at top, #e8eaf5, #d0d4e8) !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
+}
+
+/* Buttons */
+body.theme-light .game-btn {
+  background: rgba(255,255,255,0.5) !important;
+  color: #111 !important;
+  border-color: rgba(0,0,0,0.25) !important;
+  backdrop-filter: blur(5px);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.08) !important;
+}
+body.theme-light .game-btn:hover {
+  background: #111 !important;
+  color: #fff !important;
+}
+body.theme-light .game-input-name {
+  background: rgba(255,255,255,0.6) !important;
+  color: #111 !important;
+  border-color: rgba(0,0,0,0.2) !important;
+}
+body.theme-light .game-input-name::placeholder { color: #888 !important; }
+body.theme-light .ludo-dropdown {
+  background: rgba(255,255,255,0.6) !important;
+  color: #111 !important;
+  border-color: rgba(0,0,0,0.2) !important;
+}
+body.theme-light .dom-abtn-draw { background: #fff !important; color: #000 !important; border-color: #000 !important; }
+body.theme-light .ttt-cell { background: rgba(255,255,255,0.6) !important; border-color: rgba(0,0,0,0.2) !important; }
+body.theme-light #ludo-log-msg, body.theme-light #snl-log-msg { color: #0077aa !important; }
+body.theme-light .bil-hud-top, body.theme-light .bil-hud-bottom {
+  background: rgba(255,255,255,0.6) !important;
+  border-color: rgba(0,0,0,0.2) !important;
+}
+body.theme-light .bil-player-name,
+body.theme-light .bil-score-num,
+body.theme-light .bil-title { color: #111 !important; text-shadow: none !important; }
+body.theme-light .bil-turn-badge { background: #111 !important; color: #fff !important; }
+
+/* ============================================
+   TEMA 3: COLORFUL — dark neon, warna-warni
+   ============================================ */
+body.theme-colorful { background: #03030f !important; }
+
+body.theme-colorful .game-screen {
+  background: rgba(3,3,15,0.97) !important;
+  color: #fff !important;
+}
+body.theme-colorful #main-hub-menu {
+  background: linear-gradient(135deg, #050520 0%, #0a0520 50%, #05050a 100%) !important;
+}
+body.theme-colorful #ludo-hub, body.theme-colorful #ludo-offline-setup, body.theme-colorful #ludo-game-screen {
+  background: linear-gradient(135deg, #150308 0%, #05010a 100%) !important;
+}
+body.theme-colorful #snl-hub, body.theme-colorful #snl-offline-setup, body.theme-colorful #snl-game-screen {
+  background: linear-gradient(135deg, #011508 0%, #020a05 100%) !important;
+}
+body.theme-colorful #ttt-hub, body.theme-colorful #ttt-offline-setup, body.theme-colorful #ttt-game-screen {
+  background: linear-gradient(135deg, #010d15 0%, #010508 100%) !important;
+}
+body.theme-colorful #chess-hub, body.theme-colorful #chess-offline-setup, body.theme-colorful #chess-game-screen {
+  background: linear-gradient(135deg, #150d01 0%, #0a0700 100%) !important;
+}
+body.theme-colorful #billiard-hub, body.theme-colorful #billiard-rules,
+body.theme-colorful #billiard-offline-setup, body.theme-colorful #billiard-game-screen {
+  background: linear-gradient(135deg, #141400 0%, #0a0a00 100%) !important;
+}
+body.theme-colorful #dom-hub, body.theme-colorful #dom-s-setup, body.theme-colorful #dom-s-game {
+  background: linear-gradient(135deg, #050515 0%, #010108 100%) !important;
+}
+
+/* Glow on title */
+body.theme-colorful .game-h1 {
+  color: #fff !important;
+  text-shadow: 0 0 20px rgba(0,210,255,0.6), 0 0 40px rgba(0,210,255,0.3) !important;
+}
+body.theme-colorful .splash-title {
+  text-shadow: 0 0 25px currentColor, 0 0 50px currentColor !important;
+  filter: brightness(1.2);
+}
+body.theme-colorful .game-subtitle { color: #00d2ff !important; text-shadow: 0 0 10px rgba(0,210,255,0.5) !important; }
+body.theme-colorful .splash-sub { color: #888 !important; }
+
+/* Cards */
+body.theme-colorful .game-card {
+  background: rgba(0,5,20,0.8) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.5), 0 0 20px rgba(0,210,255,0.05) !important;
+}
+body.theme-colorful .overlay-box {
+  background: rgba(5,5,25,0.75) !important;
+  border-color: rgba(0,210,255,0.3) !important;
+  backdrop-filter: blur(15px);
+  box-shadow: 8px 8px 0 rgba(0,0,0,0.8), 0 0 30px rgba(0,210,255,0.1) !important;
+}
+body.theme-colorful .rules-card {
+  background: rgba(5,5,20,0.8) !important;
+  border-color: rgba(255,255,255,0.15) !important;
+  box-shadow: inset 0 0 30px rgba(0,210,255,0.03) !important;
+}
+body.theme-colorful .dom-card {
+  background: rgba(5,5,20,0.8) !important;
+  border-color: rgba(0,210,255,0.2) !important;
+}
+body.theme-colorful .ludo-top-panel {
+  background: rgba(5,5,20,0.9) !important;
+  border-color: rgba(0,210,255,0.2) !important;
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.8), 0 0 20px rgba(0,210,255,0.08) !important;
+}
+body.theme-colorful .chat-box {
+  background: rgba(5,5,20,0.7) !important;
+  border-color: rgba(0,210,255,0.2) !important;
+}
+body.theme-colorful .dom-modal {
+  background: rgba(3,3,15,0.92) !important;
+  border-color: rgba(0,210,255,0.4) !important;
+  box-shadow: 8px 8px 0 rgba(0,0,0,0.8), 0 0 40px rgba(0,210,255,0.15) !important;
+}
+body.theme-colorful .dom-topbar,
+body.theme-colorful .dom-action-bar {
+  background: rgba(3,3,15,0.95) !important;
+  border-color: rgba(0,210,255,0.15) !important;
+}
+body.theme-colorful .dom-chip.cur {
+  border-color: #00d2ff !important;
+  box-shadow: 0 0 15px rgba(0,210,255,0.4), inset 0 0 8px rgba(0,210,255,0.1) !important;
+}
+body.theme-colorful .lb-elegant-box {
+  background: radial-gradient(circle at top, #0a0a2a, #030310) !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.95), 0 0 60px rgba(0,210,255,0.08) !important;
+}
+
+/* Buttons */
+body.theme-colorful .game-btn {
+  background: rgba(0,5,20,0.7) !important;
+  color: #fff !important;
+  border-color: rgba(0,210,255,0.35) !important;
+  backdrop-filter: blur(5px);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.5), 0 0 10px rgba(0,210,255,0.05) !important;
+  transition: 0.15s !important;
+}
+body.theme-colorful .game-btn:hover {
+  background: rgba(0,210,255,0.15) !important;
+  border-color: #00d2ff !important;
+  color: #00d2ff !important;
+  box-shadow: 0 0 20px rgba(0,210,255,0.3) !important;
+  transform: translateY(-2px) !important;
+}
+body.theme-colorful .game-input-name {
+  background: rgba(0,5,20,0.8) !important;
+  color: #00d2ff !important;
+  border-color: rgba(0,210,255,0.3) !important;
+  box-shadow: inset 0 0 10px rgba(0,210,255,0.05) !important;
+}
+body.theme-colorful .game-input-name::placeholder { color: rgba(0,210,255,0.3) !important; }
+body.theme-colorful .ludo-dropdown {
+  background: rgba(0,5,20,0.8) !important;
+  color: #ccc !important;
+  border-color: rgba(0,210,255,0.2) !important;
+}
+body.theme-colorful .ttt-cell {
+  background: rgba(5,5,25,0.8) !important;
+  border-color: rgba(0,210,255,0.2) !important;
+}
+body.theme-colorful #ludo-log-msg, body.theme-colorful #snl-log-msg {
+  color: #00d2ff !important;
+  text-shadow: 0 0 8px rgba(0,210,255,0.5) !important;
+}
+body.theme-colorful .dom-abtn-draw {
+  border-color: #00d2ff !important;
+  color: #00d2ff !important;
+  background: rgba(0,210,255,0.05) !important;
+  box-shadow: 3px 3px 0 rgba(0,210,255,0.1) !important;
+}
+body.theme-colorful .dom-abtn-draw:hover:not(:disabled) {
+  background: #00d2ff !important;
+  color: #000 !important;
+}
+body.theme-colorful .bil-hud-top, body.theme-colorful .bil-hud-bottom {
+  background: rgba(3,3,15,0.9) !important;
+  border-color: rgba(0,210,255,0.25) !important;
+}
+body.theme-colorful .bil-turn-badge {
+  background: #00d2ff !important;
+  color: #000 !important;
+  box-shadow: 0 0 12px rgba(0,210,255,0.6) !important;
+}
+body.theme-colorful .bil-title {
+  text-shadow: 0 0 15px rgba(0,210,255,0.5) !important;
+}
+
+/* Neon scroll */
+body.theme-colorful .chat-messages::-webkit-scrollbar-thumb { background: #00d2ff; box-shadow: 0 0 6px rgba(0,210,255,0.6); }
+
+/* CRT scan line lebih kuat di colorful */
+body.theme-colorful .crt::before {
+  background: linear-gradient(rgba(0,210,255,0.02) 50%, rgba(0,0,0,0.15) 50%) !important;
+  background-size: 100% 3px !important;
+}
   </style>
 </head>
 <body class="arcade-theme">
@@ -615,25 +1075,26 @@
     </div>
 
     <div id="universal-lobby" class="game-screen">
-      <div class="overlay-box">
-        <h2 id="lobby-title" style="margin-top:0;margin-bottom:5px;">ROOM LOBBY</h2>
-        <h1 id="lobby-code-display" style="color:#ffeb3b;letter-spacing:5px;margin-bottom:20px;">SERVER</h1>
-        <div id="lobby-options-area" style="display:none;text-align:left;margin-bottom:15px;background:#111;padding:10px;border-radius:8px;border:2px solid #444;"></div>
-        
-        <div class="chat-box" id="lobby-chat-box" style="display:none;">
-          <div class="chat-messages" id="lobby-chat-msgs"></div>
-          <div class="chat-input-area">
-            <input type="text" id="lobby-chat-input" class="chat-input" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter') sendLobbyChat()">
-            <button class="chat-send-btn" onclick="sendLobbyChat()">KIRIM</button>
-          </div>
-        </div>
-        
-        <div class="lobby-player-list" id="lobby-players-list"></div>
-        <p id="lobby-status-msg" style="font-family:'Teko';font-size:18px;color:#aaa;margin-bottom:15px;">Menunggu pemain lain...</p>
-        <button id="btn-start-game" class="game-btn" style="width:100%;border-color:#0f0;color:#0f0;display:none;" onclick="startGameHost()">START GAME</button>
-        <button class="game-btn" onclick="leaveRoom()" style="margin-top:15px;width:100%;border-color:#ff4757;color:#ff4757;">KELUAR ROOM</button>
+  <div class="overlay-box">
+    <h2 id="lobby-title" style="margin-top:0;margin-bottom:5px;">ROOM LOBBY</h2>
+    <h1 id="lobby-code-display" style="color:#ffeb3b;letter-spacing:5px;margin-bottom:20px;">SERVER</h1>
+    <div id="lobby-options-area" style="display:none;text-align:left;margin-bottom:15px;background:#111;padding:10px;border-radius:8px;border:2px solid #444;"></div>
+
+    <div class="lobby-player-list" id="lobby-players-list"></div>
+
+    <div class="chat-box" id="lobby-chat-box">
+      <div class="chat-messages" id="lobby-chat-msgs"></div>
+      <div class="chat-input-area">
+        <input type="text" id="lobby-chat-input" class="chat-input" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter') sendLobbyChat()">
+        <button class="chat-send-btn" onclick="sendLobbyChat()">KIRIM</button>
       </div>
     </div>
+
+    <p id="lobby-status-msg" style="font-family:'Teko';font-size:18px;color:#aaa;margin:15px 0 10px;">Menunggu pemain lain...</p>
+    <button id="btn-start-game" class="game-btn" style="width:100%;border-color:#0f0;color:#0f0;display:none;" onclick="startGameHost()">START GAME</button>
+    <button class="game-btn" onclick="leaveRoom()" style="margin-top:15px;width:100%;border-color:#ff4757;color:#ff4757;">KELUAR ROOM</button>
+  </div>
+</div>
 
     <div id="leaderboard-screen" class="game-screen">
       <div class="lb-elegant-box">
@@ -839,7 +1300,7 @@
     <div class="dom-r-list" id="dom-me-results"></div>
     <div class="dom-m-btns">
       <button class="game-btn" onclick="domStartGame()" style="width:auto;padding:10px 24px;margin:0;" id="dom-rematch-btn">REMATCH</button>
-      <button class="game-btn" onclick="leaveRoom(); document.getElementById('dom-m-end').classList.remove('open');" style="width:auto;padding:10px 18px;margin:0;border-color:#555;color:#888;">MENU HUB</button>
+      <button class="game-btn" onclick="leaveRoom(); document.getElementById('dom-m-end').classList.remove('open');" style="width:auto;padding:10px 18px;margin:0;border-color:#555;color:#888;">KEMBALI</button>
     </div>
   </div>
 </div>
@@ -967,17 +1428,22 @@
   </div>
 </div>
 
-<!-- MODAL PENGATURAN (SUPER TRANSPARAN & ESTETIK) -->
+<!-- MODAL PENGATURAN -->
 <div class="dom-overlay" id="settings-modal" style="display:none; z-index:99999; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); position:fixed; top:0; left:0; width:100%; height:100%; backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);">
-  <div class="dom-modal" style="background:rgba(20, 20, 20, 0.25); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(255, 255, 255, 0.15); width:90%; max-width:350px; padding:25px 20px; border-radius:16px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
-    <h2 style="color:#fff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:3px; text-shadow:0 2px 5px rgba(0,0,0,0.5);"> PENGATURAN</h2>
+  <div class="dom-modal" id="settings-modal-box" style="background:rgba(20,20,20,0.25); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(255,255,255,0.15); width:90%; max-width:350px; padding:25px 20px; border-radius:16px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+    <h2 style="color:#fff; margin-top:0; margin-bottom:15px; font-size:18px; letter-spacing:3px; text-shadow:0 2px 5px rgba(0,0,0,0.5);">⚙ PENGATURAN</h2>
 
-    <!-- Ganti Nickname -->
+    <!-- PILIH TEMA -->
     <div style="text-align:left; margin-bottom:15px;">
-      <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">NICKNAME:</p>
-      <input type="text" id="setting-nickname" class="game-input-name" style="width:100%; margin-bottom:15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:8px; box-shadow:inset 0 2px 4px rgba(0,0,0,0.3); padding:10px; color:#fff;" placeholder="NAMA LU...">
-
-      <!-- Ganti Avatar -->
+      <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:8px; letter-spacing:1px;">TEMA TAMPILAN:</p>
+      <div style="display:flex; gap:8px; justify-content:center;">
+        <button onclick="applyTheme('clean')" style="flex:1; padding:10px 5px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff; font-family:'Orbitron',sans-serif; font-size:9px; cursor:pointer; letter-spacing:1px;"><br>COLORFULL</button>
+        <button onclick="applyTheme('light')" style="flex:1; padding:10px 5px; border-radius:10px; border:1px solid rgba(200,200,255,0.4); background:rgba(240,240,255,0.15); color:#ddf; font-family:'Orbitron',sans-serif; font-size:9px; cursor:pointer; letter-spacing:1px;"><br>LIGHT</button>
+        <button onclick="applyTheme('dark')" style="flex:1; padding:10px 5px; border-radius:10px; border:1px solid rgba(0,210,255,0.5); background:rgba(0,210,255,0.08); color:#00d2ff; font-family:'Orbitron',sans-serif; font-size:9px; cursor:pointer; letter-spacing:1px;"><br>DARK</button>
+      </div>
+    </div>
+    
+    <!-- Pilih Avatar -->
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">PILIH AVATAR:</p>
       <div class="avatar-container" id="setting-avatar-selector" style="margin-bottom:0; justify-content:flex-start; gap:8px;">
         <img class="avatar-item" src="AVATAR1.jpg" onclick="selectAvatar(this, 'AVATAR1.jpg')" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.2);">
@@ -987,19 +1453,26 @@
       </div>
     </div>
 
-    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
+    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:15px 0;">
+    <!-- Ganti Nickname -->
+    <div style="text-align:left; margin-bottom:15px;">
+      <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:5px; letter-spacing:1px;">NICKNAME:</p>
+      <input type="text" id="setting-nickname" class="game-input-name" style="width:100%; margin-bottom:15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:8px; box-shadow:inset 0 2px 4px rgba(0,0,0,0.3); padding:10px; color:#fff;" placeholder="NAMA LU...">
 
-    <!-- Pengaturan Audio -->
+    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:15px 0;">
+
+    <!-- Audio -->
     <div style="text-align:left; margin-bottom:20px;">
       <p style="color:#aaa; font-family:'Teko', sans-serif; font-size:15px; margin-bottom:10px; letter-spacing:1px;">VOLUME MUSIK:</p>
       <input type="range" id="setting-volume" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)" style="width:100%; margin-bottom:15px; cursor:pointer; accent-color:#00d2ff;">
-      
       <button class="game-btn" id="btn-mute" style="width:100%; margin:0; font-size:12px; border:1px solid rgba(0,210,255,0.4); background:rgba(0,210,255,0.05); color:#00d2ff; border-radius:8px; box-shadow:none;" onclick="toggleMute()"> BERSUARA</button>
     </div>
 
     <button class="game-btn" style="margin-top:10px; width:100%; border:1px solid rgba(46,213,115,0.4); background:rgba(46,213,115,0.1); color:#2ed573; border-radius:8px; box-shadow:none;" onclick="saveSettings()">SIMPAN & TUTUP</button>
   </div>
 </div>
+
+    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
 
 </div>
 
@@ -1366,11 +1839,9 @@ function rollLudoDice(){
   document.getElementById('ludo-dice').disabled=true;
   let rng=Math.floor(Math.random()*6)+1; 
   
-  // 🔊 MAINKAN SUARA DADU
-  // Pancing browser agar izin audionya kebuka pas user klik dadu
-if (typeof initAudio === 'function') initAudio(); 
-
-if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
+  // 🔊 Pancing audio & putar suara Dadu
+  if (typeof initAudio === 'function') initAudio(); 
+  if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
 
   if(isOnline){
     database.ref(`ludo_rooms/${roomCode}/state`).update({dice:rng,hasRolled:true});
@@ -1395,13 +1866,14 @@ async function executeLudoMove(color,id){
   if(isOnline)database.ref(`ludo_rooms/${roomCode}/state`).update({moving:true}); 
   let t=ludoPlayers[color].tokens.find(x=>x.id===id);let steps=ludoGameState.dice;let gotKill=false;let isFinish=false; 
   
+  if (typeof initAudio === 'function') initAudio(); 
+
+  // PERBAIKAN: Kurung "else" dikembalikan agar bidak bisa jalan
   if(t.status==='base'){
     t.status='perimeter';t.pos=ludoPlayers[color].startIdx;renderLudoTokens();
-    // Pancing browser agar izin audionya kebuka pas user klik dadu
-if (typeof initAudio === 'function') initAudio(); 
-
-if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
-
+    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 Suara keluar
+    await new Promise(r=>setTimeout(r,400));
+  } else {
     for(let i=0;i<steps;i++){
       if(t.status==='perimeter'){
         if(t.pos===ludoPlayers[color].endIdx){t.status='home';t.pos=0;}else{t.pos=(t.pos+1)%52;}
@@ -1409,7 +1881,7 @@ if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
         t.pos++;if(t.pos===5)t.status='finish';
       }
       renderLudoTokens();
-      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA LANGKAH
+      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 Suara langkah
       await new Promise(r=>setTimeout(r,200));
       if(t.status==='finish'){isFinish=true;break;}
     }
@@ -1440,7 +1912,7 @@ function rollSnLDice(){
   document.getElementById('snl-dice').disabled=true;
   let rng=Math.floor(Math.random()*6)+1; 
   
-  // 🔊 MAINKAN SUARA DADU
+  if (typeof initAudio === 'function') initAudio(); 
   if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
 
   if(isOnline){
@@ -1459,10 +1931,12 @@ function rollSnLDice(){
 
 async function executeSnLMove(color,dice){ 
   let cp=snlPlayers[color].pos;let tp; 
+  if (typeof initAudio === 'function') initAudio(); 
+
   if(cp===0){ 
     if(dice===1){
       document.getElementById('snl-log-msg').innerText="BANGKIT!";tp=1;snlPlayers[color].pos=1;renderSnLPawns();
-      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA BANGKIT
+      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } 
       await new Promise(r=>setTimeout(r,600));
       if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color]});passSnLNextTurn(color);return;
     } else{
@@ -1475,14 +1949,14 @@ async function executeSnLMove(color,dice){
   
   while(cp!==tp){
     cp++;snlPlayers[color].pos=cp;renderSnLPawns();
-    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA LANGKAH
+    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } 
     await new Promise(r=>setTimeout(r,250));
   } 
   
   if(snlActiveLayout[cp]){ 
     let isSn=snlActiveLayout[cp]<cp;document.getElementById('snl-log-msg').innerText=isSn?"Ops! Kena Ular 🐍":"Yess! Naik Tangga 🪜!"; 
     await new Promise(r=>setTimeout(r,600));cp=snlActiveLayout[cp];snlPlayers[color].pos=cp;renderSnLPawns();
-    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA NAIK/TURUN
+    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } 
     await new Promise(r=>setTimeout(r,500)); 
   } 
   
@@ -2423,6 +2897,17 @@ function playLocalAudio(inputElement) {
   activePlayButton = btn;
   inputElement.value = '';
 }
+
+function applyTheme(t) {
+  document.body.classList.remove('theme-dark', 'theme-light', 'theme-colorful');
+  document.body.classList.add('theme-' + t);
+  localStorage.setItem('261-theme', t);
+}
+
+(function() {
+  const saved = localStorage.getItem('261-theme') || 'colorful';
+  document.body.classList.add('theme-' + saved);
+})();
 
 </script>
 </body>
