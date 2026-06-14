@@ -1965,15 +1965,12 @@ function getLudoDefault(){return{red:{startIdx:0,endIdx:50,tokens:[{id:'r1',stat
 function startLudoOffline(){ 
   isOnline=false; activeGame='ludo'; 
   
+  // Fitur Ludo Papan Pink
   let ludoTheme = document.getElementById('ludo-theme-board');
   ludoConfig.board = ludoTheme ? ludoTheme.value : 'default';
-  
-  // Papan CSS Murni (Pink / Cute)
+  let bgLudo = ludoConfig.board === 'pink' ? 'papanludo_pink.png' : 'papan.png';
   let mbc = document.getElementById('main-board-container');
-  if(mbc) {
-    if (ludoConfig.board === 'pink') mbc.classList.add('cute-theme'); 
-    else mbc.classList.remove('cute-theme');
-  }
+  if(mbc) mbc.style.backgroundImage = `url('${bgLudo}')`;
   
   ludoTypes={red:document.getElementById('ludo-off-red').value,blue:document.getElementById('ludo-off-blue').value,green:document.getElementById('ludo-off-green').value,skull:document.getElementById('ludo-off-skull').value}; 
   ludoNames={red:ludoTypes.red==='ai'?"BOT MERAH":"PLAYER 1",blue:ludoTypes.blue==='ai'?"BOT BIRU":"PLAYER 2",green:ludoTypes.green==='ai'?"BOT HIJAU":"PLAYER 3",skull:ludoTypes.skull==='ai'?"BOT ABU":"PLAYER 4"}; 
@@ -1986,16 +1983,7 @@ function startLudoOffline(){
 
 function syncLudoOnline(data){ 
   if(document.getElementById('universal-lobby').classList.contains('active')){ 
-    ludoPlayers=data.board; ludoGameState=data.state; 
-    
-    // Sinkronisasi Tema Pink Online
-    ludoConfig = data.config || { board: 'default' };
-    let mbc = document.getElementById('main-board-container');
-    if(mbc) {
-      if (ludoConfig.board === 'pink') mbc.classList.add('cute-theme');
-      else mbc.classList.remove('cute-theme');
-    }
-
+    ludoPlayers=data.board;ludoGameState=data.state; 
     ludoTypes={red:'none',blue:'none',green:'none',skull:'none'};Object.keys(data.players).forEach(c=>ludoTypes[c]='human');ludoNames=data.players; 
     document.getElementById('ludo-badge').innerText="WARNA LU: "+myColor.toUpperCase(); document.getElementById('ludo-badge').style.color=gameConfigs.ludo.hex[myColor]; 
     initLudoBoardHTML();initLudoTokensHTML();showScreen('ludo-game-screen');updateLudoUI(); 
@@ -2008,62 +1996,21 @@ function syncLudoOnline(data){
     if(ludoGameState.winners.length>=ac-1&&ac>1)showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo); 
   } 
 }
-
 function initLudoBoardHTML(){ let g=''; for(let y=0;y<15;y++){for(let x=0;x<15;x++){ let cl='cell';let st=`grid-row:${y+1};grid-column:${x+1};`; if(y===7&&x>=1&&x<=5)cl+=' path-skull';if(x===7&&y>=1&&y<=5)cl+=' path-tech'; if(y===7&&x>=9&&x<=13)cl+=' path-japan';if(x===7&&y>=9&&y<=13)cl+=' path-red'; let iS=x<6&&y<6;let iT=x>8&&y<6;let iR=x<6&&y>8;let iJ=x>8&&y>8;let iC=x>5&&x<9&&y>5&&y<9; if(!iS&&!iT&&!iR&&!iJ&&!iC){let safe=ludoSafeZones.some(idx=>ludoPathCoords[idx]&&ludoPathCoords[idx].x===x&&ludoPathCoords[idx].y===y);g+=`<div class="${cl}" style="${st}">${safe?`<span style="font-size:18px;opacity:0.85;">⭐</span>`:''}</div>`;} }} g+=`<div class="base base-skull" style="grid-area:1/1/7/7;"><div class="inner-box"><div class="slot" id="skull-slot-0"></div><div class="slot" id="skull-slot-1"></div><div class="slot" id="skull-slot-2"></div><div class="slot" id="skull-slot-3"></div></div></div><div class="base base-tech" style="grid-area:1/10/7/16;"><div class="inner-box"><div class="slot" id="green-slot-0"></div><div class="slot" id="green-slot-1"></div><div class="slot" id="green-slot-2"></div><div class="slot" id="green-slot-3"></div></div></div><div class="base base-red" style="grid-area:10/1/16/7;"><div class="inner-box"><div class="slot" id="red-slot-0"></div><div class="slot" id="red-slot-1"></div><div class="slot" id="red-slot-2"></div><div class="slot" id="red-slot-3"></div></div></div><div class="base base-japan" style="grid-area:10/10/16/16;"><div class="inner-box"><div class="slot" id="blue-slot-0"></div><div class="slot" id="blue-slot-1"></div><div class="slot" id="blue-slot-2"></div><div class="slot" id="blue-slot-3"></div></div></div><div class="center-arena"><span>261</span><br><span>AREA</span></div>`; document.getElementById('ludo-board').innerHTML=g; }
 function initLudoTokensHTML(){ let l=document.getElementById('ludo-tokens');l.innerHTML=''; Object.keys(ludoPlayers).forEach(col=>{if(ludoTypes[col]==='none')return;ludoPlayers[col].tokens.forEach(t=>{let d=document.createElement('div');d.className=`token ${col}`;d.id=t.id;d.onclick=()=>onLudoTokenClick(col,t.id);l.appendChild(d);});});renderLudoTokens(); }
 function renderLudoTokens(){ let l=document.getElementById('ludo-tokens');let groups={};let fc={red:0,blue:0,green:0,skull:0}; Object.keys(ludoPlayers).forEach(col=>{ if(ludoTypes[col]==='none'){ludoPlayers[col].tokens.forEach(t=>{let e=document.getElementById(t.id);if(e)e.style.display='none';});return;} ludoPlayers[col].tokens.forEach((t,i)=>{ let e=document.getElementById(t.id);if(!e)return; e.style.display='flex';if(t.status==='finish'){e.innerHTML='👑';e.style.fontSize='24px';}else{e.innerHTML='';} if(t.status==='base'){let sl=document.getElementById(`${col}-slot-${i}`);if(sl&&e.parentElement!==sl)sl.appendChild(e);e.style.position='relative';e.style.width='75%';e.style.height='75%';e.style.left='0';e.style.top='0';e.style.transform='translate(0,0) scale(1)';} else if(t.status==='finish'){if(e.parentElement!==l)l.appendChild(e);e.style.position='absolute';e.style.width='6.5%';e.style.height='6.5%';let fi=fc[col];fc[col]++;let bx=7,by=7;if(col==='red'){bx=6.7;by=7.7;}if(col==='blue'){bx=7.7;by=6.7;}if(col==='green'){bx=6.7;by=5.7;}if(col==='skull'){bx=5.7;by=6.7;}e.style.left=`calc(${bx+(fi%2)*0.4} * (100% / 15))`;e.style.top=`calc(${by+Math.floor(fi/2)*0.4} * (100% / 15))`;e.style.transform='translate(0%,0%) scale(0.75)';} else{if(e.parentElement!==l)l.appendChild(e);e.style.position='absolute';e.style.width='6.5%';e.style.height='6.5%';let key=`${t.status}-${t.pos}`;if(!groups[key])groups[key]=[];groups[key].push({el:e,col,t});} }); }); Object.keys(groups).forEach(key=>{ let items=groups[key];let count=items.length; items.forEach((item,index)=>{ let tx,ty;if(item.t.status==='perimeter'){tx=ludoPathCoords[item.t.pos].x;ty=ludoPathCoords[item.t.pos].y;}else{tx=ludoHomePaths[item.col][item.t.pos].x;ty=ludoHomePaths[item.col][item.t.pos].y;} item.el.style.left=`calc(${tx} * (100% / 15))`;item.el.style.top=`calc(${ty} * (100% / 15))`; if(count===1)item.el.style.transform='translate(0%,0%) scale(1)'; else if(count===2){if(index===0)item.el.style.transform='translate(-20%,0%) scale(0.85)';else item.el.style.transform='translate(20%,0%) scale(0.85)';} else if(count===3){if(index===0)item.el.style.transform='translate(-20%,-15%) scale(0.7)';else if(index===1)item.el.style.transform='translate(20%,-15%) scale(0.7)';else item.el.style.transform='translate(0%,15%) scale(0.7)';} else{if(index===0)item.el.style.transform='translate(-20%,-20%) scale(0.6)';else if(index===1)item.el.style.transform='translate(20%,-20%) scale(0.6)';else if(index===2)item.el.style.transform='translate(-20%,20%) scale(0.6)';else item.el.style.transform='translate(20%,20%) scale(0.6)';} }); }); }
-
 function updateLudoUI(){ let tc=ludoGameState.turn;let btn=document.getElementById('ludo-dice');let log=document.getElementById('ludo-log-msg'); document.getElementById('ludo-turn-info').innerText=`${ludoNames[tc]||gameConfigs.ludo.colorNames[tc]} (${gameConfigs.ludo.colorNames[tc]})`; document.getElementById('ludo-turn-info').style.color=gameConfigs.ludo.hex[tc]; btn.innerText=ludoGameState.dice>0?ludoGameState.dice:'🎲'; let isMy=isOnline?(tc===myColor):(ludoTypes[tc]==='human'); if(isMy){if(!ludoGameState.hasRolled&&!ludoGameState.moving){btn.disabled=false;log.innerText="Giliran! Lempar dadu.";}else{btn.disabled=true;log.innerText="Jalan...";highlightLudoTokens(tc);}} else{btn.disabled=true;log.innerText=(ludoTypes[tc]==='ai')?"Bot mikir...":"Nunggu...";document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active'));} }
-
-function highlightLudoTokens(color){ 
-  document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); 
-  let canMove=false; let movable=[]; 
-  ludoPlayers[color].tokens.forEach(t=>{
-    let ok=false;
-    if(t.status==='base'&&ludoGameState.dice===6)ok=true;
-    if(t.status==='perimeter')ok=true;
-    if(t.status==='home'&&(t.pos+ludoGameState.dice<=5))ok=true;
-    if(ok){canMove=true;movable.push(t.id);let e=document.getElementById(t.id);if(e)e.classList.add('token-active');}
-  }); 
-  
-  if(!canMove){
-    document.getElementById('ludo-log-msg').innerText="Ga bisa gerak!";
-    setTimeout(()=>{
-      let nt=color; let idx=gameConfigs.ludo.colors.indexOf(color);
-      for(let i=1;i<=4;i++){
-        let n=gameConfigs.ludo.colors[(idx+i)%4];
-        if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}
-      }
-      if(isOnline&&myColor===color){
-        database.ref(`ludo_rooms/${roomCode}/state`).update({turn:nt,dice:0,hasRolled:false,moving:false});
-      }else if(!isOnline){
-        ludoGameState.turn=nt;ludoGameState.dice=0;ludoGameState.hasRolled=false;updateLudoUI();
-        if(ludoTypes[nt]==='ai')setTimeout(rollLudoDice,1000);
-      }
-    },1000);
-  } 
-  return movable; 
-}
-
-// Fungsi tambahan wajib biar Manusia bisa nge-klik bidak
-function onLudoTokenClick(color, id) {
-  if (ludoGameState.moving || ludoGameState.turn !== color || !ludoGameState.hasRolled) return;
-  if (isOnline && myColor !== color) return;
-  if (ludoTypes[color] === 'ai') return;
-  
-  let t = document.getElementById(id);
-  if (t && t.classList.contains('token-active')) {
-     executeLudoMove(color, id);
-  }
-}
-
+function highlightLudoTokens(color){ document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); let canMove=false;let movable=[]; ludoPlayers[color].tokens.forEach(t=>{let ok=false;if(t.status==='base'&&ludoGameState.dice===6)ok=true;if(t.status==='perimeter')ok=true;if(t.status==='home'&&(t.pos+ludoGameState.dice<=5))ok=true;if(ok){canMove=true;movable.push(t.id);let e=document.getElementById(t.id);if(e)e.classList.add('token-active');}}); if(!canMove){document.getElementById('ludo-log-msg').innerText="Ga bisa gerak!";setTimeout(()=>{let nt=color;let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}if(isOnline&&myColor===color){database.ref(`ludo_rooms/${roomCode}/state`).update({turn:nt,dice:0,hasRolled:false,moving:false});}else if(!isOnline){ludoGameState.turn=nt;ludoGameState.dice=0;ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[nt]==='ai')setTimeout(rollLudoDice,1000);}},1000);} return movable; }
 function rollLudoDice(){ 
   if(ludoGameState.hasRolled||ludoGameState.moving)return; 
   document.getElementById('ludo-dice').disabled=true;
   let rng=Math.floor(Math.random()*6)+1; 
   
-  if (typeof initAudio === 'function') initAudio(); 
-  if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
+  // 🔊 MAINKAN SUARA DADU
+  // Pancing browser agar izin audionya kebuka pas user klik dadu
+if (typeof initAudio === 'function') initAudio(); 
+
+if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
 
   if(isOnline){
     database.ref(`ludo_rooms/${roomCode}/state`).update({dice:rng,hasRolled:true});
@@ -2073,113 +2020,48 @@ function rollLudoDice(){
       document.getElementById('ludo-dice').innerText=Math.floor(Math.random()*6)+1;
       c++;
       if(c>8){
-        clearInterval(a);
-        ludoGameState.dice=rng; ludoGameState.hasRolled=true; updateLudoUI();
-        
-        if(ludoTypes[ludoGameState.turn]==='ai'){
-          setTimeout(()=>{
-            let mv=highlightLudoTokens(ludoGameState.turn);
-            if(mv.length>0){
-              let bt=mv.find(id=>ludoPlayers[ludoGameState.turn].tokens.find(t=>t.id===id).status==='base');
-              let ch=bt||mv[Math.floor(Math.random()*mv.length)];
-              executeLudoMove(ludoGameState.turn,ch);
-            }
-          },800);
-        }
+        clearInterval(a);ludoGameState.dice=rng;ludoGameState.hasRolled=true;updateLudoUI();
+        if(ludoTypes[ludoGameState.turn]==='ai')setTimeout(()=>{
+          let mv=highlightLudoTokens(ludoGameState.turn);
+          if(mv.length>0){let bt=mv.find(id=>ludoPlayers[ludoGameState.turn].tokens.find(t=>t.id===id).status==='base');let ch=bt||mv[Math.floor(Math.random()*mv.length)];executeLudoMove(ludoGameState.turn,ch);}
+        },800);
       }
     },50);
   } 
 }
 
 async function executeLudoMove(color,id){ 
-  ludoGameState.moving=true; document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); 
-  if(isOnline) database.ref(`ludo_rooms/${roomCode}/state`).update({moving:true}); 
+  ludoGameState.moving=true;document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); 
+  if(isOnline)database.ref(`ludo_rooms/${roomCode}/state`).update({moving:true}); 
+  let t=ludoPlayers[color].tokens.find(x=>x.id===id);let steps=ludoGameState.dice;let gotKill=false;let isFinish=false; 
   
-  let t = ludoPlayers[color].tokens.find(x=>x.id===id); 
-  let steps = ludoGameState.dice; 
-  let gotKill = false; let isFinish = false; 
-  
-  if (typeof initAudio === 'function') initAudio(); 
+  if(t.status==='base'){
+    t.status='perimeter';t.pos=ludoPlayers[color].startIdx;renderLudoTokens();
+    // Pancing browser agar izin audionya kebuka pas user klik dadu
+if (typeof initAudio === 'function') initAudio(); 
 
-  // FIX: Pemisahan logika pakai "else" biar tidak macet / freeze
-  if (t.status === 'base') {
-    t.status = 'perimeter'; 
-    t.pos = ludoPlayers[color].startIdx; 
-    renderLudoTokens();
-    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } 
-    await new Promise(r=>setTimeout(r,400));
-  } else {
-    for(let i=0; i<steps; i++){
-      if(t.status === 'perimeter'){
-        if(t.pos === ludoPlayers[color].endIdx) { t.status='home'; t.pos=0; }
-        else { t.pos = (t.pos+1)%52; }
-      } else if(t.status === 'home'){
-        t.pos++; if(t.pos===5) t.status='finish';
+if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
+
+    for(let i=0;i<steps;i++){
+      if(t.status==='perimeter'){
+        if(t.pos===ludoPlayers[color].endIdx){t.status='home';t.pos=0;}else{t.pos=(t.pos+1)%52;}
+      }else if(t.status==='home'){
+        t.pos++;if(t.pos===5)t.status='finish';
       }
       renderLudoTokens();
-      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // Suara langkah pake sfxStep!
+      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA LANGKAH
       await new Promise(r=>setTimeout(r,200));
-      if(t.status === 'finish'){ isFinish=true; break; }
+      if(t.status==='finish'){isFinish=true;break;}
     }
   } 
   
-  let killed=[]; 
-  if(t.status==='perimeter' && !ludoSafeZones.includes(t.pos)){
-    Object.keys(ludoPlayers).forEach(ec=>{
-      if(ec!==color && ludoTypes[ec]!=='none'){
-        ludoPlayers[ec].tokens.forEach(et=>{
-          if(et.status==='perimeter' && et.pos===t.pos) killed.push(et);
-        });
-      }
-    });
-  } 
-  
-  if(killed.length>0){
-    gotKill=true; 
-    killed.forEach(et=>{et.status='base'; et.pos=-1;});
-    renderLudoTokens();
-    await new Promise(r=>setTimeout(r,400));
-  } 
-  
-  let isWinner = ludoPlayers[color].tokens.filter(tk=>tk.status==='finish').length===4; 
-  if(!ludoGameState.winners) ludoGameState.winners=[]; 
-  if(isWinner && !ludoGameState.winners.includes(color)) ludoGameState.winners.push(color); 
-  
-  let ac = Object.keys(ludoTypes).filter(c=>ludoTypes[c]!=='none').length; 
-  if(ludoGameState.winners.length >= ac-1){ 
-    Object.keys(ludoTypes).forEach(c=>{ if(ludoTypes[c]!=='none'&&!ludoGameState.winners.includes(c)) ludoGameState.winners.push(c); }); 
-    if(isOnline && myColor===color) database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers, [`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners, [`ludo_rooms/${roomCode}/state/moving`]:false}); 
-    else if(!isOnline) showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo); 
-    return; 
-  } 
-  
-  if(isOnline){
-    if(myColor===color){
-      let nt=color;
-      if(!isFinish && !gotKill && steps!==6){
-        let idx=gameConfigs.ludo.colors.indexOf(color);
-        for(let i=1;i<=4;i++){
-          let n=gameConfigs.ludo.colors[(idx+i)%4];
-          if(ludoTypes[n]!=='none' && !ludoGameState.winners.includes(n)){nt=n;break;}
-        }
-      }
-      database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers, [`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners, [`ludo_rooms/${roomCode}/state/turn`]:nt, [`ludo_rooms/${roomCode}/state/dice`]:0, [`ludo_rooms/${roomCode}/state/hasRolled`]:false, [`ludo_rooms/${roomCode}/state/moving`]:false});
-    }
-  } else {
-    ludoGameState.moving=false;
-    if(isFinish || gotKill || steps===6){
-      ludoGameState.hasRolled=false; updateLudoUI();
-      if(ludoTypes[color]==='ai') setTimeout(rollLudoDice,800);
-    } else {
-      let nt=color; let idx=gameConfigs.ludo.colors.indexOf(color);
-      for(let i=1;i<=4;i++){
-        let n=gameConfigs.ludo.colors[(idx+i)%4];
-        if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}
-      }
-      ludoGameState.turn=nt; ludoGameState.dice=0; ludoGameState.hasRolled=false; updateLudoUI();
-      if(ludoTypes[nt]==='ai') setTimeout(rollLudoDice,1000);
-    }
-  } 
+  let killed=[]; if(t.status==='perimeter'&&!ludoSafeZones.includes(t.pos)){Object.keys(ludoPlayers).forEach(ec=>{if(ec!==color&&ludoTypes[ec]!=='none'){ludoPlayers[ec].tokens.forEach(et=>{if(et.status==='perimeter'&&et.pos===t.pos)killed.push(et);});}});} 
+  if(killed.length>0){gotKill=true;killed.forEach(et=>{et.status='base';et.pos=-1;});renderLudoTokens();await new Promise(r=>setTimeout(r,400));} 
+  let isWinner=ludoPlayers[color].tokens.filter(tk=>tk.status==='finish').length===4; if(!ludoGameState.winners)ludoGameState.winners=[]; 
+  if(isWinner&&!ludoGameState.winners.includes(color))ludoGameState.winners.push(color); let ac=Object.keys(ludoTypes).filter(c=>ludoTypes[c]!=='none').length; 
+  if(ludoGameState.winners.length>=ac-1){ Object.keys(ludoTypes).forEach(c=>{if(ludoTypes[c]!=='none'&&!ludoGameState.winners.includes(c))ludoGameState.winners.push(c);}); if(isOnline&&myColor===color)database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/moving`]:false}); else if(!isOnline)showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo);return; } 
+  if(isOnline){if(myColor===color){let nt=color;if(!isFinish&&!gotKill&&steps!==6){let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}}database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/turn`]:nt,[`ludo_rooms/${roomCode}/state/dice`]:0,[`ludo_rooms/${roomCode}/state/hasRolled`]:false,[`ludo_rooms/${roomCode}/state/moving`]:false});}} 
+  else{ludoGameState.moving=false;if(isFinish||gotKill||steps===6){ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[color]==='ai')setTimeout(rollLudoDice,800);}else{let nt=color;let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}ludoGameState.turn=nt;ludoGameState.dice=0;ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[nt]==='ai')setTimeout(rollLudoDice,1000);}} 
 }
 
 // ===================================== ULAR TANGGA =====================================
