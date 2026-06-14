@@ -1472,6 +1472,11 @@ body.theme-colorful .crt::before {
   </div>
 </div>
 
+<div id="in-game-avatar-hud" style="display:none; position:fixed; top:15px; left:15px; background:rgba(20,20,20,0.6); border:1px solid rgba(255,255,255,0.15); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); padding:5px 12px 5px 5px; border-radius:30px; align-items:center; gap:10px; z-index:99000; box-shadow:0 4px 15px rgba(0,0,0,0.5); pointer-events:none;">
+  <img id="hud-avatar" src="" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:2px solid #00d2ff; box-shadow:0 0 10px rgba(0,210,255,0.4);">
+  <span id="hud-name" style="color:#fff; font-family:'Orbitron', sans-serif; font-size:11px; font-weight:bold; letter-spacing:1px; text-transform:uppercase;">PLAYER</span>
+</div>
+
     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
 
 </div>
@@ -1576,10 +1581,10 @@ function toggleMute() {
   let btn = document.getElementById('btn-mute');
   if(!btn) return;
   if (isMuted) {
-     btn.innerText = "🔇 BISU (MUTED)"; btn.style.borderColor = "#ff4757"; btn.style.color = "#ff4757";
+     btn.innerText = " BISU (MUTED)"; btn.style.borderColor = "#ff4757"; btn.style.color = "#ff4757";
      if (currentGameAudio) currentGameAudio.muted = true;
   } else {
-     btn.innerText = "🔊 BERSUARA (UNMUTE)"; btn.style.borderColor = "#00d2ff"; btn.style.color = "#00d2ff";
+     btn.innerText = " BERSUARA (UNMUTE)"; btn.style.borderColor = "#00d2ff"; btn.style.color = "#00d2ff";
      if (currentGameAudio) currentGameAudio.muted = false;
   }
 }
@@ -1850,119 +1855,66 @@ function updateLudoUI(){ let tc=ludoGameState.turn;let btn=document.getElementBy
 function highlightLudoTokens(color){ document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); let canMove=false;let movable=[]; ludoPlayers[color].tokens.forEach(t=>{let ok=false;if(t.status==='base'&&ludoGameState.dice===6)ok=true;if(t.status==='perimeter')ok=true;if(t.status==='home'&&(t.pos+ludoGameState.dice<=5))ok=true;if(ok){canMove=true;movable.push(t.id);let e=document.getElementById(t.id);if(e)e.classList.add('token-active');}}); if(!canMove){document.getElementById('ludo-log-msg').innerText="Ga bisa gerak!";setTimeout(()=>{let nt=color;let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}if(isOnline&&myColor===color){database.ref(`ludo_rooms/${roomCode}/state`).update({turn:nt,dice:0,hasRolled:false,moving:false});}else if(!isOnline){ludoGameState.turn=nt;ludoGameState.dice=0;ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[nt]==='ai')setTimeout(rollLudoDice,1000);}},1000);} return movable; }
 
 function rollLudoDice(){ 
-  if(ludoGameState.hasRolled || ludoGameState.moving) return; 
-  document.getElementById('ludo-dice').disabled = true;
-  let rng = Math.floor(Math.random()*6)+1; 
+  if(ludoGameState.hasRolled||ludoGameState.moving)return; 
+  document.getElementById('ludo-dice').disabled=true;
+  let rng=Math.floor(Math.random()*6)+1; 
   
-  if (typeof initAudio === 'function') initAudio(); 
-  playSafe(sfxDice); 
+  // 🔊 MAINKAN SUARA DADU
+  // Pancing browser agar izin audionya kebuka pas user klik dadu
+if (typeof initAudio === 'function') initAudio(); 
+
+if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
 
   if(isOnline){
-    database.ref(`ludo_rooms/${roomCode}/state`).update({dice:rng, hasRolled:true});
-  } else {
+    database.ref(`ludo_rooms/${roomCode}/state`).update({dice:rng,hasRolled:true});
+  } else{
     let c=0;
-    let a = setInterval(()=>{
-      document.getElementById('ludo-dice').innerText = Math.floor(Math.random()*6)+1;
+    let a=setInterval(()=>{
+      document.getElementById('ludo-dice').innerText=Math.floor(Math.random()*6)+1;
       c++;
-      if(c > 8){
-        clearInterval(a); ludoGameState.dice = rng; ludoGameState.hasRolled = true; updateLudoUI();
-        if(ludoTypes[ludoGameState.turn] === 'ai') setTimeout(()=>{
-          let mv = highlightLudoTokens(ludoGameState.turn);
-          if(mv.length > 0){
-             let bt = mv.find(id => ludoPlayers[ludoGameState.turn].tokens.find(t => t.id === id).status === 'base');
-             executeLudoMove(ludoGameState.turn, bt || mv[Math.floor(Math.random()*mv.length)]);
-          }
-        }, 800);
+      if(c>8){
+        clearInterval(a);ludoGameState.dice=rng;ludoGameState.hasRolled=true;updateLudoUI();
+        if(ludoTypes[ludoGameState.turn]==='ai')setTimeout(()=>{
+          let mv=highlightLudoTokens(ludoGameState.turn);
+          if(mv.length>0){let bt=mv.find(id=>ludoPlayers[ludoGameState.turn].tokens.find(t=>t.id===id).status==='base');let ch=bt||mv[Math.floor(Math.random()*mv.length)];executeLudoMove(ludoGameState.turn,ch);}
+        },800);
       }
-    }, 50);
+    },50);
   } 
 }
 
-async function executeLudoMove(color, id){ 
-  ludoGameState.moving = true;
-  document.querySelectorAll('.token-active').forEach(e => e.classList.remove('token-active')); 
-  if(isOnline) database.ref(`ludo_rooms/${roomCode}/state`).update({moving:true}); 
+async function executeLudoMove(color,id){ 
+  ludoGameState.moving=true;document.querySelectorAll('.token-active').forEach(e=>e.classList.remove('token-active')); 
+  if(isOnline)database.ref(`ludo_rooms/${roomCode}/state`).update({moving:true}); 
+  let t=ludoPlayers[color].tokens.find(x=>x.id===id);let steps=ludoGameState.dice;let gotKill=false;let isFinish=false; 
   
-  let t = ludoPlayers[color].tokens.find(x => x.id === id);
-  let steps = ludoGameState.dice;
-  let gotKill = false;
-  let isFinish = false;
-  
-  if(t.status === 'base'){
-    t.status = 'perimeter'; t.pos = ludoPlayers[color].startIdx;
-    renderLudoTokens();
-    playSafe(sfxStep); 
-    await new Promise(r => setTimeout(r, 400));
-  } else {
-    for(let i=0; i < steps; i++){
-      if(t.status === 'perimeter'){
-        if(t.pos === ludoPlayers[color].endIdx){ t.status = 'home'; t.pos = 0; } 
-        else { t.pos = (t.pos + 1) % 52; }
-      } else if(t.status === 'home'){
-        t.pos++; if(t.pos === 5) t.status = 'finish';
+  if(t.status==='base'){
+    t.status='perimeter';t.pos=ludoPlayers[color].startIdx;renderLudoTokens();
+    // Pancing browser agar izin audionya kebuka pas user klik dadu
+if (typeof initAudio === 'function') initAudio(); 
+
+if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
+
+    for(let i=0;i<steps;i++){
+      if(t.status==='perimeter'){
+        if(t.pos===ludoPlayers[color].endIdx){t.status='home';t.pos=0;}else{t.pos=(t.pos+1)%52;}
+      }else if(t.status==='home'){
+        t.pos++;if(t.pos===5)t.status='finish';
       }
       renderLudoTokens();
-      playSafe(sfxStep); 
-      await new Promise(r => setTimeout(r, 200));
-      if(t.status === 'finish') { isFinish = true; break; }
+      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA LANGKAH
+      await new Promise(r=>setTimeout(r,200));
+      if(t.status==='finish'){isFinish=true;break;}
     }
   } 
   
-  let killed=[]; 
-  if(t.status === 'perimeter' && !ludoSafeZones.includes(t.pos)){
-    Object.keys(ludoPlayers).forEach(ec=>{
-      if(ec!==color && ludoTypes[ec]!=='none'){
-        ludoPlayers[ec].tokens.forEach(et=>{
-          if(et.status==='perimeter' && et.pos===t.pos) killed.push(et);
-        });
-      }
-    });
-  } 
-  if(killed.length > 0){
-    gotKill = true; 
-    killed.forEach(et=>{ et.status='base'; et.pos=-1; });
-    renderLudoTokens();
-    await new Promise(r => setTimeout(r, 400));
-  } 
-  
-  let isWinner = ludoPlayers[color].tokens.filter(tk=>tk.status==='finish').length===4; 
-  if(!ludoGameState.winners) ludoGameState.winners=[]; 
-  if(isWinner && !ludoGameState.winners.includes(color)) ludoGameState.winners.push(color); 
-  let ac = Object.keys(ludoTypes).filter(c=>ludoTypes[c]!=='none').length; 
-  if(ludoGameState.winners.length >= ac-1){ 
-    Object.keys(ludoTypes).forEach(c=>{ if(ludoTypes[c]!=='none' && !ludoGameState.winners.includes(c)) ludoGameState.winners.push(c); }); 
-    if(isOnline && myColor===color) database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers, [`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners, [`ludo_rooms/${roomCode}/state/moving`]:false}); 
-    else if(!isOnline) showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo); 
-    return; 
-  } 
-  
-  if(isOnline){
-    if(myColor===color){
-      let nt = color;
-      if(!isFinish && !gotKill && steps!==6){
-        let idx = gameConfigs.ludo.colors.indexOf(color);
-        for(let i=1; i<=4; i++){
-          let n = gameConfigs.ludo.colors[(idx+i)%4];
-          if(ludoTypes[n]!=='none' && !ludoGameState.winners.includes(n)){nt=n; break;}
-        }
-      }
-      database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers, [`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners, [`ludo_rooms/${roomCode}/state/turn`]:nt, [`ludo_rooms/${roomCode}/state/dice`]:0, [`ludo_rooms/${roomCode}/state/hasRolled`]:false, [`ludo_rooms/${roomCode}/state/moving`]:false});
-    }
-  } else {
-    ludoGameState.moving = false;
-    if(isFinish || gotKill || steps===6){
-      ludoGameState.hasRolled = false; updateLudoUI();
-      if(ludoTypes[color]==='ai') setTimeout(rollLudoDice, 800);
-    } else {
-      let nt = color; let idx = gameConfigs.ludo.colors.indexOf(color);
-      for(let i=1; i<=4; i++){
-        let n = gameConfigs.ludo.colors[(idx+i)%4];
-        if(ludoTypes[n]!=='none' && !ludoGameState.winners.includes(n)){nt=n; break;}
-      }
-      ludoGameState.turn = nt; ludoGameState.dice = 0; ludoGameState.hasRolled = false; updateLudoUI();
-      if(ludoTypes[nt]==='ai') setTimeout(rollLudoDice, 1000);
-    }
-  } 
+  let killed=[]; if(t.status==='perimeter'&&!ludoSafeZones.includes(t.pos)){Object.keys(ludoPlayers).forEach(ec=>{if(ec!==color&&ludoTypes[ec]!=='none'){ludoPlayers[ec].tokens.forEach(et=>{if(et.status==='perimeter'&&et.pos===t.pos)killed.push(et);});}});} 
+  if(killed.length>0){gotKill=true;killed.forEach(et=>{et.status='base';et.pos=-1;});renderLudoTokens();await new Promise(r=>setTimeout(r,400));} 
+  let isWinner=ludoPlayers[color].tokens.filter(tk=>tk.status==='finish').length===4; if(!ludoGameState.winners)ludoGameState.winners=[]; 
+  if(isWinner&&!ludoGameState.winners.includes(color))ludoGameState.winners.push(color); let ac=Object.keys(ludoTypes).filter(c=>ludoTypes[c]!=='none').length; 
+  if(ludoGameState.winners.length>=ac-1){ Object.keys(ludoTypes).forEach(c=>{if(ludoTypes[c]!=='none'&&!ludoGameState.winners.includes(c))ludoGameState.winners.push(c);}); if(isOnline&&myColor===color)database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/moving`]:false}); else if(!isOnline)showEndLeaderboard(ludoGameState.winners,ludoNames,gameConfigs.ludo);return; } 
+  if(isOnline){if(myColor===color){let nt=color;if(!isFinish&&!gotKill&&steps!==6){let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}}database.ref().update({[`ludo_rooms/${roomCode}/board`]:ludoPlayers,[`ludo_rooms/${roomCode}/state/winners`]:ludoGameState.winners,[`ludo_rooms/${roomCode}/state/turn`]:nt,[`ludo_rooms/${roomCode}/state/dice`]:0,[`ludo_rooms/${roomCode}/state/hasRolled`]:false,[`ludo_rooms/${roomCode}/state/moving`]:false});}} 
+  else{ludoGameState.moving=false;if(isFinish||gotKill||steps===6){ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[color]==='ai')setTimeout(rollLudoDice,800);}else{let nt=color;let idx=gameConfigs.ludo.colors.indexOf(color);for(let i=1;i<=4;i++){let n=gameConfigs.ludo.colors[(idx+i)%4];if(ludoTypes[n]!=='none'&&!ludoGameState.winners.includes(n)){nt=n;break;}}ludoGameState.turn=nt;ludoGameState.dice=0;ludoGameState.hasRolled=false;updateLudoUI();if(ludoTypes[nt]==='ai')setTimeout(rollLudoDice,1000);}} 
 }
 
 // ===================================== ULAR TANGGA =====================================
@@ -1977,101 +1929,67 @@ function updateSnLUI(){ let tc=snlGameState.turn;let btn=document.getElementById
 function startSnLOffline(){ isOnline=false;activeGame='snl'; snlConfig={board:document.getElementById('snl-theme-board').value,snake:document.getElementById('snl-theme-snake').value}; snlTypes={red:document.getElementById('snl-off-red').value,blue:document.getElementById('snl-off-blue').value,green:document.getElementById('snl-off-green').value,yellow:document.getElementById('snl-off-yellow').value,purple:document.getElementById('snl-off-purple').value}; snlNames={red:snlTypes.red==='ai'?"BOT 1":"PLAYER 1",blue:snlTypes.blue==='ai'?"BOT 2":"PLAYER 2",green:snlTypes.green==='ai'?"BOT 3":"PLAYER 3",yellow:snlTypes.yellow==='ai'?"BOT 4":"PLAYER 4",purple:snlTypes.purple==='ai'?"BOT 5":"PLAYER 5"}; if(Object.values(snlTypes).filter(v=>v!=='none').length<2){alert("Minimal 2 pemain!");return;} snlPlayers={};gameConfigs.snl.colors.forEach(c=>{if(snlTypes[c]!=='none')snlPlayers[c]={pos:0};}); let st='red';for(let c of gameConfigs.snl.colors){if(snlTypes[c]!=='none'){st=c;break;}} snlActiveLayout=snlLayouts[Math.floor(Math.random()*snlLayouts.length)]; let bg=snlConfig.board==='pink'?"papan_ular_pink.png":"papan_ular.png"; document.getElementById('snl-main-container').style.backgroundImage=`url('${bg}')`; snlGameState={turn:st,dice:0,hasRolled:false,moving:false,winners:[]}; document.getElementById('snl-badge').innerText="MODE LOKAL/OFFLINE"; initSnLBoardHTML(); setTimeout(()=>{showScreen('snl-game-screen');drawVisualSnL();renderSnLPawns();updateSnLUI();if(snlTypes[snlGameState.turn]==='ai')setTimeout(rollSnLDice,1000);},100); }
 function syncSnLOnline(data){ if(document.getElementById('universal-lobby').classList.contains('active')){ snlActiveLayout=snlLayouts[data.layoutIdx||0]; snlConfig=data.config||{board:'default',snake:'default'}; let bg=snlConfig.board==='pink'?"papan_ular_pink.png":"papan_ular.png"; document.getElementById('snl-main-container').style.backgroundImage=`url('${bg}')`; snlPlayers=data.board;snlGameState=data.state; snlTypes={red:'none',blue:'none',green:'none',yellow:'none',purple:'none'}; Object.keys(data.players).forEach(c=>snlTypes[c]='human');snlNames=data.players; document.getElementById('snl-badge').innerText="WARNA LU: "+myColor.toUpperCase(); document.getElementById('snl-badge').style.color=gameConfigs.snl.hex[myColor]; initSnLBoardHTML(); setTimeout(()=>{showScreen('snl-game-screen');drawVisualSnL();renderSnLPawns();updateSnLUI();},100); } else if(document.getElementById('snl-game-screen').classList.contains('active')){ let curP=Object.keys(data.players||{}); Object.keys(snlTypes).forEach(c=>{if(snlTypes[c]==='human'&&!curP.includes(c))snlTypes[c]='none';}); let ac=Object.keys(snlTypes).filter(c=>snlTypes[c]!=='none').length; if(ac<2){if(isHost)database.ref(`snl_rooms/${roomCode}/status`).set('finished');alert("Pemain lain keluar!");leaveRoom();return;} snlGameState=data.state;if(!snlGameState.winners)snlGameState.winners=[]; if(!(snlGameState.turn===myColor&&snlGameState.moving)){snlPlayers=data.board;renderSnLPawns();}updateSnLUI(); if(snlGameState.winners.length>=ac-1&&ac>1)showEndLeaderboard(snlGameState.winners,snlNames,gameConfigs.snl); } }
 function rollSnLDice(){ 
-  if(snlGameState.hasRolled || snlGameState.moving) return; 
-  document.getElementById('snl-dice').disabled = true;
-  let rng = Math.floor(Math.random()*6)+1; 
+  if(snlGameState.hasRolled||snlGameState.moving)return; 
+  document.getElementById('snl-dice').disabled=true;
+  let rng=Math.floor(Math.random()*6)+1; 
   
-  if (typeof initAudio === 'function') initAudio(); 
-  playSafe(sfxDice);
+  // 🔊 MAINKAN SUARA DADU
+  if(!isMuted) { sfxDice.currentTime = 0; sfxDice.play().catch(e=>{}); }
 
   if(isOnline){
-    database.ref(`snl_rooms/${roomCode}/state`).update({dice:rng, hasRolled:true, moving:true});
-    executeSnLMove(snlGameState.turn, rng);
-  } else {
-    let c = 0;
-    let a = setInterval(()=>{
-      document.getElementById('snl-dice').innerText = Math.floor(Math.random()*6)+1;
+    database.ref(`snl_rooms/${roomCode}/state`).update({dice:rng,hasRolled:true,moving:true});executeSnLMove(snlGameState.turn,rng);
+  } else{
+    let c=0;
+    let a=setInterval(()=>{
+      document.getElementById('snl-dice').innerText=Math.floor(Math.random()*6)+1;
       c++;
-      if(c > 8){
-        clearInterval(a);
-        snlGameState.dice = rng; snlGameState.hasRolled = true; snlGameState.moving = true; updateSnLUI();
-        executeSnLMove(snlGameState.turn, rng);
+      if(c>8){
+        clearInterval(a);snlGameState.dice=rng;snlGameState.hasRolled=true;snlGameState.moving=true;updateSnLUI();executeSnLMove(snlGameState.turn,rng);
       }
-    }, 50);
+    },50);
   } 
 }
 
-async function executeSnLMove(color, dice){ 
-  let cp = snlPlayers[color].pos; let tp; 
-  if (typeof initAudio === 'function') initAudio(); 
-
-  if(cp === 0){ 
-    if(dice === 1){
-      document.getElementById('snl-log-msg').innerText = "BANGKIT!"; tp = 1; snlPlayers[color].pos = 1; renderSnLPawns();
-      playSafe(sfxStep); 
-      await new Promise(r => setTimeout(r, 600));
-      if(isOnline && myColor === color) database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color]});
-      passSnLNextTurn(color); return;
-    } else {
-      document.getElementById('snl-log-msg').innerText = "Gagal! Harus angka 1!";
-      setTimeout(() => { passSnLNextTurn(color); }, 1000); return;
+async function executeSnLMove(color,dice){ 
+  let cp=snlPlayers[color].pos;let tp; 
+  if(cp===0){ 
+    if(dice===1){
+      document.getElementById('snl-log-msg').innerText="BANGKIT!";tp=1;snlPlayers[color].pos=1;renderSnLPawns();
+      if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA BANGKIT
+      await new Promise(r=>setTimeout(r,600));
+      if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color]});passSnLNextTurn(color);return;
+    } else{
+      document.getElementById('snl-log-msg').innerText="Gagal! Harus angka 1!";setTimeout(()=>{passSnLNextTurn(color);},1000);return;
     } 
   } else { 
-    tp = cp + dice; 
-    if(tp > 100){
-      document.getElementById('snl-log-msg').innerText = `Kelebihan! Butuh ${100-cp}`;
-      await new Promise(r => setTimeout(r, 1000)); passSnLNextTurn(color); return;
-    } 
+    tp=cp+dice; 
+    if(tp>100){document.getElementById('snl-log-msg').innerText=`Kelebihan! Butuh ${100-cp}`;await new Promise(r=>setTimeout(r,1000));passSnLNextTurn(color);return;} 
   } 
   
-  while(cp !== tp){
-    cp++; snlPlayers[color].pos = cp; renderSnLPawns();
-    playSafe(sfxStep); 
-    await new Promise(r => setTimeout(r, 250));
+  while(cp!==tp){
+    cp++;snlPlayers[color].pos=cp;renderSnLPawns();
+    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA LANGKAH
+    await new Promise(r=>setTimeout(r,250));
   } 
   
   if(snlActiveLayout[cp]){ 
-    let isSn = snlActiveLayout[cp] < cp; document.getElementById('snl-log-msg').innerText = isSn ? "Ops! Kena Ular 🐍" : "Yess! Naik Tangga 🪜!"; 
-    await new Promise(r => setTimeout(r, 600)); 
-    cp = snlActiveLayout[cp]; snlPlayers[color].pos = cp; renderSnLPawns();
-    playSafe(sfxStep); 
-    await new Promise(r => setTimeout(r, 500)); 
+    let isSn=snlActiveLayout[cp]<cp;document.getElementById('snl-log-msg').innerText=isSn?"Ops! Kena Ular 🐍":"Yess! Naik Tangga 🪜!"; 
+    await new Promise(r=>setTimeout(r,600));cp=snlActiveLayout[cp];snlPlayers[color].pos=cp;renderSnLPawns();
+    if(!isMuted) { sfxStep.currentTime = 0; sfxStep.play().catch(e=>{}); } // 🔊 SUARA NAIK/TURUN
+    await new Promise(r=>setTimeout(r,500)); 
   } 
   
-  let isWin = cp === 100; if(!snlGameState.winners) snlGameState.winners = []; 
-  if(isWin && !snlGameState.winners.includes(color)) snlGameState.winners.push(color); 
-  let ac = Object.keys(snlTypes).filter(c => snlTypes[c] !== 'none').length; 
-  if(snlGameState.winners.length >= ac-1){ 
-    Object.keys(snlTypes).forEach(c => { if(snlTypes[c] !== 'none' && !snlGameState.winners.includes(c)) snlGameState.winners.push(c); }); 
-    if(isOnline && myColor === color) database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color], [`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners, [`snl_rooms/${roomCode}/state/moving`]:false}); 
-    else if(!isOnline) showEndLeaderboard(snlGameState.winners, snlNames, gameConfigs.snl); return; 
-  } 
-  if(dice === 6 || isWin){ 
-    if(isOnline){
-      if(myColor === color) database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color], [`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners, [`snl_rooms/${roomCode}/state/dice`]:0, [`snl_rooms/${roomCode}/state/hasRolled`]:false, [`snl_rooms/${roomCode}/state/moving`]:false});
-    } else {
-      snlGameState.moving = false; snlGameState.hasRolled = false; updateSnLUI();
-      if(snlTypes[color] === 'ai') setTimeout(rollSnLDice, 800);
-    } 
+  let isWin=cp===100; if(!snlGameState.winners)snlGameState.winners=[]; 
+  if(isWin&&!snlGameState.winners.includes(color))snlGameState.winners.push(color); 
+  let ac=Object.keys(snlTypes).filter(c=>snlTypes[c]!=='none').length; 
+  if(snlGameState.winners.length>=ac-1){ Object.keys(snlTypes).forEach(c=>{if(snlTypes[c]!=='none'&&!snlGameState.winners.includes(c))snlGameState.winners.push(c);}); if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color],[`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners,[`snl_rooms/${roomCode}/state/moving`]:false}); else if(!isOnline)showEndLeaderboard(snlGameState.winners,snlNames,gameConfigs.snl);return; } 
+  if(dice===6||isWin){ 
+    if(isOnline){if(myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color],[`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners,[`snl_rooms/${roomCode}/state/dice`]:0,[`snl_rooms/${roomCode}/state/hasRolled`]:false,[`snl_rooms/${roomCode}/state/moving`]:false});} else{snlGameState.moving=false;snlGameState.hasRolled=false;updateSnLUI();if(snlTypes[color]==='ai')setTimeout(rollSnLDice,800);} 
   } else { 
-    if(isOnline && myColor === color) database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color], [`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners}); 
-    passSnLNextTurn(color); 
+    if(isOnline&&myColor===color)database.ref().update({[`snl_rooms/${roomCode}/board/${color}`]:snlPlayers[color],[`snl_rooms/${roomCode}/state/winners`]:snlGameState.winners}); passSnLNextTurn(color); 
   } 
 }
-
-function passSnLNextTurn(color){ 
-  let mx = gameConfigs.snl.colors.length; let idx = gameConfigs.snl.colors.indexOf(color); let nt = color; 
-  for(let i=1; i<=mx; i++){
-    let n = gameConfigs.snl.colors[(idx+i)%mx];
-    if(snlTypes[n] !== 'none' && !snlGameState.winners.includes(n)){nt = n; break;}
-  } 
-  if(isOnline){
-    if(myColor === color) database.ref().update({[`snl_rooms/${roomCode}/state/turn`]:nt, [`snl_rooms/${roomCode}/state/dice`]:0, [`snl_rooms/${roomCode}/state/hasRolled`]:false, [`snl_rooms/${roomCode}/state/moving`]:false});
-  } else {
-    snlGameState.moving = false; snlGameState.turn = nt; snlGameState.dice = 0; snlGameState.hasRolled = false; updateSnLUI();
-    if(snlTypes[nt] === 'ai') setTimeout(rollSnLDice, 1000);
-  } 
-}
+function passSnLNextTurn(color){ let mx=gameConfigs.snl.colors.length;let idx=gameConfigs.snl.colors.indexOf(color);let nt=color; for(let i=1;i<=mx;i++){let n=gameConfigs.snl.colors[(idx+i)%mx];if(snlTypes[n]!=='none'&&!snlGameState.winners.includes(n)){nt=n;break;}} if(isOnline){if(myColor===color)database.ref().update({[`snl_rooms/${roomCode}/state/turn`]:nt,[`snl_rooms/${roomCode}/state/dice`]:0,[`snl_rooms/${roomCode}/state/hasRolled`]:false,[`snl_rooms/${roomCode}/state/moving`]:false});} else{snlGameState.moving=false;snlGameState.turn=nt;snlGameState.dice=0;snlGameState.hasRolled=false;updateSnLUI();if(snlTypes[nt]==='ai')setTimeout(rollSnLDice,1000);} }
 
 // ===================================== TIC TAC TOE =====================================
 let tttBoard=['','','','','','','','',''],tttTurn='X',tttMode='local',tttScores={X:0,O:0}; const tttPatterns=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
@@ -3012,4 +2930,4 @@ function applyTheme(t) {
 
 </script>
 </body>
-                                                                                                                                                                                                                   </html>
+  </html>
